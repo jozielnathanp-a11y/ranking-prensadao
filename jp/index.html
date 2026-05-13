@@ -335,7 +335,7 @@ function stopListening() {
 // ── Groq API ──────────────────────────────────────
 var conversationHistory = [];
 
-var systemPrompt = 'Você é o JP, assistente pessoal do Josiel. Personalidade: direto, simpático, informal mas sem exagerar em gírias. Fale como um amigo prestativo — sem ser robótico e sem ser exagerado. Respostas CURTAS e objetivas — máximo 2 frases — você está sendo lido em voz alta. Responda sempre em português do Brasil.';
+var systemPrompt = 'Você é o JP, assistente de voz do Josiel. Você é direto, objetivo e prestativo. Respostas CURTAS — máximo 2 frases curtas — pois você está sendo lido em voz alta. Responda sempre em português do Brasil.';
 
 function getGeminiReply(userText) {
   conversationHistory.push({ role: 'user', content: userText });
@@ -344,7 +344,7 @@ function getGeminiReply(userText) {
     model: 'llama-3.3-70b-versatile',
     messages: [{ role: 'system', content: systemPrompt }].concat(conversationHistory),
     max_tokens: 150,
-    temperature: 0.8
+    temperature: 0.7
   };
 
   fetch('https://api.groq.com/openai/v1/chat/completions', {
@@ -361,7 +361,7 @@ function getGeminiReply(userText) {
     try {
       reply = data.choices[0].message.content;
     } catch(e) {
-      reply = 'Não consegui processar, tenta de novo.';
+      reply = 'Erro ao processar. Tenta de novo.';
     }
     conversationHistory.push({ role: 'assistant', content: reply });
     hideTyping();
@@ -370,27 +370,24 @@ function getGeminiReply(userText) {
   })
   .catch(function() {
     hideTyping(); resetMic();
-    addBubble('system', 'Sem conexão, verifica a internet.');
+    addBubble('system', 'Sem conexão. Verifica a internet.');
   });
 }
 
-// ── TTS via Web Speech API (melhor voz disponível) ──
+// ── TTS robotizado ──────────────────────────────────
 function speak(text) {
   if (!('speechSynthesis' in window)) { resetMic(); return; }
   setStatus('talking', 'Falando...');
 
-  // Função interna que executa após vozes carregadas
   function doSpeak() {
     window.speechSynthesis.cancel();
     var utt = new SpeechSynthesisUtterance(text);
     utt.lang = 'pt-BR';
     utt.rate = voiceSpeed;
-    utt.pitch = 0.6;
+    utt.pitch = 0.1;   // bem grave = efeito robô
 
     var voices = window.speechSynthesis.getVoices();
-    // Prioridade: Google pt-BR masculino > qualquer pt-BR > pt genérico
-    var chosen = voices.find(function(v){ return v.lang==='pt-BR' && /google/i.test(v.name) && /masculin|male/i.test(v.name); })
-              || voices.find(function(v){ return v.lang==='pt-BR' && /google/i.test(v.name); })
+    var chosen = voices.find(function(v){ return v.lang==='pt-BR' && /google/i.test(v.name); })
               || voices.find(function(v){ return v.lang==='pt-BR'; })
               || voices.find(function(v){ return /pt/i.test(v.lang); });
     if (chosen) utt.voice = chosen;
@@ -405,16 +402,14 @@ function speak(text) {
   else { window.speechSynthesis.onvoiceschanged = function(){ doSpeak(); }; }
 }
 
-
-
 // ── Init ─────────────────────────────────────────────
 setTimeout(function(){
-  var welcome = 'Oi mano! JP na área 🔥 Toca no mic e manda ver!';
+  var welcome = 'JP online. Pode falar.';
   addBubble('jp', welcome);
   speak(welcome);
   if (!GEMINI_KEY) {
     setTimeout(function(){
-      addBubble('system', '⚙️ Toca na engrenagem e cola a chave do Gemini pra começar');
+      addBubble('system', '⚙️ Configure a chave do Groq antes de usar');
     }, 1200);
   }
 }, 500);
