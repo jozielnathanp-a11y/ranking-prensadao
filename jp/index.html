@@ -254,21 +254,32 @@ function setStatus(cls, txt) {
   var el = document.getElementById('statusText');
   el.className = 'status-dot ' + cls; el.textContent = txt;
 }
+var autoListen = false; // controla se deve voltar a ouvir sozinho
+
 function resetMic() {
   micBtn.classList.remove('recording','processing');
-  micBtn.textContent = '🎤';
-  micHint.textContent = 'Toca pra falar';
+  micBtn.textContent = autoListen ? '🔴' : '🎤';
+  micHint.textContent = autoListen ? 'Ouvindo sempre — toca pra pausar' : 'Toca pra falar';
   setStatus('', 'Na área');
   waveform.classList.remove('active');
   listening = false;
 }
 
-// ── Speech Recognition (Web Speech API) ────────────
 function toggleMic() {
-  if (listening) { stopListening(); return; }
-  startListening();
+  if (listening) {
+    // Usuário pausou manualmente — desativa autoListen
+    autoListen = false;
+    stopListening();
+    micBtn.textContent = '🎤';
+    micHint.textContent = 'Toca pra falar';
+  } else {
+    // Ativa modo contínuo
+    autoListen = true;
+    startListening();
+  }
 }
 
+// ── Speech Recognition (Web Speech API) ────────────
 function startListening() {
   var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SpeechRecognition) {
@@ -374,9 +385,9 @@ function getGeminiReply(userText) {
   });
 }
 
-// ── TTS robotizado ──────────────────────────────────
+// ── TTS voz natural ──────────────────────────────────
 function speak(text) {
-  if (!('speechSynthesis' in window)) { resetMic(); return; }
+  if (!('speechSynthesis' in window)) { afterSpeak(); return; }
   setStatus('talking', 'Falando...');
 
   function doSpeak() {
@@ -384,7 +395,7 @@ function speak(text) {
     var utt = new SpeechSynthesisUtterance(text);
     utt.lang = 'pt-BR';
     utt.rate = voiceSpeed;
-    utt.pitch = 0.1;   // bem grave = efeito robô
+    utt.pitch = 1.0;
 
     var voices = window.speechSynthesis.getVoices();
     var chosen = voices.find(function(v){ return v.lang==='pt-BR' && /google/i.test(v.name); })
@@ -392,14 +403,24 @@ function speak(text) {
               || voices.find(function(v){ return /pt/i.test(v.lang); });
     if (chosen) utt.voice = chosen;
 
-    utt.onend = function(){ resetMic(); };
-    utt.onerror = function(){ resetMic(); };
+    utt.onend = function(){ afterSpeak(); };
+    utt.onerror = function(){ afterSpeak(); };
     window.speechSynthesis.speak(utt);
   }
 
   var voices = window.speechSynthesis.getVoices();
   if (voices.length > 0) { doSpeak(); }
   else { window.speechSynthesis.onvoiceschanged = function(){ doSpeak(); }; }
+}
+
+// ── Após falar, volta a ouvir se autoListen ativo ────
+function afterSpeak() {
+  resetMic();
+  if (autoListen) {
+    setTimeout(function(){
+      if (!listening) startListening();
+    }, 800);
+  }
 }
 
 // ── Init ─────────────────────────────────────────────
