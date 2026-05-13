@@ -34,9 +34,7 @@
       border-radius: 50%;
       background: linear-gradient(135deg, #ff6b00, #ff9500);
       display: flex; align-items: center; justify-content: center;
-      font-size: 16px;
-      font-weight: 900;
-      flex-shrink: 0;
+      font-size: 16px; font-weight: 900; flex-shrink: 0;
     }
     .header-info h1 { font-size: 18px; font-weight: 700; letter-spacing: 1px; }
     .status-dot {
@@ -44,94 +42,60 @@
       display: flex; align-items: center; gap: 5px;
     }
     .status-dot::before {
-      content: '';
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      background: #4caf50;
-      display: inline-block;
+      content: ''; width: 7px; height: 7px;
+      border-radius: 50%; background: #4caf50; display: inline-block;
     }
     .status-dot.talking::before { background: #ff9500; animation: pulse 0.8s infinite; }
     .status-dot.thinking::before { background: #2196f3; animation: pulse 0.6s infinite; }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
     .chat {
-      flex: 1;
-      overflow-y: auto;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+      flex: 1; overflow-y: auto; padding: 16px;
+      display: flex; flex-direction: column; gap: 12px;
       scroll-behavior: smooth;
     }
     .chat::-webkit-scrollbar { display: none; }
 
     .bubble {
-      max-width: 82%;
-      padding: 12px 15px;
-      border-radius: 18px;
-      font-size: 15px;
-      line-height: 1.5;
+      max-width: 82%; padding: 12px 15px;
+      border-radius: 18px; font-size: 15px; line-height: 1.5;
       animation: fadeIn 0.3s ease;
     }
     @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
-
     .bubble.user {
-      background: #1e1e1e;
-      align-self: flex-end;
-      border-bottom-right-radius: 4px;
-      color: #ddd;
+      background: #1e1e1e; align-self: flex-end;
+      border-bottom-right-radius: 4px; color: #ddd;
     }
     .bubble.jp {
       background: linear-gradient(135deg, #ff6b00, #ff9500);
-      align-self: flex-start;
-      border-bottom-left-radius: 4px;
-      color: #fff;
-      font-weight: 500;
+      align-self: flex-start; border-bottom-left-radius: 4px;
+      color: #fff; font-weight: 500;
     }
     .bubble.system {
-      background: #1a1a1a;
-      align-self: center;
-      font-size: 12px;
-      color: #666;
-      padding: 6px 12px;
-      border-radius: 10px;
-      max-width: 90%;
-      text-align: center;
+      background: #1a1a1a; align-self: center;
+      font-size: 12px; color: #888; padding: 6px 14px;
+      border-radius: 10px; max-width: 92%; text-align: center;
     }
-
     .typing { display: flex; gap: 5px; align-items: center; padding: 14px 16px; }
     .typing span {
-      width: 8px; height: 8px;
-      background: #fff;
-      border-radius: 50%;
-      animation: bounce 1s infinite;
+      width: 8px; height: 8px; background: #fff;
+      border-radius: 50%; animation: bounce 1s infinite;
     }
-    .typing span:nth-child(2) { animation-delay: 0.15s; }
-    .typing span:nth-child(3) { animation-delay: 0.3s; }
-    @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
+    .typing span:nth-child(2){animation-delay:0.15s}
+    .typing span:nth-child(3){animation-delay:0.3s}
+    @keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
 
     .bottom {
-      padding: 16px 24px 32px;
-      border-top: 1px solid #1a1a1a;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 14px;
+      padding: 16px 24px 32px; border-top: 1px solid #1a1a1a;
+      display: flex; flex-direction: column; align-items: center; gap: 14px;
     }
-
     .waveform {
-      height: 36px;
-      display: flex;
-      align-items: center;
-      gap: 3px;
-      opacity: 0;
-      transition: opacity 0.3s;
+      height: 36px; display: flex; align-items: center; gap: 3px;
+      opacity: 0; transition: opacity 0.3s;
     }
     .waveform.active { opacity: 1; }
     .waveform .bar {
-      width: 4px;
-      background: #ff9500;
-      border-radius: 2px;
+      width: 4px; background: #ff9500; border-radius: 2px;
       animation: wave 0.6s ease-in-out infinite alternate;
     }
     .waveform .bar:nth-child(1){animation-delay:0s}
@@ -143,32 +107,27 @@
     .waveform .bar:nth-child(7){animation-delay:0.2s}
     .waveform .bar:nth-child(8){animation-delay:0.1s}
     .waveform .bar:nth-child(9){animation-delay:0s}
-    @keyframes wave { from{height:6px} to{height:28px} }
+    @keyframes wave{from{height:6px}to{height:28px}}
 
     .mic-btn {
-      width: 80px; height: 80px;
-      border-radius: 50%;
-      border: none;
+      width: 80px; height: 80px; border-radius: 50%; border: none;
       background: linear-gradient(135deg, #ff6b00, #ff9500);
-      color: white;
-      font-size: 32px;
-      cursor: pointer;
+      color: white; font-size: 32px; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
       transition: transform 0.15s, box-shadow 0.15s;
       box-shadow: 0 4px 20px rgba(255,107,0,0.4);
       -webkit-tap-highlight-color: transparent;
     }
-    .mic-btn:active { transform: scale(0.94); }
+    .mic-btn:active{transform:scale(0.94)}
     .mic-btn.recording {
       background: linear-gradient(135deg, #e53935, #ff5252);
       box-shadow: 0 4px 24px rgba(229,57,53,0.5);
       animation: recPulse 1.2s infinite;
     }
-    @keyframes recPulse { 0%,100%{box-shadow:0 4px 24px rgba(229,57,53,0.5)} 50%{box-shadow:0 4px 36px rgba(229,57,53,0.8)} }
+    @keyframes recPulse{0%,100%{box-shadow:0 4px 24px rgba(229,57,53,0.5)}50%{box-shadow:0 4px 36px rgba(229,57,53,0.8)}}
     .mic-btn.processing {
       background: linear-gradient(135deg, #1565c0, #2196f3);
-      box-shadow: 0 4px 20px rgba(33,150,243,0.4);
-      animation: none;
+      box-shadow: 0 4px 20px rgba(33,150,243,0.4); animation: none;
     }
     .mic-hint { font-size: 12px; color: #555; text-align: center; }
 
@@ -184,30 +143,25 @@
       background: rgba(0,0,0,0.85); z-index: 100;
       align-items: flex-end; justify-content: center;
     }
-    .modal.open { display: flex; }
+    .modal.open{display:flex}
     .modal-box {
-      background: #141414;
-      border-radius: 20px 20px 0 0;
-      padding: 28px 24px 44px;
-      width: 100%; max-width: 480px;
+      background: #141414; border-radius: 20px 20px 0 0;
+      padding: 28px 24px 44px; width: 100%; max-width: 480px;
       animation: slideUp 0.3s ease;
     }
-    @keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
-    .modal-box h2 { font-size: 18px; margin-bottom: 20px; color: #ff9500; }
-    .modal-box label { font-size: 13px; color: #888; display: block; margin-bottom: 6px; }
+    @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+    .modal-box h2{font-size:18px;margin-bottom:20px;color:#ff9500}
+    .modal-box label{font-size:13px;color:#888;display:block;margin-bottom:6px}
     .modal-box input, .modal-box select {
-      width: 100%; background: #1e1e1e;
-      border: 1px solid #333; color: #fff;
-      padding: 11px 14px; border-radius: 10px;
-      font-size: 15px; margin-bottom: 16px; outline: none;
+      width:100%;background:#1e1e1e;border:1px solid #333;color:#fff;
+      padding:11px 14px;border-radius:10px;font-size:15px;margin-bottom:16px;outline:none;
     }
-    .modal-box input:focus, .modal-box select:focus { border-color: #ff9500; }
+    .modal-box input:focus,.modal-box select:focus{border-color:#ff9500}
     .save-btn {
-      width: 100%; padding: 14px;
-      background: linear-gradient(135deg, #ff6b00, #ff9500);
-      border: none; border-radius: 12px;
-      color: #fff; font-size: 16px; font-weight: 700;
-      cursor: pointer; letter-spacing: 0.5px;
+      width:100%;padding:14px;
+      background:linear-gradient(135deg,#ff6b00,#ff9500);
+      border:none;border-radius:12px;color:#fff;
+      font-size:16px;font-weight:700;cursor:pointer;letter-spacing:0.5px;
     }
   </style>
 </head>
@@ -237,49 +191,48 @@
 <div class="modal" id="configModal">
   <div class="modal-box">
     <h2>⚙️ Configuração</h2>
-    <label>Chave OpenAI (Whisper + GPT-4o)</label>
-    <input type="password" id="apiKeyInput" placeholder="sk-..." />
-    <label>URL do Webhook (opcional)</label>
-    <input type="text" id="webhookInput" placeholder="https://..." />
+    <label>Chave do Gemini (Google AI Studio)</label>
+    <input type="password" id="apiKeyInput" placeholder="AIza..." />
     <label>Velocidade da voz</label>
     <select id="voiceSpeed">
-      <option value="0.9">Normal</option>
-      <option value="1.1">Ligeirinho</option>
-      <option value="1.3">Rápido</option>
+      <option value="0.85">Normal</option>
+      <option value="1.0">Ligeirinho</option>
+      <option value="1.2">Rápido</option>
     </select>
-    <button class="save-btn" onclick="saveConfig()">Salvar</button>
+    <button class="save-btn" onclick="saveConfig()">Salvar 💾</button>
   </div>
 </div>
 
 <script>
-var config = {
-  apiKey: localStorage.getItem('jp_api_key') || '',
-  webhook: localStorage.getItem('jp_webhook') || '',
-  voiceSpeed: parseFloat(localStorage.getItem('jp_voice_speed') || '0.9')
-};
+var GEMINI_KEY = localStorage.getItem('jp_gemini_key') || '';
+var voiceSpeed = parseFloat(localStorage.getItem('jp_voice_speed') || '0.85');
 
+var chat = document.getElementById('chat');
+var micBtn = document.getElementById('micBtn');
+var waveform = document.getElementById('waveform');
+var micHint = document.getElementById('micHint');
+var listening = false;
+var recognition = null;
+
+// ── Config ──────────────────────────────────────────
 function openConfig() {
-  document.getElementById('apiKeyInput').value = config.apiKey;
-  document.getElementById('webhookInput').value = config.webhook;
-  document.getElementById('voiceSpeed').value = config.voiceSpeed;
+  document.getElementById('apiKeyInput').value = GEMINI_KEY;
+  document.getElementById('voiceSpeed').value = voiceSpeed;
   document.getElementById('configModal').classList.add('open');
 }
 function saveConfig() {
-  config.apiKey = document.getElementById('apiKeyInput').value.trim();
-  config.webhook = document.getElementById('webhookInput').value.trim();
-  config.voiceSpeed = parseFloat(document.getElementById('voiceSpeed').value);
-  localStorage.setItem('jp_api_key', config.apiKey);
-  localStorage.setItem('jp_webhook', config.webhook);
-  localStorage.setItem('jp_voice_speed', config.voiceSpeed);
+  GEMINI_KEY = document.getElementById('apiKeyInput').value.trim();
+  voiceSpeed = parseFloat(document.getElementById('voiceSpeed').value);
+  localStorage.setItem('jp_gemini_key', GEMINI_KEY);
+  localStorage.setItem('jp_voice_speed', voiceSpeed);
   document.getElementById('configModal').classList.remove('open');
   addBubble('jp', 'Salvo mano! Tamo junto 💯');
 }
 document.getElementById('configModal').addEventListener('click', function(e){
-  if(e.target === this) this.classList.remove('open');
+  if(e.target===this) this.classList.remove('open');
 });
 
-var chat = document.getElementById('chat');
-
+// ── Chat ────────────────────────────────────────────
 function addBubble(who, text) {
   var d = document.createElement('div');
   d.className = 'bubble ' + who;
@@ -290,176 +243,166 @@ function addBubble(who, text) {
 }
 function showTyping() {
   var d = document.createElement('div');
-  d.className = 'bubble jp typing';
-  d.id = 'typing';
+  d.className = 'bubble jp typing'; d.id = 'typing';
   d.innerHTML = '<span></span><span></span><span></span>';
-  chat.appendChild(d);
-  chat.scrollTop = chat.scrollHeight;
+  chat.appendChild(d); chat.scrollTop = chat.scrollHeight;
 }
 function hideTyping() {
-  var t = document.getElementById('typing');
-  if (t) t.remove();
+  var t = document.getElementById('typing'); if(t) t.remove();
 }
-function setStatus(state, text) {
+function setStatus(cls, txt) {
   var el = document.getElementById('statusText');
-  el.className = 'status-dot ' + state;
-  el.textContent = text;
+  el.className = 'status-dot ' + cls; el.textContent = txt;
+}
+function resetMic() {
+  micBtn.classList.remove('recording','processing');
+  micBtn.textContent = '🎤';
+  micHint.textContent = 'Toca pra falar';
+  setStatus('', 'Na área');
+  waveform.classList.remove('active');
+  listening = false;
 }
 
-var mediaRecorder, audioChunks = [], recording = false;
-var micBtn = document.getElementById('micBtn');
-var waveform = document.getElementById('waveform');
-var micHint = document.getElementById('micHint');
-
+// ── Speech Recognition (Web Speech API) ────────────
 function toggleMic() {
-  if (recording) { stopRecording(); }
-  else { startRecording(); }
+  if (listening) { stopListening(); return; }
+  startListening();
 }
 
-function startRecording() {
-  navigator.mediaDevices.getUserMedia({ audio: true }).then(function(stream) {
-    audioChunks = [];
-    var mimeType = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/mp4';
-    mediaRecorder = new MediaRecorder(stream, { mimeType: mimeType });
-    mediaRecorder.ondataavailable = function(e) { audioChunks.push(e.data); };
-    mediaRecorder.onstop = processAudio;
-    mediaRecorder.start();
-    recording = true;
+function startListening() {
+  var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    addBubble('system', 'Seu navegador não suporta reconhecimento de voz. Use o Chrome, mano.');
+    return;
+  }
+  if (!GEMINI_KEY) {
+    addBubble('system', '⚙️ Cola a chave do Gemini nas configurações primeiro!');
+    return;
+  }
+
+  recognition = new SpeechRecognition();
+  recognition.lang = 'pt-BR';
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  recognition.onstart = function() {
+    listening = true;
     micBtn.classList.add('recording');
     micBtn.textContent = '⏹️';
     waveform.classList.add('active');
     micHint.textContent = 'Pode mandar ver...';
     setStatus('talking', 'Te ouvindo...');
-  }).catch(function() {
-    addBubble('system', 'Libera o microfone nas configurações do Chrome, mano.');
-  });
-}
+  };
 
-function stopRecording() {
-  if (mediaRecorder && recording) {
-    mediaRecorder.stop();
-    mediaRecorder.stream.getTracks().forEach(function(t){ t.stop(); });
-    recording = false;
+  recognition.onresult = function(e) {
+    var transcript = e.results[0][0].transcript;
+    if (!transcript.trim()) { resetMic(); return; }
+    listening = false;
     micBtn.classList.remove('recording');
     micBtn.classList.add('processing');
     micBtn.textContent = '⏳';
     waveform.classList.remove('active');
     micHint.textContent = 'Processando...';
     setStatus('thinking', 'Pensando...');
-  }
-}
-
-function processAudio() {
-  var blob = new Blob(audioChunks, { type: 'audio/webm' });
-  var fd = new FormData();
-  fd.append('file', blob, 'audio.webm');
-  fd.append('model', 'whisper-1');
-  fd.append('language', 'pt');
-
-  if (!config.apiKey) {
-    resetMic();
-    addBubble('system', 'Configura a chave da API primeiro ⚙️');
-    return;
-  }
-
-  fetch('https://api.openai.com/v1/audio/transcriptions', {
-    method: 'POST',
-    headers: { 'Authorization': 'Bearer ' + config.apiKey },
-    body: fd
-  }).then(function(r){ return r.json(); }).then(function(data) {
-    var transcript = data.text || '';
-    if (!transcript.trim()) {
-      resetMic();
-      addBubble('system', 'Não peguei nada, mano. Fala de novo!');
-      return;
-    }
     addBubble('user', transcript);
     showTyping();
-    getReply(transcript);
-  }).catch(function() {
+    getGeminiReply(transcript);
+  };
+
+  recognition.onerror = function(e) {
     resetMic();
-    addBubble('system', 'Erro na transcrição. Verifica a chave da API.');
+    if (e.error === 'no-speech') {
+      addBubble('system', 'Não ouvi nada, mano. Fala de novo!');
+    } else if (e.error === 'not-allowed') {
+      addBubble('system', 'Libera o microfone nas configurações do Chrome!');
+    } else {
+      addBubble('system', 'Erro no microfone: ' + e.error);
+    }
+  };
+
+  recognition.onend = function() {
+    if (listening) { resetMic(); }
+  };
+
+  recognition.start();
+}
+
+function stopListening() {
+  if (recognition) recognition.stop();
+  listening = false;
+}
+
+// ── Gemini API ──────────────────────────────────────
+var conversationHistory = [];
+
+var systemPrompt = 'Você é o JP, assistente de voz parceiro do Josiel. Personalidade: direto, fala com gírias do estilo rua brasileiro, parceirão, sem frescura. Use expressões como "mano", "trampo", "na moral", "de boa", "saca", "tá ligado", "firmeza", "tô junto". Seja útil mas com personalidade. Respostas CURTAS e diretas — máximo 2 frases — você está sendo falado em voz alta.';
+
+function getGeminiReply(userText) {
+  conversationHistory.push({ role: 'user', parts: [{ text: userText }] });
+
+  var body = {
+    system_instruction: { parts: [{ text: systemPrompt }] },
+    contents: conversationHistory,
+    generationConfig: { maxOutputTokens: 150, temperature: 0.9 }
+  };
+
+  fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + GEMINI_KEY, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data) {
+    var reply = '';
+    try {
+      reply = data.candidates[0].content.parts[0].text;
+    } catch(e) {
+      reply = 'Deu ruim mano, tenta de novo.';
+    }
+    conversationHistory.push({ role: 'model', parts: [{ text: reply }] });
+    hideTyping();
+    addBubble('jp', reply);
+    speak(reply);
+  })
+  .catch(function() {
+    hideTyping(); resetMic();
+    addBubble('system', 'Sem conexão mano, verifica a internet.');
   });
 }
 
-function getReply(transcript) {
-  var systemPrompt = 'Você é o JP, assistente de voz parceiro do Josiel. Personalidade: direto, fala com gírias do estilo rua brasileiro, parceirão, sem frescura. Use expressões como "mano", "trampo", "na moral", "de boa", "saca", "tá ligado", "firmeza", "tô junto". Seja útil mas com personalidade. Respostas curtas e diretas — você está sendo lido em voz alta. Máximo 2-3 frases.';
-
-  var endpoint = config.webhook || null;
-
-  if (endpoint) {
-    fetch(endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: transcript })
-    }).then(function(r){ return r.json(); }).then(function(data) {
-      var reply = data.reply || data.text || data.message || JSON.stringify(data);
-      hideTyping();
-      addBubble('jp', reply);
-      speak(reply);
-    }).catch(function() {
-      hideTyping(); resetMic();
-      addBubble('system', 'Erro no webhook, mano.');
-    });
-  } else {
-    fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': 'Bearer ' + config.apiKey,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        model: 'gpt-4o',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: transcript }
-        ],
-        max_tokens: 200
-      })
-    }).then(function(r){ return r.json(); }).then(function(data) {
-      var reply = (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || 'Deu ruim mano, tenta de novo.';
-      hideTyping();
-      addBubble('jp', reply);
-      speak(reply);
-    }).catch(function() {
-      hideTyping(); resetMic();
-      addBubble('system', 'Sem conexão com o servidor.');
-    });
-  }
-}
-
+// ── TTS ─────────────────────────────────────────────
 function speak(text) {
   if (!('speechSynthesis' in window)) { resetMic(); return; }
   window.speechSynthesis.cancel();
   var utt = new SpeechSynthesisUtterance(text);
   utt.lang = 'pt-BR';
-  utt.rate = config.voiceSpeed;
-  utt.pitch = 0.85;
-  var voices = window.speechSynthesis.getVoices();
-  var ptBR = voices.find(function(v){ return v.lang === 'pt-BR' && v.name.toLowerCase().includes('male'); })
-          || voices.find(function(v){ return v.lang === 'pt-BR'; });
-  if (ptBR) utt.voice = ptBR;
-  setStatus('talking', 'Falando...');
-  utt.onend = function() { setStatus('', 'Na área'); resetMic(); };
-  window.speechSynthesis.speak(utt);
-}
+  utt.rate = voiceSpeed;
+  utt.pitch = 0.82;
 
-function resetMic() {
-  micBtn.classList.remove('recording', 'processing');
-  micBtn.textContent = '🎤';
-  micHint.textContent = 'Toca pra falar';
-  setStatus('', 'Na área');
+  var voices = window.speechSynthesis.getVoices();
+  var best = voices.find(function(v){ return v.lang==='pt-BR' && /google/i.test(v.name); })
+          || voices.find(function(v){ return v.lang==='pt-BR'; });
+  if (best) utt.voice = best;
+
+  setStatus('talking', 'Falando...');
+  utt.onend = function(){ resetMic(); };
+  utt.onerror = function(){ resetMic(); };
+  window.speechSynthesis.speak(utt);
 }
 
 window.speechSynthesis.onvoiceschanged = function(){};
 
-setTimeout(function() {
-  addBubble('jp', 'Oi mano! JP na área 🔥 Toca no mic e manda ver!');
-  speak('Oi mano! JP na área. Toca no mic e manda ver!');
-  if (!config.apiKey) {
-    setTimeout(function(){ addBubble('system', '⚙️ Configura a chave da API antes de usar'); }, 1500);
+// ── Init ─────────────────────────────────────────────
+setTimeout(function(){
+  var welcome = 'Oi mano! JP na área 🔥 Toca no mic e manda ver!';
+  addBubble('jp', welcome);
+  speak(welcome);
+  if (!GEMINI_KEY) {
+    setTimeout(function(){
+      addBubble('system', '⚙️ Toca na engrenagem e cola a chave do Gemini pra começar');
+    }, 1200);
   }
-}, 600);
+}, 500);
 </script>
 </body>
 </html>
