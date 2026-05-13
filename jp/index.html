@@ -191,8 +191,8 @@
 <div class="modal" id="configModal">
   <div class="modal-box">
     <h2>⚙️ Configuração</h2>
-    <label>Chave do Gemini (Google AI Studio)</label>
-    <input type="password" id="apiKeyInput" placeholder="AIza..." />
+    <label>Chave do Groq</label>
+    <input type="password" id="apiKeyInput" placeholder="gsk_..." />
     <label>Velocidade da voz</label>
     <select id="voiceSpeed">
       <option value="0.85">Normal</option>
@@ -204,7 +204,7 @@
 </div>
 
 <script>
-var GEMINI_KEY = localStorage.getItem('jp_gemini_key') || '';
+var GEMINI_KEY = localStorage.getItem('jp_groq_key') || '';
 var voiceSpeed = parseFloat(localStorage.getItem('jp_voice_speed') || '0.85');
 
 var chat = document.getElementById('chat');
@@ -223,7 +223,7 @@ function openConfig() {
 function saveConfig() {
   GEMINI_KEY = document.getElementById('apiKeyInput').value.trim();
   voiceSpeed = parseFloat(document.getElementById('voiceSpeed').value);
-  localStorage.setItem('jp_gemini_key', GEMINI_KEY);
+  localStorage.setItem('jp_groq_key', GEMINI_KEY);
   localStorage.setItem('jp_voice_speed', voiceSpeed);
   document.getElementById('configModal').classList.remove('open');
   addBubble('jp', 'Salvo mano! Tamo junto 💯');
@@ -332,95 +332,80 @@ function stopListening() {
   listening = false;
 }
 
-// ── Gemini API ──────────────────────────────────────
+// ── Groq API ──────────────────────────────────────
 var conversationHistory = [];
 
-var systemPrompt = 'Você é o JP, assistente de voz parceiro do Josiel. Personalidade: direto, fala com gírias do estilo rua brasileiro, parceirão, sem frescura. Use expressões como "mano", "trampo", "na moral", "de boa", "saca", "tá ligado", "firmeza", "tô junto". Seja útil mas com personalidade. Respostas CURTAS e diretas — máximo 2 frases — você está sendo falado em voz alta.';
+var systemPrompt = 'Você é o JP, assistente pessoal do Josiel. Personalidade: direto, simpático, informal mas sem exagerar em gírias. Fale como um amigo prestativo — sem ser robótico e sem ser exagerado. Respostas CURTAS e objetivas — máximo 2 frases — você está sendo lido em voz alta. Responda sempre em português do Brasil.';
 
 function getGeminiReply(userText) {
-  conversationHistory.push({ role: 'user', parts: [{ text: userText }] });
+  conversationHistory.push({ role: 'user', content: userText });
 
   var body = {
-    system_instruction: { parts: [{ text: systemPrompt }] },
-    contents: conversationHistory,
-    generationConfig: { maxOutputTokens: 150, temperature: 0.9 }
+    model: 'llama-3.3-70b-versatile',
+    messages: [{ role: 'system', content: systemPrompt }].concat(conversationHistory),
+    max_tokens: 150,
+    temperature: 0.8
   };
 
-  fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + GEMINI_KEY, {
+  fetch('https://api.groq.com/openai/v1/chat/completions', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Authorization': 'Bearer ' + GEMINI_KEY,
+      'Content-Type': 'application/json'
+    },
     body: JSON.stringify(body)
   })
   .then(function(r){ return r.json(); })
   .then(function(data) {
     var reply = '';
     try {
-      reply = data.candidates[0].content.parts[0].text;
+      reply = data.choices[0].message.content;
     } catch(e) {
-      reply = 'Deu ruim mano, tenta de novo.';
+      reply = 'Não consegui processar, tenta de novo.';
     }
-    conversationHistory.push({ role: 'model', parts: [{ text: reply }] });
+    conversationHistory.push({ role: 'assistant', content: reply });
     hideTyping();
     addBubble('jp', reply);
     speak(reply);
   })
   .catch(function() {
     hideTyping(); resetMic();
-    addBubble('system', 'Sem conexão mano, verifica a internet.');
+    addBubble('system', 'Sem conexão, verifica a internet.');
   });
 }
 
-// ── TTS via Google Cloud TTS (voz masculina pt-BR) ──
+// ── TTS via Web Speech API (melhor voz disponível) ──
 function speak(text) {
+  if (!('speechSynthesis' in window)) { resetMic(); return; }
   setStatus('talking', 'Falando...');
 
-  // Usa Google Cloud TTS com a mesma chave do Gemini (se tiver permissão)
-  // Voz: pt-BR-Wavenet-B (masculina, natural)
-  fetch('https://texttospeech.googleapis.com/v1/text:synthesize?key=' + GEMINI_KEY, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      input: { text: text },
-      voice: { languageCode: 'pt-BR', name: 'pt-BR-Wavenet-B', ssmlGender: 'MALE' },
-      audioConfig: { audioEncoding: 'MP3', speakingRate: voiceSpeed, pitch: -2.0 }
-    })
-  })
-  .then(function(r){ return r.json(); })
-  .then(function(data) {
-    if (data.audioContent) {
-      var audio = new Audio('data:audio/mp3;base64,' + data.audioContent);
-      audio.onended = function(){ resetMic(); };
-      audio.onerror = function(){ speakFallback(text); };
-      audio.play();
-    } else {
-      speakFallback(text);
-    }
-  })
-  .catch(function(){ speakFallback(text); });
-}
+  // Função interna que executa após vozes carregadas
+  function doSpeak() {
+    window.speechSynthesis.cancel();
+    var utt = new SpeechSynthesisUtterance(text);
+    utt.lang = 'pt-BR';
+    utt.rate = voiceSpeed;
+    utt.pitch = 0.6;
 
-// Fallback: Web Speech API (caso Cloud TTS falhe)
-function speakFallback(text) {
-  if (!('speechSynthesis' in window)) { resetMic(); return; }
-  window.speechSynthesis.cancel();
-  var utt = new SpeechSynthesisUtterance(text);
-  utt.lang = 'pt-BR';
-  utt.rate = voiceSpeed;
-  utt.pitch = 0.5; // mais grave possível
+    var voices = window.speechSynthesis.getVoices();
+    // Prioridade: Google pt-BR masculino > qualquer pt-BR > pt genérico
+    var chosen = voices.find(function(v){ return v.lang==='pt-BR' && /google/i.test(v.name) && /masculin|male/i.test(v.name); })
+              || voices.find(function(v){ return v.lang==='pt-BR' && /google/i.test(v.name); })
+              || voices.find(function(v){ return v.lang==='pt-BR'; })
+              || voices.find(function(v){ return /pt/i.test(v.lang); });
+    if (chosen) utt.voice = chosen;
 
-  // Tentar pegar voz masculina
+    utt.onend = function(){ resetMic(); };
+    utt.onerror = function(){ resetMic(); };
+    window.speechSynthesis.speak(utt);
+  }
+
   var voices = window.speechSynthesis.getVoices();
-  var male = voices.find(function(v){ return v.lang==='pt-BR' && /masculin|male|homem|brasil.*m/i.test(v.name); })
-          || voices.find(function(v){ return v.lang==='pt-BR' && /wavenet/i.test(v.name); })
-          || voices.find(function(v){ return v.lang==='pt-BR'; });
-  if (male) utt.voice = male;
-
-  utt.onend = function(){ resetMic(); };
-  utt.onerror = function(){ resetMic(); };
-  window.speechSynthesis.speak(utt);
+  if (voices.length > 0) { doSpeak(); }
+  else { window.speechSynthesis.onvoiceschanged = function(){ doSpeak(); }; }
 }
 
-window.speechSynthesis.onvoiceschanged = function(){};
+
 
 // ── Init ─────────────────────────────────────────────
 setTimeout(function(){
