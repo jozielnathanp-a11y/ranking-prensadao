@@ -370,21 +370,51 @@ function getGeminiReply(userText) {
   });
 }
 
-// ── TTS ─────────────────────────────────────────────
+// ── TTS via Google Cloud TTS (voz masculina pt-BR) ──
 function speak(text) {
+  setStatus('talking', 'Falando...');
+
+  // Usa Google Cloud TTS com a mesma chave do Gemini (se tiver permissão)
+  // Voz: pt-BR-Wavenet-B (masculina, natural)
+  fetch('https://texttospeech.googleapis.com/v1/text:synthesize?key=' + GEMINI_KEY, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      input: { text: text },
+      voice: { languageCode: 'pt-BR', name: 'pt-BR-Wavenet-B', ssmlGender: 'MALE' },
+      audioConfig: { audioEncoding: 'MP3', speakingRate: voiceSpeed, pitch: -2.0 }
+    })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data) {
+    if (data.audioContent) {
+      var audio = new Audio('data:audio/mp3;base64,' + data.audioContent);
+      audio.onended = function(){ resetMic(); };
+      audio.onerror = function(){ speakFallback(text); };
+      audio.play();
+    } else {
+      speakFallback(text);
+    }
+  })
+  .catch(function(){ speakFallback(text); });
+}
+
+// Fallback: Web Speech API (caso Cloud TTS falhe)
+function speakFallback(text) {
   if (!('speechSynthesis' in window)) { resetMic(); return; }
   window.speechSynthesis.cancel();
   var utt = new SpeechSynthesisUtterance(text);
   utt.lang = 'pt-BR';
   utt.rate = voiceSpeed;
-  utt.pitch = 0.82;
+  utt.pitch = 0.5; // mais grave possível
 
+  // Tentar pegar voz masculina
   var voices = window.speechSynthesis.getVoices();
-  var best = voices.find(function(v){ return v.lang==='pt-BR' && /google/i.test(v.name); })
+  var male = voices.find(function(v){ return v.lang==='pt-BR' && /masculin|male|homem|brasil.*m/i.test(v.name); })
+          || voices.find(function(v){ return v.lang==='pt-BR' && /wavenet/i.test(v.name); })
           || voices.find(function(v){ return v.lang==='pt-BR'; });
-  if (best) utt.voice = best;
+  if (male) utt.voice = male;
 
-  setStatus('talking', 'Falando...');
   utt.onend = function(){ resetMic(); };
   utt.onerror = function(){ resetMic(); };
   window.speechSynthesis.speak(utt);
