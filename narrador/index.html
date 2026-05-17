@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⚽ Narrador de Gol — Prensadão</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0a1628;color:#fff;min-height:100vh;max-width:500px;margin:0 auto}
+    header{background:linear-gradient(135deg,#1a6b3a,#0d4a27);padding:14px 20px;text-align:center;border-bottom:3px solid #f5c518}
+    header h1{font-size:1.3rem;font-weight:900;letter-spacing:1px}
+    header p{font-size:0.75rem;opacity:0.8;margin-top:2px}
+    .status-bar{background:#0f2040;padding:8px 16px;display:flex;align-items:center;justify-content:space-between;font-size:0.78rem;border-bottom:1px solid #1e3a5f}
+    .dot{width:9px;height:9px;border-radius:50%;background:#888;display:inline-block;margin-right:6px}
+    .dot.on{background:#4caf50;animation:blink 1.5s infinite}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+    .btn-sm{padding:5px 12px;border-radius:20px;border:none;font-size:0.75rem;font-weight:700;cursor:pointer;background:#4caf50;color:#fff}
+    .manual{padding:12px 16px;display:flex;gap:8px;border-bottom:1px solid #1e3a5f}
+    .manual button{flex:1;padding:13px 6px;border:none;border-radius:10px;font-size:0.88rem;font-weight:800;cursor:pointer}
+    .btn-gol{background:linear-gradient(135deg,#f5c518,#e6a800);color:#000}
+    .btn-brasil{background:linear-gradient(135deg,#009c3b,#006622);color:#fff;border:2px solid #ffdf00!important}
+    .tabs{display:flex;gap:4px;padding:10px 16px 0;background:#0f2040;border-bottom:1px solid #1e3a5f;overflow-x:auto}
+    .tab{padding:6px 12px;border-radius:8px 8px 0 0;border:none;font-size:0.72rem;font-weight:700;cursor:pointer;background:#1e3a5f;color:#aaa;white-space:nowrap}
+    .tab.active{background:#f5c518;color:#000}
+    .section{padding:12px 16px;border-bottom:1px solid #1e3a5f}
+    .section-title{font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;color:#888;margin-bottom:10px}
+    .game-card{background:#0f2040;border-radius:10px;padding:11px 13px;margin-bottom:8px;border-left:4px solid #1e3a5f;cursor:pointer;user-select:none;transition:border-color 0.2s,background 0.2s;display:flex;align-items:center;gap:10px}
+    .game-card.brasil{border-left-color:#4caf50;background:#0a2a1a}
+    .game-card.selected{border-left-color:#f5c518;background:#1a1500}
+    .game-card.brasil.selected{border-left-color:#00e676;background:#0a2a0a}
+    .game-card.new-gol{animation:flash 0.4s 4}
+    @keyframes flash{0%,100%{opacity:1}50%{opacity:0.3}}
+    .toggle{width:28px;height:28px;border-radius:50%;border:2px solid #555;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:0.9rem}
+    .game-card.selected .toggle{background:#f5c518;border-color:#f5c518;color:#000}
+    .game-card.brasil.selected .toggle{background:#00e676;border-color:#00e676;color:#000}
+    .game-info{flex:1;min-width:0}
+    .game-top{display:flex;justify-content:space-between;margin-bottom:3px}
+    .game-league{font-size:0.62rem;color:#888}
+    .game-clock{font-size:0.65rem;color:#f5c518;font-weight:700}
+    .game-teams{display:flex;align-items:center;gap:6px}
+    .team{font-size:0.82rem;font-weight:600;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .team.home{text-align:left}
+    .team.away{text-align:right}
+    .score{font-size:1rem;font-weight:900;color:#f5c518;background:#0a1628;padding:3px 8px;border-radius:5px;min-width:44px;text-align:center;flex-shrink:0}
+    .game-card.brasil .score{color:#4caf50}
+    .no-games{text-align:center;color:#555;padding:24px 0;font-size:0.85rem}
+    #gol-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:999;justify-content:center;align-items:center;flex-direction:column;text-align:center;padding:20px}
+    #gol-overlay.show{display:flex;animation:fadeIn 0.2s}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    .ov-ball{font-size:5rem;animation:bounce 0.4s infinite alternate}
+    @keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-18px)}}
+    .ov-gol{font-size:3rem;font-weight:900;color:#f5c518;text-shadow:0 0 30px #f5c518;letter-spacing:3px;margin:8px 0}
+    .ov-brasil{font-size:2.5rem;font-weight:900;color:#00e676;text-shadow:0 0 20px #00e676;margin:8px 0}
+    .ov-scorer{font-size:1.1rem;margin-top:6px}
+    .ov-match{font-size:0.8rem;color:#aaa;margin-top:4px}
+    .ov-close{margin-top:22px;font-size:0.7rem;color:#555}
+    .log-list{list-style:none;font-size:0.75rem}
+    .log-list li{padding:4px 0;border-bottom:1px solid #1a2a3a;color:#bbb}
+    .log-list li.lg{color:#f5c518}
+    .log-list li.lb{color:#00e676}
+    .log-time{color:#555;margin-right:5px;font-size:0.7rem}
+  </style>
+</head>
+<body>
+<header>
+  <h1>⚽ NARRADOR DE GOL</h1>
+  <p>Prensadão — Guarapuava/PR</p>
+</header>
+<div class="status-bar">
+  <span><span class="dot" id="dot"></span><span id="status-txt">Carregando...</span></span>
+  <button class="btn-sm" onclick="carregarTodos()">🔄 Atualizar</button>
+</div>
+<div class="manual">
+  <button class="btn-gol"    onclick="tocarManual(false)">⚽ Testar Fox Sports</button>
+  <button class="btn-brasil" onclick="tocarManual(true)">🇧🇷 Testar Brasil</button>
+</div>
+<div class="tabs">
+  <button class="tab active" onclick="mudarAba('bra.1',this)">🇧🇷 Brasileirão</button>
+  <button class="tab" onclick="mudarAba('conmebol.libertadores',this)">🏆 Libertadores</button>
+  <button class="tab" onclick="mudarAba('conmebol.sudamericana',this)">🌎 Sul-Americana</button>
+  <button class="tab" onclick="mudarAba('fifa.world',this)">🌍 Copa do Mundo</button>
+  <button class="tab" onclick="mudarAba('bra.2',this)">📋 Série B</button>
+</div>
+<div class="section">
+  <div class="section-title">📺 Toque no jogo para monitorar 🔊</div>
+  <div id="games-list"><div class="no-games">Carregando...</div></div>
+</div>
+<div class="section">
+  <div class="section-title">📋 Gols detectados</div>
+  <ul class="log-list" id="log-list"><li style="color:#555">Nenhum gol ainda.</li></ul>
+</div>
+<div id="gol-overlay" onclick="fecharOv()">
+  <div class="ov-ball" id="ov-ball">⚽</div>
+  <div id="ov-txt" class="ov-gol">GOOOOOL!</div>
+  <div class="ov-scorer" id="ov-scorer"></div>
+  <div class="ov-match"  id="ov-match"></div>
+  <div class="ov-close">Toque para fechar</div>
+</div>
+<script>
+const HINOS_MAP={"sao paulo": "https://www.myinstants.com/media/sounds/hino-do-sao-paulo.mp3", "são paulo": "https://www.myinstants.com/media/sounds/hino-do-sao-paulo.mp3", "palmeiras": "https://www.myinstants.com/media/sounds/hino-palmeiras.mp3", "flamengo": "https://www.myinstants.com/media/sounds/hino-flamengo.mp3", "santos": "https://www.myinstants.com/media/sounds/hino-santos.mp3", "corinthians": "https://www.myinstants.com/media/sounds/bota-o-hino-do-corinthians.mp3", "athletico": "https://www.myinstants.com/media/sounds/hino-atletico-paranaense.mp3", "atletico": "https://www.myinstants.com/media/sounds/hino-atletico-paranaense.mp3", "atlético": "https://www.myinstants.com/media/sounds/hino-atletico-paranaense.mp3", "coritiba": "https://www.myinstants.com/media/sounds/hino-coritiba.mp3", "fluminense": "https://www.myinstants.com/media/sounds/hino-fluminense-cantado.mp3", "botafogo": "https://www.myinstants.com/media/sounds/botafogo-hino-instrumento-mp3-1_BK8ykaQ.mp3", "internacional": "https://www.myinstants.com/media/sounds/hino-internacional.mp3", "grêmio": "https://www.myinstants.com/media/sounds/hino-gremio_Nv6o6nm.mp3", "gremio": "https://www.myinstants.com/media/sounds/hino-gremio_Nv6o6nm.mp3"};
+const BRASIL_SRCS=["https://www.myinstants.com/media/sounds/brasil-sil-sil.mp3", "https://www.myinstants.com/media/sounds/brasil-sil-sil-celebracao.mp3", "https://www.myinstants.com/media/sounds/y2mate_nu1Dq3Z.mp3"];
+const FOX_SRC='https://www.myinstants.com/media/sounds/fox_7PpoGaZ.mp3';
+const TIMES_BR=["brazil", "brasil", "flamengo", "palmeiras", "corinthians", "são paulo", "sao paulo", "santos", "cruzeiro", "atletico", "atlético", "grêmio", "gremio", "fluminense", "vasco", "botafogo", "internacional", "fortaleza", "bahia", "athletico", "coritiba", "goias", "goiás", "sport", "ceara", "ceará", "cuiaba", "cuiabá", "bragantino", "america", "chapecoense", "guarani", "vitoria", "vitória", "nautico", "avai", "juventude", "criciuma", "cricíuma", "ponte preta", "bragantino", "atletico mineiro"];
+
+const LIGAS = {
+  'bra.1':                   '🇧🇷 Brasileirão',
+  'conmebol.libertadores':   '🏆 Libertadores',
+  'conmebol.sudamericana':   '🌎 Sul-Americana',
+  'fifa.world':              '🌍 Copa do Mundo',
+  'bra.2':                   '📋 Série B'
+};
+
+let somDesbloqueado=false, brasilIdx=0;
+let jogosAtuais={}, jogosSelecionados=new Set(), golsDetectados={};
+let abaAtual='bra.1';
+
+const ehBrasil=n=>TIMES_BR.some(b=>(n||'').toLowerCase().includes(b));
+
+function desbloquearSom(){
+  if(somDesbloqueado)return; somDesbloqueado=true;
+  // Desbloqueia silenciosamente — cria contexto de áudio sem tocar
+  const ctx = new (window.AudioContext||window.webkitAudioContext)();
+  ctx.resume().then(()=>ctx.close()).catch(()=>{});
+}
+
+function tocarAudio(ehBr, teamName){
+  try{
+    let src=null;
+    // Brasil/Seleção → Brasil sil sil
+    if(ehBr && (teamName||'').toLowerCase().match(/brazil|brasil/)){
+      src=BRASIL_SRCS[brasilIdx%BRASIL_SRCS.length];brasilIdx++;
+    }
+    // Adversário marca → vaia da torcida
+    if(!src){src='https://www.myinstants.com/media/sounds/vaias.mp3';}
+    const audio=new Audio(src);
+    audio.volume=1.0;
+    audio.play().catch(e=>console.warn(e));
+  }catch(e){console.warn(e);}
+}
+
+let ovTimer=null;
+function mostrarOv(ehBr,scorer,match){
+  document.getElementById('ov-ball').textContent=ehBr?'🇧🇷':'⚽';
+  const txt=document.getElementById('ov-txt');
+  txt.textContent=ehBr?'GOOOOOL! 🇧🇷':'GOOOOOL!';
+  txt.className=ehBr?'ov-brasil':'ov-gol';
+  document.getElementById('ov-scorer').textContent=scorer||'';
+  document.getElementById('ov-match').textContent=match||'';
+  document.getElementById('gol-overlay').classList.add('show');
+  if(ovTimer)clearTimeout(ovTimer);
+  ovTimer=setTimeout(fecharOv,9000);
+}
+function fecharOv(){document.getElementById('gol-overlay').classList.remove('show');}
+
+function tocarManual(ehBr){
+  desbloquearSom();
+  tocarAudio(ehBr, ehBr?'brasil':null);
+  mostrarOv(ehBr,null,'Teste manual');
+  addLog(ehBr?'🇧🇷 Brasil! (manual)':'⚽ Fox Sports (manual)',ehBr);
+}
+
+function mudarAba(liga, el){
+  abaAtual=liga;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  renderJogos(jogosAtuais[liga]||[]);
+}
+
+async function buscarLiga(liga){
+  try{
+    const r=await fetch(`https://site.api.espn.com/apis/site/v2/sports/soccer/${liga}/scoreboard`);
+    if(!r.ok)return[];
+    const d=await r.json();
+    return d.events||[];
+  }catch(e){return[];}
+}
+
+async function carregarTodos(){
+  setStatus('Atualizando...',true);
+  let total=0;
+  for(const liga of Object.keys(LIGAS)){
+    const jogos=await buscarLiga(liga);
+    jogosAtuais[liga]=jogos;
+    jogos.forEach(j=>{if(!golsDetectados[j.id])golsDetectados[j.id]=new Set();});
+    total+=jogos.length;
+  }
+  renderJogos(jogosAtuais[abaAtual]||[]);
+  const sel=jogosSelecionados.size;
+  setStatus(sel>0?`🔊 ${sel} monitorado(s) · ${hora()}`:`${total} jogo(s) ao vivo · ${hora()}`,true);
+}
+
+function renderJogos(jogos){
+  const el=document.getElementById('games-list');
+  if(!jogos.length){el.innerHTML='<div class="no-games">Nenhum jogo ao vivo agora 😴</div>';return;}
+  jogos.sort((a,b)=>temBrasil(b)-temBrasil(a));
+  el.innerHTML=jogos.map(j=>{
+    const comp=j.competitions?.[0]||{};
+    const comps=comp.competitors||[];
+    const home=comps.find(c=>c.homeAway==='home')||comps[0]||{};
+    const away=comps.find(c=>c.homeAway==='away')||comps[1]||{};
+    const hName=home.team?.displayName||'?';
+    const aName=away.team?.displayName||'?';
+    const hScore=home.score??0;
+    const aScore=away.score??0;
+    const clock=j.status?.displayClock||'';
+    const isBr=temBrasil(j);
+    const isSel=jogosSelecionados.has(j.id);
+    return `<div class="game-card ${isBr?'brasil':''} ${isSel?'selected':''}" id="card-${j.id}" onclick="toggleJogo('${j.id}')">
+      <div class="toggle">${isSel?'🔊':''}</div>
+      <div class="game-info">
+        <div class="game-top">
+          <span class="game-league">${isBr?'🇧🇷 ':''}${LIGAS[abaAtual]||''}</span>
+          <span class="game-clock">${clock?'⏱ '+clock:'AO VIVO'}</span>
+        </div>
+        <div class="game-teams">
+          <span class="team home">${hName}</span>
+          <span class="score">${hScore} – ${aScore}</span>
+          <span class="team away">${aName}</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function temBrasil(ev){
+  return(ev.competitions?.[0]?.competitors||[]).some(c=>ehBrasil(c.team?.displayName));
+}
+
+function toggleJogo(id){
+  desbloquearSom();
+  jogosSelecionados.has(id)?jogosSelecionados.delete(id):jogosSelecionados.add(id);
+  const card=document.getElementById('card-'+id);
+  if(card){
+    // encontrar jogo em todas as ligas
+    let isBr=false;
+    for(const liga of Object.values(jogosAtuais)){
+      const j=liga.find(x=>x.id===id);
+      if(j){isBr=temBrasil(j);break;}
+    }
+    const isSel=jogosSelecionados.has(id);
+    card.className=`game-card ${isBr?'brasil':''} ${isSel?'selected':''}`;
+    card.querySelector('.toggle').textContent=isSel?'🔊':'';
+  }
+  const sel=jogosSelecionados.size;
+  setStatus(sel>0?`🔊 ${sel} monitorado(s) · ${hora()}`:`Atualizado ${hora()}`,true);
+}
+
+async function verificarGols(){
+  if(jogosSelecionados.size===0)return;
+  for(const liga of Object.keys(LIGAS)){
+    const jogos=await buscarLiga(liga);
+    jogosAtuais[liga]=jogos;
+    if(abaAtual===liga)renderJogos(jogos);
+    for(const j of jogos){
+      if(!jogosSelecionados.has(j.id))continue;
+      const comp=j.competitions?.[0]||{};
+      const comps=comp.competitors||[];
+      const details=comp.details||[];
+      const teamMap={};
+      comps.forEach(c=>teamMap[c.team.id]=c.team.displayName);
+      const gols=details.filter(d=>(d?.type?.text||'').toLowerCase().includes('goal'));
+      if(!golsDetectados[j.id])golsDetectados[j.id]=new Set();
+      for(const gol of gols){
+        const clock=gol?.clock?.displayValue||'?';
+        const scorer=gol?.athletesInvolved?.[0]?.displayName||'';
+        const teamId=gol?.team?.id||'';
+        const teamNm=teamMap[teamId]||'';
+        const chave=`${clock}_${scorer}_${teamId}`;
+        if(!golsDetectados[j.id].has(chave)){
+          golsDetectados[j.id].add(chave);
+          const isBr=ehBrasil(teamNm);
+          const matchName=`${comps[0]?.team?.displayName||''} x ${comps[1]?.team?.displayName||''}`;
+          const scorerTxt=scorer?`⚽ ${scorer} aos ${clock}`:'⚽ Gol!';
+          tocarAudio(isBr,teamNm);
+          mostrarOv(isBr,scorerTxt,matchName);
+          addLog(`${isBr?'🇧🇷':'⚽'} ${scorer||'Gol'} (${teamNm}) ${clock} — ${matchName}`,isBr);
+          const card=document.getElementById('card-'+j.id);
+          if(card){card.classList.add('new-gol');setTimeout(()=>card.classList.remove('new-gol'),2000);}
+          await sleep(700);
+        }
+      }
+    }
+  }
+}
+
+const logs=[];
+function addLog(txt,isBr){
+  logs.unshift({txt,isBr,h:hora()});
+  if(logs.length>15)logs.pop();
+  document.getElementById('log-list').innerHTML=
+    logs.map(l=>`<li class="${l.isBr?'lb':'lg'}"><span class="log-time">${l.h}</span>${l.txt}</li>`).join('');
+}
+function setStatus(txt,on){
+  document.getElementById('status-txt').textContent=txt;
+  document.getElementById('dot').className='dot'+(on?' on':'');
+}
+function hora(){return new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+
+carregarTodos();
+setInterval(verificarGols,30000);
+setInterval(carregarTodos,120000);
+</script>
+</body>
+</html>
