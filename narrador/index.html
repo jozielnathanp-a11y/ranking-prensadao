@@ -119,12 +119,19 @@ function desbloquearSom(){
 
 function tocarAudio(ehBr, teamName){
   try{
+    const tn=(teamName||'').toLowerCase();
     let src=null;
-    // Brasil/Seleção → Brasil sil sil
-    if(ehBr && (teamName||'').toLowerCase().match(/brazil|brasil/)){
+    // Seleção Brasileira → Brasil Sil Sil
+    if(tn.match(/brazil|brasil/)){
       src=BRASIL_SRCS[brasilIdx%BRASIL_SRCS.length];brasilIdx++;
     }
-    // Adversário marca → vaia da torcida
+    // Time brasileiro com hino próprio → hino do time
+    if(!src && ehBr){
+      for(const [key,url] of Object.entries(HINOS_MAP)){
+        if(tn.includes(key)){src=url;break;}
+      }
+    }
+    // Adversário estrangeiro → vaia da torcida
     if(!src){src='https://www.myinstants.com/media/sounds/vaias.mp3';}
     const audio=new Audio(src);
     audio.volume=1.0;
