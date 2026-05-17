@@ -75,11 +75,8 @@
   <button class="btn-brasil" onclick="tocarManual(true)">🇧🇷 Testar Brasil</button>
 </div>
 <div class="tabs">
-  <button class="tab active" onclick="mudarAba('bra.1',this)">🇧🇷 Brasileirão</button>
+  <button class="tab active" onclick="mudarAba('fifa.world',this)">🌍 Copa do Mundo</button>
   <button class="tab" onclick="mudarAba('conmebol.libertadores',this)">🏆 Libertadores</button>
-  <button class="tab" onclick="mudarAba('conmebol.sudamericana',this)">🌎 Sul-Americana</button>
-  <button class="tab" onclick="mudarAba('fifa.world',this)">🌍 Copa do Mundo</button>
-  <button class="tab" onclick="mudarAba('bra.2',this)">📋 Série B</button>
 </div>
 <div class="section">
   <div class="section-title">📺 Toque no jogo para monitorar 🔊</div>
@@ -103,16 +100,13 @@ const FOX_SRC='https://www.myinstants.com/media/sounds/fox_7PpoGaZ.mp3';
 const TIMES_BR=["brazil", "brasil", "flamengo", "palmeiras", "corinthians", "são paulo", "sao paulo", "santos", "cruzeiro", "atletico", "atlético", "grêmio", "gremio", "fluminense", "vasco", "botafogo", "internacional", "fortaleza", "bahia", "athletico", "coritiba", "goias", "goiás", "sport", "ceara", "ceará", "cuiaba", "cuiabá", "bragantino", "america", "chapecoense", "guarani", "vitoria", "vitória", "nautico", "avai", "juventude", "criciuma", "cricíuma", "ponte preta", "bragantino", "atletico mineiro"];
 
 const LIGAS = {
-  'bra.1':                   '🇧🇷 Brasileirão',
-  'conmebol.libertadores':   '🏆 Libertadores',
-  'conmebol.sudamericana':   '🌎 Sul-Americana',
   'fifa.world':              '🌍 Copa do Mundo',
-  'bra.2':                   '📋 Série B'
+  'conmebol.libertadores':   '🏆 Libertadores'
 };
 
 let somDesbloqueado=false, brasilIdx=0;
 let jogosAtuais={}, jogosSelecionados=new Set(), golsDetectados={};
-let abaAtual='bra.1';
+let abaAtual='fifa.world';
 
 const ehBrasil=n=>TIMES_BR.some(b=>(n||'').toLowerCase().includes(b));
 
