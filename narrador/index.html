@@ -131,8 +131,8 @@ function tocarAudio(ehBr, teamName){
         if(tn.includes(key)){src=url;break;}
       }
     }
-    // Adversário estrangeiro → vaia da torcida
-    if(!src){src='https://www.myinstants.com/media/sounds/vaias.mp3';}
+    // Adversário estrangeiro → Fox Sports
+    if(!src){src=FOX_SRC;}
     const audio=new Audio(src);
     audio.volume=1.0;
     audio.play().catch(e=>console.warn(e));
