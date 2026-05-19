@@ -117,27 +117,31 @@ function desbloquearSom(){
   ctx.resume().then(()=>ctx.close()).catch(()=>{});
 }
 
+const HINOS_PAISES={"argentina": "https://www.myinstants.com/media/sounds/himno-argentino.mp3", "germany": "https://www.myinstants.com/media/sounds/deutsche-nationalhymne.mp3", "deutschland": "https://www.myinstants.com/media/sounds/deutsche-nationalhymne.mp3", "england": "https://www.myinstants.com/media/sounds/british-anthem.mp3", "great britain": "https://www.myinstants.com/media/sounds/british-anthem.mp3", "portugal": "https://www.myinstants.com/media/sounds/hino-de-portugal_-h8glvbglvc_01.mp3", "united states": "https://www.myinstants.com/media/sounds/usa-national-anthem.mp3", "usa": "https://www.myinstants.com/media/sounds/usa-national-anthem.mp3", "spain": "https://www.myinstants.com/media/sounds/himno-de-espana.mp3", "españa": "https://www.myinstants.com/media/sounds/himno-de-espana.mp3"};
+
 function tocarAudio(ehBr, teamName){
   try{
     const tn=(teamName||'').toLowerCase();
-    // Seleção Brasileira → Brasil Sil Sil + Fox Sports juntos
+    // Seleção Brasileira → Vinheta Globo Brasil
     if(tn.match(/brazil|brasil/)){
-      const a1=new Audio(BRASIL_SRCS[brasilIdx%BRASIL_SRCS.length]); brasilIdx++;
-      const a2=new Audio(FOX_SRC);
-      a1.volume=1.0; a2.volume=0.8;
-      a1.play().catch(e=>console.warn(e));
-      a2.play().catch(e=>console.warn(e));
+      const a=new Audio(BRASIL_SRCS[brasilIdx%BRASIL_SRCS.length]); brasilIdx++;
+      a.volume=1.0; a.play().catch(e=>console.warn(e));
       return;
     }
-    // Time brasileiro com hino próprio → hino do time
-    let src=null;
+    // Time brasileiro (Libertadores) → hino do clube
     if(ehBr){
       for(const [key,url] of Object.entries(HINOS_MAP)){
-        if(tn.includes(key)){src=url;break;}
+        if(tn.includes(key)){
+          const a=new Audio(url); a.volume=1.0; a.play().catch(e=>console.warn(e));
+          return;
+        }
       }
     }
-    // Adversário estrangeiro → Fox Sports
-    if(!src){src=FOX_SRC;}
+    // Seleção adversária → hino do país se existir
+    let src=FOX_SRC;
+    for(const [key,url] of Object.entries(HINOS_PAISES)){
+      if(tn.includes(key)){src=url;break;}
+    }
     const audio=new Audio(src);
     audio.volume=1.0;
     audio.play().catch(e=>console.warn(e));
