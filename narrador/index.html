@@ -95,8 +95,8 @@
 </div>
 <script>
 const HINOS_MAP={"sao paulo": "https://www.myinstants.com/media/sounds/hino-do-sao-paulo.mp3", "são paulo": "https://www.myinstants.com/media/sounds/hino-do-sao-paulo.mp3", "palmeiras": "https://www.myinstants.com/media/sounds/hino-palmeiras.mp3", "flamengo": "https://www.myinstants.com/media/sounds/hino-flamengo.mp3", "santos": "https://www.myinstants.com/media/sounds/hino-santos.mp3", "corinthians": "https://www.myinstants.com/media/sounds/bota-o-hino-do-corinthians.mp3", "athletico": "https://www.myinstants.com/media/sounds/hino-atletico-paranaense.mp3", "atletico": "https://www.myinstants.com/media/sounds/hino-atletico-paranaense.mp3", "atlético": "https://www.myinstants.com/media/sounds/hino-atletico-paranaense.mp3", "coritiba": "https://www.myinstants.com/media/sounds/hino-coritiba.mp3", "fluminense": "https://www.myinstants.com/media/sounds/hino-fluminense-cantado.mp3", "botafogo": "https://www.myinstants.com/media/sounds/botafogo-hino-instrumento-mp3-1_BK8ykaQ.mp3", "internacional": "https://www.myinstants.com/media/sounds/hino-internacional.mp3", "grêmio": "https://www.myinstants.com/media/sounds/hino-gremio_Nv6o6nm.mp3", "gremio": "https://www.myinstants.com/media/sounds/hino-gremio_Nv6o6nm.mp3"};
-const BRASIL_SRCS=["https://www.myinstants.com/media/sounds/vinheta_gol_do_brasil_1994_.mp3"];
-const FOX_SRC="https://www.myinstants.com/media/sounds/vht_gol_radiometro-online-audio-converter.mp3";
+const BRASIL_SRCS=["https://www.myinstants.com/media/sounds/fifa-word-cup-qatar-2022-official-intro.mp3"];
+const FOX_SRC="https://www.myinstants.com/media/sounds/fox_7PpoGaZ.mp3";
 const TIMES_BR=["brazil", "brasil", "flamengo", "palmeiras", "corinthians", "são paulo", "sao paulo", "santos", "cruzeiro", "atletico", "atlético", "grêmio", "gremio", "fluminense", "vasco", "botafogo", "internacional", "fortaleza", "bahia", "athletico", "coritiba", "goias", "goiás", "sport", "ceara", "ceará", "cuiaba", "cuiabá", "bragantino", "america", "chapecoense", "guarani", "vitoria", "vitória", "nautico", "avai", "juventude", "criciuma", "cricíuma", "ponte preta", "bragantino", "atletico mineiro"];
 
 const LIGAS = {
@@ -117,14 +117,12 @@ function desbloquearSom(){
   ctx.resume().then(()=>ctx.close()).catch(()=>{});
 }
 
-const HINOS_PAISES={"argentina": "https://www.myinstants.com/media/sounds/himno-argentino.mp3", "germany": "https://www.myinstants.com/media/sounds/deutsche-nationalhymne.mp3", "deutschland": "https://www.myinstants.com/media/sounds/deutsche-nationalhymne.mp3", "england": "https://www.myinstants.com/media/sounds/british-anthem.mp3", "great britain": "https://www.myinstants.com/media/sounds/british-anthem.mp3", "portugal": "https://www.myinstants.com/media/sounds/hino-de-portugal_-h8glvbglvc_01.mp3", "united states": "https://www.myinstants.com/media/sounds/usa-national-anthem.mp3", "usa": "https://www.myinstants.com/media/sounds/usa-national-anthem.mp3", "spain": "https://www.myinstants.com/media/sounds/himno-de-espana.mp3", "españa": "https://www.myinstants.com/media/sounds/himno-de-espana.mp3"};
-
 function tocarAudio(ehBr, teamName){
   try{
     const tn=(teamName||'').toLowerCase();
-    // Seleção Brasileira → Vinheta Globo Brasil
+    // Brasil → vinheta Copa Qatar 2022
     if(tn.match(/brazil|brasil/)){
-      const a=new Audio(BRASIL_SRCS[brasilIdx%BRASIL_SRCS.length]); brasilIdx++;
+      const a=new Audio(BRASIL_SRCS[0]);
       a.volume=1.0; a.play().catch(e=>console.warn(e));
       return;
     }
@@ -137,14 +135,9 @@ function tocarAudio(ehBr, teamName){
         }
       }
     }
-    // Seleção adversária → hino do país se existir
-    let src=FOX_SRC;
-    for(const [key,url] of Object.entries(HINOS_PAISES)){
-      if(tn.includes(key)){src=url;break;}
-    }
-    const audio=new Audio(src);
-    audio.volume=1.0;
-    audio.play().catch(e=>console.warn(e));
+    // Todas as outras seleções → Fox Sports
+    const a=new Audio(FOX_SRC);
+    a.volume=1.0; a.play().catch(e=>console.warn(e));
   }catch(e){console.warn(e);}
 }
 
