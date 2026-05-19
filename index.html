@@ -160,7 +160,7 @@
 </audio>
 
 <script>
-  const META = 280, META_MIN = 60;
+  const META = 300, META_MIN = 70;
   const ranking = [
       { nome: 'Gabriel', pontos: 40 },
       { nome: 'Ruan', pontos: 40 },
@@ -234,7 +234,7 @@
     const nomeEl=document.createElement('div'); nomeEl.className='card-nome'; nomeEl.textContent=c.nome;
     const ptsEl=document.createElement('div'); ptsEl.className='card-pts'; ptsEl.innerHTML='<strong>'+c.pontos+'</strong> pontos';
     const badgeEl=document.createElement('div');
-    badgeEl.textContent=c.pontos>=META_MIN?'✅ Elegível ao prêmio':'⚠️ Abaixo do mínimo (60 pts)';
+    badgeEl.textContent=c.pontos>=META_MIN?'✅ Elegível ao prêmio':'⚠️ Abaixo do mínimo (70 pts)';
     badgeEl.className=c.pontos>=META_MIN?'badge-ok':'badge-nok';
     const bw=document.createElement('div'); bw.className='card-barra-wrap';
     const bf=document.createElement('div'); bf.className='card-barra-fill';
