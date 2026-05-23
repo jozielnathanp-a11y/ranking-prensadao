@@ -206,7 +206,17 @@
           <div class="caixa-verso" id="verso-3"></div>
         </div>
       </div>
+      <div class="caixa" id="caixa-4" onclick="escolherCaixa(4)">
+        <div class="caixa-inner">
+          <div class="caixa-frente">
+            <div class="caixa-emoji">🎁</div>
+            <div class="caixa-num">Caixa 4</div>
+          </div>
+          <div class="caixa-verso" id="verso-4"></div>
+        </div>
+      </div>
     </div>
+    <div id="caixas-bloqueio" style="display:none; color:rgba(255,255,255,0.4); font-size:0.82rem; margin-top:8px;">🔒 Disponível quando você atingir <strong style="color:var(--gold-light)">90 pts</strong></div>
     <div class="votos-placar" id="votos-placar"></div>
     <div class="premio-final" id="premio-final"></div>
   </div>
@@ -308,7 +318,8 @@
     4: { emoji: '🍽️', nome: 'Vale Janta' }
   };
   // Distribuição das caixas
-  const CAIXA_PREMIOS = { 1: PREMIOS[1], 2: PREMIOS[2], 3: PREMIOS[3] };
+  const CAIXA_PREMIOS = { 1: PREMIOS[1], 2: PREMIOS[2], 3: PREMIOS[3], 4: PREMIOS[4] };
+  const META_CAIXA_IND = 90; // pts individuais para liberar escolha
 
   function lancarConfetti() {
     const canvas = document.getElementById('confetti-canvas');
@@ -344,6 +355,11 @@
   }
 
   function escolherCaixa(num) {
+    // Verificar se caixas estão bloqueadas
+    if(document.getElementById('caixas-wrap').classList.contains('bloqueada')) {
+      alert('🔒 As caixas só ficam disponíveis quando você atingir 90 pts!');
+      return;
+    }
     const jaVotou = localStorage.getItem('prensadao_voto');
     if(jaVotou) { alert('Você já escolheu sua caixa! 😊'); return; }
     localStorage.setItem('prensadao_voto', num);
@@ -391,11 +407,31 @@
       const c = document.getElementById('caixa-'+meuVoto);
       const v = document.getElementById('verso-'+meuVoto);
       const p = CAIXA_PREMIOS[meuVoto];
-      v.innerHTML = '<div class="caixa-emoji">'+p.emoji+'</div><div class="caixa-premio">'+p.nome+'</div>';
-      c.classList.add('aberta','caixa-escolhida');
-      [1,2,3].forEach(n => { if(n!=meuVoto) document.getElementById('caixa-'+n).classList.add('bloqueada'); });
+      if(c && v && p) {
+        v.innerHTML = '<div class="caixa-emoji">'+p.emoji+'</div><div class="caixa-premio">'+p.nome+'</div>';
+        c.classList.add('aberta','caixa-escolhida');
+        [1,2,3,4].forEach(n => { if(n!=meuVoto) { const el=document.getElementById('caixa-'+n); if(el) el.classList.add('bloqueada'); }});
+      }
     }
   }
+
+  // Verificar bloqueio por pontuação individual
+  function verificarBloqueio() {
+    const minPts = Math.min(...ranking.map(c => c.pontos));
+    const maxPts2 = Math.max(...ranking.map(c => c.pontos));
+    const wrap = document.getElementById('caixas-wrap');
+    const aviso = document.getElementById('caixas-bloqueio');
+    // Se nenhum atingiu 90, bloquear
+    if(maxPts2 < META_CAIXA_IND) {
+      wrap.classList.add('bloqueada');
+      [1,2,3,4].forEach(n => { const el=document.getElementById('caixa-'+n); if(el) el.classList.add('bloqueada'); });
+      if(aviso) aviso.style.display='block';
+    } else {
+      wrap.classList.remove('bloqueada');
+      if(aviso) aviso.style.display='none';
+    }
+  }
+  setTimeout(verificarBloqueio, 600);
   // Inicializar placar ao carregar
   setTimeout(atualizarPlacar, 500);
   // === FIM CAIXAS ===
