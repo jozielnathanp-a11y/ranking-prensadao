@@ -304,12 +304,11 @@
   const PREMIOS = {
     1: { emoji: '🍕', nome: 'Vale Pizza' },
     2: { emoji: '🍗', nome: 'Vale KFC' },
-    3: { emoji: '✂️', nome: 'Vale Barbeiro' },
-    4: { emoji: '🎨', nome: 'Vale Tatuagem' }
+    3: { emoji: '🍺', nome: 'Vale Cerveja' },
+    4: { emoji: '🍽️', nome: 'Vale Janta' }
   };
-  // Distribuição das caixas (aleatória a cada build)
-  const CAIXA_PREMIOS = { 1: PREMIOS[1], 2: PREMIOS[3], 3: PREMIOS[4] };
-  // Ordem pode ser alterada pelo gestor. Ex: caixa 2 = pizza, etc.
+  // Distribuição das caixas
+  const CAIXA_PREMIOS = { 1: PREMIOS[1], 2: PREMIOS[2], 3: PREMIOS[3] };
 
   function lancarConfetti() {
     const canvas = document.getElementById('confetti-canvas');
