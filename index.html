@@ -125,13 +125,8 @@
   .caixa-escolhida { border-color:var(--gold) !important; box-shadow:0 0 18px rgba(201,168,76,0.6); }
   .votos-placar { font-size:0.8rem; color:rgba(255,255,255,0.5); margin-top:8px; line-height:1.8; }
   .premio-final { margin-top:16px; font-family:'Oswald',sans-serif; font-size:1.1rem; color:var(--gold-light); font-weight:700; letter-spacing:1px; display:none; animation:slideIn 0.5s ease both; }
-  /* GOL OVERLAY */
+  /* CONFETE */
   #confetti-canvas { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:999; }
-  .gol-overlay { position:fixed; top:0; left:0; width:100%; height:100%; display:none; align-items:center; justify-content:center; flex-direction:column; z-index:1000; background:rgba(0,0,0,0.7); }
-  .gol-overlay.ativo { display:flex; }
-  .gol-bola { font-size:5rem; animation:bolaSpin 0.5s linear infinite; }
-  .gol-texto { font-family:'Oswald',sans-serif; font-size:4rem; font-weight:900; color:var(--gold-light); letter-spacing:8px; text-shadow:0 0 30px rgba(201,168,76,0.9); animation:pulse 0.3s ease-in-out infinite alternate; margin-top:10px; }
-  @keyframes bolaSpin { from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
   </style>
 </head>
 <body>
@@ -217,11 +212,6 @@
   </div>
 </div>
 
-<!-- OVERLAY GOLS -->
-<div class="gol-overlay" id="gol-overlay">
-  <div class="gol-bola" id="gol-bola">⚽</div>
-  <div class="gol-texto" id="gol-texto">GOL!</div>
-</div>
 <canvas id="confetti-canvas"></canvas>
 
 <audio id="audio-ucl" loop>
@@ -350,14 +340,8 @@
   }
 
   function animacaoGol(cb) {
-    const ov = document.getElementById('gol-overlay');
-    const txt = document.getElementById('gol-texto');
-    const bola = document.getElementById('gol-bola');
-    const msgs = ['GOL! ⚽🔥','GOLAÇO!','É ISSO! 🏆','CAMPEÃO!'];
-    txt.textContent = msgs[Math.floor(Math.random()*msgs.length)];
-    ov.classList.add('ativo');
     lancarConfetti();
-    setTimeout(() => { ov.classList.remove('ativo'); if(cb) cb(); }, 2200);
+    setTimeout(() => { if(cb) cb(); }, 800);
   }
 
   function escolherCaixa(num) {
