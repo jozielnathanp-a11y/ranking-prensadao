@@ -1,0 +1,82 @@
+EXCLUIR,ID,Codigo,Nome,Categoria,Unidade
+,9aaeb7bc-cca0-4f5c-80c6-014b25545ba1,2025100000_boqueiraw,10X20 Pct P/ Sache C/100,Embalagens,und
+,46216140-c8b7-4ff4-b02a-d3b04a9d069c,2025300000_boqueiraw,12X20 Pct P/ Kit Molho C/100,Embalagens,und
+,c3f4f522-c432-46c1-ae42-06d42f16a22d,2025400000_boqueiraw,22X16 Pct Para Lanche C/100,Embalagens,und
+,5be1e476-a557-4970-88d9-3fd8d3d9f929,2025800000_boqueiraw,30X40 Sacola P C/100,Embalagens,und
+,bd3c5018-bfb2-484c-a317-fd712d02c359,2025700000_boqueiraw,38X48 Sacola G C/100,Embalagens,und
+,5f73ae0e-70bb-4d82-9125-5866159096dd,2026300000_boqueiraw,40X60 Pct P/Maionese C/100,Embalagens,und
+,2b0824e7-6ee2-46b0-8b25-49a4bab6755a,7896098904671_boqueiraw,Água Sanitária 1L,Limpeza,L
+,3d374703-427a-4e8e-b278-0fbfca18136a,000100_boqueiraw,Alcatra Porcionado,Processado,kg
+,634e239a-d46f-4011-9306-967bed968d8a,9226_boqueiraw,Alcool 70°,Limpeza,und
+,f6569017-913e-4789-8d83-385711596bde,000200_boqueiraw,Alface Cortada,Processado,kg
+,f6b81840-441b-4432-940d-4c493a64d0c1,000300_boqueiraw,Bacon em Cubos,Processado,kg
+,57cbe69f-bcfd-4822-bb38-b6313b5a816f,7898919751051_boqueiraw,Batata Palha,Bruto,kg
+,bd07fd43-293d-4f1f-8c03-889023eba8d8,PRENS001_boqueiraw,Bobina Impressora,Embalagens,und
+,29e79a09-123d-4231-9ae4-c0574cf864c5,PRENS002_boqueiraw,Bobina Maquininha Cartão,Embalagens,und
+,4ea420a0-8bdf-4204-89f4-8a584de84e1e,000400_boqueiraw,Calabresa Fatiada,Processado,kg
+,f818f25d-9a3f-4b98-9d76-d5008c8ae680,7898942816826_boqueiraw,Canudo Descartável c/100,Embalagens,und
+,6a73b6bc-1e9b-48f0-8662-1a53697354e0,7891031409756_boqueiraw,Catchup,Bruto,und
+,2f6d1535-a8aa-429c-8bc0-e12c91548508,7898955711453_boqueiraw,Catupiry,Bruto,kg
+,5ef62e18-d8cb-4ba6-8979-1cb4b5244b6b,7896728970851_boqueiraw,Cheddar,Bruto,kg
+,26fe93fd-aa73-4d2d-8c47-0cb6b1751674,7894900010015_boqueiraw,Coca Cola Lata,Bebidas,und
+,8c7b6972-1ee9-42ce-965f-f9bfc09a9d34,7894900700015_boqueiraw,Coca Cola Zero Lata,Bebidas,und
+,0dff4212-83fb-48c0-b4ac-0bc71387e01d,7898939720105_boqueiraw,Copo 300ml c/100,Embalagens,und
+,5610b898-816a-41e1-b096-72c64d07e451,2026100000_boqueiraw,Copo Chopp 400Ml C/50,Embalagens,und
+,19df05ee-9e27-4f85-bc14-28ed9e5a0627,7894900531008_boqueiraw,Crystal Água c/ Gás,Bebidas,und
+,f7271ade-ba5d-42cc-8b3d-c63a60a67148,7894900530001_boqueiraw,Crystal Água s/ Gás,Bebidas,und
+,cb36a5a1-ca81-4d5e-ab1a-54a726dc1e12,1036_boqueiraw,Desincrustante,Limpeza,und
+,44cda3b4-e9aa-46ee-9fb5-013e05db7824,9128_boqueiraw,Detergente 500Ml,Limpeza,und
+,7ba61909-86e3-4b7f-9f36-719fc9a29c79,9158_boqueiraw,Esponja P/ Louça,Limpeza,und
+,61e20054-f8aa-4823-84eb-c1d2428c7337,7894900093001_boqueiraw,Fanta Guaraná Lata,Bebidas,und
+,dd42e6a6-fb1e-4b53-aa60-fc2b2b9b8a6c,7894900094008_boqueiraw,Fanta Guaraná Zero Lata,Bebidas,und
+,6d8e1a51-bcd7-4a53-a2d0-0098e5784b82,7894900030013_boqueiraw,Fanta Laranja Lata,Bebidas,und
+,6fec4009-0421-4011-ae66-5bb642911557,7894900091007_boqueiraw,Fanta Maracujá Lata,Bebidas,und
+,ed6d86a4-0869-4a12-a538-503a2b8815aa,7894900050011_boqueiraw,Fanta Uva Lata,Bebidas,und
+,cbd7b372-6fe3-40ac-9186-8369662f696c,9232_boqueiraw,Fibra Azul,Limpeza,und
+,c55d7761-bacb-4d4a-9ca5-b817483c4237,9146_boqueiraw,Fibra Pesada,Limpeza,und
+,369e2ba0-260a-4b2f-b4b3-10d4d162ce07,000600_boqueiraw,Frango Temperado,Processado,kg
+,2bb0ae50-3a7c-4e77-8626-26812e74d8da,7898119104312_boqueiraw,Grampo 226/6,Embalagens,und
+,2fd3d2c6-3853-4a3d-84e8-7ee6c687dc39,2027000000_boqueiraw,Guardanapo Cai Cai,Embalagens,und
+,9795f279-10df-459f-ac08-7330fd1ad04a,2027100000_boqueiraw,Guardanapo Sache Neutro,Embalagens,und
+,de98b524-66bc-4711-aa80-8ae79707fba4,2027200000_boqueiraw,Guardanapo Sache Personalinazado,Embalagens,und
+,ce1ac40b-afdb-465c-a2a3-3ce265e016f4,2026900000_boqueiraw,Interfolha Toalha,Embalagens,und
+,4541c00f-9745-4723-95de-5ffe2e5aa571,7898904904_boqueiraw,Klyo Pine,Limpeza,und
+,e97f8d38-0781-4516-91ef-fb385df65482,2025000000_boqueiraw,Kraft Neutro 5Kg,Embalagens,und
+,ea5adb37-c70c-4647-ad85-efe3bfc039be,2051000000_boqueiraw,Kraft Sache Personalizado Branco,Embalagens,und
+,9ec763a8-bfdc-4efb-b393-02b6b9650620,9126_boqueiraw,La De Aço,Limpeza,und
+,072502cf-28b8-4ece-ad18-9194e07b5ad2,109_boqueiraw,Limpa Chapa E Grill,Limpeza,und
+,5101746d-ad33-4252-adc0-d436d9a32912,113_boqueiraw,Lixa Ferro 3M P100,Limpeza,und
+,36ddf85f-88eb-4a45-bfeb-c8850df465f9,9162_boqueiraw,Lixa Rolo G80,Limpeza,und
+,5da207a2-9adc-4386-8380-89fc568f9bd4,9237_boqueiraw,Luva Latex Amarela,Limpeza,und
+,7b4c83d9-828b-4cc7-a633-e7b777c75aab,001000_boqueiraw,Maionese Branca,Processado,kg
+,1788f548-f3b6-45d2-82cf-a39c5195b681,001100_boqueiraw,Maionese Temperada,Processado,kg
+,c7c11da2-7154-4eba-85e0-48927e6356b8,2025900000_boqueiraw,Mascara Tnt Preta Cx C/50,Embalagens,und
+,32749015-2baf-4914-8610-2d56cc1293fa,000500_boqueiraw,Molho de Carne Moída,Processado,kg
+,cb7dccc0-7fb7-40ad-83c2-256a93c8b3e0,7891031405601_boqueiraw,Mostarda,Bruto,und
+,f009ce79-7dbd-47e3-ad57-755b91bbf438,7891022860580_boqueiraw,Multi-Uso Desengordurante Bombril,Limpeza,und
+,85240001-ad68-4845-b68f-4706064805af,002200_boqueiraw,Óleo de Soja,Bruto,und
+,c6aa2a2f-328d-41b2-8e4b-b6b6e493c9be,002400_boqueiraw,Ovo,Bruto,und
+,de44fe7d-591d-4da1-a011-a881a01ca6b8,9147_boqueiraw,Pano De Chão,Limpeza,und
+,abfdfc06-8998-4401-8137-63d618d2201e,107_boqueiraw,Pano Magico (Perflex),Limpeza,und
+,698c5b2d-8453-4dba-8080-ec79fd9dc059,4_boqueiraw,Pão de Hot Dog,Bruto,und
+,0a212d45-d061-4272-887e-1e388a2dd879,PAPEL01_boqueiraw,Papel Higiênico,Limpeza,und
+,20c393b9-8c51-4baa-9fc5-eee9928daddc,2026800000_boqueiraw,Papel Toalha Bobina,Embalagens,und
+,5dbb0f6c-a8e9-441a-83d9-07e32263309e,000800_boqueiraw,Queijo Ralado,Processado,kg
+,b551f51b-f12f-4217-860e-b1fa3037b67a,1038_boqueiraw,Sabão Em Barra,Limpeza,und
+,5e78749d-07dd-4112-965a-7b26fd05b201,9129_boqueiraw,Sabão Em Pó,Limpeza,und
+,359f2842-ad75-4290-ce8b-a9f00310ca0f,141_boqueiraw,Sabonete Liquido,Limpeza,und
+,92a300fe-b699-489b-90c1-82d8ffcb36ef,LIXO01_boqueiraw,Saco de Lixo,Limpeza,und
+,b22b13fc-907e-44a8-a239-5c7920bb28f1,9236_boqueiraw,Saco P/ Lixo 100Lt C/50,Limpeza,und
+,f8b3fbaa-0087-4e4e-b21f-2a80314e1377,9347_boqueiraw,Saco P/ Lixo 150Lt,Limpeza,und
+,c47c4741-a87c-43dc-bab9-93fa0d7f6e65,9348_boqueiraw,Saco P/ Lixo 30Lt,Limpeza,und
+,163aa47a-29b3-4607-8a8b-801b8e683370,913_boqueiraw,Saco P/ Lixo 50Lt C/50,Limpeza,und
+,69e4745e-b9c7-49fd-924d-0331e209e147,9262_boqueiraw,Saco P/ Lixo 60Lt,Limpeza,und
+,6a251b31-1580-4e17-a0c7-811e1460aa71,1001_boqueiraw,Saco P/Lixo 200L C/50,Limpeza,und
+,59aca120-e8b6-4586-a83c-f7241c9bfb0d,7891515220983_boqueiraw,Salsicha,Bruto,kg
+,192da99a-64b3-4bb2-8684-db7aeab3ecef,9159_boqueiraw,Saponáceo Cremoso,Limpeza,und
+,77c191a3-fca2-4384-82c0-b650a994cedf,7894900180503_boqueiraw,Schweppes Original Lata,Bebidas,und
+,08485c7f-4bc6-403b-a355-da583533ba3a,7894900681017_boqueiraw,Sprite Lata,Bebidas,und
+,868fe508-75a8-4052-b44f-30b6c70ad931,7894900060010_boqueiraw,Sprite Zero Açúcar Lata,Bebidas,und
+,44decb41-8108-49bf-ab5a-cfef4b474f31,7894900079838_boqueiraw,Sprite Zero Lata,Bebidas,und
+,db881433-77ee-4bb4-a752-9717881571d7,001900_boqueiraw,Tempero do Lucão,Processado,kg
+,fed4d085-deed-4545-a49f-926e13302d21,000900_boqueiraw,Tomate Triturado,Processado,kg
