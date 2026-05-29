@@ -236,12 +236,32 @@ input[type="date"], input[type="time"] {
 .ag-dt-row { display: flex; gap: 8px; }
 .ag-dt-row input { flex: 1; margin-bottom: 8px; }
 
+
+/* Botão notificação */
+.notif-btn {
+  background: none;
+  border: 1px solid #444;
+  border-radius: 20px;
+  color: #aaa;
+  font-size: 0.75rem;
+  padding: 5px 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  white-space: nowrap;
+}
+.notif-btn.ativo { border-color: #48bb78; color: #48bb78; }
+.notif-btn.bloq  { border-color: #fc5c5c; color: #fc5c5c; }
+
 </style>
 </head>
 <body>
 
 <div id="login-screen">
   <div class="l-logo">🔥</div>
+  <button class="notif-btn" id="notif-btn" onclick="ativarNotificacao()">🔔 Ativar notificações</button>
   <div class="l-brand">PRENSADÃO</div>
   <div class="l-sub">Painel do Time</div>
   <div class="l-card">
@@ -435,6 +455,55 @@ function solicitarNotificacao() {
     Notification.requestPermission();
   }
 }
+
+function updateNotifBtn() {
+  var btn = document.getElementById('notif-btn');
+  if (!btn) return;
+  if (!('Notification' in window)) {
+    btn.textContent = '🔕 Notif. indisponível';
+    btn.classList.add('bloq');
+    return;
+  }
+  if (Notification.permission === 'granted') {
+    btn.innerHTML = '🔔 Notificações ativas';
+    btn.classList.add('ativo');
+    btn.classList.remove('bloq');
+  } else if (Notification.permission === 'denied') {
+    btn.innerHTML = '🔕 Notif. bloqueada';
+    btn.classList.add('bloq');
+    btn.classList.remove('ativo');
+  } else {
+    btn.innerHTML = '🔔 Ativar notificações';
+    btn.classList.remove('ativo','bloq');
+  }
+}
+
+function ativarNotificacao() {
+  if (!('Notification' in window)) {
+    alert('Seu navegador não suporta notificações.');
+    return;
+  }
+  if (Notification.permission === 'granted') {
+    alert('Notificações já estão ativas! ✅');
+    return;
+  }
+  if (Notification.permission === 'denied') {
+    alert('Notificações estão bloqueadas.\nVá em Configurações do navegador > Notificações e permita este site.');
+    return;
+  }
+  Notification.requestPermission().then(function(p) {
+    updateNotifBtn();
+    if (p === 'granted') {
+      new Notification('🔔 Prensadão', {
+        body: 'Notificações ativadas! Você receberá alertas de mensagens e novidades.',
+        icon: 'https://jozielnathanp-a11y.github.io/ranking-prensadao/icon.png'
+      });
+    } else {
+      alert('Permissão negada. Ative nas configurações do navegador.');
+    }
+  });
+}
+
 
 function enviarNotificacao(titulo, corpo, icone) {
   if (!('Notification' in window)) return;
