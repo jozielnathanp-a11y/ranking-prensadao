@@ -7,25 +7,19 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>Painel do Gestor — Prensadão</title>
 <style>
-/* === BASE === */
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:"Segoe UI",sans-serif;background:#0a0a0a;color:#fff;min-height:100vh}
-
-/* === LOGIN === */
-#login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px;position:relative;z-index:1}
-#app-screen{min-height:100vh;padding-bottom:70px}
+body{font-family:'Segoe UI',sans-serif;background:#0a0a0a;color:#fff;min-height:100vh}
+#login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px}
 .l-logo{font-size:3rem;margin-bottom:10px}
 .l-brand{font-size:1.4rem;font-weight:900;letter-spacing:2px;margin-bottom:4px}
-.l-sub{font-size:0.82rem;color:#888;margin-bottom:36px}
-.l-card{background:#111;border:1px solid #2a2a2a;border-radius:18px;padding:28px;width:100%;max-width:340px;position:relative;z-index:2}
+.l-sub{font-size:0.82rem;color:#555;margin-bottom:36px}
+.l-card{background:#111;border:1px solid #1e1e1e;border-radius:18px;padding:28px;width:100%;max-width:340px}
 .l-card label{display:block;font-size:0.75rem;color:#666;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
-.l-card input{width:100%;padding:13px 14px;background:#1a1a1a;border:1.5px solid #2a2a2a;border-radius:10px;color:#fff;font-size:0.95rem;margin-bottom:16px;outline:none}
-#btn-entrar{width:100%;padding:14px;background:linear-gradient(135deg,#ff6b00,#ff9500);border:none;border-radius:12px;color:#fff;font-size:1rem;font-weight:800;cursor:pointer;letter-spacing:1px;display:block;position:relative;z-index:999}
-.l-err{display:none;color:#ff4444;font-size:0.8rem;text-align:center;margin-top:8px}
-
-/* === APP === */
-
-#app-screen{min-height:100vh;padding-bottom:70px}
+.l-card input{width:100%;padding:13px 14px;background:#1a1a1a;border:1.5px solid #2a2a2a;border-radius:10px;color:#fff;font-size:0.95rem;margin-bottom:16px}
+.l-card input:focus{outline:none;border-color:#ff6b00}
+.l-btn{width:100%;padding:14px;background:linear-gradient(135deg,#ff6b00,#ff9500);border:none;border-radius:12px;color:#fff;font-size:1rem;font-weight:800;cursor:pointer;letter-spacing:1px}
+.l-err{color:#fc8181;font-size:0.82rem;text-align:center;margin-top:10px;display:none}
+#app-screen{display:none;min-height:100vh;padding-bottom:70px}
 .top-hdr{background:#111;border-bottom:1px solid #1a1a1a;padding:14px 18px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
 .top-av{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #ff6b00}
 .top-nm{font-size:0.95rem;font-weight:800}
@@ -243,17 +237,7 @@ input[type="date"], input[type="time"] {
 .ag-dt-row input { flex: 1; margin-bottom: 8px; }
 
 
-
-*{box-sizing:border-box;margin:0;padding:0}body{font-family:"Segoe UI",sans-serif;background:#0a0a0a;color:#fff;min-height:100vh}
-#login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px}
-.l-logo{font-size:3rem;margin-bottom:10px}.l-brand{font-size:1.4rem;font-weight:900;letter-spacing:2px;margin-bottom:4px}.l-sub{font-size:0.82rem;color:#555;margin-bottom:36px}
-.l-card{background:#111;border:1px solid #1e1e1e;border-radius:18px;padding:28px;width:100%;max-width:340px}
-.l-card label{display:block;font-size:0.75rem;color:#666;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
-.l-card input{width:100%;padding:13px 14px;background:#1a1a1a;border:1.5px solid #2a2a2a;border-radius:10px;color:#fff;font-size:0.95rem;margin-bottom:16px}
-.l-card input:focus{outline:none;border-color:#4a90d9}
-.l-btn-app-unused{width:100%;padding:14px;background:linear-gradient(135deg,#1a1a2e,#4a90d9);border:none;border-radius:12px;color:#fff;font-size:1rem;font-weight:800;cursor:pointer}
-.l-err{color:#fc8181;font-size:0.82rem;text-align:center;margin-top:10px;display:none}
-#app-screen{min-height:100vh;padding-bottom:70px}
+#app-screen{display:none;min-height:100vh;padding-bottom:70px}
 .top-hdr{background:#111;border-bottom:1px solid #1a1a1a;padding:14px 18px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
 .top-nm{font-size:0.95rem;font-weight:800}.top-sub{font-size:0.72rem;color:#555}
 .badge-ab{background:#f6ad55;color:#0a0a0a;font-size:0.72rem;font-weight:800;padding:2px 8px;border-radius:99px;margin-left:8px}
@@ -291,7 +275,6 @@ input[type="date"], input[type="time"] {
 .sec-lbl{font-size:0.75rem;color:#555;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
 
 
-
 </style>
 </head>
 <body>
@@ -302,13 +285,13 @@ input[type="date"], input[type="time"] {
   <div class="l-sub">Painel do Gestor</div>
   <div class="l-card">
     <label>Senha</label>
-    <input type="password" id="lsn" placeholder="••••••••" autocomplete="current-password">
-    <button class="l-btn" id="btn-entrar" onclick="doLogin()">ENTRAR</button>
+    <input type="password" id="lsn" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="l-btn" onclick="doLogin()">ENTRAR</button>
     <div class="l-err" id="lerr">Senha incorreta.</div>
   </div>
 </div>
 
-<div id="app-screen" style="display:none">
+<div id="app-screen">
 <div class="top-hdr"><div class="top-nm">🛂 Painel do Gestor <span class="badge-ab" id="badge-ab">0</span></div></div>
 <div id="tab-geral" class="tab-c active"><div id="ajudas-card" style="background:#111;border:1.5px solid #f6ad55;border-radius:14px;padding:16px;margin-bottom:14px;display:none"><div style="font-size:0.9rem;font-weight:800;margin-bottom:4px">Ajudas Concluidas<span id="ajudas-badge" style="background:#f6ad55;color:#000;font-size:0.7rem;font-weight:800;padding:2px 8px;border-radius:99px;margin-left:8px">0</span></div><div id="ajudas-pendentes-lista"></div></div>
 <div class="stat-row" id="stat-row"></div>
@@ -342,20 +325,16 @@ input[type="date"], input[type="time"] {
 <button class="nav-b" id="nav-ranking" onclick="swTab('ranking')"><span class="ni">🏆</span><span class="nl">Ranking</span></button>
 </div>
 </div>
-
-<script>
-function getSn(){ return 'josiel123'; }
+<script>function getSn(){return 'josiel123'}
 function doLogin(){
-  var v = document.getElementById('lsn').value;
-  if(v === getSn()){
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('app-screen').style.display = 'block';
-    var nav = document.getElementById('bot-nav');
-    if(nav) nav.style.display = 'flex';
-    try{ initApp(); }catch(e){ console.warn(e); }
+  const v=document.getElementById('lsn').value;
+  if(v===getSn()){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app-screen').style.display='block';
+    var bn=document.getElementById('bot-nav');if(bn)bn.style.display='flex';
+            initApp();
   } else {
-    var err = document.getElementById('lerr');
-    if(err){ err.style.display='block'; setTimeout(function(){ err.style.display='none'; },2000); }
+    const e=document.getElementById('lerr');e.style.display='block';setTimeout(()=>e.style.display='none',2000);
   }
 }
 
@@ -520,7 +499,4 @@ function getAjudaGanhos(){try{return JSON.parse(localStorage.getItem('prd_ajuda_
 function saveAjudaGanhos(g){localStorage.setItem('prd_ajuda_ganhos',JSON.stringify(g));}
 function confirmarAjuda(idx){var ganhos=getAjudaGanhos();if(!ganhos[idx])return;ganhos[idx].confirmado=true;saveAjudaGanhos(ganhos);alert('Pontos confirmados para '+ganhos[idx].nome+'!');renderAjudasPendentes();}
 function renderAjudasPendentes(){var wrap=document.getElementById('ajudas-pendentes-lista');if(!wrap)return;var ganhos=getAjudaGanhos().filter(function(g){return!g.confirmado;});var card=document.getElementById('ajudas-card');if(!ganhos.length){wrap.innerHTML='<p style="color:#555;text-align:center">Nenhuma ajuda pendente</p>';if(card)card.style.display='none';return;}if(card)card.style.display='block';wrap.innerHTML=ganhos.map(function(g,i){return '<div style="border:1px solid #2a2a2a;border-radius:10px;padding:12px;margin-bottom:8px">'+'<div style="font-weight:700;color:#f6ad55">'+g.nome+'</div>'+'<div style="font-size:0.8rem;color:#aaa;margin:4px 0">'+g.motivo+'</div>'+'<button onclick="confirmarAjuda('+i+')" style="width:100%;padding:8px;background:#1a3a1a;border:1px solid #48bb78;border-radius:8px;color:#48bb78;font-weight:700;cursor:pointer">Confirmar +3 pts</button>'+'</div>';}).join('');}
-
-</script>
-</body>
-</html>
+</script></body></html>
