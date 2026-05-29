@@ -433,13 +433,20 @@ function sendWpp(phone,url,nome){
 }
 
 function swTab(t){
-  document.querySelectorAll(".tab-c").forEach(c=>c.classList.remove("active"));
-  document.querySelectorAll(".nav-b").forEach(b=>b.classList.remove("active"));
-  document.getElementById("tab-"+t).classList.add("active");
-  document.getElementById("nav-"+t).classList.add("active");
-  if(t==="chamados") renderChamados();
-  if(t==="geral") renderGeral();
+  document.querySelectorAll('.tab-c').forEach(c=>c.classList.remove('active'));
+  document.querySelectorAll('.nav-b').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+t).classList.add('active');
+  document.getElementById('nav-'+t).classList.add('active');
+  if(t==='chamados') renderChamados();
+  if(t==='geral')    renderGeral();
+  if(t==='msgs')     try{ renderMsgsEnviadas(); }catch(e){}
+  if(t==='chat')     try{ renderChatGestor(); }catch(e){}
+  if(t==='agenda')   try{ renderAgendaGestor(); }catch(e){}
 }
+window.addEventListener('load',()=>{
+  try{ renderChatGestor(); }catch(e){}
+  try{ renderAgendaGestor(); }catch(e){}
+});
 
 
 const MSG_PREFIX = 'prd_msgs_';
@@ -700,13 +707,5 @@ function renderAgendaGestor(){
       '</div>';
   }).join('');
 }
-
-const _swTabOrigGestor=swTab;
-function swTab(t){
-  _swTabOrigGestor(t);
-  if(t==='chat') renderChatGestor();
-  if(t==='agenda') renderAgendaGestor();
-}
-window.addEventListener('load',()=>{ try{renderChatGestor();}catch(e){} try{renderAgendaGestor();}catch(e){} });
 
 </script></body></html>
