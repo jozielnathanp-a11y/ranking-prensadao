@@ -1,274 +1,38 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0a0a0a">
-<title>Painel do Gestor — Prensadão</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0}body{font-family:"Segoe UI",sans-serif;background:#0a0a0a;color:#fff;min-height:100vh}
-#login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px}
-.l-logo{font-size:3rem;margin-bottom:10px}.l-brand{font-size:1.4rem;font-weight:900;letter-spacing:2px;margin-bottom:4px}.l-sub{font-size:0.82rem;color:#555;margin-bottom:36px}
-.l-card{background:#111;border:1px solid #1e1e1e;border-radius:18px;padding:28px;width:100%;max-width:340px}
-.l-card label{display:block;font-size:0.75rem;color:#666;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
-.l-card input{width:100%;padding:13px 14px;background:#1a1a1a;border:1.5px solid #2a2a2a;border-radius:10px;color:#fff;font-size:0.95rem;margin-bottom:16px}
-.l-card input:focus{outline:none;border-color:#4a90d9}
-.l-btn{width:100%;padding:14px;background:linear-gradient(135deg,#1a1a2e,#4a90d9);border:none;border-radius:12px;color:#fff;font-size:1rem;font-weight:800;cursor:pointer}
-.l-err{color:#fc8181;font-size:0.82rem;text-align:center;margin-top:10px;display:none}
-#app-screen{display:none;min-height:100vh;padding-bottom:70px}
-.top-hdr{background:#111;border-bottom:1px solid #1a1a1a;padding:14px 18px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
-.top-nm{font-size:0.95rem;font-weight:800}.top-sub{font-size:0.72rem;color:#555}
-.badge-ab{background:#f6ad55;color:#0a0a0a;font-size:0.72rem;font-weight:800;padding:2px 8px;border-radius:99px;margin-left:8px}
-.bot-nav{position:fixed;bottom:0;left:0;right:0;background:#111;border-top:1px solid #1e1e1e;display:flex;z-index:100}
-.nav-b{flex:1;padding:10px 4px 8px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;color:#444;border:none;background:none}
-.nav-b .ni{font-size:1.3rem}.nav-b .nl{font-size:0.62rem;font-weight:600}.nav-b.active{color:#4a90d9}
-.tab-c{display:none;padding:16px;max-width:700px;margin:0 auto}.tab-c.active{display:block}
-.stat-row{display:flex;gap:10px;margin-bottom:16px;overflow-x:auto}.stat-c{background:#111;border:1px solid #1e1e1e;border-radius:12px;padding:14px 16px;text-align:center;min-width:80px;flex-shrink:0}
-.stat-n{font-size:1.6rem;font-weight:900}.stat-l{font-size:0.68rem;color:#555;margin-top:2px}.stat-c.ab .stat-n{color:#f6ad55}.stat-c.rp .stat-n{color:#48bb78}.stat-c.urg .stat-n{color:#fc8181}
-.colab-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
-.colab-card{background:#111;border:1px solid #1e1e1e;border-radius:14px;padding:16px;cursor:pointer;transition:border 0.2s}.colab-card:hover{border-color:#4a90d9}.colab-card.has-open{border-color:#f6ad55}
-.colab-av{width:48px;height:48px;border-radius:50%;object-fit:cover;border:2px solid #2a2a2a;margin-bottom:10px;display:block}
-.colab-nm{font-size:0.92rem;font-weight:800}.colab-pos{font-size:0.75rem;color:#f6ad55;margin-top:2px}
-.colab-badge{display:inline-block;margin-top:6px;font-size:0.7rem;font-weight:700;padding:3px 8px;border-radius:99px}
-.colab-badge.open{background:#1a1200;color:#f6ad55;border:1px solid #f6ad55}.colab-badge.ok{background:#0d1a10;color:#48bb78;border:1px solid #48bb78}.colab-badge.none{background:#1a1a1a;color:#555;border:1px solid #333}
-.filtros{display:flex;gap:8px;margin-bottom:14px;overflow-x:auto}.fil-btn{padding:7px 14px;border-radius:99px;border:1.5px solid #2a2a2a;background:none;color:#555;font-size:0.75rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:all 0.2s}.fil-btn.active{background:#1a2a3a;border-color:#4a90d9;color:#4a90d9}
-.ch-card{background:#111;border:1px solid #1e1e1e;border-radius:14px;padding:16px;margin-bottom:12px}
-.ch-card.urg{border-left:3px solid #fc8181}.ch-card.aberto{border-left:3px solid #f6ad55}.ch-card.respondido{border-left:3px solid #48bb78;opacity:0.7}
-.ch-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;gap:8px}
-.ch-tipo{font-size:0.8rem;font-weight:700;color:#4a90d9}.ch-colab{font-size:0.75rem;color:#666;margin-top:2px}.ch-dt{font-size:0.7rem;color:#444;text-align:right}
-.st-badge{font-size:0.7rem;font-weight:700;padding:3px 10px;border-radius:99px;white-space:nowrap;display:inline-block}.st-badge.aberto{background:#1a1200;color:#f6ad55;border:1px solid #f6ad55}.st-badge.respondido{background:#0d1a10;color:#48bb78;border:1px solid #48bb78}
-.urg-tag{display:inline-block;font-size:0.7rem;padding:2px 8px;border-radius:99px;margin-bottom:8px;font-weight:600}.urg-tag.baixa{background:#0d1a10;color:#48bb78}.urg-tag.media{background:#1a1200;color:#f6ad55}.urg-tag.alta{background:#1a0d0d;color:#fc8181}
-.ch-msg{font-size:0.85rem;color:#ccc;line-height:1.5;margin-bottom:10px}
-.resp-area{background:#0f0f0f;border-radius:10px;padding:12px;margin-top:10px}
-.resp-ex{font-size:0.8rem;color:#aaa;margin-bottom:10px;border-left:3px solid #4a90d9;padding-left:10px}.resp-ex strong{color:#4a90d9;display:block;font-size:0.72rem;margin-bottom:4px}
-.resp-inp{width:100%;padding:10px;background:#1a1a1a;border:1.5px solid #2a2a2a;border-radius:8px;color:#fff;font-size:0.83rem;resize:vertical;min-height:70px}.resp-inp:focus{outline:none;border-color:#4a90d9}
-.btn-row{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}.btn-resp{flex:1;padding:10px;background:linear-gradient(135deg,#1a1a2e,#4a90d9);border:none;border-radius:8px;color:#fff;font-size:0.82rem;font-weight:700;cursor:pointer;min-width:80px}
-.btn-wpp{padding:10px 12px;background:#0d2818;border:1px solid #25d366;border-radius:8px;color:#25d366;font-size:0.82rem;cursor:pointer}.btn-fechar{padding:10px 12px;background:none;border:1px solid #2a2a2a;border-radius:8px;color:#555;font-size:0.82rem;cursor:pointer}
-.empty-st{text-align:center;padding:50px 20px;color:#333}.empty-st .ei{font-size:2.5rem;margin-bottom:10px}
-.paineis-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.pl-card{background:#111;border:1px solid #1e1e1e;border-radius:14px;padding:16px}
-.pl-av{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #4a90d9;margin-bottom:10px;display:block}
-.pl-nm{font-size:0.88rem;font-weight:800}.pl-pts{font-size:0.75rem;color:#f6ad55;margin-top:2px}.pl-link{font-size:0.65rem;color:#444;margin-top:4px;word-break:break-all}
-.copy-btn{display:block;width:100%;padding:6px;border:none;border-radius:6px;font-size:0.72rem;cursor:pointer;margin-top:6px;font-weight:600}
-.rk-frame{width:100%;height:calc(100vh - 130px);border:none;display:block}
-.sec-lbl{font-size:0.75rem;color:#555;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
-</style>
-</head><body>
-<div id="login-screen">
-<div class="l-logo">🛂</div>
-<div class="l-brand">PRENSADÃO</div>
-<div class="l-sub">Painel do Gestor</div>
-<div class="l-card">
-<label>Senha</label>
-<input type="password" id="lsn" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
-<button class="l-btn" onclick="doLogin()">ENTRAR</button>
-<div class="l-err" id="lerr">Senha incorreta.</div>
-</div></div>
-<div id="app-screen">
-<div class="top-hdr"><div class="top-nm">🛂 Painel do Gestor <span class="badge-ab" id="badge-ab">0</span></div></div>
-<div id="tab-geral" class="tab-c active"><div id="ajudas-card" style="background:#111;border:1.5px solid #f6ad55;border-radius:14px;padding:16px;margin-bottom:14px;display:none"><div style="font-size:0.9rem;font-weight:800;margin-bottom:4px">Ajudas Concluidas<span id="ajudas-badge" style="background:#f6ad55;color:#000;font-size:0.7rem;font-weight:800;padding:2px 8px;border-radius:99px;margin-left:8px">0</span></div><div id="ajudas-pendentes-lista"></div></div>
-<div class="stat-row" id="stat-row"></div>
-<div class="sec-lbl">Time</div>
-<div class="colab-grid" id="colab-grid"></div>
+<title>Painel do Gestor</title>
+</head>
+<body style="background:#0a0a0a;color:#fff;font-family:sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0">
+<div id="login" style="text-align:center;padding:24px;max-width:320px;width:100%">
+  <div style="font-size:3rem">🛂</div>
+  <div style="font-size:1.4rem;font-weight:900;margin:8px 0 4px">PRENSADÃO</div>
+  <div style="font-size:0.8rem;color:#555;margin-bottom:24px">Painel do Gestor</div>
+  <input type="password" id="lsn" placeholder="Senha"
+    style="width:100%;padding:13px;background:#1a1a1a;border:1px solid #333;border-radius:10px;color:#fff;font-size:1rem;margin-bottom:12px;box-sizing:border-box">
+  <button id="btn" style="width:100%;padding:14px;background:#4a90d9;border:none;border-radius:12px;color:#fff;font-size:1rem;font-weight:800;cursor:pointer">ENTRAR</button>
+  <div id="err" style="color:#fc8181;font-size:0.8rem;margin-top:10px;display:none">Senha incorreta</div>
 </div>
-<div id="tab-chamados" class="tab-c">
-<div class="filtros">
-<button class="fil-btn active" onclick="filtrar('todos',this)">Todos</button>
-<button class="fil-btn" onclick="filtrar('aberto',this)">⏳ Abertos</button>
-<button class="fil-btn" onclick="filtrar('respondido',this)">✅ Respondidos</button>
-<button class="fil-btn" onclick="filtrar('alta',this)">🔴 Urgentes</button>
-<button class="fil-btn" onclick="filtrar('vale',this)">💵 Vales</button>
-<button class="fil-btn" onclick="filtrar('ponto',this)">🕐 Ponto</button>
-<button class="fil-btn" onclick="filtrar('reclamacao',this)">⚠️ Reclamações</button>
-<button class="fil-btn" onclick="filtrar('sugestao',this)">💡 Sugestões</button>
+<div id="app" style="display:none;padding:20px;width:100%;text-align:center">
+  <p style="font-size:1.5rem;color:#48bb78">Login OK!</p>
 </div>
-<div id="lista-chamados"></div>
-</div>
-<div id="tab-paineis" class="tab-c">
-<div class="sec-lbl">Links dos Painéis</div>
-<div class="paineis-grid" id="paineis-grid"></div>
-</div>
-<div id="tab-ranking" class="tab-c" style="padding:0">
-<iframe class="rk-frame" src="https://jozielnathanp-a11y.github.io/ranking-prensadao/"></iframe>
-</div>
-<div class="bot-nav" id="bot-nav" style="display:none">
-<button class="nav-b active" id="nav-geral" onclick="swTab('geral')"><span class="ni">📊</span><span class="nl">Geral</span></button>
-<button class="nav-b" id="nav-chamados" onclick="swTab('chamados')"><span class="ni">💬</span><span class="nl">Chamados</span></button>
-<button class="nav-b" id="nav-paineis" onclick="swTab('paineis')"><span class="ni">🔗</span><span class="nl">Painéis</span></button>
-<button class="nav-b" id="nav-ranking" onclick="swTab('ranking')"><span class="ni">🏆</span><span class="nl">Ranking</span></button>
-</div>
-</div><script>
-const FOTO_GABRIEL = "https://res.cloudinary.com/dewulu3tj/image/upload/v1780062694/checklist_prensadao/colaborador_gabriel.jpg";
-const FOTO_RUAN = "https://res.cloudinary.com/dewulu3tj/image/upload/v1780062694/checklist_prensadao/colaborador_ruan.jpg";
-const FOTO_CAUA = "https://res.cloudinary.com/dewulu3tj/image/upload/v1780062695/checklist_prensadao/colaborador_caua.jpg";
-const FOTO_KAUANY = "";
-const COLABORADORES = [{"id": "gabriel", "nome": "Gabriel Vogt", "store": "pg_gab_ch", "phone": "5542988869247", "emoji": "🥉", "pts": 15, "painel": "https://jozielnathanp-a11y.github.io/ranking-prensadao/painel-time-gabriel.html"}, {"id": "ruan", "nome": "Ruan", "store": "pg_ruan_ch", "phone": "5542988307171", "emoji": "🥇", "pts": 81, "painel": "https://jozielnathanp-a11y.github.io/ranking-prensadao/painel-time-ruan.html"}, {"id": "caua", "nome": "Cauã", "store": "pg_caua_ch", "phone": "5542988709227", "emoji": "🥈", "pts": 41, "painel": "https://jozielnathanp-a11y.github.io/ranking-prensadao/painel-time-caua.html"}, {"id": "kauany", "nome": "Kauany", "store": "pg_kauany_ch", "phone": "554291573573", "emoji": "—", "pts": 40, "painel": "https://jozielnathanp-a11y.github.io/ranking-prensadao/painel-time-kauany.html"}];
-const FOTOS = {gabriel:FOTO_GABRIEL,ruan:FOTO_RUAN,caua:FOTO_CAUA,kauany:FOTO_KAUANY};
-const GESTOR_SENHA = "josiel123";
-let filtroAtivo = "todos";
-
-function getSenha(){ return GESTOR_SENHA; }
-function doLogin(){
+<script>
+document.getElementById("btn").addEventListener("click", function(){
   var v = document.getElementById("lsn").value;
-  var senha = getSenha();
-  if(v === senha){
-    var ls = document.getElementById("login-screen");
-    var ap = document.getElementById("app-screen");
-    var nav = document.getElementById("bot-nav");
-    ls.style.display = "none";
-    ap.style.display = "block";
-    if(nav) nav.style.display = "flex";
-    setTimeout(function(){ initApp(); }, 50);
+  if(v === "josiel123"){
+    document.getElementById("login").style.display = "none";
+    document.getElementById("app").style.display = "block";
   } else {
-    var e = document.getElementById("lerr");
-    if(e){ e.style.display="block"; setTimeout(function(){ e.style.display="none"; },2000); }
+    var e = document.getElementById("err");
+    e.style.display = "block";
+    setTimeout(function(){ e.style.display="none"; }, 2000);
   }
-}
-function initApp(){
-  renderAjudasPendentes();
-  renderGeral(); renderChamados(); renderPaineis(); }
-
-function getAllChamados(){
-  let all = [];
-  COLABORADORES.forEach(c => {
-    try {
-      const chs = JSON.parse(localStorage.getItem(c.store) || "[]");
-      chs.forEach(ch => { ch._colab=c.nome; ch._colabId=c.id; ch._phone=c.phone; });
-      all = all.concat(chs);
-    } catch(e){}
-  });
-  if(all.length === 0){
-    all = [
-      {id:1716900001,tipo:"vale",tipoLabel:"Solicitação de Vale",urgencia:"media",mensagem:"Gostaria de adiantar R$ 200,00.",data:"28/05/2026",hora:"20:10",status:"aberto",resposta:null,_colab:"Gabriel Vogt",_colabId:"gabriel",_phone:"5542988869247"},
-      {id:1716900002,tipo:"sugestao",tipoLabel:"Sugestão",urgencia:"baixa",mensagem:"Colocar música mais animada nas sextas.",data:"27/05/2026",hora:"22:05",status:"respondido",resposta:"Boa ideia! Já anotei.",_colab:"Ruan",_colabId:"ruan",_phone:"5542988307171"}
-    ];
-  }
-  all.sort((a,b) => b.id - a.id);
-  return all;
-}
-
-function renderGeral(){
-  const todos = getAllChamados();
-  const ab = todos.filter(c=>c.status==="aberto").length;
-  const rp = todos.filter(c=>c.status==="respondido").length;
-  const urg = todos.filter(c=>c.urgencia==="alta").length;
-  document.getElementById("badge-ab").textContent = ab;
-  document.getElementById("stat-row").innerHTML =
-    '<div class="stat-c ab"><div class="stat-n">'+ab+'</div><div class="stat-l">Abertos</div></div>'+
-    '<div class="stat-c rp"><div class="stat-n">'+rp+'</div><div class="stat-l">Respondidos</div></div>'+
-    '<div class="stat-c urg"><div class="stat-n">'+urg+'</div><div class="stat-l">Urgentes</div></div>'+
-    '<div class="stat-c"><div class="stat-n">'+todos.length+'</div><div class="stat-l">Total</div></div>';
-  document.getElementById("colab-grid").innerHTML = COLABORADORES.map(c => {
-    const chs = todos.filter(ch=>ch._colabId===c.id);
-    const abCh = chs.filter(ch=>ch.status==="aberto").length;
-    const foto = FOTOS[c.id] || "";
-    const bcls = abCh>0?"open":(chs.length>0?"ok":"none");
-    const btxt = abCh>0?(abCh+" aberto(s)"):(chs.length>0?"Em dia":"Sem chamados");
-    const av = foto
-      ? '<img class="colab-av" src="'+foto+'" alt="'+c.nome+'">'
-      : '<div class="colab-av" style="background:#1a1a1a;display:flex;align-items:center;justify-content:center;font-size:1.4rem">'+c.emoji+'</div>';
-    return '<div class="colab-card '+(abCh>0?"has-open":"")+'" onclick="filtrarColab(''+c.id+'')">'+av+'<div class="colab-nm">'+c.nome+'</div><div class="colab-pos">'+c.emoji+' '+c.pts+' pts</div><span class="colab-badge '+bcls+'">'+btxt+'</span></div>';
-  }).join("");
-}
-
-function filtrarColab(id){ swTab("chamados"); filtroAtivo="_colab_"+id; renderChamados(); }
-
-function filtrar(tipo, btn){
-  filtroAtivo=tipo;
-  document.querySelectorAll(".fil-btn").forEach(b=>b.classList.remove("active"));
-  btn.classList.add("active");
-  renderChamados();
-}
-
-function renderChamados(){
-  let todos=getAllChamados(), chs=todos;
-  if(filtroAtivo==="aberto") chs=todos.filter(c=>c.status==="aberto");
-  else if(filtroAtivo==="respondido") chs=todos.filter(c=>c.status==="respondido");
-  else if(filtroAtivo==="alta") chs=todos.filter(c=>c.urgencia==="alta");
-  else if(filtroAtivo.startsWith("_colab_")){ const id=filtroAtivo.replace("_colab_",""); chs=todos.filter(c=>c._colabId===id); }
-  else if(filtroAtivo!=="todos") chs=todos.filter(c=>c.tipo===filtroAtivo);
-  const lista=document.getElementById("lista-chamados");
-  if(!chs.length){ lista.innerHTML='<div class="empty-st"><div class="ei">✅</div><p>Nenhum chamado nesta categoria</p></div>'; return; }
-  const urgL={baixa:"🟢 Baixa",media:"🟡 Média",alta:"🔴 Alta"};
-  lista.innerHTML=chs.map(c=>{
-    const cls=c.urgencia==="alta"?"urg":c.status;
-    return '<div class="ch-card '+cls+'" id="chc-'+c.id+'">'+
-      '<div class="ch-top"><div><div class="ch-tipo">'+(c.tipoLabel||c.tipo)+'</div><div class="ch-colab">👤 '+(c._colab||'')+'</div></div>'+
-      '<div><div class="ch-dt">'+c.data+' '+(c.hora||'')+'</div><span class="st-badge '+c.status+'">'+(c.status==="aberto"?"⏳ Aguardando":"✅ Respondido")+'</span></div></div>'+
-      '<span class="urg-tag '+(c.urgencia||"baixa")+'">'+(urgL[c.urgencia]||"")+'</span>'+
-      (c.vale?'<div style="font-size:0.8rem;color:#f6ad55;margin-bottom:8px">💵 '+c.vale+'</div>':'')+
-      '<div class="ch-msg">'+(c.mensagem||'')+'</div>'+
-      (c.anexo?'<div style="margin-bottom:8px"><a href="'+c.anexo+'" target="_blank" style="color:#4a90d9;font-size:0.78rem">📎 Ver anexo</a></div>':'')+
-      '<div class="resp-area">'+
-      (c.resposta?'<div class="resp-ex"><strong>Sua resposta:</strong>'+c.resposta+'</div>':'')+
-      '<textarea class="resp-inp" id="ri-'+c.id+'" placeholder="Escreva sua resposta...">'+(c.resposta||'')+'</textarea>'+
-      '<div class="btn-row">'+
-      '<button class="btn-resp" onclick="responder(''+c._colabId+'','+c.id+')">✅ Salvar</button>'+
-      '<button class="btn-wpp" onclick="respWpp(''+c._colabId+'','+c.id+',''+c._phone+'')">📱 WPP</button>'+
-      (c.status==="aberto"?'<button class="btn-fechar" onclick="fechar(''+c._colabId+'','+c.id+')">Fechar</button>':'')+
-      '</div></div></div>';
-  }).join("");
-}
-
-function getChs(cid){ const c=COLABORADORES.find(x=>x.id===cid); if(!c) return []; try{ return JSON.parse(localStorage.getItem(c.store)||"[]"); }catch(e){ return []; } }
-function saveChs(cid,chs){ const c=COLABORADORES.find(x=>x.id===cid); if(c) localStorage.setItem(c.store,JSON.stringify(chs)); }
-
-function responder(cid,id){
-  const resp=document.getElementById("ri-"+id).value.trim();
-  if(!resp){ alert("Escreva uma resposta!"); return; }
-  const chs=getChs(cid), idx=chs.findIndex(c=>c.id===id);
-  if(idx>=0){ chs[idx].resposta=resp; chs[idx].status="respondido"; saveChs(cid,chs); }
-  alert("✅ Resposta salva!"); renderChamados(); renderGeral();
-}
-
-function respWpp(cid,id,phone){
-  const resp=document.getElementById("ri-"+id).value.trim();
-  const chs=getChs(cid); const c=chs.find(ch=>ch.id===id); if(!c) return;
-  const colab=COLABORADORES.find(x=>x.id===cid);
-  let wpp="*💬 Resposta do Gestor — Prensadão*\n*Para:* "+(colab?colab.nome:"")+"\n*Ref:* "+(c.tipoLabel||c.tipo)+" ("+c.data+")\n\n"+(resp||"");
-  if(resp){ const idx=chs.findIndex(ch=>ch.id===id); if(idx>=0){ chs[idx].resposta=resp; chs[idx].status="respondido"; saveChs(cid,chs); } }
-  window.open("https://wa.me/"+phone+"?text="+encodeURIComponent(wpp),"_blank");
-  renderChamados(); renderGeral();
-}
-
-function fechar(cid,id){
-  const chs=getChs(cid), idx=chs.findIndex(c=>c.id===id);
-  if(idx>=0){ chs[idx].status="respondido"; saveChs(cid,chs); }
-  renderChamados(); renderGeral();
-}
-
-function renderPaineis(){
-  document.getElementById("paineis-grid").innerHTML = COLABORADORES.map(c => {
-    const foto=FOTOS[c.id]||"";
-    const av=foto?'<img class="pl-av" src="'+foto+'" alt="'+c.nome+'">'
-      :'<div class="pl-av" style="background:#1a1a1a;display:flex;align-items:center;justify-content:center;font-size:1.4rem">'+c.emoji+'</div>';
-    return '<div class="pl-card">'+av+
-      '<div class="pl-nm">'+c.nome+'</div>'+
-      '<div class="pl-pts">'+c.emoji+' '+c.pts+' pts</div>'+
-      '<div class="pl-link">'+c.painel.replace("https://","")+'</div>'+
-      '<button class="copy-btn" style="background:#1a2a3a;color:#4a90d9" onclick="copyL(''+c.painel+'',this)">📋 Copiar link</button>'+
-      '<button class="copy-btn" style="background:#0d2818;color:#25d366" onclick="sendWpp(''+c.phone+'',''+c.painel+'',''+c.nome+'')">📱 Enviar WhatsApp</button>'+
-      '</div>';
-  }).join("");
-}
-
-function copyL(url,btn){ navigator.clipboard.writeText(url).then(()=>{ btn.textContent="✅ Copiado!"; setTimeout(()=>btn.textContent="📋 Copiar link",2000); }); }
-function sendWpp(phone,url,nome){
-  const msg="*Prensadão — Painel do Time* 🔥\n\nOlá, "+nome+"! Seu painel personalizado tá pronto.\nAcesse aqui: "+url;
-  window.open("https://wa.me/"+phone+"?text="+encodeURIComponent(msg),"_blank");
-}
-
-function swTab(t){
-  document.querySelectorAll(".tab-c").forEach(c=>c.classList.remove("active"));
-  document.querySelectorAll(".nav-b").forEach(b=>b.classList.remove("active"));
-  document.getElementById("tab-"+t).classList.add("active");
-  document.getElementById("nav-"+t).classList.add("active");
-  if(t==="chamados") renderChamados();
-  if(t==="geral") renderGeral();
-}
-
-
-function getAjudaGanhos(){try{return JSON.parse(localStorage.getItem('prd_ajuda_ganhos')||'[]');}catch(e){return [];}}
-function saveAjudaGanhos(g){localStorage.setItem('prd_ajuda_ganhos',JSON.stringify(g));}
-function confirmarAjuda(idx){var ganhos=getAjudaGanhos();if(!ganhos[idx])return;ganhos[idx].confirmado=true;saveAjudaGanhos(ganhos);alert('Pontos confirmados para '+ganhos[idx].nome+'!');renderAjudasPendentes();}
-function renderAjudasPendentes(){var wrap=document.getElementById('ajudas-pendentes-lista');if(!wrap)return;var ganhos=getAjudaGanhos().filter(function(g){return!g.confirmado;});var card=document.getElementById('ajudas-card');if(!ganhos.length){wrap.innerHTML='<p style="color:#555;text-align:center">Nenhuma ajuda pendente</p>';if(card)card.style.display='none';return;}if(card)card.style.display='block';var badge=document.getElementById('ajudas-badge');if(badge)badge.textContent=ganhos.length;wrap.innerHTML=ganhos.map(function(g,i){return '<div style="border:1px solid #2a2a2a;border-radius:10px;padding:12px;margin-bottom:8px">'+'<div style="font-weight:700;color:#f6ad55">'+g.nome+'</div>'+'<div style="font-size:0.8rem;color:#aaa;margin:4px 0">'+g.motivo+'</div>'+'<button onclick="confirmarAjuda('+i+')" style="width:100%;padding:8px;background:#1a3a1a;border:1px solid #48bb78;border-radius:8px;color:#48bb78;font-weight:700;cursor:pointer">Confirmar +3 pts</button>'+'</div>';}).join('');}
-</script></body></html>
+});
+document.getElementById("lsn").addEventListener("keydown", function(ev){
+  if(ev.key === "Enter") document.getElementById("btn").click();
+});
+</script>
+</body>
+</html>
