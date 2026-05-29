@@ -573,6 +573,30 @@ input[type="date"], input[type="time"] {
 </div>
 
 <script>
+// ===== NOTIFICAÇÕES PUSH =====
+function solicitarNotificacao() {
+  if (!('Notification' in window)) return;
+  if (Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
+}
+
+function enviarNotificacao(titulo, corpo, icone) {
+  if (!('Notification' in window)) return;
+  if (Notification.permission !== 'granted') return;
+  try {
+    new Notification(titulo, {
+      body: corpo,
+      icon: icone || 'https://jozielnathanp-a11y.github.io/ranking-prensadao/icon.png',
+      badge: 'https://jozielnathanp-a11y.github.io/ranking-prensadao/icon.png',
+      tag: 'prensadao-chat',
+      renotify: true
+    });
+  } catch(e) {}
+}
+// =============================
+
+
 function alterarSenhaGestor() {
   var at = document.getElementById('g-at').value;
   var nv = document.getElementById('g-nv').value;
