@@ -687,7 +687,10 @@ let filtroAtivo = "todos";
 
 
 function initApp(){
-  renderAjudasPendentes(); renderGeral(); renderChamados(); renderPaineis();
+  loadChamadosSB(function(){
+    renderAjudasPendentes(); renderGeral(); renderChamados(); renderPaineis();
+  });
+  renderAjudasPendentes(); renderGeral(); renderPaineis();
   renderChat(); renderFeedback(); renderAgendaCheck(); renderAgendaLista();
   // Definir data min do agendamento como hoje
   var today = new Date().toISOString().slice(0,10);
@@ -695,24 +698,7 @@ function initApp(){
   if(agData) agData.min = today;
 }
 
-function getAllChamados(){
-  let all = [];
-  COLABORADORES.forEach(c => {
-    try {
-      const chs = JSON.parse(localStorage.getItem(c.store) || "[]");
-      chs.forEach(ch => { ch._colab=c.nome; ch._colabId=c.id; ch._phone=c.phone; });
-      all = all.concat(chs);
-    } catch(e){}
-  });
-  if(all.length === 0){
-    all = [
-      {id:1716900001,tipo:"vale",tipoLabel:"Solicitação de Vale",urgencia:"media",mensagem:"Gostaria de adiantar R$ 200,00.",data:"28/05/2026",hora:"20:10",status:"aberto",resposta:null,_colab:"Gabriel Vogt",_colabId:"gabriel",_phone:"5542988869247"},
-      {id:1716900002,tipo:"sugestao",tipoLabel:"Sugestão",urgencia:"baixa",mensagem:"Colocar música mais animada nas sextas.",data:"27/05/2026",hora:"22:05",status:"respondido",resposta:"Boa ideia! Já anotei.",_colab:"Ruan",_colabId:"ruan",_phone:"5542988307171"}
-    ];
-  }
-  all.sort((a,b) => b.id - a.id);
-  return all;
-}
+
 
 function renderGeral(){
   const todos = getAllChamados();
@@ -846,6 +832,21 @@ setInterval(function() {
 }, 10000);
 
 // ================================
+
+function getAllChamados() {
+  var all = [];
+  COLABORADORES.forEach(function(c) {
+    var chs = _chsCache[c.id] || [];
+    chs.forEach(function(ch) {
+      ch._colab = c.nome;
+      ch._colabId = c.id;
+      ch._phone = c.phone;
+    });
+    all = all.concat(chs);
+  });
+  all.sort(function(a,b){ return b.id - a.id; });
+  return all;
+}
 function renderChamados(){
   let todos=getAllChamados(), chs=todos;
   if(filtroAtivo==="aberto") chs=todos.filter(c=>c.status==="aberto");
@@ -860,7 +861,7 @@ function renderChamados(){
     const cls=c.urgencia==="alta"?"urg":c.status;
     return '<div class="ch-card '+cls+'" id="chc-'+c.id+'">'+
       '<div class="ch-top"><div><div class="ch-tipo">'+(c.tipoLabel||c.tipo)+'</div><div class="ch-colab">👤 '+(c._colab||'')+'</div></div>'+
-      '<div><div class="ch-dt">'+c.data+' '+(c.hora||'')+'</div><span class="st-badge '+c.status+'">'+(c.status==="aberto"?"⏳ Aguardando":"✅ Respondido")+'</span></div></div>'+
+      '<div><div class="ch-dt">'+c.data+' '+(c.hora||'')+'</div><span class="st-badge '+c.status+'">'+(c.status==="aberto"?"⏳ Aguardando":c.status==="rejeitado"?"❌ Rejeitado":"✅ Respondido")+'</span></div></div>'+
       '<span class="urg-tag '+(c.urgencia||"baixa")+'">'+(urgL[c.urgencia]||"")+'</span>'+
       (c.vale?'<div style="font-size:0.8rem;color:#f6ad55;margin-bottom:8px">💵 '+c.vale+'</div>':'')+
       '<div class="ch-msg">'+(c.mensagem||'')+'</div>'+
