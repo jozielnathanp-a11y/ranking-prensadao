@@ -515,6 +515,47 @@ function saveAjudaGanhos(g){localStorage.setItem('prd_ajuda_ganhos',JSON.stringi
 function confirmarAjuda(idx){var ganhos=getAjudaGanhos();if(!ganhos[idx])return;ganhos[idx].confirmado=true;saveAjudaGanhos(ganhos);alert('Pontos confirmados para '+ganhos[idx].nome+'!');renderAjudasPendentes();}
 function renderAjudasPendentes(){var wrap=document.getElementById('ajudas-pendentes-lista');if(!wrap)return;var ganhos=getAjudaGanhos().filter(function(g){return!g.confirmado;});var card=document.getElementById('ajudas-card');if(!ganhos.length){wrap.innerHTML='<p style="color:#555;text-align:center">Nenhuma ajuda pendente</p>';if(card)card.style.display='none';return;}if(card)card.style.display='block';wrap.innerHTML=ganhos.map(function(g,i){return '<div style="border:1px solid #2a2a2a;border-radius:10px;padding:12px;margin-bottom:8px">'+'<div style="font-weight:700;color:#f6ad55">'+g.nome+'</div>'+'<div style="font-size:0.8rem;color:#aaa;margin:4px 0">'+g.motivo+'</div>'+'<button onclick="confirmarAjuda('+i+')" style="width:100%;padding:8px;background:#1a3a1a;border:1px solid #48bb78;border-radius:8px;color:#48bb78;font-weight:700;cursor:pointer">Confirmar +3 pts</button>'+'</div>';}).join('');}
 
+// Event delegation para botoes dinamicos
+document.addEventListener('click', function(e) {
+  var t = e.target;
+
+  // colab-card -> filtrarColab
+  var card = t.closest ? t.closest('.colab-card') : null;
+  if (card && card.dataset.colabid) {
+    filtrarColab(card.dataset.colabid);
+    return;
+  }
+
+  // btn-resp -> responder
+  if (t.classList && t.classList.contains('btn-resp')) {
+    responder(t.dataset.colabid, parseInt(t.dataset.cid));
+    return;
+  }
+
+  // btn-wpp -> respWpp
+  if (t.classList && t.classList.contains('btn-wpp')) {
+    respWpp(t.dataset.colabid, parseInt(t.dataset.cid), t.dataset.phone);
+    return;
+  }
+
+  // btn-fechar -> fechar
+  if (t.classList && t.classList.contains('btn-fechar')) {
+    fechar(t.dataset.colabid, parseInt(t.dataset.cid));
+    return;
+  }
+
+  // copy-link-btn -> copyL
+  if (t.classList && t.classList.contains('copy-link-btn')) {
+    copyL(t.dataset.url, t);
+    return;
+  }
+
+  // send-wpp-btn -> sendWpp
+  if (t.classList && t.classList.contains('send-wpp-btn')) {
+    sendWpp(t.dataset.phone, t.dataset.url, t.dataset.nome);
+    return;
+  }
+});
 </script>
 </body>
 </html>
