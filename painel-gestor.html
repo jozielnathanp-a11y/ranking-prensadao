@@ -747,6 +747,105 @@ function filtrar(tipo, btn){
   renderChamados();
 }
 
+
+// ===== CHAMADOS VIA SUPABASE =====
+
+// Cache local para evitar re-renders desnecessários
+var _chsCache = {};
+
+function loadChamadosSB(callback) {
+  // Buscar todos os chamados de todos os colaboradores
+  sbGet('prd_mensagens', 'tipo=eq.chamado&order=ts.desc&limit=100')
+    .then(function(rows) {
+      if (!Array.isArray(rows)) rows = [];
+      _chsCache = {};
+      rows.forEach(function(row) {
+        try {
+          var ch = JSON.parse(row.texto);
+          ch._sbid = row.id; // id do registro no SB
+          if (!_chsCache[ch.colab_id || row.de]) _chsCache[ch.colab_id || row.de] = [];
+          _chsCache[ch.colab_id || row.de].push(ch);
+        } catch(e) {}
+      });
+      if (typeof callback === 'function') callback();
+    });
+}
+
+function getChs(cid) {
+  return _chsCache[cid] || [];
+}
+
+function atualizarStatusSB(cid, id, novoStatus, resposta, callback) {
+  // Buscar o _sbid do chamado no cache
+  var chs = getChs(cid);
+  var ch = chs.find(function(x) { return x.id === id; });
+  if (!ch || !ch._sbid) {
+    // Fallback: buscar direto no SB
+    sbGet('prd_mensagens', 'tipo=eq.chamado&de=eq.'+cid+'&order=ts.desc&limit=50')
+      .then(function(rows) {
+        var row = (rows||[]).find(function(r) {
+          try { return JSON.parse(r.texto).id === id; } catch(e) { return false; }
+        });
+        if (!row) return;
+        var chObj = {};
+        try { chObj = JSON.parse(row.texto); } catch(e) {}
+        chObj.status = novoStatus;
+        chObj.resposta = resposta;
+        fetch(SB_URL+'/rest/v1/prd_mensagens?id=eq.'+row.id, {
+          method: 'PATCH',
+          headers: Object.assign({}, SB_H, {'Prefer': 'return=minimal'}),
+          body: JSON.stringify({ texto: JSON.stringify(chObj) })
+        }).then(function() {
+          loadChamadosSB(function() { loadChamadosSB(function(){ renderChamados(); renderGeral(); }); if(callback)callback(); });
+        });
+      });
+    return;
+  }
+  // Atualizar o objeto e fazer PATCH
+  ch.status = novoStatus;
+  ch.resposta = resposta;
+  fetch(SB_URL+'/rest/v1/prd_mensagens?id=eq.'+ch._sbid, {
+    method: 'PATCH',
+    headers: Object.assign({}, SB_H, {'Prefer': 'return=minimal'}),
+    body: JSON.stringify({ texto: JSON.stringify(ch) })
+  }).then(function() {
+    // Atualizar cache local
+    if (_chsCache[cid]) {
+      var idx = _chsCache[cid].findIndex(function(x){ return x.id === id; });
+      if (idx >= 0) { _chsCache[cid][idx].status = novoStatus; _chsCache[cid][idx].resposta = resposta; }
+    }
+    renderChamados(); renderGeral();
+    if (callback) callback();
+  });
+}
+
+function fechar(cid, id) {
+  atualizarStatusSB(cid, id, 'respondido', 'Chamado fechado pelo gestor.');
+}
+
+function rejeitarSB(cid, id) {
+  var motivo = prompt('Motivo da rejeicao (opcional):') || '';
+  var resposta = motivo ? 'Rejeitado: ' + motivo : 'Rejeitado pelo gestor';
+  atualizarStatusSB(cid, id, 'rejeitado', resposta, function() {
+    // Notificar colaborador
+    var colab = COLABORADORES.find(function(x){ return x.id === cid; });
+    var ch = (getChs(cid)||[]).find(function(x){ return x.id === id; });
+    sbPost('prd_mensagens', {
+      id: Date.now(), ts: Date.now(),
+      de: 'gestor', nome: 'Gestor', emoji: '\u{1F6C2}',
+      texto: 'Sua solicitacao "' + (ch && ch.tipoLabel ? ch.tipoLabel : 'chamado') + '" foi rejeitada.' + (motivo ? ' Motivo: ' + motivo : ''),
+      tipo: 'msg', para: cid
+    });
+    alert('Rejeitado e colaborador notificado!');
+  });
+}
+
+// Polling chamados a cada 10s
+setInterval(function() {
+  loadChamadosSB(function() { renderChamados(); renderGeral(); });
+}, 10000);
+
+// ================================
 function renderChamados(){
   let todos=getAllChamados(), chs=todos;
   if(filtroAtivo==="aberto") chs=todos.filter(c=>c.status==="aberto");
@@ -778,76 +877,16 @@ function renderChamados(){
   }).join("");
 }
 
-function getChs(cid){ const c=COLABORADORES.find(x=>x.id===cid); if(!c) return []; try{ return JSON.parse(localStorage.getItem(c.store)||"[]"); }catch(e){ return []; } }
-function saveChs(cid,chs){ const c=COLABORADORES.find(x=>x.id===cid); if(c) localStorage.setItem(c.store,JSON.stringify(chs)); }
+
+
 
 
 // ===== REJEITAR CHAMADO =====
 
 // ===== REJEITAR VIA SUPABASE =====
-function rejeitarSB(cid, id) {
-  const motivo = prompt('Motivo da rejeição (opcional):') || '';
-  const chs = getChs(cid);
-  const idx = chs.findIndex(c => c.id === id);
-  if (idx < 0) return;
 
-  chs[idx].status = 'rejeitado';
-  chs[idx].resposta = motivo ? 'Rejeitado: ' + motivo : 'Rejeitado pelo gestor';
-  saveChs(cid, chs);
 
-  // Atualizar no Supabase — buscar o registro e fazer PATCH
-  const chAtual = chs[idx];
-  const novoTexto = JSON.stringify(chAtual);
 
-  // Buscar o id do registro no SB
-  fetch(SB_URL+'/rest/v1/prd_mensagens?de=eq.'+cid+'&tipo=eq.chamado&order=ts.desc&limit=50', {
-    headers: SB_H
-  }).then(r => r.json()).then(rows => {
-    if (!Array.isArray(rows)) return;
-    // Achar o registro pelo id do chamado dentro do JSON
-    const row = rows.find(r => {
-      try { return JSON.parse(r.texto).id === id; } catch(e) { return false; }
-    });
-    if (!row) return;
-    // PATCH no registro
-    return fetch(SB_URL+'/rest/v1/prd_mensagens?id=eq.'+row.id, {
-      method: 'PATCH',
-      headers: Object.assign({}, SB_H, {'Prefer': 'return=minimal'}),
-      body: JSON.stringify({ texto: novoTexto, lida: true })
-    });
-  });
-
-  // Notificar colaborador
-  const msgRejeicao = {
-    id: Date.now(), ts: Date.now(),
-    de: 'gestor', nome: 'Gestor', emoji: '🛂',
-    texto: 'Sua solicitacao "' + (chAtual.tipoLabel || chAtual.tipo) + '" foi rejeitada.' + (motivo ? ' Motivo: ' + motivo : ''),
-    tipo: 'msg', para: cid
-  };
-  sbPost('prd_mensagens', msgRejeicao);
-  alert('Rejeitado e colaborador notificado!');
-  renderChamados(); renderGeral();
-}
-
-function rejeitar(cid, id) {
-  const motivo = prompt('Motivo da rejeição (opcional):') || '';
-  const chs = getChs(cid), idx = chs.findIndex(c => c.id === id);
-  if (idx < 0) return;
-  chs[idx].status = 'rejeitado';
-  chs[idx].resposta = motivo ? '❌ Rejeitado: ' + motivo : '❌ Rejeitado pelo gestor';
-  saveChs(cid, chs);
-  // Notificar colaborador via mensagem interna
-  const colab = COLABORADORES.find(x => x.id === cid);
-  const msgRejeicao = {
-    id: Date.now(), ts: Date.now(),
-    de: 'gestor', nome: 'Gestor', emoji: '🛂',
-    texto: '❌ Sua solicitação "' + (chs[idx].tipoLabel || chs[idx].tipo) + '" foi rejeitada.' + (motivo ? ' Motivo: ' + motivo : ''),
-    tipo: 'msg'
-  };
-  sbPost('prd_mensagens', Object.assign({}, msgRejeicao, { para: cid }));
-  alert('✅ Rejeitado e colaborador notificado!');
-  renderChamados(); renderGeral();
-}
 
 // ===== ATUALIZAR PONTOS NO RANKING =====
 function atualizarPtsRanking(colabId, delta, motivo) {
@@ -893,11 +932,7 @@ function respWpp(cid,id,phone){
   renderChamados(); renderGeral();
 }
 
-function fechar(cid,id){
-  const chs=getChs(cid), idx=chs.findIndex(c=>c.id===id);
-  if(idx>=0){ chs[idx].status="respondido"; saveChs(cid,chs); }
-  renderChamados(); renderGeral();
-}
+
 
 function renderPaineis(){
   document.getElementById("paineis-grid").innerHTML = COLABORADORES.map(c => {
