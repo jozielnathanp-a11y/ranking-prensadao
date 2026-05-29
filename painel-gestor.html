@@ -337,7 +337,7 @@ function doLogin(){
     document.getElementById('app-screen').style.display = 'block';
     var bn = document.getElementById('bot-nav');
     if(bn) bn.style.display = 'flex';
-    initApp();
+    try{ initApp(); }catch(ex){ console.error("initApp erro:", ex); }
   } else {
     var e = document.getElementById('lerr');
     e.style.display = 'block';
