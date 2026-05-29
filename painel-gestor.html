@@ -139,6 +139,19 @@
 <div class="top-hdr"><div class="top-nm">🛂 Painel do Gestor <span class="badge-ab" id="badge-ab">0</span></div></div>
 <div id="tab-geral" class="tab-c active">
 
+    <!-- AJUDAS PENDENTES -->
+    <div id="ajudas-card" style="background:#111;border:1.5px solid #f6ad55;border-radius:14px;padding:16px;margin-bottom:14px;display:none">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div style="font-size:1.8rem">🤝</div>
+        <div style="flex:1">
+          <div style="font-size:0.92rem;font-weight:800">Ajudas Concluídas</div>
+          <div style="font-size:0.72rem;color:#f6ad55;margin-top:2px">Aguardando confirmação de pontos</div>
+        </div>
+        <div id="ajudas-badge" style="background:#f6ad55;color:#000;font-size:0.7rem;font-weight:800;padding:2px 8px;border-radius:99px">0</div>
+      </div>
+      <div id="ajudas-pendentes-lista"></div>
+    </div>
+
     <div style="background:#111;border:1px solid #1e1e1e;border-radius:14px;padding:16px;margin-bottom:14px">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
         <div style="font-size:2rem">📦</div>
@@ -300,7 +313,8 @@ function doLogin(){
     const e=document.getElementById("lerr"); e.style.display="block"; setTimeout(()=>e.style.display="none",2000);
   }
 }
-function initApp(){ renderGeral(); renderChamados(); renderPaineis(); }
+function initApp(){
+  renderAjudasPendentes(); renderGeral(); renderChamados(); renderPaineis(); }
 
 function getAllChamados(){
   let all = [];
@@ -702,6 +716,58 @@ function renderAgendaGestor(){
       '<div class="ag-quem">👤 '+a.criadoPorNome+' · Para: '+(QUEM_LABEL[a.quem]||a.quem)+'</div>'+
       (a.desc?'<div class="ag-desc">'+a.desc+'</div>':'')+
       (a.status==='pendente'?'<div class="ag-acoes"><button class="ag-btn ok" onclick="concluirAgGestor('+a.id+')">✅ Concluído</button><button class="ag-btn del" onclick="deletarAgGestor('+a.id+')">🗑️ Remover</button></div>':'')+
+      '</div>';
+  }).join('');
+}
+
+
+// === AJUDAS CONCLUÍDAS (pendentes de confirmação) ===
+function getAjudaGanhos() {
+  try { return JSON.parse(localStorage.getItem('prd_ajuda_ganhos') || '[]'); } catch(e) { return []; }
+}
+function saveAjudaGanhos(g) { localStorage.setItem('prd_ajuda_ganhos', JSON.stringify(g)); }
+
+function confirmarAjuda(idx) {
+  var ganhos = getAjudaGanhos();
+  if (!ganhos[idx]) return;
+  var g = ganhos[idx];
+  // Marcar como confirmado
+  ganhos[idx].confirmado = true;
+  saveAjudaGanhos(ganhos);
+  alert('✅ +3 pts confirmados para ' + g.nome + '!\nLembre de lançar no CSV do ranking.');
+  renderAjudasPendentes();
+}
+
+function renderAjudasPendentes() {
+  var wrap = document.getElementById('ajudas-pendentes-lista');
+  if (!wrap) return;
+  var ganhos = getAjudaGanhos().filter(function(g){ return !g.confirmado; });
+  if (!ganhos.length) {
+    wrap.innerHTML = '<div style="text-align:center;padding:20px;color:#333;font-size:0.8rem">Nenhuma ajuda pendente 👍</div>';
+    // Esconder o card se vazio
+    var card = document.getElementById('ajudas-card');
+    if (card) card.style.display = 'none';
+    return;
+  }
+  // Mostrar o card
+  var card = document.getElementById('ajudas-card');
+  if (card) card.style.display = 'block';
+  // Atualizar badge
+  var badge = document.getElementById('ajudas-badge');
+  if (badge) badge.textContent = ganhos.length;
+
+  wrap.innerHTML = ganhos.map(function(g, i) {
+    var dt = new Date(g.ts).toLocaleDateString('pt-BR') + ' ' + new Date(g.ts).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+    return '<div style="background:#0a0a0a;border:1px solid #2a2a2a;border-radius:10px;padding:12px;margin-bottom:8px">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">' +
+      '<div style="font-size:0.85rem;font-weight:700;color:#f6ad55">' + g.nome + '</div>' +
+      '<div style="font-size:0.65rem;color:#444">' + dt + '</div>' +
+      '</div>' +
+      '<div style="font-size:0.78rem;color:#aaa;margin-bottom:8px">📋 ' + g.motivo + '</div>' +
+      '<div style="display:flex;gap:8px;align-items:center">' +
+      '<span style="font-size:0.75rem;color:#48bb78;font-weight:700">+3 pts</span>' +
+      '<button onclick="confirmarAjuda(' + i + ')" style="flex:1;padding:8px;background:linear-gradient(135deg,#1a3a1a,#2d8a2d);border:none;border-radius:8px;color:#fff;font-size:0.8rem;font-weight:700;cursor:pointer">✅ Confirmar e lançar no ranking</button>' +
+      '</div>' +
       '</div>';
   }).join('');
 }
