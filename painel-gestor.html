@@ -121,15 +121,13 @@ function getSenha(){ return GESTOR_SENHA; }
 function doLogin(){
   const v = document.getElementById("lsn").value;
   if(v === getSenha()){
-    try {
-      document.getElementById("login-screen").style.display="none";
-      document.getElementById("app-screen").style.display="block";
-      initApp();
-    } catch(err) {
-      alert("Erro ao entrar: " + err.message);
-      document.getElementById("login-screen").style.display="flex";
-      document.getElementById("app-screen").style.display="none";
-    }
+    var ls = document.getElementById("login-screen");
+    var ap = document.getElementById("app-screen");
+    if(!ls){ alert("login-screen NAO ENCONTRADO"); return; }
+    if(!ap){ alert("app-screen NAO ENCONTRADO"); return; }
+    ls.style.cssText = "display:none";
+    ap.style.cssText = "display:block;min-height:100vh;padding-bottom:70px";
+    try { initApp(); } catch(err){ alert("initApp erro: "+err.message); }
   } else {
     const e=document.getElementById("lerr"); e.style.display="block"; setTimeout(()=>e.style.display="none",2000);
   }
