@@ -96,7 +96,7 @@
 <div id="tab-ranking" class="tab-c" style="padding:0">
 <iframe class="rk-frame" src="https://jozielnathanp-a11y.github.io/ranking-prensadao/"></iframe>
 </div>
-<div class="bot-nav">
+<div class="bot-nav" id="bot-nav" style="display:none">
 <button class="nav-b active" id="nav-geral" onclick="swTab('geral')"><span class="ni">📊</span><span class="nl">Geral</span></button>
 <button class="nav-b" id="nav-chamados" onclick="swTab('chamados')"><span class="ni">💬</span><span class="nl">Chamados</span></button>
 <button class="nav-b" id="nav-paineis" onclick="swTab('paineis')"><span class="ni">🔗</span><span class="nl">Painéis</span></button>
@@ -121,6 +121,7 @@ function doLogin(){
   if(v === getSenha()){
     document.getElementById("login-screen").style.display="none";
     document.getElementById("app-screen").style.display="block";
+    var nav=document.getElementById("bot-nav"); if(nav) nav.style.display="flex";
     initApp();
   } else {
     const e=document.getElementById("lerr"); e.style.display="block"; setTimeout(()=>e.style.display="none",2000);
