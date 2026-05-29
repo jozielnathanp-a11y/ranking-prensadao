@@ -219,6 +219,23 @@ body{font-family:'Segoe UI',sans-serif;background:#0a0a0a;color:#fff;min-height:
 .ag-fil{padding:6px 12px;border-radius:99px;border:1.5px solid #2a2a2a;background:none;color:#555;font-size:0.72rem;font-weight:600;cursor:pointer;white-space:nowrap}
 .ag-fil.active{background:#1a2a3a;border-color:#4a90d9;color:#4a90d9}
 
+
+input[type="date"], input[type="time"] {
+  color-scheme: dark;
+  color: #fff;
+  background: #1a1a1a;
+  border: 1.5px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 9px;
+  font-size: 0.83rem;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 8px;
+}
+.ag-dt-row { display: flex; gap: 8px; }
+.ag-dt-row input { flex: 1; margin-bottom: 8px; }
+
 </style>
 </head>
 <body>
@@ -379,7 +396,7 @@ body{font-family:'Segoe UI',sans-serif;background:#0a0a0a;color:#fff;min-height:
   <div id="msgs-colab-lista"></div>
 </div>
 <div id="tab-chat" class="tab-c" style="padding:12px 12px 0"><div class="chat-wrap"><div class="chat-msgs" id="chat-msgs"></div><div class="chat-ia"><div class="chat-tools"><button class="ct-btn" id="btn-ajuda" onclick="chatToggleAjuda()">🤝 Pedir Ajuda</button><label class="ct-btn" for="chat-file-inp">📷 Foto</label><input type="file" id="chat-file-inp" accept="image/*" style="display:none" onchange="chatUploadMidia(this)"></div><div class="ajuda-form-box" id="ajuda-form-box"><div style="font-size:0.73rem;color:#f6ad55;font-weight:700;margin-bottom:6px">🤝 Pedir ajuda em tarefa</div><input id="ajuda-desc-inp" class="ag-inp" placeholder="Descreva a tarefa..."><button onclick="chatEnviarAjuda()" style="width:100%;padding:8px;background:#1a3a1a;border:1px solid #48bb78;border-radius:8px;color:#48bb78;font-size:0.82rem;font-weight:700;cursor:pointer">Enviar pedido</button></div><img class="chat-prev" id="chat-prev-img"><div class="chat-upst" id="chat-upst-msg"></div><div class="chat-row"><textarea class="chat-inp" id="chat-txt-inp" placeholder="Mensagem pro grupo..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();chatEnviarMsg();}"></textarea><button class="chat-sbtn" onclick="chatEnviarMsg()">➤</button></div></div></div></div>
-<div id="tab-agenda" class="tab-c"><button onclick="document.getElementById('ag-form-box').style.display=document.getElementById('ag-form-box').style.display==='block'?'none':'block'" style="width:100%;padding:12px;background:linear-gradient(135deg,#1a1a2e,#4a90d9);border:none;border-radius:12px;color:#fff;font-size:0.87rem;font-weight:700;cursor:pointer;margin-bottom:12px">+ Novo Agendamento</button><div id="ag-form-box" class="ag-form-box"><input id="ag-titulo-inp" class="ag-inp" placeholder="Título..."><input id="ag-data-inp" type="datetime-local" class="ag-inp"><input id="ag-desc-inp" class="ag-inp" placeholder="Descrição (opcional)"><select id="ag-quem-sel" class="ag-inp"><option value="todos">👥 Para todos</option><option value="gabriel">Gabriel</option><option value="ruan">Ruan</option><option value="caua">Cauã</option><option value="kauany">Kauany</option></select><button onclick="agCriar()" style="width:100%;padding:11px;background:linear-gradient(135deg,#1a1a2e,#4a90d9);border:none;border-radius:8px;color:#fff;font-size:0.87rem;font-weight:700;cursor:pointer">✅ Criar</button></div><div class="ag-fils"><button class="ag-fil active" onclick="agFil('todos',this)">Todos</button><button class="ag-fil" onclick="agFil('hoje',this)">Hoje</button><button class="ag-fil" onclick="agFil('semana',this)">Semana</button><button class="ag-fil" onclick="agFil('pendente',this)">Pendentes</button><button class="ag-fil" onclick="agFil('concluido',this)">Concluídos</button></div><div id="ag-lista"></div></div>
+<div id="tab-agenda" class="tab-c"><button onclick="document.getElementById('ag-form-box').style.display=document.getElementById('ag-form-box').style.display==='block'?'none':'block'" style="width:100%;padding:12px;background:linear-gradient(135deg,#1a1a2e,#4a90d9);border:none;border-radius:12px;color:#fff;font-size:0.87rem;font-weight:700;cursor:pointer;margin-bottom:12px">+ Novo Agendamento</button><div id="ag-form-box" class="ag-form-box"><input id="ag-titulo-inp" class="ag-inp" placeholder="Título..."><div class="ag-dt-row"><input id="ag-data-inp" type="date" placeholder="Data"><input id="ag-hora-inp" type="time" placeholder="Hora"></div><input id="ag-desc-inp" class="ag-inp" placeholder="Descrição (opcional)"><select id="ag-quem-sel" class="ag-inp"><option value="todos">👥 Para todos</option><option value="gabriel">Gabriel</option><option value="ruan">Ruan</option><option value="caua">Cauã</option><option value="kauany">Kauany</option></select><button onclick="agCriar()" style="width:100%;padding:11px;background:linear-gradient(135deg,#1a1a2e,#4a90d9);border:none;border-radius:8px;color:#fff;font-size:0.87rem;font-weight:700;cursor:pointer">✅ Criar</button></div><div class="ag-fils"><button class="ag-fil active" onclick="agFil('todos',this)">Todos</button><button class="ag-fil" onclick="agFil('hoje',this)">Hoje</button><button class="ag-fil" onclick="agFil('semana',this)">Semana</button><button class="ag-fil" onclick="agFil('pendente',this)">Pendentes</button><button class="ag-fil" onclick="agFil('concluido',this)">Concluídos</button></div><div id="ag-lista"></div></div>
 <div class="bot-nav">
     <button class="nav-b active" id="nav-inicio" onclick="swTab('inicio')"><span class="ni">🏠</span><span class="nl">Início</span></button>
     <button class="nav-b" id="nav-checklist" onclick="swTab('checklist')"><span class="ni">✅</span><span class="nl">Checklist</span></button>
@@ -907,14 +924,16 @@ function agFil(f, btn) {
 
 function agCriar() {
   var titulo = document.getElementById('ag-titulo-inp');
-  var dt = document.getElementById('ag-data-inp');
+  var dtEl = document.getElementById('ag-data-inp');
+  var hrEl = document.getElementById('ag-hora-inp');
+  var dt = { value: (dtEl && dtEl.value && hrEl && hrEl.value) ? dtEl.value + 'T' + hrEl.value : (dtEl ? dtEl.value : '') };
   if (!titulo || !titulo.value.trim() || !dt || !dt.value) { alert('Preencha título e data!'); return; }
   var desc = document.getElementById('ag-desc-inp');
   var quem = document.getElementById('ag-quem-sel');
   var items = agGetItems();
   items.push({ id: Date.now(), ts: Date.now(), titulo: titulo.value.trim(), datahora: dt.value, desc: desc ? desc.value.trim() : '', quem: quem ? quem.value : 'todos', criadoPor: 'caua', criadoPorNome: 'Cauã', status: 'pendente' });
   agSaveItems(items);
-  titulo.value = ''; dt.value = '';
+  titulo.value = ''; dtEl.value = ''; hrEl.value = '';
   if (desc) desc.value = '';
   var box = document.getElementById('ag-form-box');
   if (box) box.style.display = 'none';
