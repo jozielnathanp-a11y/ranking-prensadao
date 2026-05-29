@@ -1094,39 +1094,38 @@ function monRenderSolicitacoes() {
 function monRenderChecklist() {
   var grid = document.getElementById('mon-check-grid');
   if (!grid) return;
-  // Tarefas padrão do checklist (mesmas dos painéis individuais)
-  var tarefas_labels = [
-    'Limpeza da área',
-    'Organização da cozinha',
-    'Verificação de estoque',
-    'Conferência de pedidos',
-    'Fechamento do caixa'
-  ];
+  // Tarefas reais do checklist semanal
+  var TAREFAS = ["Higienização das mesas, escada e salão superior", "Higienização do freezer e organização dos refrigerantes", "Lavar potinhos de molho e porta-guardanapos", "Limpar bandejas e contar fundas e rasas", "Higienização dos recipientes de etiquetas"];
   var cards = COLABORADORES.map(function(c) {
     var dados = {};
     try {
       var raw = localStorage.getItem('pg_' + c.id + '_cl');
       if (raw) dados = JSON.parse(raw);
     } catch(e) {}
-    var tks = dados.tks || {};
-    var total = tarefas_labels.length;
-    var feitas = Object.values(tks).filter(Boolean).length;
+    // tks é array: ['sim','nao',null,...] — null = não respondido
+    var tks = dados.tks || [];
+    var total = TAREFAS.length;
+    var feitas = tks.filter(function(v){ return v === 'sim'; }).length;
     var pct = total > 0 ? Math.round(feitas/total*100) : 0;
     var cls = feitas === total ? 'ok' : (feitas > 0 ? 'parcial' : 'vazio');
     var foto = FOTOS_MON[c.id] || '';
     var av = foto
       ? '<img src="' + foto + '" style="width:28px;height:28px;border-radius:50%;object-fit:cover;margin-right:6px;vertical-align:middle">'
       : '<span style="margin-right:4px">' + (c.emoji||'👤') + '</span>';
-    var itens = tarefas_labels.map(function(lbl, i) {
-      var ok = tks['t'+i] || tks[i] || false;
-      return '<div class="mon-check-item ' + (ok?'feito':'nao') + '">' + lbl + '</div>';
+    var itens = TAREFAS.map(function(lbl, i) {
+      var val = tks[i];
+      var ok = val === 'sim';
+      var nao = val === 'nao';
+      var cor = ok ? 'feito' : (nao ? 'nao' : '');
+      var icon = ok ? '✅' : (nao ? '❌' : '○');
+      return '<div class="mon-check-item ' + cor + '">' + icon + ' ' + lbl + '</div>';
     }).join('');
-    var data_cl = dados.data ? '<div class="mon-ts">Última: ' + dados.data + '</div>' : '';
+    var obs = dados.obs ? '<div class="mon-ts" style="margin-top:4px;color:#666">📝 ' + dados.obs + '</div>' : '';
     return '<div class="mon-check-card ' + cls + '">' +
       '<div class="mon-check-nome">' + av + c.nome + '</div>' +
-      '<div class="mon-check-prog">' + feitas + ' de ' + total + ' tarefas</div>' +
+      '<div class="mon-check-prog">' + feitas + ' de ' + total + ' tarefas ✅</div>' +
       '<div class="mon-check-bar"><div class="mon-check-bar-fill" style="width:' + pct + '%"></div></div>' +
-      itens + data_cl +
+      itens + obs +
     '</div>';
   }).join('');
   grid.innerHTML = cards;
