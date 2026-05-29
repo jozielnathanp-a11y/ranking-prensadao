@@ -278,6 +278,52 @@ input[type="date"], input[type="time"] {
 
 
 
+
+/* === CHAT === */
+.chat-sel{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.chat-colab-btn{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:2px solid #222;background:#111;cursor:pointer;transition:all .2s;color:#fff;font-size:.85rem;}
+.chat-colab-btn.active{border-color:#ff6a00;background:#1a0d00;}
+.chat-colab-btn img{width:32px;height:32px;border-radius:50%;object-fit:cover;}
+.chat-colab-btn .av-init{width:32px;height:32px;border-radius:50%;background:#222;display:flex;align-items:center;justify-content:center;font-size:1rem;}
+.chat-msg-box{background:#111;border-radius:14px;padding:14px;}
+.chat-msg-box textarea{width:100%;background:#0a0a0a;border:1px solid #333;border-radius:10px;padding:10px;color:#fff;font-size:.9rem;resize:vertical;min-height:80px;box-sizing:border-box;}
+.chat-actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+.chat-send-btn{flex:1;padding:12px;border-radius:10px;border:none;background:#ff6a00;color:#fff;font-weight:700;font-size:.9rem;cursor:pointer;}
+.chat-send-btn:active{opacity:.8;}
+.chat-img-btn{padding:12px 16px;border-radius:10px;border:1px solid #333;background:#111;color:#aaa;font-size:.9rem;cursor:pointer;}
+.chat-notice{font-size:.75rem;color:#666;margin-top:8px;text-align:center;}
+/* === FEEDBACK === */
+.fb-colab-sel{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.fb-colab-btn{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:2px solid #222;background:#111;cursor:pointer;color:#fff;font-size:.85rem;}
+.fb-colab-btn.active{border-color:#ff6a00;background:#1a0d00;}
+.fb-colab-btn img{width:32px;height:32px;border-radius:50%;object-fit:cover;}
+.fb-colab-btn .av-init{width:32px;height:32px;border-radius:50%;background:#222;display:flex;align-items:center;justify-content:center;font-size:1rem;}
+.fb-tipo-sel{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.fb-tipo-btn{padding:12px;border-radius:10px;border:2px solid #222;background:#111;color:#fff;font-size:.82rem;cursor:pointer;text-align:center;}
+.fb-tipo-btn.sel-pos{border-color:#00c853;background:#001a0a;color:#00e676;}
+.fb-tipo-btn.sel-neg{border-color:#d32f2f;background:#1a0000;color:#ff5252;}
+.fb-tipo-btn .fb-pts{font-size:.75rem;opacity:.7;display:block;margin-top:3px;}
+.fb-obs{width:100%;background:#0a0a0a;border:1px solid #333;border-radius:10px;padding:10px;color:#fff;font-size:.9rem;resize:vertical;min-height:60px;box-sizing:border-box;margin-bottom:10px;}
+.fb-submit{width:100%;padding:14px;border-radius:10px;border:none;background:#ff6a00;color:#fff;font-weight:700;font-size:.95rem;cursor:pointer;}
+.fb-result{padding:12px;border-radius:10px;text-align:center;margin-top:10px;font-weight:600;display:none;}
+.fb-result.ok{background:#001a0a;color:#00e676;display:block;}
+.fb-result.err{background:#1a0000;color:#ff5252;display:block;}
+/* === AGENDA === */
+.ag-form{display:flex;flex-direction:column;gap:10px;}
+.ag-label{font-size:.8rem;color:#aaa;margin-bottom:2px;}
+.ag-input{background:#0a0a0a;border:1px solid #333;border-radius:10px;padding:10px;color:#fff;font-size:.9rem;width:100%;box-sizing:border-box;}
+.ag-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.ag-colab-check{display:flex;flex-wrap:wrap;gap:8px;}
+.ag-colab-item{display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:8px;border:1px solid #333;background:#111;cursor:pointer;color:#fff;font-size:.83rem;}
+.ag-colab-item.sel{border-color:#ff6a00;background:#1a0d00;}
+.ag-submit{width:100%;padding:14px;border-radius:10px;border:none;background:#ff6a00;color:#fff;font-weight:700;font-size:.95rem;cursor:pointer;margin-top:4px;}
+.ag-list{margin-top:18px;}
+.ag-item{background:#111;border-radius:12px;padding:12px 14px;margin-bottom:10px;border-left:3px solid #ff6a00;}
+.ag-item-titulo{font-weight:700;font-size:.93rem;margin-bottom:4px;}
+.ag-item-info{font-size:.78rem;color:#aaa;}
+.ag-item-del{float:right;background:none;border:none;color:#555;cursor:pointer;font-size:.8rem;}
+.ag-vazio{text-align:center;color:#555;padding:24px;font-size:.85rem;}
+
 </style>
 </head>
 <body>
@@ -321,11 +367,117 @@ input[type="date"], input[type="time"] {
 <div id="tab-ranking" class="tab-c" style="padding:0">
 <iframe class="rk-frame" src="https://jozielnathanp-a11y.github.io/ranking-prensadao/"></iframe>
 </div>
+<!-- ABA CHAT -->
+<div id="tab-chat" class="tab-c" style="display:none">
+  <div style="padding:16px">
+    <div style="font-size:1rem;font-weight:700;margin-bottom:12px;">💬 Enviar Mensagem</div>
+    <div style="font-size:.8rem;color:#aaa;margin-bottom:8px;">Para quem?</div>
+    <div class="chat-sel" id="chat-sel"></div>
+    <div class="chat-msg-box">
+      <textarea id="chat-txt" placeholder="Digite a mensagem..."></textarea>
+      <div class="chat-actions">
+        <button class="chat-img-btn" onclick="chatAnexo()">📎 Imagem/Arquivo</button>
+        <button class="chat-send-btn" onclick="chatEnviar()">Enviar no WhatsApp ▶</button>
+      </div>
+      <div class="chat-notice">Abre o WhatsApp Web com a mensagem pronta para enviar</div>
+    </div>
+  </div>
+</div>
+
+<!-- ABA FEEDBACK -->
+<div id="tab-feedback" class="tab-c" style="display:none">
+  <div style="padding:16px">
+    <div style="font-size:1rem;font-weight:700;margin-bottom:12px;">⭐ Dar Feedback</div>
+    <div style="font-size:.8rem;color:#aaa;margin-bottom:8px;">Para quem?</div>
+    <div class="fb-colab-sel" id="fb-colab-sel"></div>
+    <div style="font-size:.8rem;color:#aaa;margin-bottom:8px;">Tipo de feedback:</div>
+    <div class="fb-tipo-sel" id="fb-tipo-sel">
+      <button class="fb-tipo-btn" data-tipo="feedback_positivo" data-pts="3" onclick="fbSelecionarTipo(this)">
+        👍 Feedback Positivo<span class="fb-pts">+3 pts</span>
+      </button>
+      <button class="fb-tipo-btn" data-tipo="elogio_nominal" data-pts="10" onclick="fbSelecionarTipo(this)">
+        🌟 Elogio Nominal<span class="fb-pts">+10 pts</span>
+      </button>
+      <button class="fb-tipo-btn" data-tipo="proatividade" data-pts="3" onclick="fbSelecionarTipo(this)">
+        💪 Proatividade<span class="fb-pts">+3 pts</span>
+      </button>
+      <button class="fb-tipo-btn" data-tipo="feedback_negativo" data-pts="-2" onclick="fbSelecionarTipo(this)">
+        👎 Feedback Negativo<span class="fb-pts">-2 pts</span>
+      </button>
+      <button class="fb-tipo-btn" data-tipo="lanche_errado" data-pts="-7" onclick="fbSelecionarTipo(this)">
+        🍔 Lanche Errado<span class="fb-pts">-7 pts</span>
+      </button>
+      <button class="fb-tipo-btn" data-tipo="limpeza_malfeita" data-pts="-5" onclick="fbSelecionarTipo(this)">
+        🧹 Limpeza Mal Feita<span class="fb-pts">-5 pts</span>
+      </button>
+      <button class="fb-tipo-btn" data-tipo="atraso" data-pts="-5" onclick="fbSelecionarTipo(this)">
+        ⏰ Atraso<span class="fb-pts">-5 pts</span>
+      </button>
+      <button class="fb-tipo-btn" data-tipo="falta" data-pts="-12" onclick="fbSelecionarTipo(this)">
+        🚫 Falta<span class="fb-pts">-12 pts</span>
+      </button>
+    </div>
+    <div style="font-size:.8rem;color:#aaa;margin-bottom:6px;">Observação (opcional):</div>
+    <textarea class="fb-obs" id="fb-obs" placeholder="Descreva o motivo..."></textarea>
+    <button class="fb-submit" onclick="fbEnviar()">✅ Registrar Feedback</button>
+    <div class="fb-result" id="fb-result"></div>
+  </div>
+</div>
+
+<!-- ABA AGENDA -->
+<div id="tab-agenda" class="tab-c" style="display:none">
+  <div style="padding:16px">
+    <div style="font-size:1rem;font-weight:700;margin-bottom:12px;">📅 Agendar</div>
+    <div class="ag-form">
+      <div>
+        <div class="ag-label">Tipo</div>
+        <select class="ag-input" id="ag-tipo">
+          <option value="reuniao">🤝 Reunião</option>
+          <option value="tarefa">📋 Tarefa</option>
+          <option value="treinamento">🎓 Treinamento</option>
+          <option value="avaliacao">📊 Avaliação</option>
+          <option value="outro">📌 Outro</option>
+        </select>
+      </div>
+      <div>
+        <div class="ag-label">Título</div>
+        <input class="ag-input" id="ag-titulo" type="text" placeholder="Ex: Reunião semanal do time">
+      </div>
+      <div class="ag-row">
+        <div>
+          <div class="ag-label">Data</div>
+          <input class="ag-input" id="ag-data" type="date">
+        </div>
+        <div>
+          <div class="ag-label">Horário</div>
+          <input class="ag-input" id="ag-hora" type="time">
+        </div>
+      </div>
+      <div>
+        <div class="ag-label">Local / Observação</div>
+        <input class="ag-input" id="ag-local" type="text" placeholder="Ex: Prensadão Centro, sala de reunião">
+      </div>
+      <div>
+        <div class="ag-label">Convidar</div>
+        <div class="ag-colab-check" id="ag-colab-check"></div>
+      </div>
+      <button class="ag-submit" onclick="agAgendar()">📅 Agendar e Notificar</button>
+    </div>
+    <div class="ag-list">
+      <div style="font-size:.9rem;font-weight:600;margin-bottom:10px;color:#aaa;">Próximos Agendamentos</div>
+      <div id="ag-lista"></div>
+    </div>
+  </div>
+</div>
+
 <div class="bot-nav" id="bot-nav" style="display:none">
 <button class="nav-b active" id="nav-geral" onclick="swTab('geral')"><span class="ni">📊</span><span class="nl">Geral</span></button>
 <button class="nav-b" id="nav-chamados" onclick="swTab('chamados')"><span class="ni">💬</span><span class="nl">Chamados</span></button>
 <button class="nav-b" id="nav-paineis" onclick="swTab('paineis')"><span class="ni">🔗</span><span class="nl">Painéis</span></button>
 <button class="nav-b" id="nav-ranking" onclick="swTab('ranking')"><span class="ni">🏆</span><span class="nl">Ranking</span></button>
+<button class="nav-b" id="nav-chat" onclick="swTab('chat')"><span class="ni">💬</span><span class="nl">Chat</span></button>
+<button class="nav-b" id="nav-feedback" onclick="swTab('feedback')"><span class="ni">⭐</span><span class="nl">Feedback</span></button>
+<button class="nav-b" id="nav-agenda" onclick="swTab('agenda')"><span class="ni">📅</span><span class="nl">Agenda</span></button>
 </div>
 </div>
 
@@ -368,7 +520,13 @@ let filtroAtivo = "todos";
 
 
 function initApp(){
-  renderAjudasPendentes(); renderGeral(); renderChamados(); renderPaineis(); }
+  renderAjudasPendentes(); renderGeral(); renderChamados(); renderPaineis();
+  renderChat(); renderFeedback(); renderAgendaCheck(); renderAgendaLista();
+  // Definir data min do agendamento como hoje
+  var today = new Date().toISOString().slice(0,10);
+  var agData = document.getElementById('ag-data');
+  if(agData) agData.min = today;
+}
 
 function getAllChamados(){
   let all = [];
@@ -503,10 +661,21 @@ function sendWpp(phone,url,nome){
 function swTab(t){
   document.querySelectorAll(".tab-c").forEach(c=>c.classList.remove("active"));
   document.querySelectorAll(".nav-b").forEach(b=>b.classList.remove("active"));
-  document.getElementById("tab-"+t).classList.add("active");
-  document.getElementById("nav-"+t).classList.add("active");
+  var el = document.getElementById("tab-"+t);
+  var nav = document.getElementById("nav-"+t);
+  if(el) el.style.display = "block";
+  if(nav) nav.classList.add("active");
+  ["geral","chamados","paineis","ranking","chat","feedback","agenda"].forEach(function(tab){
+    if(tab !== t){
+      var el2 = document.getElementById("tab-"+tab);
+      if(el2) el2.style.display = "none";
+    }
+  });
   if(t==="chamados") renderChamados();
   if(t==="geral") renderGeral();
+  if(t==="chat") renderChat();
+  if(t==="feedback") renderFeedback();
+  if(t==="agenda"){ renderAgendaCheck(); renderAgendaLista(); }
 }
 
 
@@ -514,6 +683,226 @@ function getAjudaGanhos(){try{return JSON.parse(localStorage.getItem('prd_ajuda_
 function saveAjudaGanhos(g){localStorage.setItem('prd_ajuda_ganhos',JSON.stringify(g));}
 function confirmarAjuda(idx){var ganhos=getAjudaGanhos();if(!ganhos[idx])return;ganhos[idx].confirmado=true;saveAjudaGanhos(ganhos);alert('Pontos confirmados para '+ganhos[idx].nome+'!');renderAjudasPendentes();}
 function renderAjudasPendentes(){var wrap=document.getElementById('ajudas-pendentes-lista');if(!wrap)return;var ganhos=getAjudaGanhos().filter(function(g){return!g.confirmado;});var card=document.getElementById('ajudas-card');if(!ganhos.length){wrap.innerHTML='<p style="color:#555;text-align:center">Nenhuma ajuda pendente</p>';if(card)card.style.display='none';return;}if(card)card.style.display='block';wrap.innerHTML=ganhos.map(function(g,i){return '<div style="border:1px solid #2a2a2a;border-radius:10px;padding:12px;margin-bottom:8px">'+'<div style="font-weight:700;color:#f6ad55">'+g.nome+'</div>'+'<div style="font-size:0.8rem;color:#aaa;margin:4px 0">'+g.motivo+'</div>'+'<button onclick="confirmarAjuda('+i+')" style="width:100%;padding:8px;background:#1a3a1a;border:1px solid #48bb78;border-radius:8px;color:#48bb78;font-weight:700;cursor:pointer">Confirmar +3 pts</button>'+'</div>';}).join('');}
+
+
+
+// =====================================
+// CHAT
+// =====================================
+var chatColabAtivo = null;
+
+function renderChat() {
+  var sel = document.getElementById('chat-sel');
+  if (!sel) return;
+  sel.innerHTML = COLABORADORES.map(function(c) {
+    var av = FOTOS[c.id]
+      ? '<img src="' + FOTOS[c.id] + '" alt="' + c.nome + '">'
+      : '<div class="av-init">👤</div>';
+    return '<button class="chat-colab-btn' + (chatColabAtivo === c.id ? ' active' : '') + '" data-colabid="' + c.id + '" data-phone="' + c.phone + '">' + av + c.nome + '</button>';
+  }).join('');
+  document.querySelectorAll('.chat-colab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      chatColabAtivo = this.getAttribute('data-colabid');
+      document.querySelectorAll('.chat-colab-btn').forEach(function(b) { b.classList.remove('active'); });
+      this.classList.add('active');
+    });
+  });
+}
+
+function chatEnviar() {
+  var c = COLABORADORES.find(function(x) { return x.id === chatColabAtivo; });
+  if (!c) { alert('Selecione um colaborador.'); return; }
+  var msg = document.getElementById('chat-txt').value.trim();
+  if (!msg) { alert('Digite uma mensagem.'); return; }
+  var url = 'https://wa.me/' + c.phone + '?text=' + encodeURIComponent(msg);
+  window.open(url, '_blank');
+  document.getElementById('chat-txt').value = '';
+}
+
+function chatAnexo() {
+  var c = COLABORADORES.find(function(x) { return x.id === chatColabAtivo; });
+  if (!c) { alert('Selecione um colaborador.'); return; }
+  var msg = document.getElementById('chat-txt').value.trim();
+  var url = 'https://wa.me/' + c.phone + (msg ? '?text=' + encodeURIComponent(msg) : '');
+  window.open(url, '_blank');
+}
+
+// =====================================
+// FEEDBACK
+// =====================================
+var fbColabAtivo = null;
+var fbTipoAtivo = null;
+var fbPtsAtivo = 0;
+
+function renderFeedback() {
+  var sel = document.getElementById('fb-colab-sel');
+  if (!sel) return;
+  sel.innerHTML = COLABORADORES.map(function(c) {
+    var av = FOTOS[c.id]
+      ? '<img src="' + FOTOS[c.id] + '">'
+      : '<div class="av-init">👤</div>';
+    return '<button class="fb-colab-btn' + (fbColabAtivo === c.id ? ' active' : '') + '" data-colabid="' + c.id + '">' + av + c.nome + '</button>';
+  }).join('');
+  document.querySelectorAll('.fb-colab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      fbColabAtivo = this.getAttribute('data-colabid');
+      document.querySelectorAll('.fb-colab-btn').forEach(function(b) { b.classList.remove('active'); });
+      this.classList.add('active');
+    });
+  });
+}
+
+function fbSelecionarTipo(btn) {
+  fbTipoAtivo = btn.getAttribute('data-tipo');
+  fbPtsAtivo = parseFloat(btn.getAttribute('data-pts'));
+  var pos = fbPtsAtivo > 0;
+  document.querySelectorAll('.fb-tipo-btn').forEach(function(b) {
+    b.classList.remove('sel-pos', 'sel-neg');
+  });
+  btn.classList.add(pos ? 'sel-pos' : 'sel-neg');
+}
+
+function fbEnviar() {
+  var res = document.getElementById('fb-result');
+  res.className = 'fb-result';
+  if (!fbColabAtivo) { res.className = 'fb-result err'; res.textContent = 'Selecione um colaborador.'; return; }
+  if (!fbTipoAtivo) { res.className = 'fb-result err'; res.textContent = 'Selecione o tipo de feedback.'; return; }
+  var c = COLABORADORES.find(function(x) { return x.id === fbColabAtivo; });
+  var obs = document.getElementById('fb-obs').value.trim();
+  var pts = fbPtsAtivo;
+  var tipoLabel = {
+    feedback_positivo: 'Feedback positivo de cliente',
+    elogio_nominal: 'Elogio Nominal de Cliente',
+    proatividade: 'Proatividade e trabalho em equipe',
+    feedback_negativo: 'Feedback negativo de cliente',
+    lanche_errado: 'Lanche errado',
+    limpeza_malfeita: 'Limpeza mal feita',
+    atraso: 'Chegou atrasado',
+    falta: 'Falta sem atestado'
+  }[fbTipoAtivo] || fbTipoAtivo;
+  var motivo = tipoLabel + (obs ? ' — ' + obs : '');
+  // Salvar no localStorage como registro
+  var key = 'pg_feedbacks';
+  var lista = [];
+  try { lista = JSON.parse(localStorage.getItem(key) || '[]'); } catch(e) {}
+  lista.push({
+    data: new Date().toLocaleDateString('pt-BR'),
+    colab: c.nome,
+    colabId: c.id,
+    tipo: fbTipoAtivo,
+    pts: pts,
+    motivo: motivo,
+    ts: Date.now()
+  });
+  localStorage.setItem(key, JSON.stringify(lista));
+  // Atualizar pontos locais
+  c.pts = (c.pts || 40) + pts;
+  var emoji = pts > 0 ? '🟢' : '🔴';
+  var sinal = pts > 0 ? '+' + pts : pts;
+  res.className = 'fb-result ok';
+  res.textContent = emoji + ' ' + c.nome + ': ' + motivo + ' (' + sinal + ' pts)';
+  // Enviar mensagem WPP
+  var msgWpp = pts > 0
+    ? '*Prensadão — Feedback* ⭐\n\nOlá, ' + c.nome + '! ' + motivo + '.\n\nIsso valeu *' + sinal + ' pts* na gamificação! Continue assim! 💪'
+    : '*Prensadão — Feedback* ⚠️\n\nOlá, ' + c.nome + '! Registramos: ' + motivo + '.\n\nIsso resultou em *' + sinal + ' pts* na gamificação. Vamos melhorar! 💪';
+  window.open('https://wa.me/' + c.phone + '?text=' + encodeURIComponent(msgWpp), '_blank');
+  // Limpar form
+  fbColabAtivo = null;
+  fbTipoAtivo = null;
+  document.querySelectorAll('.fb-colab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.querySelectorAll('.fb-tipo-btn').forEach(function(b) { b.classList.remove('sel-pos', 'sel-neg'); });
+  document.getElementById('fb-obs').value = '';
+}
+
+// =====================================
+// AGENDA
+// =====================================
+function getAgenda() {
+  try { return JSON.parse(localStorage.getItem('pg_agenda') || '[]'); } catch(e) { return []; }
+}
+function saveAgenda(a) { localStorage.setItem('pg_agenda', JSON.stringify(a)); }
+
+function renderAgendaCheck() {
+  var el = document.getElementById('ag-colab-check');
+  if (!el) return;
+  el.innerHTML = COLABORADORES.map(function(c) {
+    return '<div class="ag-colab-item" data-colabid="' + c.id + '" data-phone="' + c.phone + '" data-nome="' + c.nome + '">' +
+      (FOTOS[c.id] ? '<img src="' + FOTOS[c.id] + '" style="width:24px;height:24px;border-radius:50%;object-fit:cover">' : '👤') +
+      ' ' + c.nome + '</div>';
+  }).join('');
+  document.querySelectorAll('.ag-colab-item').forEach(function(item) {
+    item.addEventListener('click', function() { this.classList.toggle('sel'); });
+  });
+}
+
+function renderAgendaLista() {
+  var el = document.getElementById('ag-lista');
+  if (!el) return;
+  var agenda = getAgenda().filter(function(a) {
+    return a.data >= new Date().toISOString().slice(0,10);
+  }).sort(function(a, b) { return a.data.localeCompare(b.data) || a.hora.localeCompare(b.hora); });
+  if (!agenda.length) {
+    el.innerHTML = '<div class="ag-vazio">Nenhum agendamento próximo</div>';
+    return;
+  }
+  var tipoIcon = {reuniao:'🤝',tarefa:'📋',treinamento:'🎓',avaliacao:'📊',outro:'📌'};
+  el.innerHTML = agenda.map(function(a, idx) {
+    var icon = tipoIcon[a.tipo] || '📌';
+    var convs = (a.convocados || []).join(', ') || 'Todos';
+    return '<div class="ag-item">' +
+      '<button class="ag-item-del" onclick="agDeletar(' + idx + ')">✕</button>' +
+      '<div class="ag-item-titulo">' + icon + ' ' + a.titulo + '</div>' +
+      '<div class="ag-item-info">📅 ' + a.data.split('-').reverse().join('/') + ' às ' + a.hora + (a.local ? ' • 📍 ' + a.local : '') + '</div>' +
+      '<div class="ag-item-info">👥 ' + convs + '</div>' +
+      '</div>';
+  }).join('');
+}
+
+function agAgendar() {
+  var titulo = document.getElementById('ag-titulo').value.trim();
+  var data = document.getElementById('ag-data').value;
+  var hora = document.getElementById('ag-hora').value;
+  var tipo = document.getElementById('ag-tipo').value;
+  var local = document.getElementById('ag-local').value.trim();
+  if (!titulo || !data || !hora) { alert('Preencha título, data e horário.'); return; }
+  var sels = document.querySelectorAll('.ag-colab-item.sel');
+  var convocados = [];
+  var phones = [];
+  sels.forEach(function(s) {
+    convocados.push(s.getAttribute('data-nome'));
+    phones.push(s.getAttribute('data-phone'));
+  });
+  if (phones.length === 0) {
+    COLABORADORES.forEach(function(c) { phones.push(c.phone); convocados.push(c.nome); });
+  }
+  var agenda = getAgenda();
+  agenda.push({ titulo: titulo, data: data, hora: hora, tipo: tipo, local: local, convocados: convocados, ts: Date.now() });
+  saveAgenda(agenda);
+  // Enviar WPP para cada convocado
+  var tipoLabel = {reuniao:'Reunião',tarefa:'Tarefa',treinamento:'Treinamento',avaliacao:'Avaliação',outro:'Compromisso'}[tipo] || tipo;
+  var dataFmt = data.split('-').reverse().join('/');
+  phones.forEach(function(phone, i) {
+    var nome = convocados[i];
+    var msg = '*Prensadão — ' + tipoLabel + '* 📅\n\nOlá, ' + nome + '! Você tem um agendamento:\n\n📌 *' + titulo + '*\n📅 ' + dataFmt + ' às ' + hora + (local ? '\n📍 ' + local : '') + '\n\nAté lá! 💪';
+    setTimeout(function() {
+      window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(msg), '_blank');
+    }, i * 800);
+  });
+  // Limpar form
+  document.getElementById('ag-titulo').value = '';
+  document.getElementById('ag-data').value = '';
+  document.getElementById('ag-hora').value = '';
+  document.getElementById('ag-local').value = '';
+  document.querySelectorAll('.ag-colab-item').forEach(function(i) { i.classList.remove('sel'); });
+  renderAgendaLista();
+}
+
+function agDeletar(idx) {
+  var a = getAgenda();
+  a.splice(idx, 1);
+  saveAgenda(a);
+  renderAgendaLista();
+}
 
 // Event delegation para botoes dinamicos
 document.addEventListener('click', function(e) {
