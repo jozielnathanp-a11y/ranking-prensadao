@@ -303,7 +303,7 @@ input[type="date"], input[type="time"] {
   <div class="l-card">
     <label>Senha</label>
     <input type="password" id="lsn" placeholder="••••••••" autocomplete="current-password">
-    <button class="l-btn" id="btn-entrar">ENTRAR</button>
+    <button class="l-btn" id="btn-entrar" onclick="doLogin()">ENTRAR</button>
     <div class="l-err" id="lerr">Senha incorreta.</div>
   </div>
 </div>
@@ -355,21 +355,7 @@ function doLogin(){
     try{ initApp(); }catch(e){ console.warn(e); }
   } else {
     var err = document.getElementById('lerr');
-    if(err){ err.style.display='block'; setTimeout(function(){ err.style.display='none'; },2000); }
-  }
-}
-(function(){
-  var btn = document.getElementById('btn-entrar');
-  var inp = document.getElementById('lsn');
-  function tentarLogin(){ doLogin(); }
-  if(btn){
-    btn.addEventListener('click', tentarLogin);
-    btn.addEventListener('touchstart', function(e){ e.preventDefault(); tentarLogin(); });
-  }
-  if(inp){
-    inp.addEventListener('keydown', function(e){ if(e.key==='Enter') tentarLogin(); });
-  }
-})();
+    if(err){ err.style.display='block'; setTimeout
 
 
 
