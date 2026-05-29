@@ -391,6 +391,19 @@ input[type="date"], input[type="time"] {
 <div class="stat-row" id="stat-row"></div>
 <div class="sec-lbl">Time</div>
 <div class="colab-grid" id="colab-grid"></div>
+
+<!-- Troca de Senha -->
+<div style="margin:20px 16px 0;background:#111;border-radius:14px;padding:16px;border:1px solid #222;">
+  <div style="font-size:.9rem;font-weight:800;margin-bottom:12px;">🔒 Alterar Senha</div>
+  <div style="display:flex;flex-direction:column;gap:8px;">
+    <input type="password" id="g-at" placeholder="Senha atual" style="background:#0a0a0a;border:1px solid #333;border-radius:8px;padding:10px;color:#fff;font-size:.85rem;">
+    <input type="password" id="g-nv" placeholder="Nova senha" style="background:#0a0a0a;border:1px solid #333;border-radius:8px;padding:10px;color:#fff;font-size:.85rem;">
+    <input type="password" id="g-cf" placeholder="Confirmar nova senha" style="background:#0a0a0a;border:1px solid #333;border-radius:8px;padding:10px;color:#fff;font-size:.85rem;">
+    <button onclick="alterarSenhaGestor()" style="background:#ff6a00;color:#fff;border:none;border-radius:8px;padding:10px;font-size:.85rem;font-weight:700;cursor:pointer;">🔒 Alterar Senha</button>
+  </div>
+  <div id="g-senha-msg" style="margin-top:8px;font-size:.78rem;color:#00c853;display:none;"></div>
+</div>
+
 </div>
 <div id="tab-chamados" class="tab-c">
 <div class="filtros">
@@ -559,6 +572,21 @@ input[type="date"], input[type="time"] {
 </div>
 
 <script>
+function alterarSenhaGestor() {
+  var at = document.getElementById('g-at').value;
+  var nv = document.getElementById('g-nv').value;
+  var cf = document.getElementById('g-cf').value;
+  var msg = document.getElementById('g-senha-msg');
+  if (!at || !nv || !cf) { msg.style.color='#ff5252'; msg.textContent='Preencha todos os campos.'; msg.style.display='block'; return; }
+  var sn = localStorage.getItem('pg_gestor_sn') || 'josiel123';
+  if (at !== sn) { msg.style.color='#ff5252'; msg.textContent='Senha atual incorreta.'; msg.style.display='block'; return; }
+  if (nv !== cf) { msg.style.color='#ff5252'; msg.textContent='Nova senha e confirmação não conferem.'; msg.style.display='block'; return; }
+  if (nv.length < 4) { msg.style.color='#ff5252'; msg.textContent='Mínimo 4 caracteres.'; msg.style.display='block'; return; }
+  localStorage.setItem('pg_gestor_sn', nv);
+  msg.style.color='#00c853'; msg.textContent='✅ Senha alterada com sucesso!'; msg.style.display='block';
+  document.getElementById('g-at').value=''; document.getElementById('g-nv').value=''; document.getElementById('g-cf').value='';
+}
+
 function alterarSenha() {
   var at = document.getElementById('cfg-at') ? document.getElementById('cfg-at').value : '';
   var nv = document.getElementById('cfg-nv') ? document.getElementById('cfg-nv').value : '';
