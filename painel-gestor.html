@@ -559,6 +559,21 @@ input[type="date"], input[type="time"] {
 </div>
 
 <script>
+function alterarSenha() {
+  var at = document.getElementById('cfg-at') ? document.getElementById('cfg-at').value : '';
+  var nv = document.getElementById('cfg-nv') ? document.getElementById('cfg-nv').value : '';
+  var cf = document.getElementById('cfg-cf') ? document.getElementById('cfg-cf').value : '';
+  if (!at || !nv || !cf) { alert('Preencha todos os campos.'); return; }
+  if (at !== getSn()) { alert('Senha atual incorreta.'); return; }
+  if (nv !== cf) { alert('Nova senha e confirmação não conferem.'); return; }
+  if (nv.length < 4) { alert('Senha deve ter pelo menos 4 caracteres.'); return; }
+  localStorage.setItem('pg_sn', nv);
+  alert('✅ Senha alterada com sucesso!');
+  if (document.getElementById('cfg-at')) document.getElementById('cfg-at').value = '';
+  if (document.getElementById('cfg-nv')) document.getElementById('cfg-nv').value = '';
+  if (document.getElementById('cfg-cf')) document.getElementById('cfg-cf').value = '';
+}
+
 var COLAB_ID = 'gestor';
 var COLAB_NOME = 'Josiel';
 var COLAB_EMOJI = '👔';
