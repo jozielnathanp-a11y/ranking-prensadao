@@ -63,8 +63,8 @@
   <div class="l-sub">Painel do Gestor</div>
   <div class="l-card">
     <label>Senha</label>
-    <input type="password" id="lsn" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
-    <button class="l-btn" onclick="doLogin()">ENTRAR</button>
+    <input type="password" id="lsn" placeholder="••••••••" onkeydown="if(event.key==='Enter')document.getElementById('l-btn-enter').click()">
+    <button class="l-btn" id="l-btn-enter">ENTRAR</button>
     <div class="l-err" id="lerr">Senha incorreta.</div>
   </div>
 </div>
@@ -106,6 +106,33 @@
 
 <script>
 
+function doLogin(){
+  var v = (document.getElementById("lsn").value || "").trim();
+  var s = getSenha();
+  if(v === s){
+    document.getElementById("login-screen").style.display = "none";
+    document.getElementById("app-screen").style.display  = "block";
+    var nav = document.getElementById("bot-nav");
+    if(nav) nav.style.display = "flex";
+    initApp();
+  } else {
+    var e = document.getElementById("lerr");
+    if(e){ e.style.display="block"; setTimeout(function(){ e.style.display="none"; }, 2000); }
+  }
+}
+
+window.addEventListener("DOMContentLoaded", function(){
+  var btn = document.getElementById("l-btn-enter");
+  if(btn){
+    btn.addEventListener("click",  function(){ doLogin(); });
+    btn.addEventListener("touchend", function(ev){ ev.preventDefault(); doLogin(); });
+  }
+  var inp = document.getElementById("lsn");
+  if(inp){
+    inp.addEventListener("keydown", function(ev){ if(ev.key==="Enter") doLogin(); });
+  }
+});
+
 const FOTO_GABRIEL = "https://res.cloudinary.com/dewulu3tj/image/upload/v1780062694/checklist_prensadao/colaborador_gabriel.jpg";
 const FOTO_RUAN = "https://res.cloudinary.com/dewulu3tj/image/upload/v1780062694/checklist_prensadao/colaborador_ruan.jpg";
 const FOTO_CAUA = "https://res.cloudinary.com/dewulu3tj/image/upload/v1780062695/checklist_prensadao/colaborador_caua.jpg";
@@ -116,20 +143,7 @@ const GESTOR_SENHA = "josiel123";
 let filtroAtivo = "todos";
 
 function getSenha(){ return GESTOR_SENHA; }
-function doLogin(){
-  const v = document.getElementById("lsn").value;
-  const s = getSenha();
-  alert("digitou=["+v+"] esperado=["+s+"] igual="+(v===s));
-  if(v === s){
-    document.getElementById("login-screen").style.display="none";
-    document.getElementById("app-screen").style.display="block";
-    var nav=document.getElementById("bot-nav"); if(nav) nav.style.display="flex";
-    alert("tela trocada");
-    initApp();
-  } else {
-    const e=document.getElementById("lerr"); e.style.display="block"; setTimeout(()=>e.style.display="none",2000);
-  }
-}
+
 function initApp(){
   renderAjudasPendentes(); renderGeral(); renderChamados(); renderPaineis(); }
 
