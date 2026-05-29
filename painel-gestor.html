@@ -409,7 +409,7 @@ function renderGeral(){
     const av = foto
       ? '<img class="colab-av" src="'+foto+'" alt="'+c.nome+'">'
       : '<div class="colab-av" style="background:#1a1a1a;display:flex;align-items:center;justify-content:center;font-size:1.4rem">'+c.emoji+'</div>';
-    return '<div class="colab-card '+(abCh>0?"has-open":"")+'" onclick=\"filtrarColab('"+c.id+"')\">'+av+'<div class="colab-nm">'+c.nome+'</div><div class="colab-pos">'+c.emoji+' '+c.pts+' pts</div><span class="colab-badge '+bcls+'">'+btxt+'</span></div>';
+    return '<div class="colab-card '+(abCh>0?"has-open":"")+'" data-colabid="" + c.id + "">'+av+'<div class="colab-nm">'+c.nome+'</div><div class="colab-pos">'+c.emoji+' '+c.pts+' pts</div><span class="colab-badge '+bcls+'">'+btxt+'</span></div>';
   }).join("");
 }
 
@@ -445,9 +445,9 @@ function renderChamados(){
       (c.resposta?'<div class="resp-ex"><strong>Sua resposta:</strong>'+c.resposta+'</div>':'')+
       '<textarea class="resp-inp" id="ri-'+c.id+'" placeholder="Escreva sua resposta...">'+(c.resposta||'')+'</textarea>'+
       '<div class="btn-row">'+
-      '<button class="btn-resp" onclick="responder(\'"+c._colabId+"\',"+c.id+")">✅ Salvar</button>'+
-      '<button class="btn-wpp" onclick="respWpp(\'"+c._colabId+"\',"+c.id+",\'"+c._phone+"\')">📱 WPP</button>'+
-      (c.status==="aberto"?'<button class="btn-fechar" onclick="fechar(\'"+c._colabId+"\',"+c.id+")">Fechar</button>':'')+
+      '<button class="btn-resp" data-colabid="'+c._colabId+'" data-cid="'+c.id+'">&#x2705; Salvar</button>'+
+      '<button class="btn-wpp" data-colabid="'+c._colabId+'" data-cid="'+c.id+'" data-phone="'+c._phone+'">&#128242; WPP</button>'+
+      (c.status==="aberto"?'<button class="btn-fechar" data-colabid="'+c._colabId+'" data-cid="'+c.id+'">Fechar</button>':'')+
       '</div></div></div>';
   }).join("");
 }
@@ -488,8 +488,8 @@ function renderPaineis(){
       '<div class="pl-nm">'+c.nome+'</div>'+
       '<div class="pl-pts">'+c.emoji+' '+c.pts+' pts</div>'+
       '<div class="pl-link">'+c.painel.replace("https://","")+'</div>'+
-      '<button class="copy-btn" style="background:#1a2a3a;color:#4a90d9" onclick="copyL(\'"+c.painel+"\',this)">📋 Copiar link</button>'+
-      '<button class="copy-btn" style="background:#0d2818;color:#25d366" onclick="sendWpp(\'"+c.phone+"\',\'"+c.painel+"\',\'"+c.nome+"\')">📱 Enviar WhatsApp</button>'+
+      '<button class="copy-btn copy-link-btn" style="background:#1a2a3a;color:#4a90d9" data-url="'+c.painel+'">&#128203; Copiar link</button>'+
+      '<button class="copy-btn send-wpp-btn" style="background:#0d2818;color:#25d366" data-phone="'+c.phone+'" data-url="'+c.painel+'" data-nome="'+c.nome+'">&#128242; Enviar WhatsApp</button>'+
       '</div>';
   }).join("");
 }
@@ -553,6 +553,39 @@ document.addEventListener('click', function(e) {
   // send-wpp-btn -> sendWpp
   if (t.classList && t.classList.contains('send-wpp-btn')) {
     sendWpp(t.dataset.phone, t.dataset.url, t.dataset.nome);
+    return;
+  }
+});
+
+// Event delegation para botoes dinamicos
+document.addEventListener('click', function(ev) {
+  var t = ev.target;
+  if (!t) return;
+
+  if (t.classList.contains('btn-resp')) {
+    responder(t.getAttribute('data-colabid'), parseInt(t.getAttribute('data-cid')));
+    return;
+  }
+  if (t.classList.contains('btn-wpp')) {
+    respWpp(t.getAttribute('data-colabid'), parseInt(t.getAttribute('data-cid')), t.getAttribute('data-phone'));
+    return;
+  }
+  if (t.classList.contains('btn-fechar')) {
+    fechar(t.getAttribute('data-colabid'), parseInt(t.getAttribute('data-cid')));
+    return;
+  }
+  if (t.classList.contains('copy-link-btn')) {
+    copyL(t.getAttribute('data-url'), t);
+    return;
+  }
+  if (t.classList.contains('send-wpp-btn')) {
+    sendWpp(t.getAttribute('data-phone'), t.getAttribute('data-url'), t.getAttribute('data-nome'));
+    return;
+  }
+  // colab-card click
+  var card = t.closest ? t.closest('.colab-card') : null;
+  if (card && card.getAttribute('data-colabid')) {
+    filtrarColab(card.getAttribute('data-colabid'));
     return;
   }
 });
