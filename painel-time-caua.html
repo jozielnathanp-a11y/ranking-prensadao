@@ -464,14 +464,6 @@ var chatMidia = null;
 var chatAjudaMode = false;
 var chatPollInterval = null;
 
-function chatGetMsgs() {
-  // Compatibilidade: retorna do localStorage enquanto migra
-  try { return JSON.parse(localStorage.getItem('prd_chat_grupo') || '[]'); } catch(e){ return []; }
-}
-function chatSaveMsgs(msgs) {
-  localStorage.setItem('prd_chat_grupo', JSON.stringify(msgs));
-}
-
 function chatLoadFromSB() {
   var cutoff = Date.now() - CHAT_TTL;
   sbGet('prd_chat_grupo', 'ts=gt.'+cutoff+'&order=ts.asc&limit=100').then(function(msgs) {
