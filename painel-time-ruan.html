@@ -419,6 +419,78 @@ input[type="date"], input[type="time"] {
   </div>
 </div>
 <script>
+var COLAB_ID = 'ruan';
+var COLAB_NOME = 'Ruan';
+var COLAB_EMOJI = '🥇';
+
+// ===== SUPABASE BACKEND =====
+var SB_URL = 'https://trbyynbtuzpszdvjivbs.supabase.co';
+var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRyYnl5bmJ0dXpwc3pkdmppdmJzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3ODIyODAxOCwiZXhwIjoyMDkzODA0MDE4fQ.OZq8bycNQWEpdbxPiSuB9gt7A0fPKNkawcrtE5XpGFg';
+var SB_H = { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json' };
+
+function sbGet(table, qs) {
+  return fetch(SB_URL+'/rest/v1/'+table+'?'+(qs||'order=ts.asc'), {headers:SB_H})
+    .then(function(r){return r.json();}).catch(function(){return [];});
+}
+function sbPost(table, data) {
+  return fetch(SB_URL+'/rest/v1/'+table, {method:'POST', headers:Object.assign({},SB_H,{'Prefer':'return=minimal'}), body:JSON.stringify(data)})
+    .catch(function(){});
+}
+function sbDelete(table, qs) {
+  return fetch(SB_URL+'/rest/v1/'+table+'?'+qs, {method:'DELETE', headers:SB_H}).catch(function(){});
+}
+// ===========================
+
+// === CHAT DO GRUPO (Supabase) ===
+var CHAT_TTL = 5*30*24*60*60*1000;
+var chatMidia = null;
+var chatAjudaMode = false;
+var chatPollInterval = null;
+
+function chatGetMsgs() {
+  // Compatibilidade: retorna do localStorage enquanto migra
+  try { return JSON.parse(localStorage.getItem('prd_chat_grupo') || '[]'); } catch(e){ return []; }
+}
+function chatSaveMsgs(msgs) {
+  localStorage.setItem('prd_chat_grupo', JSON.stringify(msgs));
+}
+
+function chatLoadFromSB() {
+  var cutoff = Date.now() - CHAT_TTL;
+  sbGet('prd_chat_grupo', 'ts=gt.'+cutoff+'&order=ts.asc&limit=100').then(function(msgs) {
+    if (!Array.isArray(msgs)) return;
+    localStorage.setItem('prd_chat_grupo', JSON.stringify(msgs));
+    chatRender();
+    var badge = document.getElementById('chat-badge');
+    if (badge) badge.textContent = msgs.length > 0 ? msgs.length : '';
+  });
+}
+
+function chatEnviarMsgSB(txt, midia) {
+  var msg = {
+    de: COLAB_ID,
+    nome: COLAB_NOME,
+    emoji: COLAB_EMOJI,
+    texto: txt || null,
+    midia: midia || null,
+    tipo: 'msg',
+    ts: Date.now()
+  };
+  // Salvar local imediatamente
+  var msgs = chatGetMsgs();
+  msgs.push(msg);
+  chatSaveMsgs(msgs);
+  chatRender();
+  // Enviar para Supabase
+  sbPost('prd_chat_grupo', msg);
+}
+
+function chatStartPoll() {
+  if (chatPollInterval) clearInterval(chatPollInterval);
+  chatLoadFromSB();
+  chatPollInterval = setInterval(chatLoadFromSB, 8000); // atualiza a cada 8s
+}
+
 const CC='dewulu3tj',CP='checklist_prensadao',JP='5542988819420',GR='120363289757731618@g.us';
 const FT='https://res.cloudinary.com/dewulu3tj/image/upload/v1780062694/checklist_prensadao/colaborador_ruan.jpg';
 const HIST=[{"data": "2026-05-20", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 43}, {"data": "2026-05-22", "pontos": 3, "motivo": "Trabalho em equipe", "tipo": "Ganho", "saldo": 46}, {"data": "2026-05-22", "pontos": 3, "motivo": "Dia sem erro (Semana Perfeita)", "tipo": "Ganho", "saldo": 49}, {"data": "2026-05-22", "pontos": 5, "motivo": "Checklist semanal feita", "tipo": "Ganho", "saldo": 54}, {"data": "2026-05-23", "pontos": 3, "motivo": "Proatividade — limpeza final da noite", "tipo": "Ganho", "saldo": 57}, {"data": "2026-05-24", "pontos": 3, "motivo": "Dia sem erro (Semana Perfeita)", "tipo": "Ganho", "saldo": 60}, {"data": "2026-05-24", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 63}, {"data": "2026-05-24", "pontos": 3, "motivo": "Proatividade — embalagens", "tipo": "Ganho", "saldo": 66}, {"data": "2026-05-26", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 69}, {"data": "2026-05-27", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 72}, {"data": "2026-05-27", "pontos": 3, "motivo": "Proatividade — maionese", "tipo": "Ganho", "saldo": 75}, {"data": "2026-05-28", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 78}, {"data": "2026-05-28", "pontos": 3, "motivo": "Proatividade — maionese", "tipo": "Ganho", "saldo": 81}];
@@ -537,8 +609,28 @@ async function upEx(id,inp){
 
 function setRat(v){rat=v;document.querySelectorAll('.rat span').forEach((s,i)=>s.className=i<v?'sel':'');autoSave();}
 
+
+// Salvar checklist no Supabase também
+function saveChecklistSB(tks, phs, obs, rat) {
+  var semana = new Date().toISOString().slice(0,10);
+  var data = {
+    colab_id: COLAB_ID,
+    tks: tks,
+    phs: phs,
+    obs: obs || '',
+    rat: rat || 0,
+    semana: semana,
+    ts: Date.now()
+  };
+  // Upsert por colab_id + semana
+  fetch(SB_URL+'/rest/v1/prd_checklist?colab_id=eq.'+COLAB_ID+'&semana=eq.'+semana, {
+    method: 'DELETE', headers: SB_H
+  }).then(function(){ sbPost('prd_checklist', data); }).catch(function(){});
+}
+
 function autoSave(){
   localStorage.setItem(STORE+'_cl',JSON.stringify({tks,phs,obs:document.getElementById('obs-cl').value,rat}));
+  saveChecklistSB(tks, phs, document.getElementById('obs-cl')?.value, rat);
   const i=document.getElementById('sv-ind');i.style.display='block';setTimeout(()=>i.style.display='none',1500);
 }
 
@@ -695,15 +787,45 @@ function saveCfg(){
 const MSG_PREFIX = 'prd_msgs_';
 const MSG_MAX_MS = 5 * 30 * 24 * 60 * 60 * 1000;
 
+
+// === MENSAGENS DO GESTOR (Supabase) ===
+const MSG_PREFIX = 'prd_msgs_';
+const MSG_MAX_MS = 5 * 30 * 24 * 60 * 60 * 1000;
+
 function getMsgs(cid) {
   try {
-    const msgs = JSON.parse(localStorage.getItem(MSG_PREFIX+cid)||'[]');
-    const cutoff = Date.now() - MSG_MAX_MS;
-    const ok = msgs.filter(m=>m.ts>cutoff);
-    if(ok.length!==msgs.length) localStorage.setItem(MSG_PREFIX+cid,JSON.stringify(ok));
-    return ok;
+    var local = JSON.parse(localStorage.getItem(MSG_PREFIX+cid)||'[]');
+    return local;
   } catch(e){ return []; }
 }
+function saveMsgs(cid, msgs) {
+  localStorage.setItem(MSG_PREFIX+cid, JSON.stringify(msgs));
+}
+
+function loadMsgsFromSB(cid) {
+  var cutoff = Date.now() - MSG_MAX_MS;
+  sbGet('prd_mensagens', 'para=eq.'+cid+'&ts=gt.'+cutoff+'&order=ts.asc&limit=50').then(function(msgs) {
+    if (!Array.isArray(msgs)) return;
+    // Mesclar com locais (para não perder nada)
+    var local = getMsgs(cid);
+    var sbIds = msgs.map(function(m){ return m.id; });
+    // Msgs locais que não estão no Supabase (antigas do localStorage)
+    var onlyLocal = local.filter(function(m){ return !m.id || sbIds.indexOf(m.id) < 0; });
+    var merged = onlyLocal.concat(msgs);
+    merged.sort(function(a,b){ return (a.ts||0)-(b.ts||0); });
+    saveMsgs(cid, merged);
+    renderMsgs(cid);
+    // Marcar como lidas
+    sbPost('prd_mensagens', null); // placeholder
+    fetch(SB_URL+'/rest/v1/prd_mensagens?para=eq.'+cid+'&lida=eq.false', {
+      method: 'PATCH',
+      headers: Object.assign({},SB_H,{'Prefer':'return=minimal'}),
+      body: JSON.stringify({lida: true})
+    }).catch(function(){});
+  });
+}
+
+
 function saveMsgs(cid,msgs){ localStorage.setItem(MSG_PREFIX+cid,JSON.stringify(msgs)); }
 function tsFmt(ts){ const d=new Date(ts); return d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }
 function tipoLabel(t){ return {recado:'💬 Recado',tarefa:'📋 Tarefa',doc:'📄 Solicitar Doc',foto:'📷 Solicitar Foto',aviso:'⚠️ Aviso'}[t]||t; }
@@ -759,7 +881,9 @@ function chatGetMsgs() {
     return ok;
   } catch(e) { return []; }
 }
-function chatSaveMsgs(msgs) { localStorage.setItem(CHAT_KEY, JSON.stringify(msgs)); }
+function chatSaveMsgs(msgs) { localStorage.setItem(CHAT_KEY, JSON.stringify(msgs));
+  // Sync com Supabase
+  sbPost('prd_chat_grupo', msgs[msgs.length-1]); }
 
 function chatToggleAjuda() {
   chatAjudaMode = !chatAjudaMode;
