@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0a0a0a">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>Painel Time Prensadão — Ruan</title>
+<title>Painel do Gestor — Prensadão</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Segoe UI',sans-serif;background:#0a0a0a;color:#fff;min-height:100vh}
@@ -344,10 +344,10 @@ function doLogin(){
     document.getElementById('app-screen').style.display  = 'block';
     var nav = document.getElementById('bot-nav');
     if(nav) nav.style.display = 'flex';
-    try{ initApp(); }catch(e){ console.warn('initApp erro:', e); }
+    try{ initApp(); }catch(e){}
   } else {
     var err = document.getElementById('lerr');
-    if(err){ err.style.display='block'; setTimeout(function(){ err.style.display='none'; }, 2000); }
+    if(err){ err.style.display='block'; setTimeout(function(){ err.style.display='none'; },2000); }
   }
 }
 
