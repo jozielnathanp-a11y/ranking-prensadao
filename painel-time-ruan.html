@@ -427,7 +427,31 @@ input[type="date"], input[type="time"] {
     <div class="cfg-msg" id="cfg-msg"></div>
   </div>
 </div>
-<script>var COLAB_ID = 'ruan';
+<script>
+// ===== NOTIFICAÇÕES PUSH =====
+function solicitarNotificacao() {
+  if (!('Notification' in window)) return;
+  if (Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
+}
+
+function enviarNotificacao(titulo, corpo, icone) {
+  if (!('Notification' in window)) return;
+  if (Notification.permission !== 'granted') return;
+  try {
+    new Notification(titulo, {
+      body: corpo,
+      icon: icone || 'https://jozielnathanp-a11y.github.io/ranking-prensadao/icon.png',
+      badge: 'https://jozielnathanp-a11y.github.io/ranking-prensadao/icon.png',
+      tag: 'prensadao-chat',
+      renotify: true
+    });
+  } catch(e) {}
+}
+// =============================
+
+var COLAB_ID = 'ruan';
 var COLAB_NOME = 'Ruan';
 var COLAB_EMOJI = '🥇';
 
@@ -451,6 +475,14 @@ function _chatLoadSB(){
     var CHAT_KEY='prd_chat_grupo';
     localStorage.setItem(CHAT_KEY,JSON.stringify(msgs));
     if(typeof chatRender==='function')chatRender();
+    // Notificação para novas mensagens
+    var _lastTs = parseInt(localStorage.getItem('_lastChatTs') || '0');
+    var novas = msgs.filter(function(m){ return m.ts > _lastTs && m.de !== (typeof COLAB_ID !== 'undefined' ? COLAB_ID : 'gestor'); });
+    if(novas.length > 0 && _lastTs > 0){
+      var ultima = novas[novas.length-1];
+      enviarNotificacao('💬 Prensadão', (ultima.nome||'Alguém')+': '+(ultima.texto||'📷 Mídia'), null);
+    }
+    if(msgs.length > 0) localStorage.setItem('_lastChatTs', msgs[msgs.length-1].ts);
   });
 }
 // Polling de mensagens do gestor
@@ -507,6 +539,7 @@ function doLogin(){
 }
 
 function initApp(){
+  solicitarNotificacao();
   renderHist();renderMeta();buildTks();loadSv();
   document.getElementById('pt-data').value=new Date().toISOString().split('T')[0];
 }
