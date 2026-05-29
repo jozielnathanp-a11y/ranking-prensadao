@@ -355,7 +355,9 @@ function doLogin(){
     try{ initApp(); }catch(e){ console.warn(e); }
   } else {
     var err = document.getElementById('lerr');
-    if(err){ err.style.display='block'; setTimeout
+    if(err){ err.style.display='block'; setTimeout(function(){ err.style.display='none'; },2000); }
+  }
+}
 
 
 
