@@ -28,10 +28,10 @@ body{font-family:'Segoe UI',sans-serif;background:#0a0a0a;color:#fff;min-height:
 .top-pts-num{font-size:1.1rem;font-weight:900;color:#ff9500}
 .top-pts-lbl{font-size:0.68rem;color:#555}
 .cfg-btn{background:none;border:none;color:#444;font-size:1.1rem;cursor:pointer;margin-left:10px}
-.bot-nav{position:fixed;bottom:0;left:0;right:0;background:#111;border-top:1px solid #1e1e1e;display:flex;z-index:100;overflow-x:auto;-webkit-overflow-scrolling:touch}.bot-nav::-webkit-scrollbar{display:none}
+.bot-nav{position:fixed;bottom:0;left:0;right:0;background:#111;border-top:1px solid #1e1e1e;display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;z-index:100}.bot-nav::-webkit-scrollbar{display:none}
 .nav-b{flex:1;padding:10px 4px 8px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;color:#444;border:none;background:none;transition:color 0.2s}
-.nav-b .ni{font-size:1.15rem}
-.nav-b .nl{font-size:0.58rem;font-weight:600}
+.nav-b .ni{font-size:1.3rem}
+.nav-b .nl{font-size:0.62rem;font-weight:600}
 .nav-b.active{color:#ff6b00}
 .tab-c{display:none;padding:16px;max-width:640px;margin:0 auto}
 .tab-c.active{display:block}
@@ -154,76 +154,48 @@ body{font-family:'Segoe UI',sans-serif;background:#0a0a0a;color:#fff;min-height:
 .sb{flex:1;padding:10px;border-radius:99px;border:1.5px solid #2a2a2a;background:none;color:#555;font-weight:700;font-size:0.78rem;cursor:pointer;transition:all 0.2s}
 .sb.a{background:linear-gradient(135deg,#ff6b00,#ff9500);color:#fff;border:none}
 
-.dest-btn{padding:8px 14px;border-radius:99px;border:1.5px solid #2a2a2a;background:none;color:#555;font-size:0.78rem;font-weight:700;cursor:pointer;transition:all 0.2s}
-.dest-btn.active{background:#1a2a3a;border-color:#4a90d9;color:#4a90d9}
-.tipo-msg-btn{padding:8px 12px;border-radius:99px;border:1.5px solid #2a2a2a;background:none;color:#555;font-size:0.78rem;font-weight:700;cursor:pointer;transition:all 0.2s}
-.tipo-msg-btn.active{background:#1a2a3a;border-color:#4a90d9;color:#4a90d9}
-.msg-card{background:#111;border:1px solid #1e1e1e;border-radius:14px;padding:14px;margin-bottom:10px}
-.msg-card.respondido{border-left:3px solid #48bb78}
-.msg-card.pendente{border-left:3px solid #f6ad55}
-.msg-tipo-tag{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:99px;margin-bottom:6px}
-.msg-tipo-tag.recado{background:#1a2a3a;color:#4a90d9}
-.msg-tipo-tag.tarefa{background:#1a1200;color:#f6ad55}
-.msg-tipo-tag.doc{background:#1a0f1a;color:#b794f4}
-.msg-tipo-tag.foto{background:#0d1a10;color:#48bb78}
-.msg-tipo-tag.aviso{background:#1a0d0d;color:#fc8181}
-.msg-texto-body{font-size:0.85rem;color:#ccc;line-height:1.5;margin-bottom:8px}
-.msg-resp-area{background:#0f0f0f;border-radius:8px;padding:10px;margin-top:8px}
-.msg-resp-txt{font-size:0.8rem;color:#aaa;border-left:3px solid #48bb78;padding-left:8px;margin-bottom:6px}
-.msg-resp-txt strong{color:#48bb78;display:block;font-size:0.7rem;margin-bottom:2px}
-.msg-reply-inp{width:100%;padding:10px;background:#1a1a1a;border:1.5px solid #2a2a2a;border-radius:8px;color:#fff;font-size:0.83rem;resize:vertical;min-height:60px;margin-bottom:8px}
-.msg-reply-inp:focus{outline:none;border-color:#ff6b00}
-.msg-unread{width:8px;height:8px;background:#fc8181;border-radius:50%;display:inline-block;margin-left:6px;vertical-align:middle}
-
-/* CHAT */
-.chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 190px);min-height:300px}
+.chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 195px);min-height:280px}
 .chat-msgs{flex:1;overflow-y:auto;padding:8px 0;display:flex;flex-direction:column;gap:8px}
-.chat-msgs::-webkit-scrollbar{width:4px}
-.chat-msgs::-webkit-scrollbar-thumb{background:#222;border-radius:99px}
+.chat-msgs::-webkit-scrollbar{width:3px}
 .bubble-wrap{display:flex;gap:8px;align-items:flex-end}
 .bubble-wrap.me{flex-direction:row-reverse}
-.bubble-av{width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;background:#1a1a1a;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;color:#888}
-.bubble{max-width:72%;padding:9px 12px;border-radius:14px;font-size:0.85rem;line-height:1.4;word-break:break-word}
-.bubble.outros{background:#1a1a1a;border-bottom-left-radius:4px;color:#eee}
-.bubble.eu{background:linear-gradient(135deg,#1a3a1a,#2d7a2d);border-bottom-right-radius:4px;color:#fff}
-.bubble-nm{font-size:0.65rem;font-weight:700;color:#f6ad55;margin-bottom:3px}
-.bubble-ts{font-size:0.6rem;color:#444;margin-top:4px;text-align:right}
+.bubble-av{width:26px;height:26px;border-radius:50%;object-fit:cover;flex-shrink:0;background:#1a1a1a;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:#888}
+.bubble{max-width:72%;padding:8px 12px;border-radius:14px;font-size:0.84rem;line-height:1.45;word-break:break-word}
+.bubble.outros{background:#1a1a1a;border-bottom-left-radius:3px;color:#eee}
+.bubble.eu{background:linear-gradient(135deg,#1a3a1a,#2d7a2d);border-bottom-right-radius:3px;color:#fff}
+.bubble-nm{font-size:0.64rem;font-weight:700;color:#f6ad55;margin-bottom:2px}
+.bubble-ts{font-size:0.6rem;color:#555;margin-top:3px;text-align:right}
 .bubble img{max-width:100%;border-radius:8px;display:block;margin-top:4px}
-.bubble-ajuda{background:#1a1200;border:1px solid #f6ad55;border-radius:10px;padding:8px;margin-top:6px}
-.bubble-ajuda .aj-tit{font-size:0.72rem;font-weight:700;color:#f6ad55;margin-bottom:4px}
-.bubble-ajuda .aj-pts{font-size:0.7rem;color:#aaa}
-.btn-aceitar-aj{margin-top:6px;padding:6px 12px;background:#1a3a1a;border:1px solid #48bb78;border-radius:8px;color:#48bb78;font-size:0.75rem;font-weight:700;cursor:pointer}
-.chat-input-area{border-top:1px solid #1a1a1a;padding-top:10px;margin-top:8px}
-.chat-input-row{display:flex;gap:8px;align-items:flex-end}
-.chat-inp{flex:1;padding:10px 12px;background:#111;border:1.5px solid #222;border-radius:12px;color:#fff;font-size:0.88rem;resize:none;min-height:42px;max-height:100px;outline:none}
-.chat-inp:focus{border-color:#2d7a2d}
-.chat-send-btn{padding:10px 14px;background:linear-gradient(135deg,#1a3a1a,#2d8a2d);border:none;border-radius:12px;color:#fff;font-size:1.1rem;cursor:pointer;flex-shrink:0}
-.chat-tools{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
-.chat-tool-btn{padding:6px 12px;background:#111;border:1.5px solid #222;border-radius:99px;color:#555;font-size:0.75rem;font-weight:600;cursor:pointer;transition:all 0.2s}
-.chat-tool-btn:hover{border-color:#4a90d9;color:#4a90d9}
-.chat-tool-btn.sel{background:#1a1200;border-color:#f6ad55;color:#f6ad55}
-.chat-up-prev{max-width:120px;max-height:80px;border-radius:8px;margin-bottom:6px;display:none}
-.chat-up-st{font-size:0.72rem;color:#555;margin-bottom:4px}
-/* AGENDA */
-.agenda-filtros{display:flex;gap:8px;margin-bottom:14px;overflow-x:auto}
-.agenda-filtros::-webkit-scrollbar{display:none}
-.ag-fil-btn{padding:7px 14px;border-radius:99px;border:1.5px solid #2a2a2a;background:none;color:#555;font-size:0.75rem;font-weight:600;cursor:pointer;white-space:nowrap}
-.ag-fil-btn.active{background:#1a2a3a;border-color:#4a90d9;color:#4a90d9}
-.ag-card{background:#111;border:1px solid #1e1e1e;border-radius:14px;padding:14px;margin-bottom:10px;border-left:3px solid #4a90d9}
-.ag-card.urgente{border-left-color:#fc8181}
+.b-ajuda{background:#1a1200;border:1px solid #f6ad55;border-radius:8px;padding:7px;margin-top:5px}
+.b-ajuda-tit{font-size:0.7rem;font-weight:700;color:#f6ad55;margin-bottom:3px}
+.btn-aceitar{margin-top:5px;padding:5px 10px;background:#0d1a10;border:1px solid #48bb78;border-radius:6px;color:#48bb78;font-size:0.72rem;font-weight:700;cursor:pointer}
+.chat-ia{border-top:1px solid #1a1a1a;padding-top:10px;margin-top:8px}
+.chat-tools{display:flex;gap:7px;margin-bottom:7px;flex-wrap:wrap}
+.ct-btn{padding:5px 10px;background:#111;border:1.5px solid #222;border-radius:99px;color:#555;font-size:0.72rem;font-weight:600;cursor:pointer}
+.ct-btn.sel{border-color:#f6ad55;color:#f6ad55;background:#1a1200}
+.chat-row{display:flex;gap:7px;align-items:flex-end}
+.chat-inp{flex:1;padding:9px 11px;background:#111;border:1.5px solid #222;border-radius:12px;color:#fff;font-size:0.85rem;resize:none;min-height:40px;max-height:80px;outline:none}
+.chat-sbtn{padding:10px 13px;background:linear-gradient(135deg,#1a3a1a,#2d8a2d);border:none;border-radius:12px;color:#fff;font-size:1rem;cursor:pointer}
+.ajuda-form{background:#1a1200;border:1px solid #f6ad55;border-radius:10px;padding:10px;margin-bottom:8px;display:none}
+.chat-prev{max-width:100px;max-height:70px;border-radius:6px;margin-bottom:4px;display:none}
+.chat-upst{font-size:0.7rem;color:#555;margin-bottom:3px}
+.ag-card{background:#111;border:1px solid #1e1e1e;border-radius:14px;padding:13px;margin-bottom:10px;border-left:3px solid #4a90d9}
+.ag-card.atrasado{border-left-color:#fc8181}
 .ag-card.concluido{border-left-color:#48bb78;opacity:0.6}
-.ag-tit{font-size:0.92rem;font-weight:800;margin-bottom:4px}
-.ag-dt{font-size:0.75rem;color:#f6ad55;margin-bottom:4px}
-.ag-quem{font-size:0.72rem;color:#555;margin-bottom:6px}
+.ag-tit{font-size:0.9rem;font-weight:800;margin-bottom:3px}
+.ag-dt{font-size:0.75rem;color:#f6ad55;margin-bottom:3px}
+.ag-quem{font-size:0.7rem;color:#555;margin-bottom:5px}
 .ag-desc{font-size:0.82rem;color:#aaa;line-height:1.4}
-.ag-acoes{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
-.ag-btn{padding:7px 12px;border-radius:8px;border:none;font-size:0.75rem;font-weight:700;cursor:pointer}
+.ag-acoes{display:flex;gap:8px;margin-top:8px}
+.ag-btn{padding:6px 12px;border-radius:8px;border:none;font-size:0.73rem;font-weight:700;cursor:pointer}
 .ag-btn.ok{background:#0d1a10;color:#48bb78;border:1px solid #48bb78}
 .ag-btn.del{background:none;color:#555;border:1px solid #2a2a2a}
-.novo-ag-form{background:#111;border:1px solid #1e1e1e;border-radius:14px;padding:16px;margin-bottom:16px;display:none}
-.novo-ag-form.open{display:block}
-.ag-inp{width:100%;padding:10px;background:#1a1a1a;border:1.5px solid #2a2a2a;border-radius:8px;color:#fff;font-size:0.85rem;margin-bottom:10px;outline:none}
-.ag-inp:focus{border-color:#4a90d9}
+.ag-form{background:#111;border:1px solid #1e1e1e;border-radius:14px;padding:14px;margin-bottom:12px;display:none}
+.ag-form.open{display:block}
+.ag-inp{width:100%;padding:9px;background:#1a1a1a;border:1.5px solid #2a2a2a;border-radius:8px;color:#fff;font-size:0.83rem;margin-bottom:8px;outline:none}
+.ag-fils{display:flex;gap:7px;margin-bottom:12px;overflow-x:auto}.ag-fils::-webkit-scrollbar{display:none}
+.ag-fil{padding:6px 12px;border-radius:99px;border:1.5px solid #2a2a2a;background:none;color:#555;font-size:0.72rem;font-weight:600;cursor:pointer;white-space:nowrap}
+.ag-fil.active{background:#1a2a3a;border-color:#4a90d9;color:#4a90d9}
 
 </style>
 </head>
@@ -258,7 +230,7 @@ body{font-family:'Segoe UI',sans-serif;background:#0a0a0a;color:#fff;min-height:
   <!-- INÍCIO -->
   <div id="tab-inicio" class="tab-c active">
     <div class="p-card">
-      <img class="p-foto" src="" id="p-foto" alt="G">
+      <img class="p-foto" src="" id="p-foto" src="https://res.cloudinary.com/dewulu3tj/image/upload/v1780062694/checklist_prensadao/colaborador_ruan.jpg" alt="G">
       <div>
         <div class="p-nome">Ruan</div>
         <div class="p-cargo">Garçom · Prensadão Centro</div>
@@ -273,17 +245,7 @@ body{font-family:'Segoe UI',sans-serif;background:#0a0a0a;color:#fff;min-height:
       <div class="meta-inf"><span id="meta-atual">137 pts</span><span>Meta: 320 pts</span></div>
     </div>
     
-    <div style="background:#111;border:1px solid #1e1e1e;border-radius:14px;padding:16px;margin-bottom:14px">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
-        <div style="font-size:2rem">📦</div>
-        <div>
-          <div style="font-size:0.92rem;font-weight:800">Estoque — Prensadão Centro</div>
-          <div style="font-size:0.75rem;color:#555;margin-top:2px">Consulte o estoque da unidade</div>
-        </div>
-      </div>
-      <a href="https://estoques-prensadao.vercel.app/centro" target="_blank" style="display:block;width:100%;padding:13px;background:linear-gradient(135deg,#1a3a1a,#2d8a2d);border:none;border-radius:10px;color:#fff;font-size:0.9rem;font-weight:800;text-align:center;text-decoration:none">📦 Estoque</a>
-    </div>
-
+    <div style="background:#111;border:1px solid #1e1e1e;border-radius:14px;padding:16px;margin-bottom:14px"><div style="display:flex;align-items:center;gap:12px;margin-bottom:12px"><div style="font-size:2rem">📦</div><div><div style="font-size:0.92rem;font-weight:800">Estoque — Prensadão Centro</div><div style="font-size:0.75rem;color:#555;margin-top:2px">Consulte o estoque</div></div></div><a href="https://estoques-prensadao.vercel.app/centro" target="_blank" style="display:block;width:100%;padding:13px;background:linear-gradient(135deg,#1a3a1a,#2d8a2d);border:none;border-radius:10px;color:#fff;font-size:0.9rem;font-weight:800;text-align:center;text-decoration:none">📦 Estoque</a></div>
     <div class="hist-w">
       <h3>Histórico de pontos</h3>
       <div id="hist-lista"></div>
@@ -388,85 +350,20 @@ body{font-family:'Segoe UI',sans-serif;background:#0a0a0a;color:#fff;min-height:
   </div>
 
   <!-- RANKING -->
-  <div id="tab-msgs" class="tab-c">
-  <div class="sec-lbl" style="margin-bottom:12px">Mensagens do Gestor</div>
-  <div id="msgs-colab-lista"></div>
-</div>
-
-<div id="tab-chat" class="tab-c" style="padding:12px 12px 0">
-  <div class="chat-wrap">
-    <div class="chat-msgs" id="chat-msgs-ruan"></div>
-    <div class="chat-input-area">
-      <div class="chat-tools">
-        <button class="chat-tool-btn" onclick="toggleAjuda_ruan(this)">🤝 Pedir Ajuda</button>
-        <label class="chat-tool-btn" for="chat-file-ruan">📷 Foto/GIF</label>
-        <input type="file" id="chat-file-ruan" accept="image/*" style="display:none" onchange="uploadChatMidia_ruan(this)">
-      </div>
-      <div id="ajuda-form-ruan" style="display:none;background:#1a1200;border:1px solid #f6ad55;border-radius:10px;padding:10px;margin-bottom:8px">
-        <div style="font-size:0.75rem;color:#f6ad55;font-weight:700;margin-bottom:6px">🤝 Pedir ajuda em tarefa</div>
-        <input id="ajuda-desc-ruan" class="ag-inp" placeholder="Descreva a tarefa..." style="margin-bottom:6px">
-        <select id="ajuda-pts-ruan" class="ag-inp" style="margin-bottom:6px">
-          <option value="3">Vale 3 pts → 3 pts cada</option>
-          <option value="5">Vale 5 pts → 3 pts cada</option>
-          <option value="10">Vale 10 pts → 5 pts cada</option>
-        </select>
-        <button onclick="enviarPedidoAjuda_ruan()" style="width:100%;padding:8px;background:#1a3a1a;border:1px solid #48bb78;border-radius:8px;color:#48bb78;font-size:0.82rem;font-weight:700;cursor:pointer">Enviar pedido</button>
-      </div>
-      <img id="chat-prev-ruan" class="chat-up-prev">
-      <div id="chat-up-st-ruan" class="chat-up-st"></div>
-      <div class="chat-input-row">
-        <textarea class="chat-inp" id="chat-inp-ruan" placeholder="Mensagem para o grupo..." rows="1"
-          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();enviarMsgChat_ruan();}"></textarea>
-        <button class="chat-send-btn" onclick="enviarMsgChat_ruan()">➤</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<div id="tab-agenda" class="tab-c">
-  
-  <button onclick="document.getElementById('novo-ag-ruan').classList.toggle('open')"
-    style="width:100%;padding:12px;background:linear-gradient(135deg,#1a1a2e,#4a90d9);border:none;border-radius:12px;color:#fff;font-size:0.88rem;font-weight:700;cursor:pointer;margin-bottom:12px">
-    + Novo Agendamento
-  </button>
-  <div id="novo-ag-ruan" class="novo-ag-form">
-    <input id="ag-titulo-ruan" class="ag-inp" placeholder="Título (ex: Limpeza geral, Reunião...)">
-    <input id="ag-data-ruan" type="datetime-local" class="ag-inp">
-    <input id="ag-desc-ruan" class="ag-inp" placeholder="Descrição (opcional)">
-    <select id="ag-quem-ruan" class="ag-inp">
-      <option value="todos">👥 Para todos</option>
-      <option value="gabriel">Gabriel Vogt</option>
-      <option value="ruan">Ruan</option>
-      <option value="caua">Cauã</option>
-      <option value="kauany">Kauany</option>
-    </select>
-    <button onclick="criarAgendamento_ruan()"
-      style="width:100%;padding:12px;background:linear-gradient(135deg,#1a1a2e,#4a90d9);border:none;border-radius:10px;color:#fff;font-size:0.88rem;font-weight:700;cursor:pointer">
-      ✅ Criar
-    </button>
-  </div>
-  <div class="agenda-filtros">
-    <button class="ag-fil-btn active" onclick="filtrarAg_ruan('todos',this)">Todos</button>
-    <button class="ag-fil-btn" onclick="filtrarAg_ruan('hoje',this)">Hoje</button>
-    <button class="ag-fil-btn" onclick="filtrarAg_ruan('semana',this)">Semana</button>
-    <button class="ag-fil-btn" onclick="filtrarAg_ruan('pendente',this)">Pendentes</button>
-    <button class="ag-fil-btn" onclick="filtrarAg_ruan('concluido',this)">Concluídos</button>
-  </div>
-  <div id="agenda-lista-ruan"></div>
-</div>
-
+  <div id="tab-msgs" class="tab-c"><div style="font-size:0.75rem;color:#555;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">Mensagens do Gestor</div><div id="msgs-lista"></div></div>
+<div id="tab-chat" class="tab-c" style="padding:12px 12px 0"><div class="chat-wrap"><div class="chat-msgs" id="chat-msgs"></div><div class="chat-ia"><div class="chat-tools"><button class="ct-btn" id="btn-ajuda" onclick="toggleAjuda()">🤝 Pedir Ajuda</button><label class="ct-btn" for="chat-file">📷 Foto/GIF</label><input type="file" id="chat-file" accept="image/*" style="display:none" onchange="uploadChatMidia(this)"></div><div class="ajuda-form" id="ajuda-form"><div style="font-size:0.73rem;color:#f6ad55;font-weight:700;margin-bottom:6px">🤝 Pedir ajuda em tarefa</div><input id="ajuda-desc" class="ag-inp" placeholder="Descreva a tarefa..." style="margin-bottom:5px"><select id="ajuda-pts" class="ag-inp" style="margin-bottom:6px"><option value="3">Leve (3 pts) → 2 pts cada</option><option value="5">Média (5 pts) → 3 pts cada</option><option value="10">Pesada (10 pts) → 5 pts cada</option></select><button onclick="enviarAjuda()" style="width:100%;padding:8px;background:#1a3a1a;border:1px solid #48bb78;border-radius:8px;color:#48bb78;font-size:0.82rem;font-weight:700;cursor:pointer">Enviar pedido</button></div><img class="chat-prev" id="chat-prev"><div class="chat-upst" id="chat-upst"></div><div class="chat-row"><textarea class="chat-inp" id="chat-inp" placeholder="Mensagem pro grupo..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();enviarMsg();}"></textarea><button class="chat-sbtn" onclick="enviarMsg()">➤</button></div></div></div></div>
+<div id="tab-agenda" class="tab-c"><button onclick="document.getElementById('ag-form').classList.toggle('open')" style="width:100%;padding:12px;background:linear-gradient(135deg,#1a1a2e,#4a90d9);border:none;border-radius:12px;color:#fff;font-size:0.87rem;font-weight:700;cursor:pointer;margin-bottom:12px">+ Novo Agendamento</button><div id="ag-form" class="ag-form"><input id="ag-titulo" class="ag-inp" placeholder="Título..."><input id="ag-data" type="datetime-local" class="ag-inp"><input id="ag-desc" class="ag-inp" placeholder="Descrição (opcional)"><select id="ag-quem" class="ag-inp"><option value="todos">👥 Para todos</option><option value="gabriel">Gabriel</option><option value="ruan">Ruan</option><option value="caua">Cauã</option><option value="kauany">Kauany</option></select><button onclick="criarAg()" style="width:100%;padding:11px;background:linear-gradient(135deg,#1a1a2e,#4a90d9);border:none;border-radius:8px;color:#fff;font-size:0.87rem;font-weight:700;cursor:pointer">✅ Criar</button></div><div class="ag-fils"><button class="ag-fil active" onclick="filAg('todos',this)">Todos</button><button class="ag-fil" onclick="filAg('hoje',this)">Hoje</button><button class="ag-fil" onclick="filAg('semana',this)">Semana</button><button class="ag-fil" onclick="filAg('pendente',this)">Pendentes</button><button class="ag-fil" onclick="filAg('concluido',this)">Concluídos</button></div><div id="ag-lista"></div></div>
 <div id="tab-ranking" class="tab-c" style="padding:0">
     <iframe src="https://jozielnathanp-a11y.github.io/ranking-prensadao/" style="width:100%;height:calc(100vh - 130px);border:none;display:block"></iframe>
   </div>
 
   <div class="bot-nav">
     <button class="nav-b active" id="nav-inicio" onclick="swTab('inicio')"><span class="ni">🏠</span><span class="nl">Início</span></button>
-    <button class="nav-b" id="nav-checklist" onclick="swTab('checklist')"><span class="ni">✅</span><span class="nl">Checklist</span></button>
-    <button class="nav-b" id="nav-fale" onclick="swTab('fale')"><span class="ni">💬</span><span class="nl" style="position:relative">Gestor<span id="msgs-badge" style="position:absolute;top:-4px;right:-10px;background:#fc8181;color:#fff;font-size:0.5rem;font-weight:800;padding:1px 3px;border-radius:99px;display:none">!</span></span></button>
-    
-    <button class="nav-b" id="nav-chat" onclick="swTab('chat')"><span class="ni">💬</span><span class="nl">Chat</span></button>
+    <button class="nav-b" id="nav-checklist" onclick="swTab('checklist')"><span class="ni">✅</span><span class="nl">Check</span></button>
+    <button class="nav-b" id="nav-msgs" onclick="swTab('msgs')"><span class="ni">💬</span><span class="nl">Gestor</span></button>
+    <button class="nav-b" id="nav-chat" onclick="swTab('chat')"><span class="ni">👥</span><span class="nl">Chat</span></button>
     <button class="nav-b" id="nav-agenda" onclick="swTab('agenda')"><span class="ni">📅</span><span class="nl">Agenda</span></button>
+    <button class="nav-b" id="nav-fale" onclick="swTab('fale')"><span class="ni">📩</span><span class="nl">Fale</span></button>
     <button class="nav-b" id="nav-ranking" onclick="swTab('ranking')"><span class="ni">🏆</span><span class="nl">Ranking</span></button>
   </div>
 </div>
@@ -737,22 +634,7 @@ function renderChHist(){
     </div>`).join('');
 }
 
-function swTab(t){
-  document.querySelectorAll('.tab-c').forEach(c=>c.classList.remove('active'));
-  document.querySelectorAll('.nav-b').forEach(b=>b.classList.remove('active'));
-  document.getElementById('tab-'+t).classList.add('active');
-  document.getElementById('nav-'+t).classList.add('active');
-  if(t==='msgs')   try{ renderMsgsColab(); }catch(e){}
-  if(t==='chat')   try{ renderChat_ruan(); }catch(e){}
-  if(t==='agenda') try{ renderAgenda_ruan(); }catch(e){}
-}
-window.addEventListener('load',()=>{
-  try{ renderMsgsColab(); }catch(e){}
-  try{ renderChat_ruan(); }catch(e){}
-  try{ renderAgenda_ruan(); }catch(e){}
-});catch(e){}
-}
-window.addEventListener('load',()=>{ try{ renderMsgsColab(); }catch(e){} });
+
 
 function openCfg(){document.getElementById('cfg-modal').classList.add('open');}
 function closeCfg(){document.getElementById('cfg-modal').classList.remove('open');}
@@ -766,344 +648,205 @@ function saveCfg(){
   setTimeout(closeCfg,1500);
 }
 
-const MSG_PREFIX = 'prd_msgs_';
-const MSG_MAX_MS = 5 * 30 * 24 * 60 * 60 * 1000;
-
-function getMsgs(cid) {
-  try {
-    const msgs = JSON.parse(localStorage.getItem(MSG_PREFIX+cid)||'[]');
-    const cutoff = Date.now() - MSG_MAX_MS;
-    const ok = msgs.filter(m=>m.ts>cutoff);
-    if(ok.length!==msgs.length) localStorage.setItem(MSG_PREFIX+cid,JSON.stringify(ok));
-    return ok;
-  } catch(e){ return []; }
-}
-function saveMsgs(cid,msgs){ localStorage.setItem(MSG_PREFIX+cid,JSON.stringify(msgs)); }
-function tsFmt(ts){ const d=new Date(ts); return d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }
-function tipoLabel(t){ return {recado:'💬 Recado',tarefa:'📋 Tarefa',doc:'📄 Solicitar Doc',foto:'📷 Solicitar Foto',aviso:'⚠️ Aviso'}[t]||t; }
-
-
-let msgRespAnexoURL_ruan = null;
-
-function renderMsgsColab(){
-  const msgs = getMsgs('ruan');
-  const lista = document.getElementById('msgs-colab-lista');
-  if(!msgs.length){ lista.innerHTML='<div style="text-align:center;padding:40px;color:#333"><div style="font-size:2.5rem;margin-bottom:10px">📭</div><p>Nenhuma mensagem ainda</p></div>'; return; }
-  const unread = msgs.filter(m=>m.status==='pendente').length;
-  lista.innerHTML = msgs.map(m=>`
-    <div class="msg-card ${m.status}" id="mc-${m.id}">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
-        <span class="msg-tipo-tag ${m.tipo}">${tipoLabel(m.tipo)}</span>
-        <span style="font-size:0.68rem;color:#444">${tsFmt(m.ts)}</span>
-      </div>
-      <div style="font-size:0.72rem;color:#666;margin-bottom:6px">📩 Do Gestor</div>
-      <div class="msg-texto-body">${m.texto}</div>
-      ${m.anexo?`<div style="margin-bottom:10px">${m.anexo.match(/\.(jpg|jpeg|png|gif|webp)/i)?`<img src="${m.anexo}" style="width:100%;max-height:160px;object-fit:cover;border-radius:8px">`:`<a href="${m.anexo}" target="_blank" style="color:#4a90d9;font-size:0.82rem">📎 Ver anexo do gestor</a>`}</div>`:''}
-      ${m.resposta
-        ? `<div class="msg-resp-area"><div class="msg-resp-txt"><strong>Sua resposta:</strong>${m.resposta}</div>${m.respAnexo?`<div style="margin-top:6px">${m.respAnexo.match(/\.(jpg|jpeg|png|gif|webp)/i)?`<img src="${m.respAnexo}" style="width:100%;max-height:120px;object-fit:cover;border-radius:8px">`:`<a href="${m.respAnexo}" target="_blank" style="color:#48bb78;font-size:0.78rem">📎 Seu anexo</a>`}</div>`:''}</div>`
-        : `<div class="msg-resp-area">
-            <textarea class="msg-reply-inp" id="ri-${m.id}" placeholder="Escreva sua resposta..."></textarea>
-            <div style="display:flex;gap:8px;align-items:center">
-              <label style="flex:1;padding:9px;background:#1a1a1a;border:1.5px dashed #2a2a2a;border-radius:8px;text-align:center;cursor:pointer;font-size:0.78rem;color:#555" for="rf-${m.id}">📎 Anexar foto/doc</label>
-              <input type="file" id="rf-${m.id}" accept="image/*,application/pdf" style="display:none" onchange="uploadRespColab_ruan('${m.id}',this)">
-              <button onclick="enviarRespColab_ruan('${m.id}')" style="flex:1;padding:10px;background:linear-gradient(135deg,#ff6b00,#ff9500);border:none;border-radius:8px;color:#fff;font-size:0.82rem;font-weight:700;cursor:pointer">✅ Responder</button>
-            </div>
-            <div id="rst-${m.id}" style="font-size:0.72rem;color:#555;margin-top:4px;text-align:center"></div>
-            <img id="rpv-${m.id}" style="width:100%;max-height:120px;object-fit:cover;border-radius:8px;margin-top:6px;display:none">
-          </div>`
-      }
-    </div>`).join('');
-  // Badge
-  const badge = document.getElementById('msgs-badge');
-  if(badge) badge.textContent = unread > 0 ? unread : '';
-  badge && (badge.style.display = unread > 0 ? 'inline' : 'none');
+// NAV
+function swTab(t){
+  document.querySelectorAll('.tab-c').forEach(c=>c.classList.remove('active'));
+  document.querySelectorAll('.nav-b').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+t).classList.add('active');
+  document.getElementById('nav-'+t).classList.add('active');
+  if(t==='msgs')   renderMsgsGestor();
+  if(t==='chat')   renderChat();
+  if(t==='agenda') renderAgenda();
 }
 
-async function uploadRespColab_ruan(msgId, input){
-  const file=input.files[0]; if(!file) return;
-  const st=document.getElementById('rst-'+msgId); st.textContent='⏳ Enviando...';
-  const fd=new FormData(); fd.append('file',file); fd.append('upload_preset','checklist_prensadao');
+// MSGS DO GESTOR
+const MSG_PFX = 'prd_msgs_';
+const MSG_MAX = 5*30*24*60*60*1000;
+function getMsgsG(){
   try{
-    const r=await fetch('https://api.cloudinary.com/v1_1/dewulu3tj/upload',{method:'POST',body:fd});
-    const d=await r.json();
-    if(d.secure_url){
-      msgRespAnexoURL_ruan = d.secure_url;
-      if(file.type.startsWith('image/')){document.getElementById('rpv-'+msgId).src=d.secure_url;document.getElementById('rpv-'+msgId).style.display='block';}
-      st.textContent='✅ Enviado!';
-    } else st.textContent='❌ Erro.';
-  }catch(e){st.textContent='❌ Erro.';}
-}
-
-function enviarRespColab_ruan(msgId){
-  const txt=document.getElementById('ri-'+msgId)?.value?.trim();
-  if(!txt && !msgRespAnexoURL_ruan){ alert('Escreva uma resposta ou anexe um arquivo!'); return; }
-  const msgs=getMsgs('ruan');
-  const idx=msgs.findIndex(m=>String(m.id)===String(msgId));
-  if(idx>=0){
-    msgs[idx].resposta=txt||'(sem texto)';
-    msgs[idx].respAnexo=msgRespAnexoURL_ruan;
-    msgs[idx].respTs=Date.now();
-    msgs[idx].status='respondido';
-    saveMsgs('ruan',msgs);
-    msgRespAnexoURL_ruan=null;
-  }
-  alert('✅ Resposta enviada!');
-  renderMsgsColab();
-}
-
-
-
-// ── STORAGE COMPARTILHADO ──
-const CHAT_STORE = 'prd_chat_grupo';
-const AG_STORE   = 'prd_agenda';
-const CHAT_MAX_MS = 5*30*24*60*60*1000;
-const AG_MAX_MS   = 5*30*24*60*60*1000;
-
-function getChat(){
-  try{
-    const msgs = JSON.parse(localStorage.getItem(CHAT_STORE)||'[]');
-    const cut = Date.now()-CHAT_MAX_MS;
-    const ok = msgs.filter(m=>m.ts>cut);
-    if(ok.length!==msgs.length) localStorage.setItem(CHAT_STORE,JSON.stringify(ok));
+    const msgs=JSON.parse(localStorage.getItem(MSG_PFX+'ruan')||'[]');
+    const cut=Date.now()-MSG_MAX;
+    const ok=msgs.filter(m=>m.ts>cut);
+    if(ok.length!==msgs.length) localStorage.setItem(MSG_PFX+'ruan',JSON.stringify(ok));
     return ok;
   }catch(e){return[];}
 }
-function saveChat(msgs){ localStorage.setItem(CHAT_STORE,JSON.stringify(msgs)); }
-
-function getAgenda(){
+function saveMsgsG(msgs){ localStorage.setItem(MSG_PFX+'ruan',JSON.stringify(msgs)); }
+function renderMsgsGestor(){
+  const lista=document.getElementById('msgs-lista');
+  if(!lista) return;
+  const msgs=getMsgsG();
+  const tipoL={recado:'💬 Recado',tarefa:'📋 Tarefa',doc:'📄 Doc',foto:'📷 Foto',aviso:'⚠️ Aviso'};
+  if(!msgs.length){lista.innerHTML='<div style="text-align:center;padding:40px;color:#333"><div style="font-size:2rem;margin-bottom:8px">📭</div><p>Nenhuma mensagem ainda</p></div>';return;}
+  lista.innerHTML=msgs.map(function(m){
+    var dt=new Date(m.ts).toLocaleDateString('pt-BR')+' '+new Date(m.ts).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+    var anexoHtml='';
+    if(m.anexo){
+      if(/\.(jpg|jpeg|png|gif|webp)/i.test(m.anexo)) anexoHtml='<img src="'+m.anexo+'" style="width:100%;max-height:130px;object-fit:cover;border-radius:8px;margin-bottom:7px">';
+      else anexoHtml='<a href="'+m.anexo+'" target="_blank" style="color:#4a90d9;font-size:0.78rem;display:block;margin-bottom:7px">📎 Ver anexo</a>';
+    }
+    var respHtml='';
+    if(m.resposta){
+      respHtml='<div style="background:#0a0a0a;border-radius:8px;padding:9px;border-left:3px solid #48bb78"><div style="font-size:0.68rem;color:#48bb78;font-weight:700;margin-bottom:3px">Sua resposta:</div><div style="font-size:0.8rem;color:#aaa">'+m.resposta+'</div></div>';
+    } else {
+      respHtml='<div style="background:#0a0a0a;border-radius:8px;padding:9px">'
+        +'<textarea id="ri-'+m.id+'" style="width:100%;padding:8px;background:#111;border:1.5px solid #222;border-radius:7px;color:#fff;font-size:0.82rem;resize:vertical;min-height:55px;outline:none;margin-bottom:7px" placeholder="Escreva sua resposta..."></textarea>'
+        +'<div style="display:flex;gap:7px"><label style="flex:1;padding:8px;background:#111;border:1.5px dashed #2a2a2a;border-radius:7px;text-align:center;cursor:pointer;font-size:0.75rem;color:#555" for="rfi-'+m.id+'">📎 Anexar</label>'
+        +'<input type="file" id="rfi-'+m.id+'" accept="image/*,application/pdf" style="display:none" onchange="uploadRespMsg(''+m.id+'',this)">'
+        +'<button onclick="enviarRespMsg(''+m.id+'')" style="flex:1;padding:9px;background:linear-gradient(135deg,#ff6b00,#ff9500);border:none;border-radius:7px;color:#fff;font-size:0.82rem;font-weight:700;cursor:pointer">✅ Responder</button></div>'
+        +'<div id="rst-'+m.id+'" style="font-size:0.7rem;color:#555;margin-top:3px"></div>'
+        +'<img id="rpv-'+m.id+'" style="width:100%;max-height:100px;object-fit:cover;border-radius:6px;margin-top:5px;display:none"></div>';
+    }
+    return '<div style="background:#0f0f0f;border:1px solid #1a1a1a;border-radius:12px;padding:12px;margin-bottom:8px;border-left:3px solid '+(m.status==='respondido'?'#48bb78':'#f6ad55')+'">'
+      +'<div style="display:flex;justify-content:space-between;margin-bottom:5px">'
+      +'<span style="font-size:0.7rem;font-weight:700;color:#4a90d9">'+(tipoL[m.tipo]||m.tipo)+'</span>'
+      +'<span style="font-size:0.65rem;color:#444">'+dt+'</span></div>'
+      +'<div style="font-size:0.83rem;color:#ccc;margin-bottom:8px">'+m.texto+'</div>'
+      +anexoHtml+respHtml+'</div>';
+  }).join('');
+}
+var _respAnexo={};
+async function uploadRespMsg(mid,input){
+  var file=input.files[0]; if(!file) return;
+  var st=document.getElementById('rst-'+mid); st.textContent='⏳ Enviando...';
+  var fd=new FormData(); fd.append('file',file); fd.append('upload_preset','checklist_prensadao');
   try{
-    const items = JSON.parse(localStorage.getItem(AG_STORE)||'[]');
-    const cut = Date.now()-AG_MAX_MS;
-    const ok = items.filter(a=>new Date(a.datahora).getTime()>cut-30*24*60*60*1000);
-    if(ok.length!==items.length) localStorage.setItem(AG_STORE,JSON.stringify(ok));
-    return ok;
-  }catch(e){return[];}
-}
-function saveAgenda(items){ localStorage.setItem(AG_STORE,JSON.stringify(items)); }
-
-function chatTsFmt(ts){
-  const d=new Date(ts);
-  const h=d.getHours().toString().padStart(2,'0');
-  const m=d.getMinutes().toString().padStart(2,'0');
-  return h+':'+m;
-}
-function agDtFmt(dt){
-  const d=new Date(dt);
-  return d.toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'2-digit'})+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
-}
-
-// Divisão de pts quando aceita ajuda
-function calcPtsDivisao(pts){
-  if(pts<=3) return [2,2];
-  if(pts<=5) return [3,3];
-  return [Math.floor(pts/2), Math.floor(pts/2)];
-}
-
-
-// ══ CHAT — Ruan ══
-let chatMidiaURL_ruan = null;
-let chatAjudaMode_ruan = false;
-
-function toggleAjuda_ruan(btn){
-  chatAjudaMode_ruan = !chatAjudaMode_ruan;
-  document.getElementById('ajuda-form-ruan').style.display = chatAjudaMode_ruan?'block':'none';
-  btn.classList.toggle('sel', chatAjudaMode_ruan);
-}
-
-async function uploadChatMidia_ruan(input){
-  const file=input.files[0]; if(!file) return;
-  const st=document.getElementById('chat-up-st-ruan');
-  st.textContent='⏳ Enviando...';
-  const fd=new FormData(); fd.append('file',file); fd.append('upload_preset','checklist_prensadao');
-  try{
-    const r=await fetch('https://api.cloudinary.com/v1_1/dewulu3tj/upload',{method:'POST',body:fd});
-    const d=await r.json();
-    if(d.secure_url){
-      chatMidiaURL_ruan=d.secure_url;
-      const prev=document.getElementById('chat-prev-ruan');
-      prev.src=d.secure_url; prev.style.display='block';
-      st.textContent='✅ Pronto!';
-    } else st.textContent='❌ Erro';
+    var r=await fetch('https://api.cloudinary.com/v1_1/dewulu3tj/upload',{method:'POST',body:fd});
+    var d=await r.json();
+    if(d.secure_url){_respAnexo[mid]=d.secure_url;if(file.type.startsWith('image/')){document.getElementById('rpv-'+mid).src=d.secure_url;document.getElementById('rpv-'+mid).style.display='block';}st.textContent='✅ Enviado!';}
+    else st.textContent='❌ Erro';
   }catch(e){st.textContent='❌ Erro';}
 }
-
-function enviarMsgChat_ruan(){
-  const txt=document.getElementById('chat-inp-ruan').value.trim();
-  if(!txt && !chatMidiaURL_ruan) return;
-  const msgs=getChat();
-  msgs.push({
-    id:Date.now(),ts:Date.now(),
-    de:'ruan',nome:'Ruan',emoji:'🥇',
-    texto:txt,midia:chatMidiaURL_ruan||null,
-    tipo:'msg'
-  });
-  saveChat(msgs);
-  document.getElementById('chat-inp-ruan').value='';
-  chatMidiaURL_ruan=null;
-  document.getElementById('chat-prev-ruan').style.display='none';
-  document.getElementById('chat-up-st-ruan').textContent='';
-  renderChat_ruan();
+function enviarRespMsg(mid){
+  var txt=document.getElementById('ri-'+mid)?document.getElementById('ri-'+mid).value.trim():'';
+  if(!txt&&!_respAnexo[mid]){alert('Escreva uma resposta!');return;}
+  var msgs=getMsgsG();
+  var idx=msgs.findIndex(function(m){return String(m.id)===String(mid);});
+  if(idx>=0){msgs[idx].resposta=txt||'(sem texto)';msgs[idx].respAnexo=_respAnexo[mid]||null;msgs[idx].respTs=Date.now();msgs[idx].status='respondido';saveMsgsG(msgs);}
+  delete _respAnexo[mid];
+  alert('✅ Resposta enviada!');
+  renderMsgsGestor();
 }
 
-function enviarPedidoAjuda_ruan(){
-  const desc=document.getElementById('ajuda-desc-ruan').value.trim();
-  if(!desc){alert('Descreva a tarefa!');return;}
-  const pts=parseInt(document.getElementById('ajuda-pts-ruan').value);
-  const [p1,p2]=calcPtsDivisao(pts);
-  const msgs=getChat();
-  msgs.push({
-    id:Date.now(),ts:Date.now(),
-    de:'ruan',nome:'Ruan',emoji:'🥇',
-    texto:desc,midia:null,tipo:'ajuda',
-    pts,p1,p2,aceitoPor:null,aceitoPorNome:null
-  });
-  saveChat(msgs);
-  document.getElementById('ajuda-desc-ruan').value='';
-  document.getElementById('ajuda-form-ruan').style.display='none';
-  chatAjudaMode_ruan=false;
-  renderChat_ruan();
+// CHAT
+const CHAT_STORE='prd_chat_grupo';
+const CHAT_MAX=5*30*24*60*60*1000;
+var _chatMidia=null, _ajudaMode=false;
+function getChat(){
+  try{var msgs=JSON.parse(localStorage.getItem(CHAT_STORE)||'[]');var cut=Date.now()-CHAT_MAX;var ok=msgs.filter(function(m){return m.ts>cut;});if(ok.length!==msgs.length)localStorage.setItem(CHAT_STORE,JSON.stringify(ok));return ok;}catch(e){return[];}
 }
-
-function aceitarAjuda_ruan(msgId){
-  const msgs=getChat();
-  const idx=msgs.findIndex(m=>m.id===msgId);
-  if(idx<0) return;
-  if(msgs[idx].de==='ruan'){alert('Você não pode aceitar sua própria tarefa!');return;}
-  if(msgs[idx].aceitoPor){alert('Já foi aceita por '+msgs[idx].aceitoPorNome+'!');return;}
-  msgs[idx].aceitoPor='ruan';
-  msgs[idx].aceitoPorNome='Ruan';
-  saveChat(msgs);
-
-  // Lançar pontos para os dois
-  const [p1,p2]=[msgs[idx].p1,msgs[idx].p2];
-  const solicitante=msgs[idx].de;
-  // Pontuar via ranking_prensadao (localStorage do ranking)
-  try{
-    const csv=localStorage.getItem('ranking_csv');
-    // Notificação apenas — pontuação real feita pelo gestor
-  }catch(e){}
-
-  // Mensagem automática no chat
-  msgs.push({
-    id:Date.now()+1,ts:Date.now(),
-    de:'sistema',nome:'Sistema',emoji:'🤖',
-    texto:'✅ Ruan aceitou ajudar! Pts divididos: +'+p1+' pts para '+msgs[idx].nome+' e +'+p2+' pts para Ruan. O gestor será notificado para lançar.',
-    midia:null,tipo:'sistema'
-  });
-  saveChat(msgs);
-  renderChat_ruan();
+function saveChat(msgs){localStorage.setItem(CHAT_STORE,JSON.stringify(msgs));}
+function toggleAjuda(){
+  _ajudaMode=!_ajudaMode;
+  document.getElementById('ajuda-form').style.display=_ajudaMode?'block':'none';
+  document.getElementById('btn-ajuda').classList.toggle('sel',_ajudaMode);
 }
-
-function renderChat_ruan(){
-  const msgs=getChat();
-  const wrap=document.getElementById('chat-msgs-ruan');
-  if(!wrap) return;
-  const FOTOS_CHAT={gabriel:'https://res.cloudinary.com/dewulu3tj/image/upload/v1780062694/checklist_prensadao/colaborador_gabriel.jpg',ruan:'https://res.cloudinary.com/dewulu3tj/image/upload/v1780062694/checklist_prensadao/colaborador_ruan.jpg',caua:'https://res.cloudinary.com/dewulu3tj/image/upload/v1780062695/checklist_prensadao/colaborador_caua.jpg',kauany:''};
-  wrap.innerHTML=msgs.map(m=>{
-    const eu=m.de==='ruan';
-    const sistema=m.de==='sistema';
-    if(sistema) return '<div style="text-align:center;font-size:0.72rem;color:#555;padding:4px 0">'+m.texto+'</div>';
-    const av=FOTOS_CHAT[m.de]
-      ?'<img class="bubble-av" src="'+FOTOS_CHAT[m.de]+'" alt="'+m.emoji+'">'
-      :'<div class="bubble-av">'+m.emoji+'</div>';
-    const cls=eu?'eu':'outros';
-    const midia=m.midia?'<img src="'+m.midia+'" style="max-width:100%;border-radius:8px;margin-top:4px">':'';
-    let extra='';
+async function uploadChatMidia(input){
+  var file=input.files[0];if(!file)return;
+  var st=document.getElementById('chat-upst');st.textContent='⏳ Enviando...';
+  var fd=new FormData();fd.append('file',file);fd.append('upload_preset','checklist_prensadao');
+  try{var r=await fetch('https://api.cloudinary.com/v1_1/dewulu3tj/upload',{method:'POST',body:fd});var d=await r.json();if(d.secure_url){_chatMidia=d.secure_url;document.getElementById('chat-prev').src=d.secure_url;document.getElementById('chat-prev').style.display='block';st.textContent='✅ Pronto!';}else st.textContent='❌ Erro';}catch(e){st.textContent='❌ Erro';}
+}
+function enviarMsg(){
+  var txt=document.getElementById('chat-inp').value.trim();
+  if(!txt&&!_chatMidia)return;
+  var msgs=getChat();
+  msgs.push({id:Date.now(),ts:Date.now(),de:'ruan',nome:'Ruan',emoji:'🥇',texto:txt,midia:_chatMidia||null,tipo:'msg'});
+  saveChat(msgs);
+  document.getElementById('chat-inp').value='';
+  _chatMidia=null;document.getElementById('chat-prev').style.display='none';document.getElementById('chat-upst').textContent='';
+  renderChat();
+}
+function enviarAjuda(){
+  var desc=document.getElementById('ajuda-desc').value.trim();if(!desc){alert('Descreva a tarefa!');return;}
+  var pts=parseInt(document.getElementById('ajuda-pts').value);
+  var share=pts<=3?2:pts<=5?3:5;
+  var msgs=getChat();
+  msgs.push({id:Date.now(),ts:Date.now(),de:'ruan',nome:'Ruan',emoji:'🥇',texto:desc,midia:null,tipo:'ajuda',pts:pts,share:share,aceitoPor:null,aceitoPorNome:null});
+  saveChat(msgs);
+  document.getElementById('ajuda-desc').value='';document.getElementById('ajuda-form').style.display='none';_ajudaMode=false;document.getElementById('btn-ajuda').classList.remove('sel');
+  renderChat();
+}
+function aceitarAjuda(msgId){
+  var msgs=getChat();var idx=msgs.findIndex(function(m){return m.id===msgId;});if(idx<0)return;
+  if(msgs[idx].de==='ruan'){alert('Voce nao pode aceitar sua propria tarefa!');return;}
+  if(msgs[idx].aceitoPor){alert('Ja foi aceita por '+msgs[idx].aceitoPorNome+'!');return;}
+  msgs[idx].aceitoPor='ruan';msgs[idx].aceitoPorNome='Ruan';
+  msgs.push({id:Date.now()+1,ts:Date.now(),de:'sistema',nome:'Sistema',emoji:'🤖',texto:'✅ Ruan aceitou ajudar! Pts: +'+msgs[idx].share+' pts cada. Gestor notificado.',midia:null,tipo:'sistema'});
+  saveChat(msgs);renderChat();
+}
+function renderChat(){
+  var wrap=document.getElementById('chat-msgs');if(!wrap)return;
+  var msgs=getChat();
+  var FMAP={gabriel:'https://res.cloudinary.com/dewulu3tj/image/upload/v1780062694/checklist_prensadao/colaborador_gabriel.jpg',ruan:'https://res.cloudinary.com/dewulu3tj/image/upload/v1780062694/checklist_prensadao/colaborador_ruan.jpg',caua:'https://res.cloudinary.com/dewulu3tj/image/upload/v1780062695/checklist_prensadao/colaborador_caua.jpg',kauany:'',gestor:''};
+  if(!msgs.length){wrap.innerHTML='<div style="text-align:center;padding:40px;color:#333"><div style="font-size:2rem;margin-bottom:8px">💬</div><p>Nenhuma mensagem ainda</p></div>';return;}
+  wrap.innerHTML=msgs.map(function(m){
+    if(m.de==='sistema')return '<div style="text-align:center;font-size:0.7rem;color:#555;padding:4px 8px;background:#111;border-radius:99px;margin:4px auto;max-width:90%">'+m.texto+'</div>';
+    var eu=m.de==='ruan';
+    var av=FMAP[m.de]?'<img class="bubble-av" src="'+FMAP[m.de]+'" alt="'+m.emoji+'">':'<div class="bubble-av">'+m.emoji+'</div>';
+    var midia=m.midia?'<img src="'+m.midia+'" style="max-width:100%;border-radius:8px;margin-top:4px">':'';
+    var extra='';
     if(m.tipo==='ajuda'){
-      const [p1,p2]=calcPtsDivisao(m.pts);
-      const aceitoBt=(!m.aceitoPor && !eu)?'<button class="btn-aceitar-aj" onclick="aceitarAjuda_ruan('+m.id+')">✋ Aceitar (+'+p2+' pts)</button>':'';
-      const aceito=m.aceitoPor?'<div style="font-size:0.7rem;color:#48bb78;margin-top:4px">✅ Aceita por '+m.aceitoPorNome+'</div>':'';
-      extra='<div class="bubble-ajuda"><div class="aj-tit">🤝 Pedido de ajuda</div><div class="aj-pts">Pts ao concluir: '+p1+' para cada</div>'+aceitoBt+aceito+'</div>';
+      var acBtn=(!m.aceitoPor&&!eu)?'<button class="btn-aceitar" onclick="aceitarAjuda('+m.id+')">✋ Aceitar (+'+m.share+' pts)</button>':'';
+      var acInfo=m.aceitoPor?'<div style="font-size:0.68rem;color:#48bb78;margin-top:3px">✅ Aceita por '+m.aceitoPorNome+'</div>':'<div style="font-size:0.68rem;color:#f6ad55;margin-top:3px">⏳ Aguardando...</div>';
+      extra='<div class="b-ajuda"><div class="b-ajuda-tit">🤝 Pedido de ajuda</div><div style="font-size:0.7rem;color:#aaa">+'+m.share+' pts cada</div>'+acBtn+acInfo+'</div>';
     }
-    return '<div class="bubble-wrap '+(eu?'me':'')+'">'+(eu?'':av)+
-      '<div><div class="bubble '+cls+'">'+(eu?'':'<div class="bubble-nm">'+m.nome+'</div>')+
-      m.texto+midia+extra+
-      '<div class="bubble-ts">'+chatTsFmt(m.ts)+'</div>'+
-      '</div></div>'+(eu?av:'')+
-      '</div>';
+    return '<div class="bubble-wrap '+(eu?'me':'')+'">'+(eu?'':av)
+      +'<div><div class="bubble '+(eu?'eu':'outros')+'">'+(eu?'':'<div class="bubble-nm">'+m.nome+'</div>')
+      +(m.tipo!=='ajuda'?m.texto:'')+midia+extra
+      +'<div class="bubble-ts">'+new Date(m.ts).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})+'</div>'
+      +'</div></div>'+(eu?av:'')+'</div>';
   }).join('');
   wrap.scrollTop=wrap.scrollHeight;
-  // Badge
-  const badge=document.getElementById('chat-badge-ruan');
-  if(badge) badge.style.display='none';
 }
 
-// ══ AGENDA — Ruan ══
-let agFiltro_ruan='todos';
-
-function filtrarAg_ruan(f,btn){
-  agFiltro_ruan=f;
-  document.querySelectorAll('.ag-fil-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  renderAgenda_ruan();
+// AGENDA
+const AG_STORE='prd_agenda';var _agFil='todos';
+function getAg(){try{return JSON.parse(localStorage.getItem(AG_STORE)||'[]');}catch(e){return[];}}
+function saveAg(items){localStorage.setItem(AG_STORE,JSON.stringify(items));}
+function filAg(f,btn){_agFil=f;document.querySelectorAll('.ag-fil').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');renderAgenda();}
+function criarAg(){
+  var titulo=document.getElementById('ag-titulo').value.trim();var dt=document.getElementById('ag-data').value;
+  if(!titulo||!dt){alert('Preencha titulo e data!');return;}
+  var desc=document.getElementById('ag-desc').value.trim();var quem=document.getElementById('ag-quem').value;
+  var items=getAg();
+  items.push({id:Date.now(),ts:Date.now(),titulo:titulo,datahora:dt,desc:desc,quem:quem,criadoPor:'ruan',criadoPorNome:'Ruan',status:'pendente'});
+  saveAg(items);
+  document.getElementById('ag-titulo').value='';document.getElementById('ag-data').value='';document.getElementById('ag-desc').value='';document.getElementById('ag-form').classList.remove('open');
+  renderAgenda();
 }
-
-function criarAgendamento_ruan(){
-  const titulo=document.getElementById('ag-titulo-ruan').value.trim();
-  const datahora=document.getElementById('ag-data-ruan').value;
-  if(!titulo||!datahora){alert('Preencha título e data/hora!');return;}
-  const desc=document.getElementById('ag-desc-ruan').value.trim();
-  const quem=document.getElementById('ag-quem-ruan').value;
-  const items=getAgenda();
-  items.push({
-    id:Date.now(),ts:Date.now(),
-    titulo,datahora,desc,quem,
-    criadoPor:'ruan',criadoPorNome:'Ruan',
-    status:'pendente'
-  });
-  saveAgenda(items);
-  document.getElementById('ag-titulo-ruan').value='';
-  document.getElementById('ag-data-ruan').value='';
-  document.getElementById('ag-desc-ruan').value='';
-  document.getElementById('novo-ag-ruan').classList.remove('open');
-  renderAgenda_ruan();
-}
-
-function concluirAg_ruan(id){
-  const items=getAgenda();
-  const idx=items.findIndex(a=>a.id===id);
-  if(idx>=0){items[idx].status='concluido';saveAgenda(items);}
-  renderAgenda_ruan();
-}
-
-function deletarAg_ruan(id){
-  const items=getAgenda().filter(a=>a.id!==id);
-  saveAgenda(items);
-  renderAgenda_ruan();
-}
-
-function renderAgenda_ruan(){
-  const lista=document.getElementById('agenda-lista-ruan');
-  if(!lista) return;
-  let items=getAgenda();
-  const agora=Date.now();
-  const hoje=new Date(); hoje.setHours(0,0,0,0);
-  const semana=new Date(hoje); semana.setDate(semana.getDate()+7);
-
-  if(agFiltro_ruan==='hoje') items=items.filter(a=>{const d=new Date(a.datahora);return d>=hoje&&d<new Date(hoje.getTime()+86400000);});
-  else if(agFiltro_ruan==='semana') items=items.filter(a=>new Date(a.datahora)<=semana&&new Date(a.datahora)>=hoje);
-  else if(agFiltro_ruan==='pendente') items=items.filter(a=>a.status==='pendente');
-  else if(agFiltro_ruan==='concluido') items=items.filter(a=>a.status==='concluido');
-
-  // Mostrar só os do usuário ou para todos
-  items=items.filter(a=>a.quem==='todos'||a.quem==='ruan'||a.criadoPor==='ruan');
-  items.sort((a,b)=>new Date(a.datahora)-new Date(b.datahora));
-
+function concluirAg(id){var items=getAg();var idx=items.findIndex(function(a){return a.id===id;});if(idx>=0){items[idx].status='concluido';saveAg(items);}renderAgenda();}
+function deletarAg(id){saveAg(getAg().filter(function(a){return a.id!==id;}));renderAgenda();}
+function renderAgenda(){
+  var lista=document.getElementById('ag-lista');if(!lista)return;
+  var items=getAg().filter(function(a){return a.quem==='todos'||a.quem==='ruan'||a.criadoPor==='ruan';});
+  var hoje=new Date();hoje.setHours(0,0,0,0);var semana=new Date(hoje);semana.setDate(semana.getDate()+7);
+  if(_agFil==='hoje') items=items.filter(function(a){var d=new Date(a.datahora);return d>=hoje&&d<new Date(hoje.getTime()+86400000);});
+  else if(_agFil==='semana') items=items.filter(function(a){return new Date(a.datahora)<=semana&&new Date(a.datahora)>=hoje;});
+  else if(_agFil==='pendente') items=items.filter(function(a){return a.status==='pendente';});
+  else if(_agFil==='concluido') items=items.filter(function(a){return a.status==='concluido';});
+  items.sort(function(a,b){return new Date(a.datahora)-new Date(b.datahora);});
   if(!items.length){lista.innerHTML='<div style="text-align:center;padding:40px;color:#333"><div style="font-size:2rem;margin-bottom:8px">📅</div><p>Nenhum agendamento</p></div>';return;}
-
-  const QUEM_LABEL={todos:'👥 Todos',gabriel:'Gabriel',ruan:'Ruan',caua:'Cauã',kauany:'Kauany',gestor:'Josiel'};
-  lista.innerHTML=items.map(a=>{
-    const atrasado=new Date(a.datahora)<new Date()&&a.status==='pendente';
-    const cls=a.status==='concluido'?'concluido':(atrasado?'urgente':'');
-    const podeEditar=a.criadoPor==='ruan'||'ruan'==='gestor';
-    return '<div class="ag-card '+cls+'">'+
-      '<div class="ag-tit">'+a.titulo+'</div>'+
-      '<div class="ag-dt">📅 '+agDtFmt(a.datahora)+'</div>'+
-      '<div class="ag-quem">👤 Criado por '+a.criadoPorNome+' · Para: '+(QUEM_LABEL[a.quem]||a.quem)+'</div>'+
-      (a.desc?'<div class="ag-desc">'+a.desc+'</div>':'')+
-      (podeEditar&&a.status==='pendente'?'<div class="ag-acoes"><button class="ag-btn ok" onclick="concluirAg_ruan('+a.id+')">✅ Concluído</button><button class="ag-btn del" onclick="deletarAg_ruan('+a.id+')">🗑️ Remover</button></div>':'')+
-      '</div>';
+  var QL={todos:'👥 Todos',gabriel:'Gabriel',ruan:'Ruan',caua:'Cauã',kauany:'Kauany',gestor:'Josiel'};
+  lista.innerHTML=items.map(function(a){
+    var atr=new Date(a.datahora)<new Date()&&a.status==='pendente';
+    var cls=a.status==='concluido'?'concluido':(atr?'atrasado':'');
+    var podeEditar=a.criadoPor==='ruan';
+    var dtFmt=new Date(a.datahora).toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'2-digit'})+' '+new Date(a.datahora).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+    return '<div class="ag-card '+cls+'">'
+      +'<div class="ag-tit">'+a.titulo+'</div>'
+      +'<div class="ag-dt">📅 '+dtFmt+'</div>'
+      +'<div class="ag-quem">👤 '+a.criadoPorNome+' · Para: '+(QL[a.quem]||a.quem)+'</div>'
+      +(a.desc?'<div class="ag-desc">'+a.desc+'</div>':'')
+      +(podeEditar&&a.status==='pendente'?'<div class="ag-acoes"><button class="ag-btn ok" onclick="concluirAg('+a.id+')">✅ Concluído</button><button class="ag-btn del" onclick="deletarAg('+a.id+')">🗑️</button></div>':'')
+      +'</div>';
   }).join('');
 }
+
+window.addEventListener('load',function(){
+  try{renderMsgsGestor();}catch(e){}
+  try{renderChat();}catch(e){}
+  try{renderAgenda();}catch(e){}
+});
 
 </script></body></html>
