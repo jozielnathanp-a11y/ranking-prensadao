@@ -417,28 +417,46 @@ input[type="date"], input[type="time"] {
     <div class="cfg-msg" id="cfg-msg"></div>
   </div>
 </div>
-<script>
-var COLAB_ID = 'caua';
+<script>var COLAB_ID = 'caua';
 var COLAB_NOME = 'Cauã';
 var COLAB_EMOJI = '🥈';
 
 // ===== SUPABASE BACKEND =====
 var SB_URL = 'https://trbyynbtuzpszdvjivbs.supabase.co';
 var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRyYnl5bmJ0dXpwc3pkdmppdmJzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3ODIyODAxOCwiZXhwIjoyMDkzODA0MDE4fQ.OZq8bycNQWEpdbxPiSuB9gt7A0fPKNkawcrtE5XpGFg';
-var SB_H = { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json' };
+var SB_H = {'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json'};
+function sbGet(t,q){return fetch(SB_URL+'/rest/v1/'+t+'?'+(q||'order=ts.asc'),{headers:SB_H}).then(function(r){return r.json();}).catch(function(){return [];});}
+function sbPost(t,d){if(!d)return;return fetch(SB_URL+'/rest/v1/'+t,{method:'POST',headers:Object.assign({},SB_H,{'Prefer':'return=minimal'}),body:JSON.stringify(d)}).catch(function(){});}
 
-function sbGet(table, qs) {
-  return fetch(SB_URL+'/rest/v1/'+table+'?'+(qs||'order=ts.asc'), {headers:SB_H})
-    .then(function(r){return r.json();}).catch(function(){return [];});
+// Polling do chat (atualiza a cada 8s quando aba chat está aberta)
+var _chatPoll=null;
+function chatStartPoll(){
+  if(_chatPoll)clearInterval(_chatPoll);
+  _chatLoadSB();
+  _chatPoll=setInterval(_chatLoadSB,8000);
 }
-function sbPost(table, data) {
-  return fetch(SB_URL+'/rest/v1/'+table, {method:'POST', headers:Object.assign({},SB_H,{'Prefer':'return=minimal'}), body:JSON.stringify(data)})
-    .catch(function(){});
+function _chatLoadSB(){
+  sbGet('prd_chat_grupo','ts=gt.'+(Date.now()-5*30*24*60*60*1000)+'&order=ts.asc&limit=100').then(function(msgs){
+    if(!Array.isArray(msgs)||!msgs.length)return;
+    var CHAT_KEY='prd_chat_grupo';
+    localStorage.setItem(CHAT_KEY,JSON.stringify(msgs));
+    if(typeof chatRender==='function')chatRender();
+  });
 }
-function sbDelete(table, qs) {
-  return fetch(SB_URL+'/rest/v1/'+table+'?'+qs, {method:'DELETE', headers:SB_H}).catch(function(){});
+// Polling de mensagens do gestor
+function _loadMsgsSB(){
+  sbGet('prd_mensagens','para=eq.caua&order=ts.asc&limit=50').then(function(msgs){
+    if(!Array.isArray(msgs)||!msgs.length)return;
+    var key='prd_msgs_caua';
+    var local=[];try{local=JSON.parse(localStorage.getItem(key)||'[]');}catch(e){}
+    var sbIds=msgs.map(function(m){return m.id;});
+    var only=local.filter(function(m){return !m.id||sbIds.indexOf(m.id)<0;});
+    localStorage.setItem(key,JSON.stringify(only.concat(msgs)));
+    if(typeof renderMsgs==='function')renderMsgs('caua');
+  });
 }
 // ===========================
+
 
 // === CHAT DO GRUPO (Supabase) ===
 var CHAT_TTL = 5*30*24*60*60*1000;
@@ -609,26 +627,9 @@ async function upEx(id,inp){
 function setRat(v){rat=v;document.querySelectorAll('.rat span').forEach((s,i)=>s.className=i<v?'sel':'');autoSave();}
 
 
-// Salvar checklist no Supabase também
-function saveChecklistSB(tks, phs, obs, rat) {
-  var semana = new Date().toISOString().slice(0,10);
-  var data = {
-    colab_id: COLAB_ID,
-    tks: tks,
-    phs: phs,
-    obs: obs || '',
-    rat: rat || 0,
-    semana: semana,
-    ts: Date.now()
-  };
-  // Upsert por colab_id + semana
-  fetch(SB_URL+'/rest/v1/prd_checklist?colab_id=eq.'+COLAB_ID+'&semana=eq.'+semana, {
-    method: 'DELETE', headers: SB_H
-  }).then(function(){ sbPost('prd_checklist', data); }).catch(function(){});
-}
-
 function autoSave(){
   localStorage.setItem(STORE+'_cl',JSON.stringify({tks,phs,obs:document.getElementById('obs-cl').value,rat}));
+  sbPost('prd_checklist', {colab_id: COLAB_ID, tks: tks, obs: document.getElementById('obs-cl') ? document.getElementById('obs-cl').value : '', semana: new Date().toISOString().slice(0,10), ts: Date.now()});
   saveChecklistSB(tks, phs, document.getElementById('obs-cl')?.value, rat);
   const i=document.getElementById('sv-ind');i.style.display='block';setTimeout(()=>i.style.display='none',1500);
 }
@@ -769,6 +770,9 @@ function swTab(t){
   document.querySelectorAll('.nav-b').forEach(b=>b.classList.remove('active'));
   document.getElementById('tab-'+t).classList.add('active');
   document.getElementById('nav-'+t).classList.add('active');
+
+  if(t==='chat'){chatStartPoll();}
+  if(t==='msgs'){_loadMsgsSB();}
 }
 
 function openCfg(){document.getElementById('cfg-modal').classList.add('open');}
@@ -880,9 +884,7 @@ function chatGetMsgs() {
     return ok;
   } catch(e) { return []; }
 }
-function chatSaveMsgs(msgs) { localStorage.setItem(CHAT_KEY, JSON.stringify(msgs));
-  // Sync com Supabase
-  sbPost('prd_chat_grupo', msgs[msgs.length-1]); }
+function chatSaveMsgs(msgs) { localStorage.setItem(CHAT_KEY, JSON.stringify(msgs)); }
 
 function chatToggleAjuda() {
   chatAjudaMode = !chatAjudaMode;
