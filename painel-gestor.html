@@ -55,7 +55,6 @@
 .rk-frame{width:100%;height:calc(100vh - 130px);border:none;display:block}
 .sec-lbl{font-size:0.75rem;color:#555;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
 </style>
-<!-- v5 -->
 </head><body>
 <div id="login-screen">
 <div class="l-logo">🛂</div>
@@ -118,7 +117,7 @@ const FOTOS = {gabriel:FOTO_GABRIEL,ruan:FOTO_RUAN,caua:FOTO_CAUA,kauany:FOTO_KA
 const GESTOR_SENHA = "josiel123";
 let filtroAtivo = "todos";
 
-function getSenha(){ return localStorage.getItem("gestor_senha") || GESTOR_SENHA; }
+function getSenha(){ return GESTOR_SENHA; }
 function doLogin(){
   const v = document.getElementById("lsn").value;
   if(v === getSenha()){
@@ -130,6 +129,7 @@ function doLogin(){
   }
 }
 function initApp(){
+  localStorage.removeItem("gestor_senha");
   renderAjudasPendentes(); renderGeral(); renderChamados(); renderPaineis(); }
 
 function getAllChamados(){
