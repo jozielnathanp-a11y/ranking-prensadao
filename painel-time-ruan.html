@@ -28,10 +28,10 @@ body{font-family:'Segoe UI',sans-serif;background:#0a0a0a;color:#fff;min-height:
 .top-pts-num{font-size:1.1rem;font-weight:900;color:#ff9500}
 .top-pts-lbl{font-size:0.68rem;color:#555}
 .cfg-btn{background:none;border:none;color:#444;font-size:1.1rem;cursor:pointer;margin-left:10px}
-.bot-nav{position:fixed;bottom:0;left:0;right:0;background:#111;border-top:1px solid #1e1e1e;display:flex;z-index:100}
+.bot-nav{position:fixed;bottom:0;left:0;right:0;background:#111;border-top:1px solid #1e1e1e;display:flex;z-index:100;overflow-x:auto;-webkit-overflow-scrolling:touch}.bot-nav::-webkit-scrollbar{display:none}
 .nav-b{flex:1;padding:10px 4px 8px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;color:#444;border:none;background:none;transition:color 0.2s}
-.nav-b .ni{font-size:1.3rem}
-.nav-b .nl{font-size:0.62rem;font-weight:600}
+.nav-b .ni{font-size:1.15rem}
+.nav-b .nl{font-size:0.58rem;font-weight:600}
 .nav-b.active{color:#ff6b00}
 .tab-c{display:none;padding:16px;max-width:640px;margin:0 auto}
 .tab-c.active{display:block}
@@ -463,8 +463,8 @@ body{font-family:'Segoe UI',sans-serif;background:#0a0a0a;color:#fff;min-height:
   <div class="bot-nav">
     <button class="nav-b active" id="nav-inicio" onclick="swTab('inicio')"><span class="ni">🏠</span><span class="nl">Início</span></button>
     <button class="nav-b" id="nav-checklist" onclick="swTab('checklist')"><span class="ni">✅</span><span class="nl">Checklist</span></button>
-    <button class="nav-b" id="nav-fale" onclick="swTab('fale')"><span class="ni">💬</span><span class="nl">Gestor</span></button>
-    <button class="nav-b" id="nav-msgs" onclick="swTab('msgs')"><span class="ni">✉️</span><span class="nl" style="position:relative">Msgs<span id="msgs-badge" style="position:absolute;top:-4px;right:-8px;background:#fc8181;color:#fff;font-size:0.55rem;font-weight:800;padding:1px 4px;border-radius:99px;display:none">0</span></span></button>
+    <button class="nav-b" id="nav-fale" onclick="swTab('fale')"><span class="ni">💬</span><span class="nl" style="position:relative">Gestor<span id="msgs-badge" style="position:absolute;top:-4px;right:-10px;background:#fc8181;color:#fff;font-size:0.5rem;font-weight:800;padding:1px 3px;border-radius:99px;display:none">!</span></span></button>
+    
     <button class="nav-b" id="nav-chat" onclick="swTab('chat')"><span class="ni">💬</span><span class="nl">Chat</span></button>
     <button class="nav-b" id="nav-agenda" onclick="swTab('agenda')"><span class="ni">📅</span><span class="nl">Agenda</span></button>
     <button class="nav-b" id="nav-ranking" onclick="swTab('ranking')"><span class="ni">🏆</span><span class="nl">Ranking</span></button>
