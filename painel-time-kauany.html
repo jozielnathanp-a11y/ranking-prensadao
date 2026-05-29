@@ -815,7 +815,7 @@ function loadMsgsFromSB(cid) {
     saveMsgs(cid, merged);
     renderMsgs(cid);
     // Marcar como lidas
-    sbPost('prd_mensagens', null); // placeholder
+    // Marcar como lidas
     fetch(SB_URL+'/rest/v1/prd_mensagens?para=eq.'+cid+'&lida=eq.false', {
       method: 'PATCH',
       headers: Object.assign({},SB_H,{'Prefer':'return=minimal'}),
