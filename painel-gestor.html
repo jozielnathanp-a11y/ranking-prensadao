@@ -51,6 +51,27 @@
 .copy-btn{display:block;width:100%;padding:6px;border:none;border-radius:6px;font-size:0.72rem;cursor:pointer;margin-top:6px;font-weight:600}
 .rk-frame{width:100%;height:calc(100vh - 130px);border:none;display:block}
 .sec-lbl{font-size:0.75rem;color:#555;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
+
+.dest-btn{padding:8px 14px;border-radius:99px;border:1.5px solid #2a2a2a;background:none;color:#555;font-size:0.78rem;font-weight:700;cursor:pointer;transition:all 0.2s}
+.dest-btn.active{background:#1a2a3a;border-color:#4a90d9;color:#4a90d9}
+.tipo-msg-btn{padding:8px 12px;border-radius:99px;border:1.5px solid #2a2a2a;background:none;color:#555;font-size:0.78rem;font-weight:700;cursor:pointer;transition:all 0.2s}
+.tipo-msg-btn.active{background:#1a2a3a;border-color:#4a90d9;color:#4a90d9}
+.msg-card{background:#111;border:1px solid #1e1e1e;border-radius:14px;padding:14px;margin-bottom:10px}
+.msg-card.respondido{border-left:3px solid #48bb78}
+.msg-card.pendente{border-left:3px solid #f6ad55}
+.msg-tipo-tag{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:99px;margin-bottom:6px}
+.msg-tipo-tag.recado{background:#1a2a3a;color:#4a90d9}
+.msg-tipo-tag.tarefa{background:#1a1200;color:#f6ad55}
+.msg-tipo-tag.doc{background:#1a0f1a;color:#b794f4}
+.msg-tipo-tag.foto{background:#0d1a10;color:#48bb78}
+.msg-tipo-tag.aviso{background:#1a0d0d;color:#fc8181}
+.msg-texto-body{font-size:0.85rem;color:#ccc;line-height:1.5;margin-bottom:8px}
+.msg-resp-area{background:#0f0f0f;border-radius:8px;padding:10px;margin-top:8px}
+.msg-resp-txt{font-size:0.8rem;color:#aaa;border-left:3px solid #48bb78;padding-left:8px;margin-bottom:6px}
+.msg-resp-txt strong{color:#48bb78;display:block;font-size:0.7rem;margin-bottom:2px}
+.msg-reply-inp{width:100%;padding:10px;background:#1a1a1a;border:1.5px solid #2a2a2a;border-radius:8px;color:#fff;font-size:0.83rem;resize:vertical;min-height:60px;margin-bottom:8px}
+.msg-reply-inp:focus{outline:none;border-color:#ff6b00}
+.msg-unread{width:8px;height:8px;background:#fc8181;border-radius:50%;display:inline-block;margin-left:6px;vertical-align:middle}
 </style>
 </head><body>
 <div id="login-screen">
@@ -87,6 +108,50 @@
 <div class="sec-lbl">Links dos Painéis</div>
 <div class="paineis-grid" id="paineis-grid"></div>
 </div>
+
+<div id="tab-msgs" class="tab-c">
+  <div class="sec-lbl" style="margin-bottom:12px">Nova Mensagem / Tarefa</div>
+  <div style="margin-bottom:14px">
+    <label style="font-size:0.75rem;color:#666;text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:8px">Para</label>
+    <div style="display:flex;gap:8px;flex-wrap:wrap" id="dest-wrap">
+      <div class="dest-btn active" onclick="selDest('todos',this)">👥 Todos</div>
+      <div class="dest-btn" onclick="selDest('gabriel',this)">🥉 Gabriel</div>
+      <div class="dest-btn" onclick="selDest('ruan',this)">🥇 Ruan</div>
+      <div class="dest-btn" onclick="selDest('caua',this)">🥈 Cauã</div>
+      <div class="dest-btn" onclick="selDest('kauany',this)">— Kauany</div>
+    </div>
+  </div>
+  <div style="margin-bottom:14px">
+    <label style="font-size:0.75rem;color:#666;text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:8px">Tipo</label>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <div class="tipo-msg-btn active" onclick="selMsgTipo('recado',this)">💬 Recado</div>
+      <div class="tipo-msg-btn" onclick="selMsgTipo('tarefa',this)">📋 Tarefa</div>
+      <div class="tipo-msg-btn" onclick="selMsgTipo('doc',this)">📄 Solicitar Doc</div>
+      <div class="tipo-msg-btn" onclick="selMsgTipo('foto',this)">📷 Solicitar Foto</div>
+      <div class="tipo-msg-btn" onclick="selMsgTipo('aviso',this)">⚠️ Aviso</div>
+    </div>
+  </div>
+  <div style="margin-bottom:14px">
+    <label style="font-size:0.75rem;color:#666;text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:7px">Mensagem</label>
+    <textarea id="msg-texto" placeholder="Escreva a mensagem ou tarefa..." style="width:100%;padding:12px;background:#111;border:1.5px solid #222;border-radius:10px;color:#fff;font-size:0.88rem;resize:vertical;min-height:90px"></textarea>
+  </div>
+  <div style="margin-bottom:14px">
+    <label style="font-size:0.75rem;color:#666;text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:7px">Anexar (opcional)</label>
+    <div style="border:2px dashed #2a2a2a;border-radius:10px;padding:18px;text-align:center;cursor:pointer" onclick="document.getElementById('msg-file').click()">
+      <div style="font-size:1.8rem;margin-bottom:6px">📎</div>
+      <p style="color:#444;font-size:0.82rem">Toque para anexar foto ou documento</p>
+    </div>
+    <input type="file" id="msg-file" accept="image/*,application/pdf" style="display:none" onchange="uploadMsgAnexoGestor(this)">
+    <img id="msg-prev" style="width:100%;max-height:160px;object-fit:cover;border-radius:8px;margin-top:8px;display:none">
+    <div id="msg-up-st" style="font-size:0.75rem;color:#555;margin-top:5px;text-align:center"></div>
+  </div>
+  <button onclick="enviarMensagemGestor()" style="width:100%;padding:15px;background:linear-gradient(135deg,#1a1a2e,#4a90d9);border:none;border-radius:12px;color:#fff;font-size:0.95rem;font-weight:800;cursor:pointer">📤 Enviar</button>
+  <div style="margin-top:24px">
+    <div class="sec-lbl">Histórico de Mensagens</div>
+    <div id="msgs-enviadas-lista"></div>
+  </div>
+</div>
+
 <div id="tab-ranking" class="tab-c" style="padding:0">
 <iframe class="rk-frame" src="https://jozielnathanp-a11y.github.io/ranking-prensadao/"></iframe>
 </div>
@@ -94,6 +159,7 @@
 <button class="nav-b active" id="nav-geral" onclick="swTab('geral')"><span class="ni">📊</span><span class="nl">Geral</span></button>
 <button class="nav-b" id="nav-chamados" onclick="swTab('chamados')"><span class="ni">💬</span><span class="nl">Chamados</span></button>
 <button class="nav-b" id="nav-paineis" onclick="swTab('paineis')"><span class="ni">🔗</span><span class="nl">Painéis</span></button>
+    <button class="nav-b" id="nav-msgs" onclick="swTab('msgs')"><span class="ni">✉️</span><span class="nl">Mensagens</span></button>
 <button class="nav-b" id="nav-ranking" onclick="swTab('ranking')"><span class="ni">🏆</span><span class="nl">Ranking</span></button>
 </div>
 </div><script>
@@ -258,4 +324,96 @@ function swTab(t){
   if(t==="geral") renderGeral();
 }
 
+
+const MSG_PREFIX = 'prd_msgs_';
+const MSG_MAX_MS = 5 * 30 * 24 * 60 * 60 * 1000;
+
+function getMsgs(cid) {
+  try {
+    const msgs = JSON.parse(localStorage.getItem(MSG_PREFIX+cid)||'[]');
+    const cutoff = Date.now() - MSG_MAX_MS;
+    const ok = msgs.filter(m=>m.ts>cutoff);
+    if(ok.length!==msgs.length) localStorage.setItem(MSG_PREFIX+cid,JSON.stringify(ok));
+    return ok;
+  } catch(e){ return []; }
+}
+function saveMsgs(cid,msgs){ localStorage.setItem(MSG_PREFIX+cid,JSON.stringify(msgs)); }
+function tsFmt(ts){ const d=new Date(ts); return d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }
+function tipoLabel(t){ return {recado:'💬 Recado',tarefa:'📋 Tarefa',doc:'📄 Solicitar Doc',foto:'📷 Solicitar Foto',aviso:'⚠️ Aviso'}[t]||t; }
+
+
+let msgDestSel = 'todos';
+let msgTipoSel = 'recado';
+let msgAnexoURL = null;
+
+function selDest(id, el){
+  msgDestSel=id;
+  document.querySelectorAll('.dest-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+}
+function selMsgTipo(t, el){
+  msgTipoSel=t;
+  document.querySelectorAll('.tipo-msg-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+async function uploadMsgAnexoGestor(input){
+  const file=input.files[0]; if(!file) return;
+  const st=document.getElementById('msg-up-st'); st.textContent='⏳ Enviando...';
+  const fd=new FormData(); fd.append('file',file); fd.append('upload_preset','checklist_prensadao');
+  try{
+    const r=await fetch('https://api.cloudinary.com/v1_1/dewulu3tj/upload',{method:'POST',body:fd});
+    const d=await r.json();
+    if(d.secure_url){
+      msgAnexoURL=d.secure_url;
+      if(file.type.startsWith('image/')){document.getElementById('msg-prev').src=d.secure_url;document.getElementById('msg-prev').style.display='block';}
+      st.textContent='✅ Enviado!';
+    } else st.textContent='❌ Erro.';
+  }catch(e){st.textContent='❌ Erro.';}
+}
+
+function enviarMensagemGestor(){
+  const texto=document.getElementById('msg-texto').value.trim();
+  if(!texto){ alert('Escreva uma mensagem!'); return; }
+  const msg={id:Date.now(),ts:Date.now(),de:'gestor',tipo:msgTipoSel,texto,anexo:msgAnexoURL||null,status:'pendente',resposta:null,respAnexo:null,respTs:null};
+  const destinos = msgDestSel==='todos' ? COLABORADORES.map(c=>c.id) : [msgDestSel];
+  destinos.forEach(cid=>{
+    const msgs=getMsgs(cid);
+    msgs.unshift({...msg, id:Date.now()+Math.random()});
+    saveMsgs(cid,msgs);
+  });
+  // Limpar form
+  document.getElementById('msg-texto').value='';
+  msgAnexoURL=null;
+  document.getElementById('msg-prev').style.display='none';
+  document.getElementById('msg-up-st').textContent='';
+  alert('✅ Mensagem enviada para '+(msgDestSel==='todos'?'todos os colaboradores':msgDestSel)+'!');
+  renderMsgsEnviadas();
+}
+
+function renderMsgsEnviadas(){
+  const lista=document.getElementById('msgs-enviadas-lista');
+  let all=[];
+  COLABORADORES.forEach(c=>{
+    getMsgs(c.id).forEach(m=>{ all.push({...m,_colab:c.nome,_colabId:c.id}); });
+  });
+  all.sort((a,b)=>b.ts-a.ts);
+  if(!all.length){ lista.innerHTML='<div style="text-align:center;padding:30px;color:#333">Nenhuma mensagem ainda</div>'; return; }
+  lista.innerHTML=all.map(m=>`
+    <div class="msg-card ${m.status}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
+        <span class="msg-tipo-tag ${m.tipo}">${tipoLabel(m.tipo)}</span>
+        <span style="font-size:0.68rem;color:#444">${tsFmt(m.ts)}</span>
+      </div>
+      <div style="font-size:0.72rem;color:#666;margin-bottom:6px">👤 Para: ${m._colab}</div>
+      <div class="msg-texto-body">${m.texto}</div>
+      ${m.anexo?`<div style="margin-bottom:8px">${m.anexo.match(/\.(jpg|jpeg|png|gif|webp)/i)?`<img src="${m.anexo}" style="width:100%;max-height:140px;object-fit:cover;border-radius:8px">`:`<a href="${m.anexo}" target="_blank" style="color:#4a90d9;font-size:0.78rem">📎 Ver anexo</a>`}</div>`:''}
+      ${m.resposta?`<div class="msg-resp-area"><div class="msg-resp-txt"><strong>Resposta (${tsFmt(m.respTs||m.ts)}):</strong>${m.resposta}</div>${m.respAnexo?`<div>${m.respAnexo.match(/\.(jpg|jpeg|png|gif|webp)/i)?`<img src="${m.respAnexo}" style="width:100%;max-height:120px;object-fit:cover;border-radius:8px">`:`<a href="${m.respAnexo}" target="_blank" style="color:#48bb78;font-size:0.78rem">📎 Ver anexo</a>`}</div>`:''}  </div>`:`<div style="font-size:0.72rem;color:#f6ad55;margin-top:6px">⏳ Aguardando resposta</div>`}
+    </div>
+  `).join('');
+}
+
+// render msgs on tab switch
+const _origSwTab=swTab;
+function swTab(t){_origSwTab(t);if(t==="msgs")renderMsgsEnviadas();}
 </script></body></html>
