@@ -21,7 +21,7 @@ body{background:#0a0a0a;color:#fff;font-family:-apple-system,BlinkMacSystemFont,
 /* APP */
 #app-screen{display:none}
 
-#app-screen{display:none;min-height:100vh;padding-bottom:70px}
+
 .top-hdr{background:#111;border-bottom:1px solid #1a1a1a;padding:14px 18px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
 .top-av{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #ff6b00}
 .top-nm{font-size:0.95rem;font-weight:800}
@@ -331,6 +331,7 @@ input[type="date"], input[type="time"] {
 
 <script>
 function doLogin(){
+  console.log("DOLOGIN CHAMADO");
   var senha = document.getElementById('lsn').value;
   if(senha === 'josiel123'){
     document.getElementById('login-screen').style.display = 'none';
