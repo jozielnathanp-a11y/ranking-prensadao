@@ -63,8 +63,8 @@
   <div class="l-sub">Painel do Gestor</div>
   <div class="l-card">
     <label>Senha</label>
-    <input type="password" id="lsn" placeholder="••••••••" onkeydown="if(event.key==='Enter')document.getElementById('l-btn-enter').click()">
-    <button class="l-btn" id="l-btn-enter">ENTRAR</button>
+    <input type="password" id="lsn" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="l-btn" onclick="doLogin()">ENTRAR</button>
     <div class="l-err" id="lerr">Senha incorreta.</div>
   </div>
 </div>
@@ -96,7 +96,7 @@
 <div id="tab-ranking" class="tab-c" style="padding:0">
 <iframe class="rk-frame" src="https://jozielnathanp-a11y.github.io/ranking-prensadao/"></iframe>
 </div>
-<div class="bot-nav" id="bot-nav" style="display:none">
+<div class="bot-nav">
 <button class="nav-b active" id="nav-geral" onclick="swTab('geral')"><span class="ni">📊</span><span class="nl">Geral</span></button>
 <button class="nav-b" id="nav-chamados" onclick="swTab('chamados')"><span class="ni">💬</span><span class="nl">Chamados</span></button>
 <button class="nav-b" id="nav-paineis" onclick="swTab('paineis')"><span class="ni">🔗</span><span class="nl">Painéis</span></button>
@@ -105,33 +105,20 @@
 </div>
 
 <script>
-
+function getSn(){return localStorage.getItem('gestor_senha')||'josiel123';}
 function doLogin(){
-  var v = (document.getElementById("lsn").value || "").trim();
-  var s = getSenha();
-  if(v === s){
-    document.getElementById("login-screen").style.display = "none";
-    document.getElementById("app-screen").style.display  = "block";
-    var nav = document.getElementById("bot-nav");
-    if(nav) nav.style.display = "flex";
+  const v=document.getElementById('lsn').value;
+  if(v===getSn()){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app-screen').style.display='block';
+    document.getElementById('top-av').src=FT;
+    document.getElementById('p-foto').src=FT;
+    var nav=document.getElementById('bot-nav');if(nav)nav.style.display='flex';
     initApp();
   } else {
-    var e = document.getElementById("lerr");
-    if(e){ e.style.display="block"; setTimeout(function(){ e.style.display="none"; }, 2000); }
+    const e=document.getElementById('lerr');e.style.display='block';setTimeout(()=>e.style.display='none',2000);
   }
 }
-
-window.addEventListener("DOMContentLoaded", function(){
-  var btn = document.getElementById("l-btn-enter");
-  if(btn){
-    btn.addEventListener("click",  function(){ doLogin(); });
-    btn.addEventListener("touchend", function(ev){ ev.preventDefault(); doLogin(); });
-  }
-  var inp = document.getElementById("lsn");
-  if(inp){
-    inp.addEventListener("keydown", function(ev){ if(ev.key==="Enter") doLogin(); });
-  }
-});
 
 const FOTO_GABRIEL = "https://res.cloudinary.com/dewulu3tj/image/upload/v1780062694/checklist_prensadao/colaborador_gabriel.jpg";
 const FOTO_RUAN = "https://res.cloudinary.com/dewulu3tj/image/upload/v1780062694/checklist_prensadao/colaborador_ruan.jpg";
@@ -142,7 +129,7 @@ const FOTOS = {gabriel:FOTO_GABRIEL,ruan:FOTO_RUAN,caua:FOTO_CAUA,kauany:FOTO_KA
 const GESTOR_SENHA = "josiel123";
 let filtroAtivo = "todos";
 
-function getSenha(){ return GESTOR_SENHA; }
+
 
 function initApp(){
   renderAjudasPendentes(); renderGeral(); renderChamados(); renderPaineis(); }
@@ -290,7 +277,7 @@ function swTab(t){
 function getAjudaGanhos(){try{return JSON.parse(localStorage.getItem('prd_ajuda_ganhos')||'[]');}catch(e){return [];}}
 function saveAjudaGanhos(g){localStorage.setItem('prd_ajuda_ganhos',JSON.stringify(g));}
 function confirmarAjuda(idx){var ganhos=getAjudaGanhos();if(!ganhos[idx])return;ganhos[idx].confirmado=true;saveAjudaGanhos(ganhos);alert('Pontos confirmados para '+ganhos[idx].nome+'!');renderAjudasPendentes();}
-function renderAjudasPendentes(){var wrap=document.getElementById('ajudas-pendentes-lista');if(!wrap)return;var ganhos=getAjudaGanhos().filter(function(g){return!g.confirmado;});var card=document.getElementById('ajudas-card');if(!ganhos.length){wrap.innerHTML='<p style="color:#555;text-align:center">Nenhuma ajuda pendente</p>';if(card)card.style.display='none';return;}if(card)card.style.display='block';var badge=document.getElementById('ajudas-badge');if(badge)badge.textContent=ganhos.length;wrap.innerHTML=ganhos.map(function(g,i){return '<div style="border:1px solid #2a2a2a;border-radius:10px;padding:12px;margin-bottom:8px">'+'<div style="font-weight:700;color:#f6ad55">'+g.nome+'</div>'+'<div style="font-size:0.8rem;color:#aaa;margin:4px 0">'+g.motivo+'</div>'+'<button onclick="confirmarAjuda('+i+')" style="width:100%;padding:8px;background:#1a3a1a;border:1px solid #48bb78;border-radius:8px;color:#48bb78;font-weight:700;cursor:pointer">Confirmar +3 pts</button>'+'</div>';}).join('');}
+function renderAjudasPendentes(){var wrap=document.getElementById('ajudas-pendentes-lista');if(!wrap)return;var ganhos=getAjudaGanhos().filter(function(g){return!g.confirmado;});var card=document.getElementById('ajudas-card');if(!ganhos.length){wrap.innerHTML='<p style="color:#555;text-align:center">Nenhuma ajuda pendente</p>';if(card)card.style.display='none';return;}if(card)card.style.display='block';wrap.innerHTML=ganhos.map(function(g,i){return '<div style="border:1px solid #2a2a2a;border-radius:10px;padding:12px;margin-bottom:8px">'+'<div style="font-weight:700;color:#f6ad55">'+g.nome+'</div>'+'<div style="font-size:0.8rem;color:#aaa;margin:4px 0">'+g.motivo+'</div>'+'<button onclick="confirmarAjuda('+i+')" style="width:100%;padding:8px;background:#1a3a1a;border:1px solid #48bb78;border-radius:8px;color:#48bb78;font-weight:700;cursor:pointer">Confirmar +3 pts</button>'+'</div>';}).join('');}
 </script>
 </body>
 </html>
