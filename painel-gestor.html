@@ -106,20 +106,26 @@ const FOTOS = {gabriel:FOTO_GABRIEL,ruan:FOTO_RUAN,caua:FOTO_CAUA,kauany:FOTO_KA
 const GESTOR_SENHA = "josiel123";
 let filtroAtivo = "todos";
 
-function getSenha(){ return localStorage.getItem("gestor_senha") || GESTOR_SENHA; }
+function getSenha(){ return GESTOR_SENHA; }
 function doLogin(){
-  const v = document.getElementById("lsn").value;
-  if(v === getSenha()){
-    document.getElementById("login-screen").style.display="none";
-    document.getElementById("app-screen").style.display="block";
-    initApp();
+  var v = document.getElementById("lsn").value;
+  var senha = getSenha();
+  if(v === senha){
+    var ls = document.getElementById("login-screen");
+    var ap = document.getElementById("app-screen");
+    var nav = document.getElementById("bot-nav");
+    ls.style.display = "none";
+    ap.style.display = "block";
+    if(nav) nav.style.display = "flex";
+    setTimeout(function(){ initApp(); }, 50);
   } else {
-    const e=document.getElementById("lerr"); e.style.display="block"; setTimeout(()=>e.style.display="none",2000);
+    var e = document.getElementById("lerr");
+    if(e){ e.style.display="block"; setTimeout(function(){ e.style.display="none"; },2000); }
   }
 }
 function initApp(){
   renderAjudasPendentes();
-  var nav=document.getElementById("bot-nav");if(nav)nav.style.display="flex"; renderGeral(); renderChamados(); renderPaineis(); }
+  renderGeral(); renderChamados(); renderPaineis(); }
 
 function getAllChamados(){
   let all = [];
