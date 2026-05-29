@@ -411,6 +411,16 @@ input[type="date"], input[type="time"] {
     
     
     
+    
+    <div class="cfg-sep">🔒 Alterar Senha</div>
+    <label>Senha atual</label>
+    <input type="password" id="cfg-at" placeholder="Senha atual">
+    <label>Nova senha</label>
+    <input type="password" id="cfg-nv" placeholder="Nova senha">
+    <label>Confirmar nova senha</label>
+    <input type="password" id="cfg-cf" placeholder="Confirmar nova senha">
+    <button class="cfg-save-btn" onclick="alterarSenha()">🔒 Alterar Senha</button>
+
     <button class="cfg-sv" onclick="saveCfg()">Salvar</button>
     <button class="cfg-cn" onclick="closeCfg()">Cancelar</button>
     <div class="cfg-msg" id="cfg-msg"></div>
@@ -464,6 +474,22 @@ const TRF=["Efetuar a organização e higienização do balcão da mesa térmica
 const STORE='pg_kauany';
 let tks=[null,null,null,null,null],phs=[null,null,null,null,null],excnt=0,exphs={},rat=0,histOpen=false;
 let tpSel=null,urgSel=null,chAnx=null,ptAnx=null;
+
+
+function alterarSenha() {
+  var at = document.getElementById('cfg-at') ? document.getElementById('cfg-at').value : '';
+  var nv = document.getElementById('cfg-nv') ? document.getElementById('cfg-nv').value : '';
+  var cf = document.getElementById('cfg-cf') ? document.getElementById('cfg-cf').value : '';
+  if (!at || !nv || !cf) { alert('Preencha todos os campos.'); return; }
+  if (at !== getSn()) { alert('Senha atual incorreta.'); return; }
+  if (nv !== cf) { alert('Nova senha e confirmação não conferem.'); return; }
+  if (nv.length < 4) { alert('Senha deve ter pelo menos 4 caracteres.'); return; }
+  localStorage.setItem('pg_sn', nv);
+  alert('✅ Senha alterada com sucesso!');
+  if (document.getElementById('cfg-at')) document.getElementById('cfg-at').value = '';
+  if (document.getElementById('cfg-nv')) document.getElementById('cfg-nv').value = '';
+  if (document.getElementById('cfg-cf')) document.getElementById('cfg-cf').value = '';
+}
 
 function getSn(){return localStorage.getItem('pg_sn_kauany')||'kauany123'}
 function doLogin(){
