@@ -111,8 +111,6 @@ function doLogin(){
   if(v===getSn()){
     document.getElementById('login-screen').style.display='none';
     document.getElementById('app-screen').style.display='block';
-    document.getElementById('top-av').src=FT;
-    document.getElementById('p-foto').src=FT;
     var nav=document.getElementById('bot-nav');if(nav)nav.style.display='flex';
     initApp();
   } else {
