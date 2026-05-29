@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel do Gestor — Prensadão</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', sans-serif; background: #0a0a0a; color: #fff; min-height: 100vh; }
+
+/* LOGIN */
+#login-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 24px; }
+.login-logo { font-size: 3rem; margin-bottom: 12px; }
+.login-title { font-size: 1.3rem; font-weight: 800; color: #fff; margin-bottom: 4px; }
+.login-sub { font-size: 0.85rem; color: #666; margin-bottom: 32px; }
+.login-card { background: #111; border: 1px solid #222; border-radius: 16px; padding: 28px; width: 100%; max-width: 360px; }
+.login-card label { display: block; font-size: 0.82rem; color: #888; margin-bottom: 6px; }
+.login-card input { width: 100%; padding: 12px 14px; background: #1a1a1a; border: 1.5px solid #2a2a2a; border-radius: 10px; color: #fff; font-size: 0.95rem; margin-bottom: 16px; }
+.login-card input:focus { outline: none; border-color: #4a90d9; }
+.login-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #1a1a2e, #4a90d9); border: none; border-radius: 10px; color: white; font-size: 1rem; font-weight: 700; cursor: pointer; }
+.login-error { color: #fc8181; font-size: 0.82rem; text-align: center; margin-top: 10px; display: none; }
+
+/* APP */
+#app-screen { display: none; min-height: 100vh; }
+
+.header { background: #111; border-bottom: 1px solid #1a1a1a; padding: 16px 20px; display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 50; }
+.header h1 { font-size: 1rem; font-weight: 800; }
+.header p { font-size: 0.75rem; color: #666; }
+.badge-total { background: #ff6b00; color: white; font-size: 0.72rem; font-weight: 800; padding: 2px 8px; border-radius: 99px; margin-left: 8px; }
+
+/* FILTROS */
+.filtros { display: flex; gap: 8px; padding: 14px 16px; overflow-x: auto; background: #0f0f0f; border-bottom: 1px solid #1a1a1a; }
+.filtros::-webkit-scrollbar { display: none; }
+.filtro-btn { padding: 7px 14px; border-radius: 99px; border: 1.5px solid #2a2a2a; background: none; color: #666; font-size: 0.78rem; font-weight: 600; cursor: pointer; white-space: nowrap; transition: all 0.2s; }
+.filtro-btn.active { background: #1a2a3a; border-color: #4a90d9; color: #4a90d9; }
+
+/* CARDS */
+.container { padding: 16px; max-width: 700px; margin: 0 auto; }
+.empty-state { text-align: center; padding: 60px 20px; color: #444; }
+.empty-state .icon { font-size: 3rem; margin-bottom: 12px; }
+
+.chamado-card { background: #111; border: 1px solid #1e1e1e; border-radius: 14px; padding: 18px; margin-bottom: 14px; transition: border 0.2s; }
+.chamado-card.urgente { border-left: 3px solid #fc8181; }
+.chamado-card.aberto { border-left: 3px solid #f6ad55; }
+.chamado-card.respondido { border-left: 3px solid #48bb78; opacity: 0.7; }
+
+.chamado-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; gap: 8px; }
+.chamado-meta { display: flex; flex-direction: column; gap: 3px; }
+.chamado-tipo { font-size: 0.82rem; font-weight: 700; color: #ff9500; }
+.chamado-colab { font-size: 0.78rem; color: #888; }
+.chamado-data { font-size: 0.72rem; color: #555; text-align: right; }
+
+.status-badge { font-size: 0.7rem; font-weight: 700; padding: 3px 10px; border-radius: 99px; white-space: nowrap; }
+.status-badge.aberto { background: #1a1200; color: #f6ad55; border: 1px solid #f6ad55; }
+.status-badge.respondido { background: #0d1f14; color: #48bb78; border: 1px solid #48bb78; }
+
+.chamado-msg { font-size: 0.87rem; color: #ccc; line-height: 1.55; margin-bottom: 12px; }
+.chamado-anexo { margin-bottom: 10px; }
+.chamado-anexo a { color: #4a90d9; font-size: 0.8rem; }
+
+.urgencia-tag { display: inline-block; font-size: 0.72rem; padding: 2px 8px; border-radius: 99px; margin-bottom: 10px; font-weight: 600; }
+.urgencia-tag.baixa { background: #0d1f14; color: #48bb78; }
+.urgencia-tag.media { background: #1a1200; color: #f6ad55; }
+.urgencia-tag.alta { background: #1f0d0d; color: #fc8181; }
+
+/* RESPOSTA */
+.resposta-area { background: #0f0f0f; border-radius: 10px; padding: 12px; margin-top: 10px; }
+.resposta-existente { font-size: 0.82rem; color: #aaa; margin-bottom: 10px; border-left: 3px solid #4a90d9; padding-left: 10px; }
+.resposta-existente strong { color: #4a90d9; display: block; font-size: 0.75rem; margin-bottom: 4px; }
+.resposta-input { width: 100%; padding: 10px 12px; background: #1a1a1a; border: 1.5px solid #2a2a2a; border-radius: 8px; color: #fff; font-size: 0.85rem; resize: vertical; min-height: 70px; }
+.resposta-input:focus { outline: none; border-color: #4a90d9; }
+.btn-row { display: flex; gap: 8px; margin-top: 8px; }
+.btn-responder { flex: 1; padding: 10px; background: linear-gradient(135deg, #1a1a2e, #4a90d9); border: none; border-radius: 8px; color: white; font-size: 0.85rem; font-weight: 700; cursor: pointer; }
+.btn-fechar { padding: 10px 14px; background: none; border: 1px solid #333; border-radius: 8px; color: #666; font-size: 0.85rem; cursor: pointer; }
+.btn-wpp { padding: 10px 14px; background: #0d2818; border: 1px solid #25d366; border-radius: 8px; color: #25d366; font-size: 0.85rem; cursor: pointer; }
+
+/* STATS */
+.stats-bar { display: flex; gap: 10px; padding: 14px 16px; background: #0f0f0f; border-bottom: 1px solid #1a1a1a; overflow-x: auto; }
+.stats-bar::-webkit-scrollbar { display: none; }
+.stat-card { background: #111; border: 1px solid #1e1e1e; border-radius: 10px; padding: 12px 16px; text-align: center; min-width: 90px; flex-shrink: 0; }
+.stat-num { font-size: 1.5rem; font-weight: 800; }
+.stat-label { font-size: 0.7rem; color: #666; margin-top: 2px; }
+.stat-card.abertos .stat-num { color: #f6ad55; }
+.stat-card.respondidos .stat-num { color: #48bb78; }
+.stat-card.urgentes .stat-num { color: #fc8181; }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-logo">🛂</div>
+  <div class="login-title">Painel do Gestor</div>
+  <div class="login-sub">Prensadão — Área Restrita</div>
+  <div class="login-card">
+    <label>Senha do Gestor</label>
+    <input type="password" id="login-senha" placeholder="Senha" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">Entrar</button>
+    <div class="login-error" id="login-error">Senha incorreta.</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app-screen">
+
+  <div class="header">
+    <div>
+      <h1>🛂 Painel do Gestor <span class="badge-total" id="badge-abertos">0</span></h1>
+      <p>Prensadão Centro — Chamados dos colaboradores</p>
+    </div>
+  </div>
+
+  <div class="stats-bar" id="stats-bar"></div>
+
+  <div class="filtros">
+    <button class="filtro-btn active" onclick="filtrar('todos', this)">Todos</button>
+    <button class="filtro-btn" onclick="filtrar('aberto', this)">⏳ Abertos</button>
+    <button class="filtro-btn" onclick="filtrar('respondido', this)">✅ Respondidos</button>
+    <button class="filtro-btn" onclick="filtrar('alta', this)">🔴 Urgentes</button>
+    <button class="filtro-btn" onclick="filtrar('folga', this)">🏖️ Folgas</button>
+    <button class="filtro-btn" onclick="filtrar('ponto', this)">🕐 Ponto</button>
+    <button class="filtro-btn" onclick="filtrar('reclamacao', this)">⚠️ Reclamações</button>
+    <button class="filtro-btn" onclick="filtrar('sugestao', this)">💡 Sugestões</button>
+  </div>
+
+  <div class="container" id="lista-chamados"></div>
+
+</div>
+
+<script>
+const GESTOR_SENHA = 'josiel123';
+const STORAGE_KEY = 'fale_gestor_gabriel';
+let filtroAtivo = 'todos';
+
+// Chamados de exemplo para demonstração (serão substituídos pelos reais do localStorage)
+const CHAMADOS_DEMO = [
+  {
+    id: 1716900000001,
+    tipo: 'folga',
+    tipoLabel: 'Pedido de Folga',
+    urgencia: 'media',
+    mensagem: 'Gostaria de folga no dia 05/06 por motivo pessoal.',
+    dataFolga: '2026-06-05',
+    data: '28/05/2026',
+    hora: '19:30',
+    status: 'aberto',
+    resposta: null,
+    anexo: null,
+    colaborador: 'Gabriel Vogt'
+  },
+  {
+    id: 1716900000002,
+    tipo: 'sugestao',
+    tipoLabel: 'Sugestão',
+    urgencia: 'baixa',
+    mensagem: 'Seria legal ter uma música mais animada no salão nas sextas à noite.',
+    data: '27/05/2026',
+    hora: '22:10',
+    status: 'respondido',
+    resposta: 'Boa ideia! Vou conversar com a equipe.',
+    anexo: null,
+    colaborador: 'Gabriel Vogt'
+  }
+];
+
+function getSenhaGestor() {
+  return localStorage.getItem('gestor_senha') || GESTOR_SENHA;
+}
+
+function doLogin() {
+  const input = document.getElementById('login-senha').value;
+  if (input === getSenhaGestor()) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app-screen').style.display = 'block';
+    renderChamados();
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+    setTimeout(() => document.getElementById('login-error').style.display = 'none', 2000);
+  }
+}
+
+function getChamados() {
+  // Tentar pegar do localStorage (onde o Gabriel salva)
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY + '_chamados')) || [];
+    // Se não tiver nada, mostrar demo
+    return saved.length > 0 ? saved : CHAMADOS_DEMO;
+  } catch(e) { return CHAMADOS_DEMO; }
+}
+
+function filtrar(tipo, btn) {
+  filtroAtivo = tipo;
+  document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderChamados();
+}
+
+function renderChamados() {
+  const todos = getChamados();
+  let chamados = todos;
+
+  if (filtroAtivo === 'aberto') chamados = todos.filter(c => c.status === 'aberto');
+  else if (filtroAtivo === 'respondido') chamados = todos.filter(c => c.status === 'respondido');
+  else if (filtroAtivo === 'alta') chamados = todos.filter(c => c.urgencia === 'alta');
+  else if (filtroAtivo !== 'todos') chamados = todos.filter(c => c.tipo === filtroAtivo);
+
+  // Stats
+  const abertos = todos.filter(c => c.status === 'aberto').length;
+  const respondidos = todos.filter(c => c.status === 'respondido').length;
+  const urgentes = todos.filter(c => c.urgencia === 'alta').length;
+  document.getElementById('badge-abertos').textContent = abertos;
+  document.getElementById('stats-bar').innerHTML = `
+    <div class="stat-card abertos"><div class="stat-num">${abertos}</div><div class="stat-label">Abertos</div></div>
+    <div class="stat-card respondidos"><div class="stat-num">${respondidos}</div><div class="stat-label">Respondidos</div></div>
+    <div class="stat-card urgentes"><div class="stat-num">${urgentes}</div><div class="stat-label">Urgentes</div></div>
+    <div class="stat-card"><div class="stat-num">${todos.length}</div><div class="stat-label">Total</div></div>
+  `;
+
+  const lista = document.getElementById('lista-chamados');
+  if (chamados.length === 0) {
+    lista.innerHTML = '<div class="empty-state"><div class="icon">✅</div><p>Nenhum chamado nesta categoria</p></div>';
+    return;
+  }
+
+  const urgLabels = { baixa:'🟢 Baixa', media:'🟡 Média', alta:'🔴 Alta' };
+
+  lista.innerHTML = chamados.map(c => `
+    <div class="chamado-card ${c.urgencia === 'alta' ? 'urgente' : c.status}" id="card-${c.id}">
+      <div class="chamado-top">
+        <div class="chamado-meta">
+          <span class="chamado-tipo">${c.tipoLabel}</span>
+          <span class="chamado-colab">👤 ${c.colaborador || 'Gabriel Vogt'}</span>
+        </div>
+        <div style="text-align:right">
+          <div class="chamado-data">${c.data} ${c.hora || ''}</div>
+          <span class="status-badge ${c.status}">${c.status === 'aberto' ? '⏳ Aguardando' : '✅ Respondido'}</span>
+        </div>
+      </div>
+      <span class="urgencia-tag ${c.urgencia}">${urgLabels[c.urgencia] || ''}</span>
+      ${c.dataFolga ? `<div style="font-size:0.8rem;color:#f6ad55;margin-bottom:8px">📅 Data solicitada: ${c.dataFolga}</div>` : ''}
+      <div class="chamado-msg">${c.mensagem}</div>
+      ${c.anexo ? `<div class="chamado-anexo"><a href="${c.anexo}" target="_blank">📎 Ver anexo</a></div>` : ''}
+      <div class="resposta-area">
+        ${c.resposta ? `<div class="resposta-existente"><strong>Sua resposta:</strong>${c.resposta}</div>` : ''}
+        <textarea class="resposta-input" id="resp-${c.id}" placeholder="Escreva sua resposta...">${c.resposta || ''}</textarea>
+        <div class="btn-row">
+          <button class="btn-responder" onclick="responder(${c.id})">✅ Responder</button>
+          <button class="btn-wpp" onclick="responderWpp(${c.id})">WhatsApp</button>
+          ${c.status === 'aberto' ? `<button class="btn-fechar" onclick="fechar(${c.id})">Fechar</button>` : ''}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function responder(id) {
+  const resp = document.getElementById('resp-' + id).value.trim();
+  if (!resp) { alert('Escreva uma resposta!'); return; }
+  const chamados = getChamados();
+  const idx = chamados.findIndex(c => c.id === id);
+  if (idx >= 0) {
+    chamados[idx].resposta = resp;
+    chamados[idx].status = 'respondido';
+    localStorage.setItem(STORAGE_KEY + '_chamados', JSON.stringify(chamados));
+  }
+  alert('✅ Resposta salva!');
+  renderChamados();
+}
+
+function responderWpp(id) {
+  const resp = document.getElementById('resp-' + id).value.trim();
+  const chamados = getChamados();
+  const c = chamados.find(ch => ch.id === id);
+  if (!c) return;
+
+  let wpp = '*💬 Resposta do Gestor — Prensadão*\n';
+  wpp += '*Para:* Gabriel Vogt\n';
+  wpp += '*Ref:* ' + c.tipoLabel + ' (' + c.data + ')\n\n';
+  if (resp) wpp += resp;
+
+  if (resp) {
+    const idx = chamados.findIndex(ch => ch.id === id);
+    chamados[idx].resposta = resp;
+    chamados[idx].status = 'respondido';
+    localStorage.setItem(STORAGE_KEY + '_chamados', JSON.stringify(chamados));
+  }
+
+  window.open('https://wa.me/5542988869247?text=' + encodeURIComponent(wpp), '_blank');
+  renderChamados();
+}
+
+function fechar(id) {
+  const chamados = getChamados();
+  const idx = chamados.findIndex(c => c.id === id);
+  if (idx >= 0) {
+    chamados[idx].status = 'respondido';
+    localStorage.setItem(STORAGE_KEY + '_chamados', JSON.stringify(chamados));
+  }
+  renderChamados();
+}
+</script>
+</body>
+</html>
