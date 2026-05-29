@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checklist de Limpeza Semanal - Gabriel</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; color: #333; }
+  .header { background: linear-gradient(135deg, #1a1a2e, #16213e); color: white; padding: 24px 20px; text-align: center; }
+  .header h1 { font-size: 1.4rem; font-weight: 700; }
+  .header p { font-size: 0.85rem; opacity: 0.8; margin-top: 6px; }
+  .container { max-width: 600px; margin: 0 auto; padding: 16px; }
+  .card { background: white; border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  .card h2 { font-size: 1rem; color: #1a1a2e; margin-bottom: 14px; border-bottom: 2px solid #e8f4fd; padding-bottom: 8px; }
+  label { display: block; font-size: 0.9rem; margin-bottom: 6px; color: #555; font-weight: 500; }
+  input[type="text"], input[type="date"], textarea { width: 100%; padding: 10px 12px; border: 1.5px solid #ddd; border-radius: 8px; font-size: 0.9rem; transition: border 0.2s; }
+  input[type="text"]:focus, input[type="date"]:focus, textarea:focus { outline: none; border-color: #4a90d9; }
+  .task-item { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 16px; margin-bottom: 12px; transition: border 0.2s; }
+  .task-item.done { border-color: #48bb78; background: #f0fff4; }
+  .task-item.not-done { border-color: #fc8181; background: #fff5f5; }
+  .task-desc { font-size: 0.88rem; color: #444; margin-bottom: 12px; line-height: 1.5; }
+  .radio-group { display: flex; gap: 10px; margin-bottom: 10px; }
+  .radio-btn { flex: 1; padding: 10px; border: 2px solid #ddd; border-radius: 8px; text-align: center; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: all 0.2s; }
+  .radio-btn.sim { color: #276749; }
+  .radio-btn.nao { color: #c53030; }
+  .radio-btn.selected-sim { background: #48bb78; border-color: #48bb78; color: white; }
+  .radio-btn.selected-nao { background: #fc8181; border-color: #fc8181; color: white; }
+  .photo-upload { margin-top: 10px; }
+  .photo-upload label { font-size: 0.82rem; color: #666; margin-bottom: 4px; }
+  .photo-preview { width: 100%; max-height: 180px; object-fit: cover; border-radius: 8px; margin-top: 8px; display: none; }
+  .upload-btn { display: block; width: 100%; padding: 8px; background: #ebf8ff; border: 1.5px dashed #4a90d9; border-radius: 8px; text-align: center; cursor: pointer; font-size: 0.85rem; color: #2b6cb0; font-weight: 500; }
+  .upload-btn:hover { background: #bee3f8; }
+  .upload-status { font-size: 0.78rem; color: #666; margin-top: 4px; text-align: center; }
+  .extra-section { background: #fffbeb; border: 1.5px dashed #f6ad55; border-radius: 10px; padding: 16px; margin-bottom: 12px; }
+  .extra-section h3 { font-size: 0.95rem; color: #744210; margin-bottom: 8px; }
+  .extra-section p { font-size: 0.82rem; color: #92400e; margin-bottom: 12px; }
+  .extra-item { background: white; border-radius: 8px; padding: 12px; margin-bottom: 10px; border: 1px solid #fbd38d; }
+  .add-extra-btn { width: 100%; padding: 10px; background: #f6ad55; border: none; border-radius: 8px; color: white; font-weight: 600; cursor: pointer; font-size: 0.9rem; }
+  .add-extra-btn:hover { background: #ed8936; }
+  .remove-btn { background: #fc8181; color: white; border: none; border-radius: 6px; padding: 4px 10px; font-size: 0.8rem; cursor: pointer; float: right; }
+  .rating { display: flex; gap: 8px; justify-content: center; margin-top: 8px; font-size: 2rem; }
+  .rating span { cursor: pointer; opacity: 0.4; transition: opacity 0.2s; }
+  .rating span.selected { opacity: 1; }
+  .submit-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #1a1a2e, #4a90d9); color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 8px; letter-spacing: 0.5px; }
+  .submit-btn:hover { opacity: 0.95; }
+  .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .save-indicator { text-align: center; font-size: 0.78rem; color: #48bb78; margin-top: 8px; display: none; }
+  .progress-bar { background: #e2e8f0; border-radius: 99px; height: 8px; margin-top: 10px; }
+  .progress-fill { background: linear-gradient(90deg, #48bb78, #38a169); height: 100%; border-radius: 99px; transition: width 0.4s; }
+  .progress-text { text-align: center; font-size: 0.8rem; color: #666; margin-top: 4px; }
+  .validity { background: #e6fffa; border: 1px solid #81e6d9; border-radius: 8px; padding: 10px 14px; font-size: 0.85rem; color: #234e52; margin-bottom: 16px; text-align: center; }
+  textarea { resize: vertical; min-height: 70px; }
+  .success-screen { display: none; text-align: center; padding: 40px 20px; }
+  .success-screen .emoji { font-size: 4rem; }
+  .success-screen h2 { color: #276749; margin: 16px 0 8px; }
+  .success-screen p { color: #666; font-size: 0.9rem; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>✅ Checklist de Limpeza Semanal</h1>
+  <p>Prensadão — Lista do Gabriel (Garçom)</p>
+</div>
+
+<div class="container">
+
+  <div class="validity">
+    📅 Válida de <strong>segunda a sábado</strong>
+  </div>
+
+  <div class="card" id="main-form">
+    <h2>👤 Identificação</h2>
+    <label>Nome Completo *</label>
+    <input type="text" id="nome" placeholder="Seu nome completo" oninput="autoSave()">
+    <br><br>
+    <label>Data *</label>
+    <input type="date" id="data" oninput="autoSave()">
+  </div>
+
+  <div class="card">
+    <h2>📋 Progresso</h2>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <div class="progress-text" id="progress-text">0 de 5 tarefas concluídas</div>
+  </div>
+
+  <div id="tarefas">
+
+    <div class="card task-item" id="task-0">
+      <div class="task-desc">1. Limpeza das prateleiras de pães que ficam em cima das prensas e a de estoque com água e sabão.</div>
+      <div class="radio-group">
+        <div class="radio-btn sim" onclick="selectTask(0,'sim')">✅ Sim</div>
+        <div class="radio-btn nao" onclick="selectTask(0,'nao')">❌ Não</div>
+      </div>
+      <div class="photo-upload" id="photo-area-0" style="display:none">
+        <label>📷 Foto comprovando (obrigatória):</label>
+        <label class="upload-btn" for="photo-0">📁 Selecionar foto</label>
+        <input type="file" id="photo-0" accept="image/*" style="display:none" onchange="uploadPhoto(0, this)">
+        <div class="upload-status" id="status-0"></div>
+        <img class="photo-preview" id="preview-0">
+      </div>
+      <div id="justif-area-0" style="display:none; margin-top:10px;">
+        <label>Por que não foi feito?</label>
+        <textarea id="justif-0" placeholder="Explique o motivo..." oninput="autoSave()"></textarea>
+      </div>
+    </div>
+
+    <div class="card task-item" id="task-1">
+      <div class="task-desc">2. Limpar o freezer da porta amarela — interno e externo, incluindo bandejas e maionese.</div>
+      <div class="radio-group">
+        <div class="radio-btn sim" onclick="selectTask(1,'sim')">✅ Sim</div>
+        <div class="radio-btn nao" onclick="selectTask(1,'nao')">❌ Não</div>
+      </div>
+      <div class="photo-upload" id="photo-area-1" style="display:none">
+        <label>📷 Foto comprovando (obrigatória):</label>
+        <label class="upload-btn" for="photo-1">📁 Selecionar foto</label>
+        <input type="file" id="photo-1" accept="image/*" style="display:none" onchange="uploadPhoto(1, this)">
+        <div class="upload-status" id="status-1"></div>
+        <img class="photo-preview" id="preview-1">
+      </div>
+      <div id="justif-area-1" style="display:none; margin-top:10px;">
+        <label>Por que não foi feito?</label>
+        <textarea id="justif-1" placeholder="Explique o motivo..." oninput="autoSave()"></textarea>
+      </div>
+    </div>
+
+    <div class="card task-item" id="task-2">
+      <div class="task-desc">3. Limpar prateleira de louça e parte abaixo da pia.</div>
+      <div class="radio-group">
+        <div class="radio-btn sim" onclick="selectTask(2,'sim')">✅ Sim</div>
+        <div class="radio-btn nao" onclick="selectTask(2,'nao')">❌ Não</div>
+      </div>
+      <div class="photo-upload" id="photo-area-2" style="display:none">
+        <label>📷 Foto comprovando (obrigatória):</label>
+        <label class="upload-btn" for="photo-2">📁 Selecionar foto</label>
+        <input type="file" id="photo-2" accept="image/*" style="display:none" onchange="uploadPhoto(2, this)">
+        <div class="upload-status" id="status-2"></div>
+        <img class="photo-preview" id="preview-2">
+      </div>
+      <div id="justif-area-2" style="display:none; margin-top:10px;">
+        <label>Por que não foi feito?</label>
+        <textarea id="justif-2" placeholder="Explique o motivo..." oninput="autoSave()"></textarea>
+      </div>
+    </div>
+
+    <div class="card task-item" id="task-3">
+      <div class="task-desc">4. Limpar freezer de batatas e recipiente de armazenamento.</div>
+      <div class="radio-group">
+        <div class="radio-btn sim" onclick="selectTask(3,'sim')">✅ Sim</div>
+        <div class="radio-btn nao" onclick="selectTask(3,'nao')">❌ Não</div>
+      </div>
+      <div class="photo-upload" id="photo-area-3" style="display:none">
+        <label>📷 Foto comprovando (obrigatória):</label>
+        <label class="upload-btn" for="photo-3">📁 Selecionar foto</label>
+        <input type="file" id="photo-3" accept="image/*" style="display:none" onchange="uploadPhoto(3, this)">
+        <div class="upload-status" id="status-3"></div>
+        <img class="photo-preview" id="preview-3">
+      </div>
+      <div id="justif-area-3" style="display:none; margin-top:10px;">
+        <label>Por que não foi feito?</label>
+        <textarea id="justif-3" placeholder="Explique o motivo..." oninput="autoSave()"></textarea>
+      </div>
+    </div>
+
+    <div class="card task-item" id="task-4">
+      <div class="task-desc">5. Higienização e organização do armário preto e de embalagens.</div>
+      <div class="radio-group">
+        <div class="radio-btn sim" onclick="selectTask(4,'sim')">✅ Sim</div>
+        <div class="radio-btn nao" onclick="selectTask(4,'nao')">❌ Não</div>
+      </div>
+      <div class="photo-upload" id="photo-area-4" style="display:none">
+        <label>📷 Foto comprovando (obrigatória):</label>
+        <label class="upload-btn" for="photo-4">📁 Selecionar foto</label>
+        <input type="file" id="photo-4" accept="image/*" style="display:none" onchange="uploadPhoto(4, this)">
+        <div class="upload-status" id="status-4"></div>
+        <img class="photo-preview" id="preview-4">
+      </div>
+      <div id="justif-area-4" style="display:none; margin-top:10px;">
+        <label>Por que não foi feito?</label>
+        <textarea id="justif-4" placeholder="Explique o motivo..." oninput="autoSave()"></textarea>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="card">
+    <div class="extra-section">
+      <h3>⭐ Tarefas Extras — Ganhe pontos!</h3>
+      <p>Fez algo a mais além da lista? Registre aqui com foto e descrição. Cada tarefa extra aprovada vale <strong>+3 pontos</strong> na gamificação!</p>
+      <div id="extras-container"></div>
+      <button class="add-extra-btn" onclick="addExtra()">+ Adicionar Tarefa Extra</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📝 Observações</h2>
+    <textarea id="observacoes" placeholder="Observações adicionais sobre a limpeza..." oninput="autoSave()"></textarea>
+  </div>
+
+  <div class="card">
+    <h2>😊 Como foi sua semana?</h2>
+    <div class="rating" id="rating">
+      <span onclick="setRating(1)">😞</span>
+      <span onclick="setRating(2)">😕</span>
+      <span onclick="setRating(3)">😐</span>
+      <span onclick="setRating(4)">😊</span>
+      <span onclick="setRating(5)">🤩</span>
+    </div>
+  </div>
+
+  <div class="save-indicator" id="save-indicator">✓ Salvo automaticamente</div>
+
+  <button class="submit-btn" onclick="submitForm()" id="submit-btn">📤 Enviar Checklist</button>
+
+  <br><br>
+
+  <div class="success-screen" id="success-screen">
+    <div class="emoji">🎉</div>
+    <h2>Checklist enviada!</h2>
+    <p>Boa semana, Gabriel! Seu gestor foi notificado.</p>
+  </div>
+
+</div>
+
+<script>
+const CLOUDINARY_CLOUD = 'dewulu3tj';
+const CLOUDINARY_PRESET = 'checklist_prensadao';
+const JOSIEL_PHONE = '5542988819420';
+
+let taskStatus = [null, null, null, null, null];
+let photoURLs = [null, null, null, null, null];
+let extraCount = 0;
+let ratingValue = 0;
+let extraPhotoURLs = {};
+
+const taskNames = [
+  'Prateleiras de pães (acima das prensas e estoque)',
+  'Freezer porta amarela (interno, externo, bandejas, maionese)',
+  'Prateleira de louça e abaixo da pia',
+  'Freezer de batatas e recipiente de armazenamento',
+  'Armário preto e de embalagens'
+];
+
+function autoSave() {
+  const data = {
+    nome: document.getElementById('nome').value,
+    data: document.getElementById('data').value,
+    tasks: taskStatus,
+    photos: photoURLs,
+    observacoes: document.getElementById('observacoes').value,
+    rating: ratingValue
+  };
+  localStorage.setItem('checklist_gabriel', JSON.stringify(data));
+  const ind = document.getElementById('save-indicator');
+  ind.style.display = 'block';
+  setTimeout(() => ind.style.display = 'none', 2000);
+}
+
+function loadSaved() {
+  const saved = localStorage.getItem('checklist_gabriel');
+  if (!saved) return;
+  try {
+    const data = JSON.parse(saved);
+    if (data.nome) document.getElementById('nome').value = data.nome;
+    if (data.data) document.getElementById('data').value = data.data;
+    if (data.observacoes) document.getElementById('observacoes').value = data.observacoes;
+    if (data.rating) setRating(data.rating);
+    if (data.tasks) data.tasks.forEach((s, i) => { if (s) selectTask(i, s); });
+    if (data.photos) photoURLs = data.photos;
+  } catch(e) {}
+}
+
+function selectTask(index, val) {
+  taskStatus[index] = val;
+  const item = document.getElementById('task-' + index);
+  const photoArea = document.getElementById('photo-area-' + index);
+  const justifArea = document.getElementById('justif-area-' + index);
+  const btns = item.querySelectorAll('.radio-btn');
+  btns[0].className = 'radio-btn sim' + (val === 'sim' ? ' selected-sim' : '');
+  btns[1].className = 'radio-btn nao' + (val === 'nao' ? ' selected-nao' : '');
+  item.className = 'card task-item' + (val === 'sim' ? ' done' : ' not-done');
+  photoArea.style.display = val === 'sim' ? 'block' : 'none';
+  justifArea.style.display = val === 'nao' ? 'block' : 'none';
+  updateProgress();
+  autoSave();
+}
+
+function updateProgress() {
+  const done = taskStatus.filter(s => s === 'sim').length;
+  const pct = (done / 5) * 100;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = done + ' de 5 tarefas concluídas';
+}
+
+async function uploadPhoto(index, input) {
+  const file = input.files[0];
+  if (!file) return;
+  const status = document.getElementById('status-' + index);
+  const preview = document.getElementById('preview-' + index);
+  status.textContent = '⏳ Enviando foto...';
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', CLOUDINARY_PRESET);
+  try {
+    const res = await fetch('https://api.cloudinary.com/v1_1/' + CLOUDINARY_CLOUD + '/image/upload', { method: 'POST', body: formData });
+    const data = await res.json();
+    if (data.secure_url) {
+      photoURLs[index] = data.secure_url;
+      preview.src = data.secure_url;
+      preview.style.display = 'block';
+      status.textContent = '✅ Foto enviada!';
+      autoSave();
+    } else {
+      status.textContent = '❌ Erro no envio. Tente novamente.';
+    }
+  } catch(e) {
+    status.textContent = '❌ Erro no envio. Verifique a conexão.';
+  }
+}
+
+function addExtra() {
+  const id = extraCount++;
+  const div = document.createElement('div');
+  div.className = 'extra-item';
+  div.id = 'extra-' + id;
+  div.innerHTML = '<button class="remove-btn" onclick="removeExtra(' + id + ')">✕ Remover</button>' +
+    '<label>O que foi feito?</label>' +
+    '<textarea id="extra-desc-' + id + '" placeholder="Descreva a tarefa extra realizada..." style="margin-bottom:8px" oninput="autoSave()"></textarea>' +
+    '<label>📷 Foto comprovando (obrigatória):</label>' +
+    '<label class="upload-btn" for="extra-photo-' + id + '">📁 Selecionar foto</label>' +
+    '<input type="file" id="extra-photo-' + id + '" accept="image/*" style="display:none" onchange="uploadExtraPhoto(' + id + ', this)">' +
+    '<div class="upload-status" id="extra-status-' + id + '"></div>' +
+    '<img class="photo-preview" id="extra-preview-' + id + '">';
+  document.getElementById('extras-container').appendChild(div);
+}
+
+function removeExtra(id) {
+  const el = document.getElementById('extra-' + id);
+  if (el) el.remove();
+  delete extraPhotoURLs[id];
+}
+
+async function uploadExtraPhoto(id, input) {
+  const file = input.files[0];
+  if (!file) return;
+  const status = document.getElementById('extra-status-' + id);
+  const preview = document.getElementById('extra-preview-' + id);
+  status.textContent = '⏳ Enviando foto...';
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', CLOUDINARY_PRESET);
+  try {
+    const res = await fetch('https://api.cloudinary.com/v1_1/' + CLOUDINARY_CLOUD + '/image/upload', { method: 'POST', body: formData });
+    const data = await res.json();
+    if (data.secure_url) {
+      extraPhotoURLs[id] = data.secure_url;
+      preview.src = data.secure_url;
+      preview.style.display = 'block';
+      status.textContent = '✅ Foto enviada!';
+    } else {
+      status.textContent = '❌ Erro no envio.';
+    }
+  } catch(e) {
+    status.textContent = '❌ Erro no envio.';
+  }
+}
+
+function setRating(val) {
+  ratingValue = val;
+  const spans = document.querySelectorAll('.rating span');
+  spans.forEach((s, i) => s.className = i < val ? 'selected' : '');
+  autoSave();
+}
+
+async function submitForm() {
+  const nome = document.getElementById('nome').value.trim();
+  const data = document.getElementById('data').value;
+  if (!nome || !data) { alert('Preencha seu nome e a data!'); return; }
+  if (taskStatus.every(s => s === null)) { alert('Responda pelo menos uma tarefa!'); return; }
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Enviando...';
+
+  let resumo = '*✅ Checklist de Limpeza Semanal*\n';
+  resumo += '*Colaborador:* ' + nome + '\n';
+  resumo += '*Data:* ' + data + '\n';
+  resumo += '*Lista:* Gabriel (Garçom)\n\n';
+  resumo += '*Tarefas:*\n';
+
+  let pontosBase = 0;
+  let todasFeitas = true;
+  taskStatus.forEach((s, i) => {
+    if (s === 'sim') {
+      resumo += '✅ ' + taskNames[i];
+      if (photoURLs[i]) resumo += '\n📷 ' + photoURLs[i];
+      resumo += '\n';
+    } else if (s === 'nao') {
+      todasFeitas = false;
+      const justif = document.getElementById('justif-' + i).value;
+      resumo += '❌ ' + taskNames[i] + (justif ? ' — ' + justif : '') + '\n';
+    } else {
+      todasFeitas = false;
+      resumo += '⬜ ' + taskNames[i] + ' (não respondido)\n';
+    }
+  });
+
+  if (todasFeitas) pontosBase = 5;
+
+  const extrasItems = document.querySelectorAll('.extra-item');
+  let extrasData = [];
+  extrasItems.forEach(el => {
+    const id = el.id.replace('extra-', '');
+    const desc = document.getElementById('extra-desc-' + id) ? document.getElementById('extra-desc-' + id).value.trim() : '';
+    const photo = extraPhotoURLs[id];
+    if (desc) extrasData.push({ desc, photo });
+  });
+
+  if (extrasData.length > 0) {
+    resumo += '\n*Tarefas Extras (' + extrasData.length + '):*\n';
+    extrasData.forEach((e, i) => {
+      resumo += '⭐ ' + (i+1) + '. ' + e.desc + '\n';
+      if (e.photo) resumo += '📷 ' + e.photo + '\n';
+    });
+    resumo += '\n_Aguardando análise das fotos para liberação de pontos (+3 pts cada)_\n';
+  }
+
+  const obs = document.getElementById('observacoes').value.trim();
+  if (obs) resumo += '\n*Observações:* ' + obs + '\n';
+
+  resumo += '\n*Pontos base:* +' + pontosBase + ' pts';
+  if (extrasData.length > 0) resumo += '\n*Extras para análise:* ' + extrasData.length + ' tarefa(s)';
+
+  const payload = {
+    phone: JOSIEL_PHONE,
+    message: resumo,
+    colaborador: nome,
+    data: data,
+    pontos_base: pontosBase,
+    extras: extrasData
+  };
+
+  try {
+    await fetch('https://zapia-checklist-webhook.vercel.app/api/notify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      mode: 'no-cors'
+    });
+  } catch(e) {}
+
+  localStorage.removeItem('checklist_gabriel');
+  document.getElementById('submit-btn').style.display = 'none';
+  document.getElementById('success-screen').style.display = 'block';
+  window.scrollTo(0, document.body.scrollHeight);
+}
+
+window.onload = function() {
+  loadSaved();
+  const today = new Date().toISOString().split('T')[0];
+  if (!document.getElementById('data').value) {
+    document.getElementById('data').value = today;
+  }
+};
+</script>
+</body>
+</html>
