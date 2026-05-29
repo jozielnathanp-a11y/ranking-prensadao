@@ -625,7 +625,9 @@ function swTab(t){
   document.querySelectorAll('.nav-b').forEach(b=>b.classList.remove('active'));
   document.getElementById('tab-'+t).classList.add('active');
   document.getElementById('nav-'+t).classList.add('active');
+  if(t==='msgs') try{ renderMsgsColab(); }catch(e){}
 }
+window.addEventListener('load',()=>{ try{ renderMsgsColab(); }catch(e){} });
 
 function openCfg(){document.getElementById('cfg-modal').classList.add('open');}
 function closeCfg(){document.getElementById('cfg-modal').classList.remove('open');}
@@ -724,8 +726,4 @@ function enviarRespColab_kauany(msgId){
   renderMsgsColab();
 }
 
-// render msgs on tab switch and on load
-const _origSwTab=swTab;
-function swTab(t){_origSwTab(t);if(t==="msgs")renderMsgsColab();}
-window.addEventListener("load",()=>{ try{ renderMsgsColab(); } catch(e){} });
 </script></body></html>
