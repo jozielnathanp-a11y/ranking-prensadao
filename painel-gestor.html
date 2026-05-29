@@ -774,7 +774,6 @@ function renderChamados(){
       '<button class="btn-wpp" data-colabid="'+c._colabId+'" data-cid="'+c.id+'" data-phone="'+c._phone+'">&#128242; WPP</button>'+
       (c.status==="aberto"?'<button class="btn-fechar" data-colabid="'+c._colabId+'" data-cid="'+c.id+'">Fechar</button>':'')+
       (c.status==="aberto"?'<button class="btn-rejeitar" data-colabid="'+c._colabId+'" data-cid="'+c.id+'" style="background:#3a1a1a;border:1px solid #fc5c5c;color:#fc5c5c;padding:7px 14px;border-radius:8px;font-size:0.78rem;font-weight:700;cursor:pointer">❌ Rejeitar</button>':'')+
-      (c.tipo==="ponto"&&c.status==="aberto"?'<button class="btn-aprov-pts" data-colabid="'+c._colabId+'" data-cid="'+c.id+'" style="background:#1a3a1a;border:1px solid #48bb78;color:#48bb78;padding:7px 14px;border-radius:8px;font-size:0.78rem;font-weight:700;cursor:pointer">✅ Aprovar Ponto</button>':'')+
       '</div></div></div>';
   }).join("");
 }
