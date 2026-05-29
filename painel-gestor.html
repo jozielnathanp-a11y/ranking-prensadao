@@ -112,7 +112,7 @@ function doLogin(){
     document.getElementById('login-screen').style.display='none';
     document.getElementById('app-screen').style.display='block';
     var nav=document.getElementById('bot-nav');if(nav)nav.style.display='flex';
-    initApp();
+    try{ initApp(); }catch(err){ console.error(err); }
   } else {
     const e=document.getElementById('lerr');e.style.display='block';setTimeout(()=>e.style.display='none',2000);
   }
