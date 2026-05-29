@@ -840,9 +840,46 @@ function chatRender() {
     var midia = m.midia ? '<img src="' + m.midia + '" style="max-width:100%;border-radius:8px;margin-top:4px">' : '';
     var extra = '';
     if (m.tipo === 'ajuda') {
-      var acBtn = (!m.aceitoPor && !eu) ? '<button class="btn-aceitar" onclick="chatAceitar(' + m.id + ')">✋ Aceitar (+' + m.share + ' pts)</button>' : '';
-      var acInfo = m.aceitoPor ? '<div style="font-size:0.68rem;color:#48bb78;margin-top:3px">✅ Aceita por ' + m.aceitoPorNome + '</div>' : '<div style="font-size:0.68rem;color:#f6ad55;margin-top:3px">⏳ Aguardando...</div>';
-      extra = '<div class="b-ajuda"><div class="b-ajuda-tit">🤝 Pedido de ajuda</div><div style="font-size:0.7rem;color:#aaa">+' + m.share + ' pts cada</div>' + acBtn + acInfo + '</div>';
+      var eu = m.de === 'kauany';
+      var souAjudante = m.aceitoPor === 'kauany';
+      var participo = eu || souAjudante;
+      // Botão aceitar
+      var acBtn = (!m.aceitoPor && !eu)
+        ? '<button class="btn-aceitar" onclick="chatAceitar(' + m.id + ')">✋ Aceitar (+3 pts)</button>'
+        : '';
+      // Status aceite
+      var acInfo = m.aceitoPor
+        ? '<div style="font-size:0.68rem;color:#48bb78;margin-top:3px">✅ Aceita por ' + m.aceitoPorNome + '</div>'
+        : '<div style="font-size:0.68rem;color:#f6ad55;margin-top:3px">⏳ Aguardando alguém aceitar...</div>';
+      // Fotos de conclusão
+      var fotoBlock = '';
+      if (m.aceitoPor && m.status !== 'concluido') {
+        // Foto de quem pediu
+        var fpediu = m.fotoPediu
+          ? '<img src="' + m.fotoPediu + '" style="width:100%;max-height:80px;object-fit:cover;border-radius:6px;margin-top:4px">'
+          : (eu ? '<label style="display:block;margin-top:6px;padding:7px;background:#0a1a0a;border:1px dashed #48bb78;border-radius:7px;text-align:center;font-size:0.72rem;color:#48bb78;cursor:pointer" for="ajuda-foto-pediu-' + m.id + '">📷 Enviar sua foto de conclusão</label><input type="file" id="ajuda-foto-pediu-' + m.id + '" accept="image/*" style="display:none" onchange="ajudaEnviarFoto(' + m.id + ',this)">' : '<div style="font-size:0.68rem;color:#555;margin-top:4px">⏳ ' + m.nome + ' ainda não enviou a foto</div>');
+        // Foto de quem ajudou
+        var fajudou = m.fotoAjudou
+          ? '<img src="' + m.fotoAjudou + '" style="width:100%;max-height:80px;object-fit:cover;border-radius:6px;margin-top:4px">'
+          : (souAjudante ? '<label style="display:block;margin-top:6px;padding:7px;background:#0a1a0a;border:1px dashed #48bb78;border-radius:7px;text-align:center;font-size:0.72rem;color:#48bb78;cursor:pointer" for="ajuda-foto-ajudou-' + m.id + '">📷 Enviar sua foto de conclusão</label><input type="file" id="ajuda-foto-ajudou-' + m.id + '" accept="image/*" style="display:none" onchange="ajudaEnviarFoto(' + m.id + ',this)">' : '<div style="font-size:0.68rem;color:#555;margin-top:4px">⏳ ' + m.aceitoPorNome + ' ainda não enviou a foto</div>');
+        fotoBlock = '<div style="margin-top:6px;border-top:1px solid #2a2a2a;padding-top:6px">'
+          + '<div style="font-size:0.65rem;color:#888;margin-bottom:4px">📸 Fotos de conclusão:</div>'
+          + fpediu + fajudou
+          + '<div id="ajuda-st-' + m.id + '" style="font-size:0.68rem;color:#f6ad55;margin-top:3px"></div>'
+          + '</div>';
+      } else if (m.status === 'concluido') {
+        fotoBlock = '<div style="margin-top:6px;display:flex;gap:4px">'
+          + '<img src="' + m.fotoPediu + '" style="flex:1;max-height:70px;object-fit:cover;border-radius:6px">'
+          + '<img src="' + m.fotoAjudou + '" style="flex:1;max-height:70px;object-fit:cover;border-radius:6px">'
+          + '</div>';
+      }
+      extra = '<div class="b-ajuda">'
+        + '<div class="b-ajuda-tit">🤝 Pedido de ajuda</div>'
+        + '<div style="font-size:0.82rem;color:#ddd;margin:3px 0">' + m.texto + '</div>'
+        + '<div style="font-size:0.7rem;color:#aaa">+3 pts para cada ao concluir</div>'
+        + acBtn + acInfo + fotoBlock
+        + (m.status === 'concluido' ? '<div style="font-size:0.72rem;color:#48bb78;font-weight:700;margin-top:6px">🎉 Concluído! Pontos aguardando gestor</div>' : '')
+        + '</div>';
     }
     return '<div class="bubble-wrap ' + (eu ? 'me' : '') + '">' + (eu ? '' : av) +
       '<div><div class="bubble ' + (eu ? 'eu' : 'outros') + '">' +
@@ -928,5 +965,55 @@ window.addEventListener('load', function() {
   try { chatRender(); } catch(e) {}
   try { agRender(); } catch(e) {}
 });
+
+
+// === AJUDA — fluxo com foto de conclusão ===
+var _ajudaUploadando = {}; // msgId -> uploading state
+
+function ajudaEnviarFoto(msgId, input) {
+  var file = input.files[0];
+  if (!file) return;
+  var st = document.getElementById('ajuda-st-' + msgId);
+  if (st) st.textContent = '⏳ Enviando foto...';
+  var fd = new FormData();
+  fd.append('file', file);
+  fd.append('upload_preset', 'checklist_prensadao');
+  fetch('https://api.cloudinary.com/v1_1/dewulu3tj/upload', { method: 'POST', body: fd })
+    .then(function(r){ return r.json(); })
+    .then(function(d) {
+      if (!d.secure_url) { if(st) st.textContent = '❌ Erro no upload'; return; }
+      var url = d.secure_url;
+      var msgs = chatGetMsgs();
+      var idx = msgs.findIndex(function(m){ return m.id === msgId; });
+      if (idx < 0) return;
+      var m = msgs[idx];
+      // Determinar se sou quem pediu ou quem ajudou
+      if (m.de === 'kauany') {
+        m.fotoPediu = url;
+      } else if (m.aceitoPor === 'kauany') {
+        m.fotoAjudou = url;
+      } else {
+        if (st) st.textContent = '❌ Você não participa desta tarefa';
+        return;
+      }
+      // Verificar se ambos enviaram foto
+      if (m.fotoPediu && m.fotoAjudou) {
+        m.status = 'concluido';
+        // Registrar +3 pts para os dois
+        try {
+          var ganhos = JSON.parse(localStorage.getItem('prd_ajuda_ganhos') || '[]');
+          ganhos.push({ ts: Date.now(), de: m.de, nome: m.nome, pts: 3, motivo: 'Ajuda concluída: ' + m.texto.substring(0,40) });
+          ganhos.push({ ts: Date.now(), de: m.aceitoPor, nome: m.aceitoPorNome, pts: 3, motivo: 'Ajuda concluída: ' + m.texto.substring(0,40) });
+          localStorage.setItem('prd_ajuda_ganhos', JSON.stringify(ganhos));
+        } catch(e) {}
+        msgs.push({ id: Date.now()+1, ts: Date.now(), de: 'sistema', nome: 'Sistema', emoji: '🤖',
+          texto: '🎉 Tarefa concluída com foto! +3 pts para ' + m.nome + ' e ' + m.aceitoPorNome + '. Aguardando confirmação do gestor.',
+          midia: null, tipo: 'sistema' });
+      }
+      chatSaveMsgs(msgs);
+      chatRender();
+    })
+    .catch(function() { if(st) st.textContent = '❌ Erro'; });
+}
 
 </script></body></html>
