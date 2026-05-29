@@ -62,7 +62,7 @@
 <div class="l-sub">Painel do Gestor</div>
 <div class="l-card">
 <label>Senha</label>
-<form onsubmit="doLogin();return false;" style="margin:0"><input type="password" id="lsn" placeholder="••••••••" autocomplete="current-password" style="width:100%;padding:13px 14px;background:#1a1a1a;border:1.5px solid #2a2a2a;border-radius:10px;color:#fff;font-size:1rem;outline:none;box-sizing:border-box;margin-bottom:12px"><button type="submit" class="l-btn">ENTRAR</button></form>
+<input type="password" id="lsn" placeholder="••••••••" autocomplete="current-password" style="width:100%;padding:13px 14px;background:#1a1a1a;border:1.5px solid #2a2a2a;border-radius:10px;color:#fff;font-size:1rem;outline:none;box-sizing:border-box;margin-bottom:12px" onkeydown="if(event.key==='Enter'){event.preventDefault();doLogin();}"><button type="button" class="l-btn" onclick="doLogin()">ENTRAR</button>
 <div class="l-err" id="lerr">Senha incorreta.</div>
 </div></div>
 <div id="app-screen">
