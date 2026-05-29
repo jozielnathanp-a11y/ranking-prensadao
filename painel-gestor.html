@@ -560,6 +560,28 @@ input[type="date"], input[type="time"] {
 </div>
 
 <script>
+var COLAB_ID = 'gestor';
+var COLAB_NOME = 'Josiel';
+var COLAB_EMOJI = '👔';
+
+// ===== SUPABASE BACKEND =====
+var SB_URL = 'https://trbyynbtuzpszdvjivbs.supabase.co';
+var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRyYnl5bmJ0dXpwc3pkdmppdmJzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3ODIyODAxOCwiZXhwIjoyMDkzODA0MDE4fQ.OZq8bycNQWEpdbxPiSuB9gt7A0fPKNkawcrtE5XpGFg';
+var SB_H = { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json' };
+
+function sbGet(table, qs) {
+  return fetch(SB_URL+'/rest/v1/'+table+'?'+(qs||'order=ts.asc'), {headers:SB_H})
+    .then(function(r){return r.json();}).catch(function(){return [];});
+}
+function sbPost(table, data) {
+  return fetch(SB_URL+'/rest/v1/'+table, {method:'POST', headers:Object.assign({},SB_H,{'Prefer':'return=minimal'}), body:JSON.stringify(data)})
+    .catch(function(){});
+}
+function sbDelete(table, qs) {
+  return fetch(SB_URL+'/rest/v1/'+table+'?'+qs, {method:'DELETE', headers:SB_H}).catch(function(){});
+}
+// ===========================
+
 function doLogin(){
   console.log("DOLOGIN CHAMADO");
   var senha = document.getElementById('lsn').value;
@@ -793,8 +815,19 @@ function chatEnviar() {
   if (!c) { alert('Selecione um colaborador.'); return; }
   var msg = document.getElementById('chat-txt').value.trim();
   if (!msg) { alert('Digite uma mensagem.'); return; }
-  var url = 'https://wa.me/' + c.phone + '?text=' + encodeURIComponent(msg);
-  window.open(url, '_blank');
+  // Enviar via Supabase para o painel do colaborador
+  var payload = {
+    para: c.id,
+    de: 'gestor',
+    nome: 'Josiel (Gestor)',
+    texto: msg,
+    lida: false,
+    ts: Date.now()
+  };
+  sbPost('prd_mensagens', payload).then(function() {
+    var btn = document.querySelector('.chat-send-btn');
+    if (btn) { btn.textContent = '✅ Enviado!'; setTimeout(function(){ btn.textContent = 'Enviar ▶'; }, 2000); }
+  });
   document.getElementById('chat-txt').value = '';
 }
 
@@ -1007,7 +1040,7 @@ var NOMES_MON = {gabriel:"Gabriel",ruan:"Ruan",caua:"Cauã",kauany:"Kauany",gest
 function monitorRefresh() {
   monRenderChat();
   monRenderSolicitacoes();
-  monRenderChecklist();
+  monRenderChecklistSB();
 }
 
 // --- Chat do Grupo ---
@@ -1015,12 +1048,23 @@ function monRenderChat() {
   var wrap = document.getElementById('mon-chat-msgs');
   var badge = document.getElementById('mon-chat-count');
   if (!wrap) return;
-  var msgs = [];
-  try {
-    var raw = localStorage.getItem('prd_chat_grupo');
-    if (raw) msgs = JSON.parse(raw);
-  } catch(e) {}
-  // Filtrar últimas 48h
+  // Buscar do Supabase em tempo real
+  var cutoff = Date.now() - 48*60*60*1000;
+  sbGet('prd_chat_grupo', 'ts=gt.'+cutoff+'&order=ts.asc&limit=100').then(function(sbMsgs) {
+    if (Array.isArray(sbMsgs) && sbMsgs.length > 0) {
+      renderMonChatMsgs(sbMsgs);
+    } else {
+      // Fallback localStorage
+      var msgs = [];
+      try { msgs = JSON.parse(localStorage.getItem('prd_chat_grupo') || '[]'); } catch(e) {}
+      renderMonChatMsgs(msgs);
+    }
+  });
+}
+function renderMonChatMsgs(msgs) {
+  var wrap = document.getElementById('mon-chat-msgs');
+  var badge = document.getElementById('mon-chat-count');
+  if (!wrap) return;  // Filtrar últimas 48h
   var cutoff = Date.now() - 48*60*60*1000;
   msgs = msgs.filter(function(m){ return m.ts > cutoff; });
   msgs.sort(function(a,b){ return a.ts - b.ts; });
@@ -1090,6 +1134,54 @@ function monRenderSolicitacoes() {
   }).join('');
 }
 
+
+function monRenderChecklistSB() {
+  sbGet('prd_checklist', 'order=ts.desc').then(function(rows) {
+    if (!Array.isArray(rows) || !rows.length) { monRenderChecklist(); return; }
+    var grid = document.getElementById('mon-check-grid');
+    if (!grid) return;
+    var TAREFAS = [
+      "Higienização das mesas, escada e salão superior",
+      "Higienização do freezer e organização dos refrigerantes",
+      "Lavar potinhos de molho e porta-guardanapos",
+      "Limpar bandejas e contar fundas e rasas",
+      "Higienização dos recipientes de etiquetas"
+    ];
+    // Pegar o registro mais recente de cada colab
+    var latest = {};
+    rows.forEach(function(row) {
+      if (!latest[row.colab_id] || row.ts > latest[row.colab_id].ts) {
+        latest[row.colab_id] = row;
+      }
+    });
+    var cards = COLABORADORES.map(function(c) {
+      var dados = latest[c.id] || {};
+      var tks = dados.tks || [];
+      var total = TAREFAS.length;
+      var feitas = tks.filter(function(v){ return v === 'sim'; }).length;
+      var pct = total > 0 ? Math.round(feitas/total*100) : 0;
+      var cls = feitas === total ? 'ok' : (feitas > 0 ? 'parcial' : 'vazio');
+      var foto = FOTOS_MON[c.id] || '';
+      var av = foto
+        ? '<img src="' + foto + '" style="width:28px;height:28px;border-radius:50%;object-fit:cover;margin-right:6px;vertical-align:middle">'
+        : '<span style="margin-right:4px">' + (c.emoji||'👤') + '</span>';
+      var itens = TAREFAS.map(function(lbl, i) {
+        var val = Array.isArray(tks) ? tks[i] : null;
+        var ok = val === 'sim';
+        var nao = val === 'nao';
+        var icon = ok ? '✅' : (nao ? '❌' : '○');
+        return '<div class="mon-check-item ' + (ok?'feito':nao?'nao':'') + '">' + icon + ' ' + lbl + '</div>';
+      }).join('');
+      var semana = dados.semana ? '<div class="mon-ts">Semana: ' + dados.semana + '</div>' : '<div class="mon-ts" style="color:#555">Sem dados ainda</div>';
+      return '<div class="mon-check-card ' + cls + '">' +
+        '<div class="mon-check-nome">' + av + c.nome + '</div>' +
+        '<div class="mon-check-prog">' + feitas + ' de ' + total + ' tarefas ✅</div>' +
+        '<div class="mon-check-bar"><div class="mon-check-bar-fill" style="width:' + pct + '%"></div></div>' +
+        itens + semana + '</div>';
+    }).join('');
+    grid.innerHTML = cards;
+  });
+}
 // --- Checklist ---
 function monRenderChecklist() {
   var grid = document.getElementById('mon-check-grid');
