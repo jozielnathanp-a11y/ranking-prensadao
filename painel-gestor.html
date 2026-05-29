@@ -2,9 +2,6 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0a0a0a">
 <title>Painel do Gestor — Prensadão</title>
@@ -62,21 +59,13 @@
 <div class="l-sub">Painel do Gestor</div>
 <div class="l-card">
 <label>Senha</label>
-<input type="password" id="lsn" placeholder="••••••••" autocomplete="current-password" style="width:100%;padding:13px 14px;background:#1a1a1a;border:1.5px solid #2a2a2a;border-radius:10px;color:#fff;font-size:1rem;outline:none;box-sizing:border-box;margin-bottom:12px" onkeydown="if(event.key==='Enter'){event.preventDefault();doLogin();}"><button type="button" class="l-btn" onclick="doLogin()">ENTRAR</button>
+<input type="password" id="lsn" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+<button class="l-btn" onclick="doLogin()">ENTRAR</button>
 <div class="l-err" id="lerr">Senha incorreta.</div>
 </div></div>
 <div id="app-screen">
 <div class="top-hdr"><div class="top-nm">🛂 Painel do Gestor <span class="badge-ab" id="badge-ab">0</span></div></div>
-<div id="tab-geral" class="tab-c active">
-    <div id="ajudas-card" style="background:#111;border:1.5px solid #f6ad55;border-radius:14px;padding:16px;margin-bottom:14px;display:none">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
-        <div style="font-size:1.8rem">🤝</div>
-        <div style="flex:1"><div style="font-size:0.92rem;font-weight:800">Ajudas Concluídas</div>
-        <div style="font-size:0.72rem;color:#f6ad55;margin-top:2px">Aguardando confirmação de pontos</div></div>
-        <div id="ajudas-badge" style="background:#f6ad55;color:#000;font-size:0.7rem;font-weight:800;padding:2px 8px;border-radius:99px">0</div>
-      </div>
-      <div id="ajudas-pendentes-lista"></div>
-    </div>
+<div id="tab-geral" class="tab-c active"><div id="ajudas-card" style="background:#111;border:1.5px solid #f6ad55;border-radius:14px;padding:16px;margin-bottom:14px;display:none"><div style="font-size:0.9rem;font-weight:800;margin-bottom:4px">Ajudas Concluidas<span id="ajudas-badge" style="background:#f6ad55;color:#000;font-size:0.7rem;font-weight:800;padding:2px 8px;border-radius:99px;margin-left:8px">0</span></div><div id="ajudas-pendentes-lista"></div></div>
 <div class="stat-row" id="stat-row"></div>
 <div class="sec-lbl">Time</div>
 <div class="colab-grid" id="colab-grid"></div>
@@ -117,23 +106,18 @@ const FOTOS = {gabriel:FOTO_GABRIEL,ruan:FOTO_RUAN,caua:FOTO_CAUA,kauany:FOTO_KA
 const GESTOR_SENHA = "josiel123";
 let filtroAtivo = "todos";
 
-function getSenha(){ return GESTOR_SENHA; }
+function getSenha(){ return localStorage.getItem("gestor_senha") || GESTOR_SENHA; }
 function doLogin(){
   const v = document.getElementById("lsn").value;
   if(v === getSenha()){
-    var ls = document.getElementById("login-screen");
-    var ap = document.getElementById("app-screen");
-    if(!ls){ alert("login-screen NAO ENCONTRADO"); return; }
-    if(!ap){ alert("app-screen NAO ENCONTRADO"); return; }
-    ls.style.cssText = "display:none";
-    ap.style.cssText = "display:block;min-height:100vh;padding-bottom:70px";
-    try { initApp(); } catch(err){ alert("initApp erro: "+err.message); }
+    document.getElementById("login-screen").style.display="none";
+    document.getElementById("app-screen").style.display="block";
+    initApp();
   } else {
     const e=document.getElementById("lerr"); e.style.display="block"; setTimeout(()=>e.style.display="none",2000);
   }
 }
 function initApp(){
-  localStorage.removeItem("gestor_senha");
   renderAjudasPendentes(); renderGeral(); renderChamados(); renderPaineis(); }
 
 function getAllChamados(){
@@ -276,8 +260,8 @@ function swTab(t){
 }
 
 
-function getAjudaGanhos(){try{return JSON.parse(localStorage.getItem("prd_ajuda_ganhos")||"[]");}catch(e){return[];}}
-function saveAjudaGanhos(g){localStorage.setItem("prd_ajuda_ganhos",JSON.stringify(g));}
-function confirmarAjuda(idx){var ganhos=getAjudaGanhos();if(!ganhos[idx])return;ganhos[idx].confirmado=true;saveAjudaGanhos(ganhos);alert("✅ +3 pts confirmados para "+ganhos[idx].nome+"!\nLembre de lançar no CSV.");renderAjudasPendentes();}
-function renderAjudasPendentes(){var wrap=document.getElementById("ajudas-pendentes-lista");if(!wrap)return;var ganhos=getAjudaGanhos().filter(function(g){return!g.confirmado;});var card=document.getElementById("ajudas-card");if(!ganhos.length){wrap.innerHTML="<div style='text-align:center;padding:20px;color:#555;font-size:0.8rem'>Nenhuma ajuda pendente 👍</div>";if(card)card.style.display="none";return;}if(card)card.style.display="block";var badge=document.getElementById("ajudas-badge");if(badge)badge.textContent=ganhos.length;wrap.innerHTML=ganhos.map(function(g,i){var dt=new Date(g.ts).toLocaleDateString("pt-BR");return "<div style='background:#0a0a0a;border:1px solid #2a2a2a;border-radius:10px;padding:12px;margin-bottom:8px'>"+"<div style='font-size:0.85rem;font-weight:700;color:#f6ad55'>"+g.nome+"</div>"+"<div style='font-size:0.75rem;color:#aaa;margin:4px 0'>"+g.motivo+"</div>"+"<button onclick='confirmarAjuda("+i+")' style='width:100%;padding:8px;background:#1a3a1a;border:1px solid #48bb78;border-radius:8px;color:#48bb78;font-size:0.8rem;font-weight:700;cursor:pointer'>✅ Confirmar +3 pts</button>"+"</div>";}).join("");}
+function getAjudaGanhos(){try{return JSON.parse(localStorage.getItem('prd_ajuda_ganhos')||'[]');}catch(e){return [];}}
+function saveAjudaGanhos(g){localStorage.setItem('prd_ajuda_ganhos',JSON.stringify(g));}
+function confirmarAjuda(idx){var ganhos=getAjudaGanhos();if(!ganhos[idx])return;ganhos[idx].confirmado=true;saveAjudaGanhos(ganhos);alert('Pontos confirmados para '+ganhos[idx].nome+'!');renderAjudasPendentes();}
+function renderAjudasPendentes(){var wrap=document.getElementById('ajudas-pendentes-lista');if(!wrap)return;var ganhos=getAjudaGanhos().filter(function(g){return!g.confirmado;});var card=document.getElementById('ajudas-card');if(!ganhos.length){wrap.innerHTML='<p style="color:#555;text-align:center">Nenhuma ajuda pendente</p>';if(card)card.style.display='none';return;}if(card)card.style.display='block';var badge=document.getElementById('ajudas-badge');if(badge)badge.textContent=ganhos.length;wrap.innerHTML=ganhos.map(function(g,i){return '<div style="border:1px solid #2a2a2a;border-radius:10px;padding:12px;margin-bottom:8px">'+'<div style="font-weight:700;color:#f6ad55">'+g.nome+'</div>'+'<div style="font-size:0.8rem;color:#aaa;margin:4px 0">'+g.motivo+'</div>'+'<button onclick="confirmarAjuda('+i+')" style="width:100%;padding:8px;background:#1a3a1a;border:1px solid #48bb78;border-radius:8px;color:#48bb78;font-weight:700;cursor:pointer">Confirmar +3 pts</button>'+'</div>';}).join('');}
 </script></body></html>
