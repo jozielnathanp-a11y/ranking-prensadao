@@ -742,7 +742,15 @@ function swTab(t){
   document.querySelectorAll('.nav-b').forEach(b=>b.classList.remove('active'));
   document.getElementById('tab-'+t).classList.add('active');
   document.getElementById('nav-'+t).classList.add('active');
-  if(t==='msgs') try{ renderMsgsColab(); }catch(e){}
+  if(t==='msgs')   try{ renderMsgsColab(); }catch(e){}
+  if(t==='chat')   try{ renderChat_ruan(); }catch(e){}
+  if(t==='agenda') try{ renderAgenda_ruan(); }catch(e){}
+}
+window.addEventListener('load',()=>{
+  try{ renderMsgsColab(); }catch(e){}
+  try{ renderChat_ruan(); }catch(e){}
+  try{ renderAgenda_ruan(); }catch(e){}
+});catch(e){}
 }
 window.addEventListener('load',()=>{ try{ renderMsgsColab(); }catch(e){} });
 
@@ -1097,14 +1105,5 @@ function renderAgenda_ruan(){
       '</div>';
   }).join('');
 }
-
-// render chat+agenda on tab switch
-const _swTabOrig_ruan=swTab;
-function swTab(t){
-  _swTabOrig_ruan(t);
-  if(t==='chat') renderChat_ruan();
-  if(t==='agenda') renderAgenda_ruan();
-}
-window.addEventListener('load',()=>{ try{renderChat_ruan();}catch(e){} try{renderAgenda_ruan();}catch(e){} });
 
 </script></body></html>
