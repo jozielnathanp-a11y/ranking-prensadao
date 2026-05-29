@@ -246,10 +246,9 @@ input[type="date"], input[type="time"] {
   <div class="l-sub">Painel do Time</div>
   <div class="l-card">
     <label>Senha</label>
-    <input type="password" id="lsn" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+    
     <button class="l-btn" onclick="doLogin()">ENTRAR</button>
-    <div class="l-err" id="lerr">Senha incorreta.</div>
-  </div>
+    </div>
 </div>
 
 <div id="app-screen">
@@ -409,9 +408,9 @@ input[type="date"], input[type="time"] {
 <div id="cfg-modal">
   <div class="cfg-c">
     <h2>⚙️ Alterar Senha</h2>
-    <input type="password" id="cfg-at" placeholder="Senha atual">
-    <input type="password" id="cfg-nv" placeholder="Nova senha">
-    <input type="password" id="cfg-cf" placeholder="Confirmar nova senha">
+    
+    
+    
     <button class="cfg-sv" onclick="saveCfg()">Salvar</button>
     <button class="cfg-cn" onclick="closeCfg()">Cancelar</button>
     <div class="cfg-msg" id="cfg-msg"></div>
@@ -468,14 +467,7 @@ let tpSel=null,urgSel=null,chAnx=null,ptAnx=null;
 
 function getSn(){return localStorage.getItem('pg_sn')||'gabriel123'}
 function doLogin(){
-  const v=document.getElementById('lsn').value;
-  if(v===getSn()){
-    document.getElementById('login-screen').style.display='none';
-    document.getElementById('app-screen').style.display='block';
-    document.getElementById('top-av').src=FT;
-    document.getElementById('p-foto').src=FT;
-    initApp();
-  } else {
+  const v=document.getElementById('lsn').value; else {
     const e=document.getElementById('lerr');e.style.display='block';setTimeout(()=>e.style.display='none',2000);
   }
 }
@@ -728,11 +720,8 @@ function swTab(t){
 function openCfg(){document.getElementById('cfg-modal').classList.add('open');}
 function closeCfg(){document.getElementById('cfg-modal').classList.remove('open');}
 function saveCfg(){
-  const at=document.getElementById('cfg-at').value,nv=document.getElementById('cfg-nv').value,cf=document.getElementById('cfg-cf').value,msg=document.getElementById('cfg-msg');
-  if(at!==getSn()){msg.style.display='block';msg.style.color='#fc8181';msg.textContent='Senha atual incorreta.';return;}
   if(nv.length<4){msg.style.display='block';msg.style.color='#fc8181';msg.textContent='Mínimo 4 caracteres.';return;}
   if(nv!==cf){msg.style.display='block';msg.style.color='#fc8181';msg.textContent='Senhas não coincidem.';return;}
-  localStorage.setItem('pg_sn',nv);
   msg.style.display='block';msg.style.color='#48bb78';msg.textContent='Senha alterada!';
   setTimeout(closeCfg,1500);
 }
