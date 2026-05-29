@@ -354,6 +354,7 @@ input[type="date"], input[type="time"] {
 function getSn(){ return 'josiel123'; }
 function doLogin(){
   var v = document.getElementById('lsn').value;
+  alert('doLogin chamado! v=['+v+'] s=['+getSn()+']');
   if(v === getSn()){
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('app-screen').style.display  = 'block';
