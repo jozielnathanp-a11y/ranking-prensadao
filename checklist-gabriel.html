@@ -62,6 +62,20 @@
   .colaborador-info strong { font-size: 1rem; color: #1a1a2e; }
   .posicao { font-size: 0.85rem; color: #744210; font-weight: 600; margin-top: 2px; }
   .pontos { font-size: 0.8rem; color: #666; margin-top: 2px; }
+
+  .hist-section { background: white; border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  .hist-section h2 { font-size: 1rem; color: #1a1a2e; margin-bottom: 14px; border-bottom: 2px solid #e8f4fd; padding-bottom: 8px; }
+  .hist-saldo { text-align: center; font-size: 2rem; font-weight: 800; color: #1a1a2e; margin-bottom: 4px; }
+  .hist-saldo-label { text-align: center; font-size: 0.8rem; color: #888; margin-bottom: 14px; }
+  .hist-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; border-radius: 8px; margin-bottom: 6px; font-size: 0.82rem; }
+  .hist-item.ganho { background: #f0fff4; border-left: 3px solid #48bb78; }
+  .hist-item.perda { background: #fff5f5; border-left: 3px solid #fc8181; }
+  .hist-motivo { flex: 1; color: #444; }
+  .hist-data { font-size: 0.75rem; color: #999; margin-right: 8px; }
+  .hist-pts { font-weight: 700; min-width: 40px; text-align: right; }
+  .hist-pts.ganho { color: #276749; }
+  .hist-pts.perda { color: #c53030; }
+  .hist-toggle { width: 100%; padding: 8px; background: #f0f4f8; border: none; border-radius: 8px; font-size: 0.85rem; color: #555; cursor: pointer; margin-top: 8px; }
 </style>
 </head>
 <body>
@@ -80,6 +94,13 @@
     <span class="posicao">🥉 3º lugar no ranking</span>
     <span class="pontos">15 pts</span>
   </div>
+</div>
+  <div class="hist-section">
+  <h2>📊 Meu Histórico de Pontos (Ciclo Atual)</h2>
+  <div class="hist-saldo" id="hist-saldo">15 pts</div>
+  <div class="hist-saldo-label">🥉 3º lugar no ranking</div>
+  <div id="hist-lista"></div>
+  <button class="hist-toggle" onclick="toggleHist()">Ver histórico completo ▼</button>
 </div>
   <div class="validity">
     📅 Válida de <strong>segunda a sábado</strong>
@@ -463,6 +484,34 @@ window.onload = function() {
     document.getElementById('data').value = today;
   }
 };
+
+const HISTORICO = [{"data": "2026-05-20", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 43}, {"data": "2026-05-20", "pontos": -6, "motivo": "Queimou lanche", "tipo": "Perda", "saldo": 37}, {"data": "2026-05-20", "pontos": 3, "motivo": "Proatividade — arrumou o salão sozinho", "tipo": "Ganho", "saldo": 40}, {"data": "2026-05-23", "pontos": -12, "motivo": "Não fez checklist semanal", "tipo": "Perda", "saldo": 28}, {"data": "2026-05-24", "pontos": 3, "motivo": "Dia sem erro (Semana Perfeita)", "tipo": "Ganho", "saldo": 31}, {"data": "2026-05-24", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 34}, {"data": "2026-05-26", "pontos": -5, "motivo": "Não tirou o gás (Limpeza mal feita)", "tipo": "Perda", "saldo": 29}, {"data": "2026-05-26", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 32}, {"data": "2026-05-27", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 35}, {"data": "2026-05-27", "pontos": 3, "motivo": "Proatividade no atendimento", "tipo": "Ganho", "saldo": 38}, {"data": "2026-05-27", "pontos": -5, "motivo": "Não guardou pote de queijo na geladeira (Limpeza mal feita)", "tipo": "Perda", "saldo": 33}, {"data": "2026-05-27", "pontos": -5, "motivo": "Não ligou a geladeira (Limpeza mal feita)", "tipo": "Perda", "saldo": 28}, {"data": "2026-05-27", "pontos": -5, "motivo": "Pão aberto na bancada (Limpeza mal feita)", "tipo": "Perda", "saldo": 23}, {"data": "2026-05-27", "pontos": -7, "motivo": "Lanche errado — sem batata palha foi com batata", "tipo": "Perda", "saldo": 16}, {"data": "2026-05-28", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 19}, {"data": "2026-05-28", "pontos": 3, "motivo": "Proatividade — organizou a cozinha", "tipo": "Ganho", "saldo": 22}, {"data": "2026-05-28", "pontos": -7, "motivo": "Derrubou o lanche (Lanche errado)", "tipo": "Perda", "saldo": 15}];
+let histAberto = false;
+
+function renderHist() {
+  const lista = document.getElementById('hist-lista');
+  const items = histAberto ? HISTORICO.slice().reverse() : HISTORICO.slice().reverse().slice(0, 5);
+  lista.innerHTML = items.map(h => {
+    const d = h.data.split('-');
+    const dataFmt = d[2]+'/'+d[1];
+    const cls = h.tipo === 'Ganho' ? 'ganho' : 'perda';
+    const sinal = h.pontos > 0 ? '+' : '';
+    return '<div class="hist-item ' + cls + '">' +
+      '<span class="hist-data">' + dataFmt + '</span>' +
+      '<span class="hist-motivo">' + h.motivo + '</span>' +
+      '<span class="hist-pts ' + cls + '">' + sinal + h.pontos + '</span>' +
+    '</div>';
+  }).join('');
+}
+
+function toggleHist() {
+  histAberto = !histAberto;
+  renderHist();
+  document.querySelector('.hist-toggle').textContent = histAberto ? 'Ver menos ▲' : 'Ver histórico completo ▼';
+}
+
+renderHist();
+
 </script>
 </body>
 </html>
