@@ -60,9 +60,11 @@
 <div class="l-brand">PRENSADÃO</div>
 <div class="l-sub">Painel do Gestor</div>
 <div class="l-card">
+<form onsubmit="doLogin();return false;" style="margin:0">
 <label>Senha</label>
-<input type="password" id="lsn" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
-<button class="l-btn" onclick="doLogin()">ENTRAR</button>
+<input type="password" id="lsn" placeholder="••••••••" autocomplete="current-password">
+<button type="submit" class="l-btn">ENTRAR</button>
+</form>
 <div class="l-err" id="lerr">Senha incorreta.</div>
 </div></div>
 <div id="app-screen">
