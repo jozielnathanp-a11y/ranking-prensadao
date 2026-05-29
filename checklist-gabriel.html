@@ -76,10 +76,22 @@
   .hist-pts.ganho { color: #276749; }
   .hist-pts.perda { color: #c53030; }
   .hist-toggle { width: 100%; padding: 8px; background: #f0f4f8; border: none; border-radius: 8px; font-size: 0.85rem; color: #555; cursor: pointer; margin-top: 8px; }
+
+  .tab-bar { display: flex; background: #1a1a2e; position: sticky; top: 0; z-index: 100; }
+  .tab-btn { flex: 1; padding: 14px 8px; color: rgba(255,255,255,0.6); font-size: 0.9rem; font-weight: 600; text-align: center; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; }
+  .tab-btn.active { color: white; border-bottom-color: #4a90d9; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  .ranking-frame { width: 100%; border: none; height: calc(100vh - 52px); display: block; }
 </style>
 </head>
 <body>
 
+<div class="tab-bar">
+  <div class="tab-btn active" onclick="switchTab('checklist')">✅ Checklist</div>
+  <div class="tab-btn" onclick="switchTab('ranking')">🏆 Ranking</div>
+</div>
+<div id="tab-checklist" class="tab-content active">
 <div class="header">
   <h1>✅ Checklist de Limpeza Semanal</h1>
   <p>Prensadão — Lista do Gabriel Vogt</p>
@@ -512,6 +524,18 @@ function toggleHist() {
 
 renderHist();
 
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  event.target.classList.add('active');
+}
+
 </script>
+</div>
+<div id="tab-ranking" class="tab-content">
+  <iframe class="ranking-frame" src="https://jozielnathanp-a11y.github.io/ranking-prensadao/" title="Ranking Prensadão"></iframe>
+</div>
 </body>
 </html>
