@@ -409,7 +409,7 @@ function renderGeral(){
     const av = foto
       ? '<img class="colab-av" src="'+foto+'" alt="'+c.nome+'">'
       : '<div class="colab-av" style="background:#1a1a1a;display:flex;align-items:center;justify-content:center;font-size:1.4rem">'+c.emoji+'</div>';
-    return '<div class="colab-card '+(abCh>0?"has-open":"")+'" onclick="filtrarColab(''+c.id+'')">'+av+'<div class="colab-nm">'+c.nome+'</div><div class="colab-pos">'+c.emoji+' '+c.pts+' pts</div><span class="colab-badge '+bcls+'">'+btxt+'</span></div>';
+    return '<div class="colab-card '+(abCh>0?"has-open":"")+'" onclick=\"filtrarColab('"+c.id+"')\">'+av+'<div class="colab-nm">'+c.nome+'</div><div class="colab-pos">'+c.emoji+' '+c.pts+' pts</div><span class="colab-badge '+bcls+'">'+btxt+'</span></div>';
   }).join("");
 }
 
@@ -445,9 +445,9 @@ function renderChamados(){
       (c.resposta?'<div class="resp-ex"><strong>Sua resposta:</strong>'+c.resposta+'</div>':'')+
       '<textarea class="resp-inp" id="ri-'+c.id+'" placeholder="Escreva sua resposta...">'+(c.resposta||'')+'</textarea>'+
       '<div class="btn-row">'+
-      '<button class="btn-resp" onclick="responder(''+c._colabId+'','+c.id+')">✅ Salvar</button>'+
-      '<button class="btn-wpp" onclick="respWpp(''+c._colabId+'','+c.id+',''+c._phone+'')">📱 WPP</button>'+
-      (c.status==="aberto"?'<button class="btn-fechar" onclick="fechar(''+c._colabId+'','+c.id+')">Fechar</button>':'')+
+      '<button class="btn-resp" onclick="responder(\'"+c._colabId+"\',"+c.id+")">✅ Salvar</button>'+
+      '<button class="btn-wpp" onclick="respWpp(\'"+c._colabId+"\',"+c.id+",\'"+c._phone+"\')">📱 WPP</button>'+
+      (c.status==="aberto"?'<button class="btn-fechar" onclick="fechar(\'"+c._colabId+"\',"+c.id+")">Fechar</button>':'')+
       '</div></div></div>';
   }).join("");
 }
@@ -488,8 +488,8 @@ function renderPaineis(){
       '<div class="pl-nm">'+c.nome+'</div>'+
       '<div class="pl-pts">'+c.emoji+' '+c.pts+' pts</div>'+
       '<div class="pl-link">'+c.painel.replace("https://","")+'</div>'+
-      '<button class="copy-btn" style="background:#1a2a3a;color:#4a90d9" onclick="copyL(''+c.painel+'',this)">📋 Copiar link</button>'+
-      '<button class="copy-btn" style="background:#0d2818;color:#25d366" onclick="sendWpp(''+c.phone+'',''+c.painel+'',''+c.nome+'')">📱 Enviar WhatsApp</button>'+
+      '<button class="copy-btn" style="background:#1a2a3a;color:#4a90d9" onclick="copyL(\'"+c.painel+"\',this)">📋 Copiar link</button>'+
+      '<button class="copy-btn" style="background:#0d2818;color:#25d366" onclick="sendWpp(\'"+c.phone+"\',\'"+c.painel+"\',\'"+c.nome+"\')">📱 Enviar WhatsApp</button>'+
       '</div>';
   }).join("");
 }
