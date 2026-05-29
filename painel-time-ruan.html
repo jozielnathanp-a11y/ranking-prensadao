@@ -378,7 +378,7 @@ body{font-family:'Segoe UI',sans-serif;background:#0a0a0a;color:#fff;min-height:
   <div class="sec-lbl" style="margin-bottom:12px">Mensagens do Gestor</div>
   <div id="msgs-colab-lista"></div>
 </div>
-<div id="tab-chat" class="tab-c" style="padding:12px 12px 0"><div class="chat-wrap"><div class="chat-msgs" id="chat-msgs"></div><div class="chat-ia"><div class="chat-tools"><button class="ct-btn" id="btn-ajuda" onclick="chatToggleAjuda()">🤝 Pedir Ajuda</button><label class="ct-btn" for="chat-file-inp">📷 Foto</label><input type="file" id="chat-file-inp" accept="image/*" style="display:none" onchange="chatUploadMidia(this)"></div><div class="ajuda-form-box" id="ajuda-form-box"><div style="font-size:0.73rem;color:#f6ad55;font-weight:700;margin-bottom:6px">🤝 Pedir ajuda em tarefa</div><input id="ajuda-desc-inp" class="ag-inp" placeholder="Descreva a tarefa..."><select id="ajuda-pts-sel" class="ag-inp"><option value="3">Leve (3 pts) → 2 pts cada</option><option value="5">Média (5 pts) → 3 pts cada</option><option value="10">Pesada (10 pts) → 5 pts cada</option></select><button onclick="chatEnviarAjuda()" style="width:100%;padding:8px;background:#1a3a1a;border:1px solid #48bb78;border-radius:8px;color:#48bb78;font-size:0.82rem;font-weight:700;cursor:pointer">Enviar pedido</button></div><img class="chat-prev" id="chat-prev-img"><div class="chat-upst" id="chat-upst-msg"></div><div class="chat-row"><textarea class="chat-inp" id="chat-txt-inp" placeholder="Mensagem pro grupo..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();chatEnviarMsg();}"></textarea><button class="chat-sbtn" onclick="chatEnviarMsg()">➤</button></div></div></div></div>
+<div id="tab-chat" class="tab-c" style="padding:12px 12px 0"><div class="chat-wrap"><div class="chat-msgs" id="chat-msgs"></div><div class="chat-ia"><div class="chat-tools"><button class="ct-btn" id="btn-ajuda" onclick="chatToggleAjuda()">🤝 Pedir Ajuda</button><label class="ct-btn" for="chat-file-inp">📷 Foto</label><input type="file" id="chat-file-inp" accept="image/*" style="display:none" onchange="chatUploadMidia(this)"></div><div class="ajuda-form-box" id="ajuda-form-box"><div style="font-size:0.73rem;color:#f6ad55;font-weight:700;margin-bottom:6px">🤝 Pedir ajuda em tarefa</div><input id="ajuda-desc-inp" class="ag-inp" placeholder="Descreva a tarefa..."><button onclick="chatEnviarAjuda()" style="width:100%;padding:8px;background:#1a3a1a;border:1px solid #48bb78;border-radius:8px;color:#48bb78;font-size:0.82rem;font-weight:700;cursor:pointer">Enviar pedido</button></div><img class="chat-prev" id="chat-prev-img"><div class="chat-upst" id="chat-upst-msg"></div><div class="chat-row"><textarea class="chat-inp" id="chat-txt-inp" placeholder="Mensagem pro grupo..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();chatEnviarMsg();}"></textarea><button class="chat-sbtn" onclick="chatEnviarMsg()">➤</button></div></div></div></div>
 <div id="tab-agenda" class="tab-c"><button onclick="document.getElementById('ag-form-box').style.display=document.getElementById('ag-form-box').style.display==='block'?'none':'block'" style="width:100%;padding:12px;background:linear-gradient(135deg,#1a1a2e,#4a90d9);border:none;border-radius:12px;color:#fff;font-size:0.87rem;font-weight:700;cursor:pointer;margin-bottom:12px">+ Novo Agendamento</button><div id="ag-form-box" class="ag-form-box"><input id="ag-titulo-inp" class="ag-inp" placeholder="Título..."><input id="ag-data-inp" type="datetime-local" class="ag-inp"><input id="ag-desc-inp" class="ag-inp" placeholder="Descrição (opcional)"><select id="ag-quem-sel" class="ag-inp"><option value="todos">👥 Para todos</option><option value="gabriel">Gabriel</option><option value="ruan">Ruan</option><option value="caua">Cauã</option><option value="kauany">Kauany</option></select><button onclick="agCriar()" style="width:100%;padding:11px;background:linear-gradient(135deg,#1a1a2e,#4a90d9);border:none;border-radius:8px;color:#fff;font-size:0.87rem;font-weight:700;cursor:pointer">✅ Criar</button></div><div class="ag-fils"><button class="ag-fil active" onclick="agFil('todos',this)">Todos</button><button class="ag-fil" onclick="agFil('hoje',this)">Hoje</button><button class="ag-fil" onclick="agFil('semana',this)">Semana</button><button class="ag-fil" onclick="agFil('pendente',this)">Pendentes</button><button class="ag-fil" onclick="agFil('concluido',this)">Concluídos</button></div><div id="ag-lista"></div></div>
 <div class="bot-nav">
     <button class="nav-b active" id="nav-inicio" onclick="swTab('inicio')"><span class="ni">🏠</span><span class="nl">Início</span></button>
@@ -791,12 +791,9 @@ function chatEnviarMsg() {
 
 function chatEnviarAjuda() {
   var desc = document.getElementById('ajuda-desc-inp');
-  var ptsEl = document.getElementById('ajuda-pts-sel');
   if (!desc || !desc.value.trim()) { alert('Descreva a tarefa!'); return; }
-  var pts = parseInt(ptsEl ? ptsEl.value : '5');
-  var share = pts <= 3 ? 2 : pts <= 5 ? 3 : 5;
   var msgs = chatGetMsgs();
-  msgs.push({ id: Date.now(), ts: Date.now(), de: 'ruan', nome: 'Ruan', emoji: '🥇', texto: desc.value.trim(), midia: null, tipo: 'ajuda', pts: pts, share: share, aceitoPor: null, aceitoPorNome: null });
+  msgs.push({ id: Date.now(), ts: Date.now(), de: 'ruan', nome: 'Ruan', emoji: '🤝', texto: desc.value.trim(), midia: null, tipo: 'ajuda', pts: 3, share: 3, aceitoPor: null, aceitoPorNome: null });
   chatSaveMsgs(msgs);
   desc.value = '';
   var box = document.getElementById('ajuda-form-box');
@@ -815,7 +812,13 @@ function chatAceitar(msgId) {
   if (msgs[idx].aceitoPor) { alert('Já foi aceita por ' + msgs[idx].aceitoPorNome + '!'); return; }
   msgs[idx].aceitoPor = 'ruan';
   msgs[idx].aceitoPorNome = 'Ruan';
-  msgs.push({ id: Date.now()+1, ts: Date.now(), de: 'sistema', nome: 'Sistema', emoji: '🤖', texto: '✅ Ruan aceitou ajudar! +' + msgs[idx].share + ' pts cada.', midia: null, tipo: 'sistema' });
+  // Registrar +3 pts para quem aceitou
+  try {
+    var ganhos = JSON.parse(localStorage.getItem('prd_ajuda_ganhos') || '[]');
+    ganhos.push({ ts: Date.now(), de: 'ruan', nome: 'Ruan', pts: 3, motivo: 'Ajudou: ' + msgs[idx].texto.substring(0,40) });
+    localStorage.setItem('prd_ajuda_ganhos', JSON.stringify(ganhos));
+  } catch(e) {}
+  msgs.push({ id: Date.now()+1, ts: Date.now(), de: 'sistema', nome: 'Sistema', emoji: '🤖', texto: '✅ Ruan aceitou ajudar! +3 pts para cada. Gestor será notificado.', midia: null, tipo: 'sistema' });
   chatSaveMsgs(msgs);
   chatRender();
 }
