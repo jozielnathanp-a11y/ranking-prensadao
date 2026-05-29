@@ -494,9 +494,17 @@ function alterarSenha() {
 
 function getSn(){return localStorage.getItem('pg_sn_caua')||'caua123'}
 function doLogin(){
-  const v=document.getElementById('lsn').value; else {
+  const v=document.getElementById('lsn').value;
+  if(v===getSn()){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app-screen').style.display='block';
+    if(document.getElementById('top-av'))document.getElementById('top-av').src=FT;
+    if(document.getElementById('p-foto'))document.getElementById('p-foto').src=FT;
+    initApp();
+  } else {
     const e=document.getElementById('lerr');e.style.display='block';setTimeout(()=>e.style.display='none',2000);
   }
+}
 }
 
 function initApp(){
