@@ -118,10 +118,13 @@ let filtroAtivo = "todos";
 function getSenha(){ return GESTOR_SENHA; }
 function doLogin(){
   const v = document.getElementById("lsn").value;
-  if(v === getSenha()){
+  const s = getSenha();
+  alert("digitou=["+v+"] esperado=["+s+"] igual="+(v===s));
+  if(v === s){
     document.getElementById("login-screen").style.display="none";
     document.getElementById("app-screen").style.display="block";
     var nav=document.getElementById("bot-nav"); if(nav) nav.style.display="flex";
+    alert("tela trocada");
     initApp();
   } else {
     const e=document.getElementById("lerr"); e.style.display="block"; setTimeout(()=>e.style.display="none",2000);
