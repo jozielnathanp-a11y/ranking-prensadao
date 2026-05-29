@@ -87,9 +87,6 @@
 
   <div class="card" id="main-form">
     <h2>👤 Identificação</h2>
-    <label>Nome Completo *</label>
-    <input type="text" id="nome" placeholder="Seu nome completo" oninput="autoSave()">
-    <br><br>
     <label>Data *</label>
     <input type="date" id="data" oninput="autoSave()">
   </div>
@@ -259,7 +256,7 @@ const taskNames = [
 
 function autoSave() {
   const data = {
-    nome: document.getElementById('nome').value,
+    nome: 'Gabriel Vogt',
     data: document.getElementById('data').value,
     tasks: taskStatus,
     photos: photoURLs,
@@ -277,7 +274,7 @@ function loadSaved() {
   if (!saved) return;
   try {
     const data = JSON.parse(saved);
-    if (data.nome) document.getElementById('nome').value = data.nome;
+    
     if (data.data) document.getElementById('data').value = data.data;
     if (data.observacoes) document.getElementById('observacoes').value = data.observacoes;
     if (data.rating) setRating(data.rating);
@@ -389,9 +386,9 @@ function setRating(val) {
 }
 
 async function submitForm() {
-  const nome = document.getElementById('nome').value.trim();
+  const nome = 'Gabriel Vogt';
   const data = document.getElementById('data').value;
-  if (!nome || !data) { alert('Preencha seu nome e a data!'); return; }
+  if (!data) { alert('Preencha a data!'); return; }
   if (taskStatus.every(s => s === null)) { alert('Responda pelo menos uma tarefa!'); return; }
 
   const btn = document.getElementById('submit-btn');
