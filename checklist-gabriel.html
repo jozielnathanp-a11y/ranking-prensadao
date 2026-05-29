@@ -226,7 +226,7 @@
 <script>
 const CLOUDINARY_CLOUD = 'dewulu3tj';
 const CLOUDINARY_PRESET = 'checklist_prensadao';
-const JOSIEL_PHONE = '5542988819420';
+const GRUPO_PRENSADAO = '120363289757731618@g.us';
 
 let taskStatus = [null, null, null, null, null];
 let photoURLs = [null, null, null, null, null];
@@ -437,10 +437,10 @@ async function submitForm() {
   document.getElementById('success-screen').style.display = 'block';
   window.scrollTo(0, document.body.scrollHeight);
 
-  // Abrir WhatsApp com resumo para enviar ao Josiel
+  // Abrir WhatsApp com resumo para enviar ao grupo Prensadão
   const wppMsg = encodeURIComponent(resumo);
   setTimeout(() => {
-    window.open('https://wa.me/' + JOSIEL_PHONE + '?text=' + wppMsg, '_blank');
+    window.open('https://wa.me/' + GRUPO_PRENSADAO + '?text=' + wppMsg, '_blank');
   }, 1500);
 }
 
