@@ -358,14 +358,18 @@ function doLogin(){
     if(err){ err.style.display='block'; setTimeout(function(){ err.style.display='none'; },2000); }
   }
 }
-document.addEventListener('DOMContentLoaded', function(){
+(function(){
   var btn = document.getElementById('btn-entrar');
   var inp = document.getElementById('lsn');
   function tentarLogin(){ doLogin(); }
-  btn.addEventListener('click', tentarLogin);
-  btn.addEventListener('touchend', function(e){ e.preventDefault(); tentarLogin(); });
-  inp.addEventListener('keydown', function(e){ if(e.key==='Enter') tentarLogin(); });
-});
+  if(btn){
+    btn.addEventListener('click', tentarLogin);
+    btn.addEventListener('touchstart', function(e){ e.preventDefault(); tentarLogin(); });
+  }
+  if(inp){
+    inp.addEventListener('keydown', function(e){ if(e.key==='Enter') tentarLogin(); });
+  }
+})();
 
 
 
