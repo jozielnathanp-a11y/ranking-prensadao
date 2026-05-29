@@ -783,6 +783,52 @@ function saveChs(cid,chs){ const c=COLABORADORES.find(x=>x.id===cid); if(c) loca
 
 
 // ===== REJEITAR CHAMADO =====
+
+// ===== REJEITAR VIA SUPABASE =====
+function rejeitarSB(cid, id) {
+  const motivo = prompt('Motivo da rejeição (opcional):') || '';
+  const chs = getChs(cid);
+  const idx = chs.findIndex(c => c.id === id);
+  if (idx < 0) return;
+
+  chs[idx].status = 'rejeitado';
+  chs[idx].resposta = motivo ? 'Rejeitado: ' + motivo : 'Rejeitado pelo gestor';
+  saveChs(cid, chs);
+
+  // Atualizar no Supabase — buscar o registro e fazer PATCH
+  const chAtual = chs[idx];
+  const novoTexto = JSON.stringify(chAtual);
+
+  // Buscar o id do registro no SB
+  fetch(SB_URL+'/rest/v1/prd_mensagens?de=eq.'+cid+'&tipo=eq.chamado&order=ts.desc&limit=50', {
+    headers: SB_H
+  }).then(r => r.json()).then(rows => {
+    if (!Array.isArray(rows)) return;
+    // Achar o registro pelo id do chamado dentro do JSON
+    const row = rows.find(r => {
+      try { return JSON.parse(r.texto).id === id; } catch(e) { return false; }
+    });
+    if (!row) return;
+    // PATCH no registro
+    return fetch(SB_URL+'/rest/v1/prd_mensagens?id=eq.'+row.id, {
+      method: 'PATCH',
+      headers: Object.assign({}, SB_H, {'Prefer': 'return=minimal'}),
+      body: JSON.stringify({ texto: novoTexto, lida: true })
+    });
+  });
+
+  // Notificar colaborador
+  const msgRejeicao = {
+    id: Date.now(), ts: Date.now(),
+    de: 'gestor', nome: 'Gestor', emoji: '🛂',
+    texto: 'Sua solicitacao "' + (chAtual.tipoLabel || chAtual.tipo) + '" foi rejeitada.' + (motivo ? ' Motivo: ' + motivo : ''),
+    tipo: 'msg', para: cid
+  };
+  sbPost('prd_mensagens', msgRejeicao);
+  alert('Rejeitado e colaborador notificado!');
+  renderChamados(); renderGeral();
+}
+
 function rejeitar(cid, id) {
   const motivo = prompt('Motivo da rejeição (opcional):') || '';
   const chs = getChs(cid), idx = chs.findIndex(c => c.id === id);
@@ -1399,7 +1445,7 @@ document.addEventListener('click', function(ev) {
     return;
   }
   if (t.classList.contains('btn-rejeitar')) {
-    rejeitar(t.getAttribute('data-colabid'), parseInt(t.getAttribute('data-cid')));
+    rejeitarSB(t.getAttribute('data-colabid'), parseInt(t.getAttribute('data-cid')));
     return;
   }
 
