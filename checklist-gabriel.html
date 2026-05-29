@@ -432,28 +432,16 @@ async function submitForm() {
   resumo += '\n*Pontos base:* +' + pontosBase + ' pts';
   if (extrasData.length > 0) resumo += '\n*Extras para análise:* ' + extrasData.length + ' tarefa(s)';
 
-  const payload = {
-    phone: JOSIEL_PHONE,
-    message: resumo,
-    colaborador: nome,
-    data: data,
-    pontos_base: pontosBase,
-    extras: extrasData
-  };
-
-  try {
-    await fetch('https://zapia-checklist-webhook.vercel.app/api/notify', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-      mode: 'no-cors'
-    });
-  } catch(e) {}
-
   localStorage.removeItem('checklist_gabriel');
   document.getElementById('submit-btn').style.display = 'none';
   document.getElementById('success-screen').style.display = 'block';
   window.scrollTo(0, document.body.scrollHeight);
+
+  // Abrir WhatsApp com resumo para enviar ao Josiel
+  const wppMsg = encodeURIComponent(resumo);
+  setTimeout(() => {
+    window.open('https://wa.me/' + JOSIEL_PHONE + '?text=' + wppMsg, '_blank');
+  }, 1500);
 }
 
 window.onload = function() {
