@@ -645,39 +645,7 @@ function tipoLabel(t){ return {recado:'💬 Recado',tarefa:'📋 Tarefa',doc:'�
 
 let msgRespAnexoURL_caua = null;
 
-function renderMsgsColab(){
-  const msgs = getMsgs('caua');
-  const lista = document.getElementById('msgs-colab-lista');
-  if(!msgs.length){ lista.innerHTML='<div style="text-align:center;padding:40px;color:#333"><div style="font-size:2.5rem;margin-bottom:10px">📭</div><p>Nenhuma mensagem ainda</p></div>'; return; }
-  const unread = msgs.filter(m=>m.status==='pendente').length;
-  lista.innerHTML = msgs.map(m=>`
-    <div class="msg-card ${m.status}" id="mc-${m.id}">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
-        <span class="msg-tipo-tag ${m.tipo}">${tipoLabel(m.tipo)}</span>
-        <span style="font-size:0.68rem;color:#444">${tsFmt(m.ts)}</span>
-      </div>
-      <div style="font-size:0.72rem;color:#666;margin-bottom:6px">📩 Do Gestor</div>
-      <div class="msg-texto-body">${m.texto}</div>
-      ${m.anexo?`<div style="margin-bottom:10px">${m.anexo.match(/\.(jpg|jpeg|png|gif|webp)/i)?`<img src="${m.anexo}" style="width:100%;max-height:160px;object-fit:cover;border-radius:8px">`:`<a href="${m.anexo}" target="_blank" style="color:#4a90d9;font-size:0.82rem">📎 Ver anexo do gestor</a>`}</div>`:''}
-      ${m.resposta
-        ? `<div class="msg-resp-area"><div class="msg-resp-txt"><strong>Sua resposta:</strong>${m.resposta}</div>${m.respAnexo?`<div style="margin-top:6px">${m.respAnexo.match(/\.(jpg|jpeg|png|gif|webp)/i)?`<img src="${m.respAnexo}" style="width:100%;max-height:120px;object-fit:cover;border-radius:8px">`:`<a href="${m.respAnexo}" target="_blank" style="color:#48bb78;font-size:0.78rem">📎 Seu anexo</a>`}</div>`:''}</div>`
-        : `<div class="msg-resp-area">
-            <textarea class="msg-reply-inp" id="ri-${m.id}" placeholder="Escreva sua resposta..."></textarea>
-            <div style="display:flex;gap:8px;align-items:center">
-              <label style="flex:1;padding:9px;background:#1a1a1a;border:1.5px dashed #2a2a2a;border-radius:8px;text-align:center;cursor:pointer;font-size:0.78rem;color:#555" for="rf-${m.id}">📎 Anexar foto/doc</label>
-              <input type="file" id="rf-${m.id}" accept="image/*,application/pdf" style="display:none" onchange="uploadRespColab_caua('${m.id}',this)">
-              <button onclick="enviarRespColab_caua('${m.id}')" style="flex:1;padding:10px;background:linear-gradient(135deg,#ff6b00,#ff9500);border:none;border-radius:8px;color:#fff;font-size:0.82rem;font-weight:700;cursor:pointer">✅ Responder</button>
-            </div>
-            <div id="rst-${m.id}" style="font-size:0.72rem;color:#555;margin-top:4px;text-align:center"></div>
-            <img id="rpv-${m.id}" style="width:100%;max-height:120px;object-fit:cover;border-radius:8px;margin-top:6px;display:none">
-          </div>`
-      }
-    </div>`).join('');
-  // Badge
-  const badge = document.getElementById('msgs-badge');
-  if(badge) badge.textContent = unread > 0 ? unread : '';
-  badge && (badge.style.display = unread > 0 ? 'inline' : 'none');
-}
+
 
 async function uploadRespColab_caua(msgId, input){
   const file=input.files[0]; if(!file) return;
@@ -713,6 +681,5 @@ function enviarRespColab_caua(msgId){
 
 // render msgs on tab switch and on load
 const _origSwTab=swTab;
-function swTab(t){_origSwTab(t);if(t==="msgs")renderMsgsColab();}
-window.addEventListener("load",()=>{ try{ renderMsgsColab(); } catch(e){} });
+
 </script></body></html>
