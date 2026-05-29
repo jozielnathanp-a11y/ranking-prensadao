@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fale com o Gestor — Gabriel</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', sans-serif; background: #0a0a0a; color: #fff; min-height: 100vh; }
+
+/* LOGIN */
+#login-screen {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  min-height: 100vh; padding: 24px;
+}
+.login-logo { font-size: 3rem; margin-bottom: 12px; }
+.login-title { font-size: 1.3rem; font-weight: 800; color: #fff; margin-bottom: 4px; }
+.login-sub { font-size: 0.85rem; color: #666; margin-bottom: 32px; }
+.login-card { background: #111; border: 1px solid #222; border-radius: 16px; padding: 28px; width: 100%; max-width: 360px; }
+.login-card label { display: block; font-size: 0.82rem; color: #888; margin-bottom: 6px; }
+.login-card input { width: 100%; padding: 12px 14px; background: #1a1a1a; border: 1.5px solid #2a2a2a; border-radius: 10px; color: #fff; font-size: 0.95rem; margin-bottom: 16px; }
+.login-card input:focus { outline: none; border-color: #ff6b00; }
+.login-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #ff6b00, #ff9500); border: none; border-radius: 10px; color: white; font-size: 1rem; font-weight: 700; cursor: pointer; }
+.login-btn:hover { opacity: 0.9; }
+.login-error { color: #fc8181; font-size: 0.82rem; text-align: center; margin-top: 10px; display: none; }
+
+/* APP */
+#app-screen { display: none; min-height: 100vh; flex-direction: column; }
+
+.header { background: #111; border-bottom: 1px solid #1a1a1a; padding: 16px 20px; display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 50; }
+.header-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #ff6b00; }
+.header-info h1 { font-size: 1rem; font-weight: 700; }
+.header-info p { font-size: 0.75rem; color: #666; }
+.header-right { margin-left: auto; display: flex; gap: 10px; align-items: center; }
+.config-btn { background: none; border: none; color: #666; font-size: 1.2rem; cursor: pointer; }
+
+/* TAB BAR */
+.tab-bar { display: flex; background: #0f0f0f; border-bottom: 1px solid #1a1a1a; position: sticky; top: 57px; z-index: 49; }
+.tab-btn { flex: 1; padding: 12px 4px; color: #555; font-size: 0.78rem; font-weight: 600; text-align: center; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; }
+.tab-btn.active { color: #ff6b00; border-bottom-color: #ff6b00; }
+
+.tab-content { display: none; padding: 16px; }
+.tab-content.active { display: block; }
+
+/* NOVO CHAMADO */
+.section-title { font-size: 0.9rem; font-weight: 700; color: #ccc; margin-bottom: 14px; }
+.tipo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+.tipo-card { background: #111; border: 2px solid #1e1e1e; border-radius: 12px; padding: 14px 10px; text-align: center; cursor: pointer; transition: all 0.2s; }
+.tipo-card:hover { border-color: #ff6b00; }
+.tipo-card.selected { border-color: #ff6b00; background: #1a0f00; }
+.tipo-card .icon { font-size: 1.6rem; display: block; margin-bottom: 6px; }
+.tipo-card .label { font-size: 0.78rem; color: #aaa; font-weight: 600; }
+.tipo-card.selected .label { color: #ff9500; }
+
+.form-group { margin-bottom: 14px; }
+.form-group label { display: block; font-size: 0.82rem; color: #888; margin-bottom: 6px; }
+.form-group input, .form-group textarea, .form-group select {
+  width: 100%; padding: 11px 13px; background: #111; border: 1.5px solid #222;
+  border-radius: 10px; color: #fff; font-size: 0.9rem;
+}
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: #ff6b00; }
+.form-group textarea { resize: vertical; min-height: 90px; }
+.form-group select option { background: #111; }
+
+.upload-area { border: 2px dashed #2a2a2a; border-radius: 10px; padding: 20px; text-align: center; cursor: pointer; transition: border 0.2s; }
+.upload-area:hover { border-color: #ff6b00; }
+.upload-area p { color: #555; font-size: 0.85rem; }
+.upload-area .icon { font-size: 2rem; margin-bottom: 8px; }
+.upload-preview { width: 100%; border-radius: 10px; margin-top: 10px; display: none; max-height: 200px; object-fit: cover; }
+.upload-status { font-size: 0.78rem; color: #888; margin-top: 6px; text-align: center; }
+
+.urgencia-group { display: flex; gap: 8px; margin-bottom: 14px; }
+.urgencia-btn { flex: 1; padding: 9px; border: 2px solid #222; border-radius: 8px; text-align: center; cursor: pointer; font-size: 0.8rem; font-weight: 600; color: #666; transition: all 0.2s; }
+.urgencia-btn.baixa.sel { border-color: #48bb78; background: #0d1f14; color: #48bb78; }
+.urgencia-btn.media.sel { border-color: #f6ad55; background: #1a1200; color: #f6ad55; }
+.urgencia-btn.alta.sel { border-color: #fc8181; background: #1f0d0d; color: #fc8181; }
+
+.send-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, #ff6b00, #ff9500); border: none; border-radius: 12px; color: white; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 8px; }
+.send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* MEUS CHAMADOS */
+.chamado-card { background: #111; border: 1px solid #1e1e1e; border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+.chamado-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.chamado-tipo { font-size: 0.78rem; font-weight: 700; color: #ff9500; }
+.chamado-data { font-size: 0.72rem; color: #555; }
+.chamado-msg { font-size: 0.85rem; color: #ccc; line-height: 1.5; margin-bottom: 8px; }
+.chamado-status { display: inline-block; font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 99px; }
+.chamado-status.aberto { background: #1a1200; color: #f6ad55; border: 1px solid #f6ad55; }
+.chamado-status.respondido { background: #0d1f14; color: #48bb78; border: 1px solid #48bb78; }
+.chamado-resposta { background: #0f0f0f; border-left: 3px solid #ff6b00; border-radius: 0 8px 8px 0; padding: 10px 12px; margin-top: 10px; font-size: 0.82rem; color: #aaa; }
+.chamado-resposta strong { color: #ff9500; display: block; font-size: 0.75rem; margin-bottom: 4px; }
+.empty-state { text-align: center; padding: 40px 20px; color: #444; }
+.empty-state .icon { font-size: 3rem; margin-bottom: 12px; }
+
+/* AJUSTE DE PONTO */
+.ponto-card { background: #111; border: 1px solid #1e1e1e; border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+.ponto-row { display: flex; gap: 10px; }
+.ponto-row .form-group { flex: 1; }
+
+/* CONFIG / SENHA */
+#config-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 200; align-items: center; justify-content: center; padding: 24px; }
+#config-modal.open { display: flex; }
+.config-card { background: #111; border: 1px solid #222; border-radius: 16px; padding: 24px; width: 100%; max-width: 360px; }
+.config-card h2 { font-size: 1rem; margin-bottom: 16px; color: #ccc; }
+.config-card input { width: 100%; padding: 11px 13px; background: #1a1a1a; border: 1.5px solid #2a2a2a; border-radius: 10px; color: #fff; font-size: 0.9rem; margin-bottom: 12px; }
+.config-card input:focus { outline: none; border-color: #ff6b00; }
+.config-save { width: 100%; padding: 12px; background: linear-gradient(135deg, #ff6b00, #ff9500); border: none; border-radius: 10px; color: white; font-weight: 700; cursor: pointer; margin-bottom: 10px; }
+.config-cancel { width: 100%; padding: 10px; background: none; border: 1px solid #333; border-radius: 10px; color: #666; cursor: pointer; }
+.config-msg { font-size: 0.8rem; color: #48bb78; text-align: center; margin-top: 8px; display: none; }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-logo">💬</div>
+  <div class="login-title">Fale com o Gestor</div>
+  <div class="login-sub">Prensadão — Área do Colaborador</div>
+  <div class="login-card">
+    <label>Senha</label>
+    <input type="password" id="login-senha" placeholder="Digite sua senha" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">Entrar</button>
+    <div class="login-error" id="login-error">Senha incorreta. Tente novamente.</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app-screen">
+
+  <div class="header">
+    <img class="header-avatar" id="header-foto" src="" alt="Gabriel">
+    <div class="header-info">
+      <h1>Gabriel Vogt</h1>
+      <p>Colaborador · Prensadão Centro</p>
+    </div>
+    <div class="header-right">
+      <button class="config-btn" onclick="openConfig()" title="Alterar senha">⚙️</button>
+    </div>
+  </div>
+
+  <div class="tab-bar">
+    <div class="tab-btn active" onclick="switchTab('novo')">✏️ Novo</div>
+    <div class="tab-btn" onclick="switchTab('chamados')">📋 Meus Chamados</div>
+    <div class="tab-btn" onclick="switchTab('ponto')">🕐 Ponto</div>
+  </div>
+
+  <!-- ABA NOVO CHAMADO -->
+  <div id="tab-novo" class="tab-content active">
+    <div class="section-title">O que você precisa?</div>
+
+    <div class="tipo-grid">
+      <div class="tipo-card" onclick="selectTipo('folga')" id="tipo-folga">
+        <span class="icon">🏖️</span><span class="label">Pedir Folga</span>
+      </div>
+      <div class="tipo-card" onclick="selectTipo('sugestao')" id="tipo-sugestao">
+        <span class="icon">💡</span><span class="label">Sugestão</span>
+      </div>
+      <div class="tipo-card" onclick="selectTipo('reclamacao')" id="tipo-reclamacao">
+        <span class="icon">⚠️</span><span class="label">Reclamação</span>
+      </div>
+      <div class="tipo-card" onclick="selectTipo('premiacao')" id="tipo-premiacao">
+        <span class="icon">🏆</span><span class="label">Sugestão de Prêmio</span>
+      </div>
+      <div class="tipo-card" onclick="selectTipo('necessidade')" id="tipo-necessidade">
+        <span class="icon">🛒</span><span class="label">Precisa de algo</span>
+      </div>
+      <div class="tipo-card" onclick="selectTipo('outro')" id="tipo-outro">
+        <span class="icon">💬</span><span class="label">Outro</span>
+      </div>
+    </div>
+
+    <div id="form-novo" style="display:none">
+      <div class="form-group">
+        <label>Urgência</label>
+        <div class="urgencia-group">
+          <div class="urgencia-btn baixa" onclick="selectUrgencia('baixa')">🟢 Baixa</div>
+          <div class="urgencia-btn media" onclick="selectUrgencia('media')">🟡 Média</div>
+          <div class="urgencia-btn alta" onclick="selectUrgencia('alta')">🔴 Alta</div>
+        </div>
+      </div>
+
+      <div class="form-group" id="grupo-data-folga" style="display:none">
+        <label>Data desejada para folga</label>
+        <input type="date" id="data-folga">
+      </div>
+
+      <div class="form-group">
+        <label id="label-mensagem">Descreva aqui</label>
+        <textarea id="mensagem-novo" placeholder="Escreva sua mensagem..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Anexar foto ou documento (opcional)</label>
+        <div class="upload-area" onclick="document.getElementById('file-novo').click()">
+          <div class="icon">📎</div>
+          <p>Toque para anexar imagem ou documento</p>
+        </div>
+        <input type="file" id="file-novo" accept="image/*,application/pdf" style="display:none" onchange="uploadAnexo(this)">
+        <img class="upload-preview" id="preview-novo">
+        <div class="upload-status" id="status-novo"></div>
+      </div>
+
+      <button class="send-btn" onclick="enviarChamado()" id="send-btn">📤 Enviar para o Gestor</button>
+    </div>
+  </div>
+
+  <!-- ABA MEUS CHAMADOS -->
+  <div id="tab-chamados" class="tab-content">
+    <div class="section-title">Histórico de Chamados</div>
+    <div id="lista-chamados">
+      <div class="empty-state">
+        <div class="icon">📭</div>
+        <p>Nenhum chamado ainda</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABA PONTO -->
+  <div id="tab-ponto" class="tab-content">
+    <div class="section-title">Notificar Ajuste de Ponto</div>
+    <div class="ponto-card">
+      <div class="ponto-row">
+        <div class="form-group">
+          <label>Data</label>
+          <input type="date" id="ponto-data">
+        </div>
+        <div class="form-group">
+          <label>Horário</label>
+          <input type="time" id="ponto-hora">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Tipo</label>
+        <select id="ponto-tipo">
+          <option value="atraso">Atraso</option>
+          <option value="esqueci">Esqueci de bater o ponto</option>
+          <option value="saida">Saída antecipada</option>
+          <option value="falta">Falta</option>
+          <option value="outro">Outro</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Motivo / Justificativa</label>
+        <textarea id="ponto-motivo" placeholder="Explique o motivo..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Atestado ou documento (se houver)</label>
+        <div class="upload-area" onclick="document.getElementById('file-ponto').click()">
+          <div class="icon">📄</div>
+          <p>Anexar atestado ou comprovante</p>
+        </div>
+        <input type="file" id="file-ponto" accept="image/*,application/pdf" style="display:none" onchange="uploadPonto(this)">
+        <img class="upload-preview" id="preview-ponto">
+        <div class="upload-status" id="status-ponto"></div>
+      </div>
+      <button class="send-btn" onclick="enviarPonto()">📤 Enviar Notificação</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- CONFIG MODAL -->
+<div id="config-modal">
+  <div class="config-card">
+    <h2>⚙️ Alterar Senha</h2>
+    <input type="password" id="senha-atual" placeholder="Senha atual">
+    <input type="password" id="senha-nova" placeholder="Nova senha">
+    <input type="password" id="senha-conf" placeholder="Confirmar nova senha">
+    <button class="config-save" onclick="alterarSenha()">Salvar</button>
+    <button class="config-cancel" onclick="closeConfig()">Cancelar</button>
+    <div class="config-msg" id="config-msg"></div>
+  </div>
+</div>
+
+<script>
+const CLOUDINARY_CLOUD = 'dewulu3tj';
+const CLOUDINARY_PRESET = 'checklist_prensadao';
+const JOSIEL_PHONE = '5542988819420';
+const STORAGE_KEY = 'fale_gestor_gabriel';
+
+let tipoSelecionado = null;
+let urgenciaSelecionada = null;
+let anexoURL = null;
+let anexoPontoURL = null;
+
+// FOTO do Gabriel (reutilizar do ranking)
+const FOTO_GABRIEL = '';
+
+function getSenha() {
+  return localStorage.getItem('fg_senha_gabriel') || 'gabriel123';
+}
+
+function doLogin() {
+  const input = document.getElementById('login-senha').value;
+  if (input.toLowerCase() === getSenha().toLowerCase() || input === getSenha()) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app-screen').style.display = 'flex';
+    document.getElementById('app-screen').style.flexDirection = 'column';
+    loadChamados();
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+    setTimeout(() => document.getElementById('login-error').style.display = 'none', 2000);
+  }
+}
+
+function selectTipo(tipo) {
+  tipoSelecionado = tipo;
+  document.querySelectorAll('.tipo-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('tipo-' + tipo).classList.add('selected');
+  document.getElementById('form-novo').style.display = 'block';
+
+  const labels = {
+    folga: 'Por qual motivo? (opcional)',
+    sugestao: 'Qual é sua sugestão?',
+    reclamacao: 'Descreva a reclamação',
+    premiacao: 'Sua sugestão de prêmio',
+    necessidade: 'O que você precisa?',
+    outro: 'Descreva aqui'
+  };
+  document.getElementById('label-mensagem').textContent = labels[tipo] || 'Descreva aqui';
+  document.getElementById('grupo-data-folga').style.display = tipo === 'folga' ? 'block' : 'none';
+
+  window.scrollTo({ top: document.getElementById('form-novo').offsetTop - 120, behavior: 'smooth' });
+}
+
+function selectUrgencia(u) {
+  urgenciaSelecionada = u;
+  document.querySelectorAll('.urgencia-btn').forEach(b => b.classList.remove('sel'));
+  document.querySelector('.urgencia-btn.' + u).classList.add('sel');
+}
+
+async function uploadAnexo(input) {
+  const file = input.files[0];
+  if (!file) return;
+  document.getElementById('status-novo').textContent = '⏳ Enviando...';
+  const fd = new FormData();
+  fd.append('file', file);
+  fd.append('upload_preset', CLOUDINARY_PRESET);
+  try {
+    const res = await fetch('https://api.cloudinary.com/v1_1/' + CLOUDINARY_CLOUD + '/upload', { method: 'POST', body: fd });
+    const data = await res.json();
+    if (data.secure_url) {
+      anexoURL = data.secure_url;
+      if (file.type.startsWith('image/')) {
+        document.getElementById('preview-novo').src = data.secure_url;
+        document.getElementById('preview-novo').style.display = 'block';
+      }
+      document.getElementById('status-novo').textContent = '✅ Anexo enviado!';
+    }
+  } catch(e) {
+    document.getElementById('status-novo').textContent = '❌ Erro no envio.';
+  }
+}
+
+async function uploadPonto(input) {
+  const file = input.files[0];
+  if (!file) return;
+  document.getElementById('status-ponto').textContent = '⏳ Enviando...';
+  const fd = new FormData();
+  fd.append('file', file);
+  fd.append('upload_preset', CLOUDINARY_PRESET);
+  try {
+    const res = await fetch('https://api.cloudinary.com/v1_1/' + CLOUDINARY_CLOUD + '/upload', { method: 'POST', body: fd });
+    const data = await res.json();
+    if (data.secure_url) {
+      anexoPontoURL = data.secure_url;
+      if (file.type.startsWith('image/')) {
+        document.getElementById('preview-ponto').src = data.secure_url;
+        document.getElementById('preview-ponto').style.display = 'block';
+      }
+      document.getElementById('status-ponto').textContent = '✅ Documento enviado!';
+    }
+  } catch(e) {
+    document.getElementById('status-ponto').textContent = '❌ Erro no envio.';
+  }
+}
+
+function enviarChamado() {
+  if (!tipoSelecionado) { alert('Selecione o tipo de chamado!'); return; }
+  const msg = document.getElementById('mensagem-novo').value.trim();
+  if (!msg) { alert('Escreva uma mensagem!'); return; }
+
+  const tipoLabels = { folga:'Pedido de Folga', sugestao:'Sugestão', reclamacao:'Reclamação', premiacao:'Sugestão de Prêmio', necessidade:'Precisa de algo', outro:'Outro' };
+  const urgLabels = { baixa:'🟢 Baixa', media:'🟡 Média', alta:'🔴 Alta' };
+  const dataFolga = document.getElementById('data-folga').value;
+
+  const chamado = {
+    id: Date.now(),
+    tipo: tipoSelecionado,
+    tipoLabel: tipoLabels[tipoSelecionado],
+    urgencia: urgenciaSelecionada || 'baixa',
+    mensagem: msg,
+    dataFolga: dataFolga || null,
+    anexo: anexoURL || null,
+    data: new Date().toLocaleDateString('pt-BR'),
+    hora: new Date().toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'}),
+    status: 'aberto',
+    resposta: null
+  };
+
+  // Salvar localmente
+  const chamados = getChamados();
+  chamados.unshift(chamado);
+  localStorage.setItem(STORAGE_KEY + '_chamados', JSON.stringify(chamados));
+
+  // Montar mensagem WhatsApp
+  let wpp = '*💬 Fale com o Gestor — Prensadão*\n';
+  wpp += '*Colaborador:* Gabriel Vogt\n';
+  wpp += '*Tipo:* ' + chamado.tipoLabel + '\n';
+  wpp += '*Urgência:* ' + (urgLabels[chamado.urgencia] || '') + '\n';
+  wpp += '*Data/Hora:* ' + chamado.data + ' às ' + chamado.hora + '\n';
+  if (dataFolga) wpp += '*Data solicitada (folga):* ' + dataFolga + '\n';
+  wpp += '\n*Mensagem:*\n' + msg;
+  if (anexoURL) wpp += '\n\n📎 Anexo: ' + anexoURL;
+  wpp += '\n\n_ID: ' + chamado.id + '_';
+
+  // Limpar form
+  tipoSelecionado = null;
+  urgenciaSelecionada = null;
+  anexoURL = null;
+  document.getElementById('mensagem-novo').value = '';
+  document.getElementById('preview-novo').style.display = 'none';
+  document.getElementById('status-novo').textContent = '';
+  document.getElementById('form-novo').style.display = 'none';
+  document.querySelectorAll('.tipo-card').forEach(c => c.classList.remove('selected'));
+  document.querySelectorAll('.urgencia-btn').forEach(b => b.classList.remove('sel'));
+
+  // Abrir WhatsApp
+  setTimeout(() => {
+    window.open('https://wa.me/' + JOSIEL_PHONE + '?text=' + encodeURIComponent(wpp), '_blank');
+  }, 300);
+
+  alert('✅ Chamado enviado! O WhatsApp vai abrir para confirmar o envio.');
+  loadChamados();
+}
+
+function enviarPonto() {
+  const data = document.getElementById('ponto-data').value;
+  const hora = document.getElementById('ponto-hora').value;
+  const tipo = document.getElementById('ponto-tipo').value;
+  const motivo = document.getElementById('ponto-motivo').value.trim();
+  if (!data || !motivo) { alert('Preencha a data e o motivo!'); return; }
+
+  const tiposLabel = { atraso:'Atraso', esqueci:'Esqueceu de bater o ponto', saida:'Saída antecipada', falta:'Falta', outro:'Outro' };
+
+  let wpp = '*🕐 Notificação de Ponto — Prensadão*\n';
+  wpp += '*Colaborador:* Gabriel Vogt\n';
+  wpp += '*Tipo:* ' + tiposLabel[tipo] + '\n';
+  wpp += '*Data:* ' + data + (hora ? ' às ' + hora : '') + '\n';
+  wpp += '*Motivo:* ' + motivo;
+  if (anexoPontoURL) wpp += '\n📎 Documento: ' + anexoPontoURL;
+
+  setTimeout(() => {
+    window.open('https://wa.me/' + JOSIEL_PHONE + '?text=' + encodeURIComponent(wpp), '_blank');
+  }, 300);
+
+  // Salvar
+  const chamados = getChamados();
+  chamados.unshift({
+    id: Date.now(),
+    tipo: 'ponto',
+    tipoLabel: 'Ajuste de Ponto — ' + tiposLabel[tipo],
+    urgencia: 'media',
+    mensagem: motivo,
+    data: new Date().toLocaleDateString('pt-BR'),
+    hora: new Date().toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'}),
+    status: 'aberto',
+    resposta: null,
+    anexo: anexoPontoURL || null
+  });
+  localStorage.setItem(STORAGE_KEY + '_chamados', JSON.stringify(chamados));
+
+  document.getElementById('ponto-data').value = '';
+  document.getElementById('ponto-hora').value = '';
+  document.getElementById('ponto-motivo').value = '';
+  document.getElementById('preview-ponto').style.display = 'none';
+  document.getElementById('status-ponto').textContent = '';
+  anexoPontoURL = null;
+
+  alert('✅ Notificação enviada!');
+  loadChamados();
+}
+
+function getChamados() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY + '_chamados')) || []; } catch(e) { return []; }
+}
+
+function loadChamados() {
+  const chamados = getChamados();
+  const lista = document.getElementById('lista-chamados');
+  if (chamados.length === 0) {
+    lista.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>Nenhum chamado ainda</p></div>';
+    return;
+  }
+  const statusLabel = { aberto: 'Aguardando', respondido: 'Respondido' };
+  lista.innerHTML = chamados.map(c => `
+    <div class="chamado-card">
+      <div class="chamado-header">
+        <span class="chamado-tipo">${c.tipoLabel}</span>
+        <span class="chamado-data">${c.data} ${c.hora || ''}</span>
+      </div>
+      <div class="chamado-msg">${c.mensagem}</div>
+      ${c.anexo ? `<div style="margin-bottom:8px"><a href="${c.anexo}" target="_blank" style="color:#ff9500;font-size:0.8rem">📎 Ver anexo</a></div>` : ''}
+      <span class="chamado-status ${c.status}">${statusLabel[c.status] || c.status}</span>
+      ${c.resposta ? `<div class="chamado-resposta"><strong>Resposta do Gestor:</strong>${c.resposta}</div>` : ''}
+    </div>
+  `).join('');
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  event.target.classList.add('active');
+  if (tab === 'chamados') loadChamados();
+}
+
+function openConfig() { document.getElementById('config-modal').classList.add('open'); }
+function closeConfig() { document.getElementById('config-modal').classList.remove('open'); }
+
+function alterarSenha() {
+  const atual = document.getElementById('senha-atual').value;
+  const nova = document.getElementById('senha-nova').value;
+  const conf = document.getElementById('senha-conf').value;
+  const msg = document.getElementById('config-msg');
+  if (atual !== getSenha()) { msg.style.display='block'; msg.style.color='#fc8181'; msg.textContent='Senha atual incorreta.'; return; }
+  if (nova.length < 4) { msg.style.display='block'; msg.style.color='#fc8181'; msg.textContent='Senha deve ter ao menos 4 caracteres.'; return; }
+  if (nova !== conf) { msg.style.display='block'; msg.style.color='#fc8181'; msg.textContent='As senhas não coincidem.'; return; }
+  localStorage.setItem('fg_senha_gabriel', nova);
+  msg.style.display='block'; msg.style.color='#48bb78'; msg.textContent='Senha alterada com sucesso!';
+  setTimeout(closeConfig, 1500);
+}
+
+// Setar a data de hoje nos campos
+window.onload = function() {
+  const hoje = new Date().toISOString().split('T')[0];
+  document.getElementById('ponto-data').value = hoje;
+};
+</script>
+</body>
+</html>
