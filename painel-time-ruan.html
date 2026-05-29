@@ -468,6 +468,7 @@ function chatStartPoll(){
   if(_chatPoll)clearInterval(_chatPoll);
   _chatLoadSB();
   _chatPoll=setInterval(_chatLoadSB,8000);
+  setInterval(loadMsgsSB,8000);
 }
 function _chatLoadSB(){
   sbGet('prd_chat_grupo','ts=gt.'+(Date.now()-5*30*24*60*60*1000)+'&order=ts.asc&limit=100').then(function(msgs){
