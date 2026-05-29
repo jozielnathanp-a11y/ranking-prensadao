@@ -854,9 +854,20 @@ function chatEnviarMsg() {
   var inp = document.getElementById('chat-txt-inp');
   var txt = inp ? inp.value.trim() : '';
   if (!txt && !chatMidia) return;
+  var msg = {
+    id: Date.now(),
+    ts: Date.now(),
+    de: COLAB_ID,
+    nome: COLAB_NOME,
+    emoji: COLAB_EMOJI,
+    texto: txt || null,
+    midia: chatMidia || null,
+    tipo: 'msg'
+  };
   var msgs = chatGetMsgs();
-  msgs.push({ id: Date.now(), ts: Date.now(), de: 'ruan', nome: 'Ruan', emoji: '🥇', texto: txt, midia: chatMidia || null, tipo: 'msg' });
+  msgs.push(msg);
   chatSaveMsgs(msgs);
+  sbPost('prd_chat_grupo', msg);
   if (inp) inp.value = '';
   chatMidia = null;
   var prev = document.getElementById('chat-prev-img');
