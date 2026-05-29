@@ -1402,25 +1402,7 @@ document.addEventListener('click', function(ev) {
     rejeitar(t.getAttribute('data-colabid'), parseInt(t.getAttribute('data-cid')));
     return;
   }
-  if (t.classList.contains('btn-aprov-pts')) {
-    var cid = t.getAttribute('data-colabid');
-    var id = parseInt(t.getAttribute('data-cid'));
-    var chs = getChs(cid), ch = chs.find(function(x){ return x.id===id; });
-    var colab = COLABORADORES.find(function(x){ return x.id===cid; });
-    if (ch && colab) {
-      // Aprovar ponto: -5 pts (atraso) ou -12 pts (falta) conforme tipo
-      var delta = ch.tipo === 'falta' ? 12 : 5; // pontos a ESTORNAR (devolver)
-      if (confirm('Aprovar ponto de ' + colab.nome + '? Isso devolve ' + delta + ' pts a ele.')) {
-        atualizarPtsRanking(cid, delta, 'Ponto aprovado pelo gestor');
-        ch.status = 'respondido';
-        ch.resposta = '✅ Ponto aprovado pelo gestor. +' + delta + ' pts devolvidos.';
-        saveChs(cid, chs);
-        sbPost('prd_mensagens', { id: Date.now(), ts: Date.now(), de: 'gestor', nome: 'Gestor', emoji: '🛂', texto: '✅ Seu ponto foi aprovado! +' + delta + ' pts devolvidos.', tipo: 'msg', para: cid });
-        renderChamados(); renderGeral();
-      }
-    }
-    return;
-  }
+
   if (t.classList.contains('copy-link-btn')) {
     copyL(t.getAttribute('data-url'), t);
     return;
