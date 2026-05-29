@@ -538,6 +538,7 @@ function chatStartPoll(){
   _chatLoadSB();
   _chatPoll=setInterval(_chatLoadSB,8000);
   setInterval(loadMsgsSB,8000);
+  setInterval(syncChamadosSB,8000);
 }
 function _chatLoadSB(){
   sbGet('prd_chat_grupo','ts=gt.'+(Date.now()-5*30*24*60*60*1000)+'&order=ts.asc&limit=100').then(function(msgs){
@@ -829,6 +830,49 @@ function envPt(){
   alert('✅ Notificação enviada!');
 }
 
+
+// ===== SYNC CHAMADOS SUPABASE =====
+function saveChamadoSB(ch) {
+  sbPost('prd_mensagens', {
+    id: ch.id,
+    ts: ch.ts || Date.now(),
+    de: COLAB_ID,
+    para: 'gestor',
+    nome: COLAB_NOME,
+    texto: JSON.stringify(ch),
+    tipo: 'chamado',
+    lida: false
+  });
+}
+
+function syncChamadosSB() {
+  sbGet('prd_mensagens', 'de=eq.'+COLAB_ID+'&tipo=eq.chamado&order=ts.desc&limit=30')
+    .then(function(rows) {
+      if (!Array.isArray(rows) || !rows.length) return;
+      var local = getChs();
+      var atualizado = false;
+      rows.forEach(function(row) {
+        try {
+          var ch = JSON.parse(row.texto);
+          ch._sbid = row.id;
+          // Atualizar status se mudou
+          var idx = local.findIndex(function(x) { return x.id === ch.id || x._sbid === row.id; });
+          if (idx >= 0) {
+            if (local[idx].status !== ch.status) {
+              local[idx].status = ch.status;
+              local[idx].resposta = ch.resposta;
+              atualizado = true;
+            }
+          }
+        } catch(e) {}
+      });
+      if (atualizado) {
+        localStorage.setItem(STORE+'_ch', JSON.stringify(local));
+        if (typeof renderChHist === 'function') renderChHist();
+      }
+    });
+}
+// ================================
 function getChs(){try{return JSON.parse(localStorage.getItem(STORE+'_ch'))||[];}catch(e){return[];}}
 
 function renderChHist(){
