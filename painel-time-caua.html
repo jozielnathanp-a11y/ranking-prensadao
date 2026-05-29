@@ -871,6 +871,7 @@ function saveChamadoSB(ch) {
   });
 }
 
+
 function syncChamadosSB() {
   sbGet('prd_mensagens', 'de=eq.'+COLAB_ID+'&tipo=eq.chamado&order=ts.desc&limit=30')
     .then(function(rows) {
@@ -880,15 +881,17 @@ function syncChamadosSB() {
       rows.forEach(function(row) {
         try {
           var ch = JSON.parse(row.texto);
-          ch._sbid = row.id;
-          // Atualizar status se mudou
-          var idx = local.findIndex(function(x) { return x.id === ch.id || x._sbid === row.id; });
+          var idx = local.findIndex(function(x) { return x.id === ch.id; });
           if (idx >= 0) {
-            if (local[idx].status !== ch.status) {
+            if (local[idx].status !== ch.status || local[idx].resposta !== ch.resposta) {
               local[idx].status = ch.status;
               local[idx].resposta = ch.resposta;
               atualizado = true;
             }
+          } else {
+            // Chamado novo vindo do SB que não está local
+            local.unshift(ch);
+            atualizado = true;
           }
         } catch(e) {}
       });
@@ -898,6 +901,7 @@ function syncChamadosSB() {
       }
     });
 }
+
 // ================================
 function getChs(){try{return JSON.parse(localStorage.getItem(STORE+'_ch'))||[];}catch(e){return[];}}
 
@@ -909,7 +913,7 @@ function renderChHist(){
       <div class="ch-hdr"><span class="ch-tipo">${c.tipoLabel}</span><span class="ch-dt">${c.data} ${c.hora||''}</span></div>
       <div class="ch-msg">${c.mensagem}</div>
       ${c.anexo?`<div style="margin-bottom:6px"><a href="${c.anexo}" target="_blank" style="color:#ff9500;font-size:0.78rem">📎 Ver anexo</a></div>`:''}
-      <span class="ch-st ${c.status}">${c.status==='aberto'?'⏳ Aguardando':'✅ Respondido'}</span>
+      <span class="ch-st ${c.status}">${c.status==='aberto'?'⏳ Aguardando':c.status==='rejeitado'?'❌ Rejeitado':'✅ Respondido'}</span>
       ${c.resposta?`<div class="ch-resp"><strong>Resposta do Gestor:</strong>${c.resposta}</div>`:''}
     </div>`).join('');
 }
