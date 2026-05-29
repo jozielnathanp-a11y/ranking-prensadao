@@ -742,7 +742,15 @@ function swTab(t){
   document.querySelectorAll('.nav-b').forEach(b=>b.classList.remove('active'));
   document.getElementById('tab-'+t).classList.add('active');
   document.getElementById('nav-'+t).classList.add('active');
-  if(t==='msgs') try{ renderMsgsColab(); }catch(e){}
+  if(t==='msgs')   try{ renderMsgsColab(); }catch(e){}
+  if(t==='chat')   try{ renderChat_caua(); }catch(e){}
+  if(t==='agenda') try{ renderAgenda_caua(); }catch(e){}
+}
+window.addEventListener('load',()=>{
+  try{ renderMsgsColab(); }catch(e){}
+  try{ renderChat_caua(); }catch(e){}
+  try{ renderAgenda_caua(); }catch(e){}
+});catch(e){}
 }
 window.addEventListener('load',()=>{ try{ renderMsgsColab(); }catch(e){} });
 
@@ -1097,14 +1105,5 @@ function renderAgenda_caua(){
       '</div>';
   }).join('');
 }
-
-// render chat+agenda on tab switch
-const _swTabOrig_caua=swTab;
-function swTab(t){
-  _swTabOrig_caua(t);
-  if(t==='chat') renderChat_caua();
-  if(t==='agenda') renderAgenda_caua();
-}
-window.addEventListener('load',()=>{ try{renderChat_caua();}catch(e){} try{renderAgenda_caua();}catch(e){} });
 
 </script></body></html>
