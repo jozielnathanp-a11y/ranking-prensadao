@@ -153,6 +153,27 @@ body{font-family:'Segoe UI',sans-serif;background:#0a0a0a;color:#fff;min-height:
 .sub-bar{display:flex;gap:8px;margin-bottom:16px}
 .sb{flex:1;padding:10px;border-radius:99px;border:1.5px solid #2a2a2a;background:none;color:#555;font-weight:700;font-size:0.78rem;cursor:pointer;transition:all 0.2s}
 .sb.a{background:linear-gradient(135deg,#ff6b00,#ff9500);color:#fff;border:none}
+
+.dest-btn{padding:8px 14px;border-radius:99px;border:1.5px solid #2a2a2a;background:none;color:#555;font-size:0.78rem;font-weight:700;cursor:pointer;transition:all 0.2s}
+.dest-btn.active{background:#1a2a3a;border-color:#4a90d9;color:#4a90d9}
+.tipo-msg-btn{padding:8px 12px;border-radius:99px;border:1.5px solid #2a2a2a;background:none;color:#555;font-size:0.78rem;font-weight:700;cursor:pointer;transition:all 0.2s}
+.tipo-msg-btn.active{background:#1a2a3a;border-color:#4a90d9;color:#4a90d9}
+.msg-card{background:#111;border:1px solid #1e1e1e;border-radius:14px;padding:14px;margin-bottom:10px}
+.msg-card.respondido{border-left:3px solid #48bb78}
+.msg-card.pendente{border-left:3px solid #f6ad55}
+.msg-tipo-tag{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:99px;margin-bottom:6px}
+.msg-tipo-tag.recado{background:#1a2a3a;color:#4a90d9}
+.msg-tipo-tag.tarefa{background:#1a1200;color:#f6ad55}
+.msg-tipo-tag.doc{background:#1a0f1a;color:#b794f4}
+.msg-tipo-tag.foto{background:#0d1a10;color:#48bb78}
+.msg-tipo-tag.aviso{background:#1a0d0d;color:#fc8181}
+.msg-texto-body{font-size:0.85rem;color:#ccc;line-height:1.5;margin-bottom:8px}
+.msg-resp-area{background:#0f0f0f;border-radius:8px;padding:10px;margin-top:8px}
+.msg-resp-txt{font-size:0.8rem;color:#aaa;border-left:3px solid #48bb78;padding-left:8px;margin-bottom:6px}
+.msg-resp-txt strong{color:#48bb78;display:block;font-size:0.7rem;margin-bottom:2px}
+.msg-reply-inp{width:100%;padding:10px;background:#1a1a1a;border:1.5px solid #2a2a2a;border-radius:8px;color:#fff;font-size:0.83rem;resize:vertical;min-height:60px;margin-bottom:8px}
+.msg-reply-inp:focus{outline:none;border-color:#ff6b00}
+.msg-unread{width:8px;height:8px;background:#fc8181;border-radius:50%;display:inline-block;margin-left:6px;vertical-align:middle}
 </style>
 </head>
 <body>
@@ -304,7 +325,11 @@ body{font-family:'Segoe UI',sans-serif;background:#0a0a0a;color:#fff;min-height:
   </div>
 
   <!-- RANKING -->
-  <div id="tab-ranking" class="tab-c" style="padding:0">
+  <div id="tab-msgs" class="tab-c">
+  <div class="sec-lbl" style="margin-bottom:12px">Mensagens do Gestor</div>
+  <div id="msgs-colab-lista"></div>
+</div>
+<div id="tab-ranking" class="tab-c" style="padding:0">
     <iframe src="https://jozielnathanp-a11y.github.io/ranking-prensadao/" style="width:100%;height:calc(100vh - 130px);border:none;display:block"></iframe>
   </div>
 
@@ -312,6 +337,7 @@ body{font-family:'Segoe UI',sans-serif;background:#0a0a0a;color:#fff;min-height:
     <button class="nav-b active" id="nav-inicio" onclick="swTab('inicio')"><span class="ni">🏠</span><span class="nl">Início</span></button>
     <button class="nav-b" id="nav-checklist" onclick="swTab('checklist')"><span class="ni">✅</span><span class="nl">Checklist</span></button>
     <button class="nav-b" id="nav-fale" onclick="swTab('fale')"><span class="ni">💬</span><span class="nl">Gestor</span></button>
+    <button class="nav-b" id="nav-msgs" onclick="swTab('msgs')"><span class="ni">✉️</span><span class="nl" style="position:relative">Msgs<span id="msgs-badge" style="position:absolute;top:-4px;right:-8px;background:#fc8181;color:#fff;font-size:0.55rem;font-weight:800;padding:1px 4px;border-radius:99px;display:none">0</span></span></button>
     <button class="nav-b" id="nav-ranking" onclick="swTab('ranking')"><span class="ni">🏆</span><span class="nl">Ranking</span></button>
   </div>
 </div>
@@ -600,4 +626,94 @@ function saveCfg(){
   msg.style.display='block';msg.style.color='#48bb78';msg.textContent='Senha alterada!';
   setTimeout(closeCfg,1500);
 }
+
+const MSG_PREFIX = 'prd_msgs_';
+const MSG_MAX_MS = 5 * 30 * 24 * 60 * 60 * 1000;
+
+function getMsgs(cid) {
+  try {
+    const msgs = JSON.parse(localStorage.getItem(MSG_PREFIX+cid)||'[]');
+    const cutoff = Date.now() - MSG_MAX_MS;
+    const ok = msgs.filter(m=>m.ts>cutoff);
+    if(ok.length!==msgs.length) localStorage.setItem(MSG_PREFIX+cid,JSON.stringify(ok));
+    return ok;
+  } catch(e){ return []; }
+}
+function saveMsgs(cid,msgs){ localStorage.setItem(MSG_PREFIX+cid,JSON.stringify(msgs)); }
+function tsFmt(ts){ const d=new Date(ts); return d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }
+function tipoLabel(t){ return {recado:'💬 Recado',tarefa:'📋 Tarefa',doc:'📄 Solicitar Doc',foto:'📷 Solicitar Foto',aviso:'⚠️ Aviso'}[t]||t; }
+
+
+let msgRespAnexoURL_caua = null;
+
+function renderMsgsColab(){
+  const msgs = getMsgs('caua');
+  const lista = document.getElementById('msgs-colab-lista');
+  if(!msgs.length){ lista.innerHTML='<div style="text-align:center;padding:40px;color:#333"><div style="font-size:2.5rem;margin-bottom:10px">📭</div><p>Nenhuma mensagem ainda</p></div>'; return; }
+  const unread = msgs.filter(m=>m.status==='pendente').length;
+  lista.innerHTML = msgs.map(m=>`
+    <div class="msg-card ${m.status}" id="mc-${m.id}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
+        <span class="msg-tipo-tag ${m.tipo}">${tipoLabel(m.tipo)}</span>
+        <span style="font-size:0.68rem;color:#444">${tsFmt(m.ts)}</span>
+      </div>
+      <div style="font-size:0.72rem;color:#666;margin-bottom:6px">📩 Do Gestor</div>
+      <div class="msg-texto-body">${m.texto}</div>
+      ${m.anexo?`<div style="margin-bottom:10px">${m.anexo.match(/\.(jpg|jpeg|png|gif|webp)/i)?`<img src="${m.anexo}" style="width:100%;max-height:160px;object-fit:cover;border-radius:8px">`:`<a href="${m.anexo}" target="_blank" style="color:#4a90d9;font-size:0.82rem">📎 Ver anexo do gestor</a>`}</div>`:''}
+      ${m.resposta
+        ? `<div class="msg-resp-area"><div class="msg-resp-txt"><strong>Sua resposta:</strong>${m.resposta}</div>${m.respAnexo?`<div style="margin-top:6px">${m.respAnexo.match(/\.(jpg|jpeg|png|gif|webp)/i)?`<img src="${m.respAnexo}" style="width:100%;max-height:120px;object-fit:cover;border-radius:8px">`:`<a href="${m.respAnexo}" target="_blank" style="color:#48bb78;font-size:0.78rem">📎 Seu anexo</a>`}</div>`:''}</div>`
+        : `<div class="msg-resp-area">
+            <textarea class="msg-reply-inp" id="ri-${m.id}" placeholder="Escreva sua resposta..."></textarea>
+            <div style="display:flex;gap:8px;align-items:center">
+              <label style="flex:1;padding:9px;background:#1a1a1a;border:1.5px dashed #2a2a2a;border-radius:8px;text-align:center;cursor:pointer;font-size:0.78rem;color:#555" for="rf-${m.id}">📎 Anexar foto/doc</label>
+              <input type="file" id="rf-${m.id}" accept="image/*,application/pdf" style="display:none" onchange="uploadRespColab_caua('${m.id}',this)">
+              <button onclick="enviarRespColab_caua('${m.id}')" style="flex:1;padding:10px;background:linear-gradient(135deg,#ff6b00,#ff9500);border:none;border-radius:8px;color:#fff;font-size:0.82rem;font-weight:700;cursor:pointer">✅ Responder</button>
+            </div>
+            <div id="rst-${m.id}" style="font-size:0.72rem;color:#555;margin-top:4px;text-align:center"></div>
+            <img id="rpv-${m.id}" style="width:100%;max-height:120px;object-fit:cover;border-radius:8px;margin-top:6px;display:none">
+          </div>`
+      }
+    </div>`).join('');
+  // Badge
+  const badge = document.getElementById('msgs-badge');
+  if(badge) badge.textContent = unread > 0 ? unread : '';
+  badge && (badge.style.display = unread > 0 ? 'inline' : 'none');
+}
+
+async function uploadRespColab_caua(msgId, input){
+  const file=input.files[0]; if(!file) return;
+  const st=document.getElementById('rst-'+msgId); st.textContent='⏳ Enviando...';
+  const fd=new FormData(); fd.append('file',file); fd.append('upload_preset','checklist_prensadao');
+  try{
+    const r=await fetch('https://api.cloudinary.com/v1_1/dewulu3tj/upload',{method:'POST',body:fd});
+    const d=await r.json();
+    if(d.secure_url){
+      msgRespAnexoURL_caua = d.secure_url;
+      if(file.type.startsWith('image/')){document.getElementById('rpv-'+msgId).src=d.secure_url;document.getElementById('rpv-'+msgId).style.display='block';}
+      st.textContent='✅ Enviado!';
+    } else st.textContent='❌ Erro.';
+  }catch(e){st.textContent='❌ Erro.';}
+}
+
+function enviarRespColab_caua(msgId){
+  const txt=document.getElementById('ri-'+msgId)?.value?.trim();
+  if(!txt && !msgRespAnexoURL_caua){ alert('Escreva uma resposta ou anexe um arquivo!'); return; }
+  const msgs=getMsgs('caua');
+  const idx=msgs.findIndex(m=>String(m.id)===String(msgId));
+  if(idx>=0){
+    msgs[idx].resposta=txt||'(sem texto)';
+    msgs[idx].respAnexo=msgRespAnexoURL_caua;
+    msgs[idx].respTs=Date.now();
+    msgs[idx].status='respondido';
+    saveMsgs('caua',msgs);
+    msgRespAnexoURL_caua=null;
+  }
+  alert('✅ Resposta enviada!');
+  renderMsgsColab();
+}
+
+// render msgs on tab switch and on load
+const _origSwTab=swTab;
+function swTab(t){_origSwTab(t);if(t==="msgs")renderMsgsColab();}
+window.addEventListener("load",()=>{ try{ renderMsgsColab(); } catch(e){} });
 </script></body></html>
