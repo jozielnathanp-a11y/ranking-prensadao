@@ -578,7 +578,7 @@ function alterarSenhaGestor() {
   var cf = document.getElementById('g-cf').value;
   var msg = document.getElementById('g-senha-msg');
   if (!at || !nv || !cf) { msg.style.color='#ff5252'; msg.textContent='Preencha todos os campos.'; msg.style.display='block'; return; }
-  var sn = localStorage.getItem('pg_gestor_sn') || 'josiel123';
+  var sn = localStorage.getItem('pg_gestor_sn') || '281096';
   if (at !== sn) { msg.style.color='#ff5252'; msg.textContent='Senha atual incorreta.'; msg.style.display='block'; return; }
   if (nv !== cf) { msg.style.color='#ff5252'; msg.textContent='Nova senha e confirmação não conferem.'; msg.style.display='block'; return; }
   if (nv.length < 4) { msg.style.color='#ff5252'; msg.textContent='Mínimo 4 caracteres.'; msg.style.display='block'; return; }
@@ -627,7 +627,7 @@ function sbDelete(table, qs) {
 function doLogin(){
   console.log("DOLOGIN CHAMADO");
   var senha = document.getElementById('lsn').value;
-  if(senha === 'josiel123'){
+  if(senha === '281096'){
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('app-screen').style.display = 'block';
     var bn = document.getElementById('bot-nav');
@@ -656,7 +656,7 @@ const FOTO_CAUA = "https://res.cloudinary.com/dewulu3tj/image/upload/v1780062695
 const FOTO_KAUANY = "";
 const COLABORADORES = [{"id": "ruan", "nome": "Ruan", "store": "pg_ruan_ch", "phone": "5542988307171", "emoji": "🥇", "pts": 81, "painel": "https://jozielnathanp-a11y.github.io/ranking-prensadao/painel-time-ruan.html"}, {"id": "caua", "nome": "Cauã", "store": "pg_caua_ch", "phone": "5542988709227", "emoji": "🥈", "pts": 41, "painel": "https://jozielnathanp-a11y.github.io/ranking-prensadao/painel-time-caua.html"}, {"id": "kauany", "nome": "Kauany", "store": "pg_kauany_ch", "phone": "554291573573", "emoji": "🥉", "pts": 40, "painel": "https://jozielnathanp-a11y.github.io/ranking-prensadao/painel-time-kauany.html"}, {"id": "gabriel", "nome": "Gabriel Vogt", "store": "pg_gabriel_ch", "phone": "5542988869247", "emoji": "4️⃣", "pts": 15, "painel": "https://jozielnathanp-a11y.github.io/ranking-prensadao/painel-time-gabriel.html"}];
 const FOTOS = {gabriel:FOTO_GABRIEL,ruan:FOTO_RUAN,caua:FOTO_CAUA,kauany:FOTO_KAUANY};
-const GESTOR_SENHA = "josiel123";
+const GESTOR_SENHA = "281096";
 let filtroAtivo = "todos";
 
 
