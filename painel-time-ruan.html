@@ -259,10 +259,15 @@ input[type="date"], input[type="time"] {
 
 
 
+
+
+
+
+
 #login-screen{display:flex!important;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px;background:#000}
 #login-screen.oculto{display:none!important}
-#app-screen{display:none!important;min-height:100vh;padding-bottom:70px}
-#app-screen.visivel{display:block!important}
+#app-screen{display:none!important}
+#app-screen.visivel{display:block!important;min-height:100vh;padding-bottom:70px}
 </style>
 </head>
 <body>
@@ -275,8 +280,8 @@ input[type="date"], input[type="time"] {
     <label style="color:#aaa;font-size:0.85rem;display:block;margin-bottom:8px">Senha</label>
     <input type="password" id="lsn" placeholder="••••••"
       style="width:100%;padding:14px;background:#0a0a0a;border:1px solid #2a2a2a;border-radius:10px;color:#fff;font-size:1.1rem;margin-bottom:12px;box-sizing:border-box">
-    <button onclick="doLogin()"
-      style="width:100%;padding:14px;background:linear-gradient(135deg,#ff6b00,#ff9500);border:none;border-radius:12px;color:#fff;font-size:1rem;font-weight:800;cursor:pointer;letter-spacing:1px">
+    <button id="btn-login" 
+   style="width:100%;padding:14px;background:linear-gradient(135deg,#ff6b00,#ff9500);border:none;border-radius:12px;color:#fff;font-size:1rem;font-weight:800;cursor:pointer;letter-spacing:1px">
       ENTRAR
     </button>
     <div id="lerr" style="color:#fc8181;font-size:0.82rem;text-align:center;margin-top:10px;display:none">Senha incorreta</div>
@@ -460,16 +465,17 @@ input[type="date"], input[type="time"] {
     <div class="cfg-msg" id="cfg-msg"></div>
   </div>
 </div>
-<script>function getSn(){return 'ruan123';}
+<script>var _SN = 'ruan123';
+function getSn(){return _SN;}
 function doLogin(){
-  var v=document.getElementById('lsn').value.trim();
-  if(v===getSn()){
+  var v = document.getElementById('lsn').value.trim();
+  if(v === getSn()){
     document.getElementById('login-screen').classList.add('oculto');
     document.getElementById('app-screen').classList.add('visivel');
-    try{initApp();}catch(e){console.error(e);}
-  }else{
-    document.getElementById('lerr').style.display='block';
-    setTimeout(function function(){document.getElementById('lerr').style.display='none';},2000);
+    try{initApp();}catch(e){console.error('initApp erro:',e);}
+  } else {
+    var err = document.getElementById('lerr');
+    if(err){err.style.display='block';setTimeout(function(){err.style.display='none';},2000);}
   }
 }
 // ===== NOTIFICAÇÕES PUSH =====
@@ -1292,4 +1298,12 @@ function ajudaEnviarFoto(msgId, input) {
     .catch(function function() { if(st) st.textContent = '❌ Erro'; });
 }
 
+
+// Login button listener
+document.addEventListener('DOMContentLoaded', function(){
+  var btn = document.getElementById('btn-login');
+  if(btn){ btn.addEventListener('click', doLogin); }
+  var inp = document.getElementById('lsn');
+  if(inp){ inp.addEventListener('keydown', function(e){ if(e.key==='Enter'){doLogin();} }); }
+});
 </script></body></html>
