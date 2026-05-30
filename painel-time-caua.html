@@ -264,12 +264,14 @@ input[type="date"], input[type="time"] {
   
   <div class="l-brand">PRENSADÃO</div>
   <div class="l-sub">Painel do Time</div>
-  <div class="l-card">
+  <form onsubmit="event.preventDefault();doLogin();" autocomplete="off">
+<div class="l-card">
     <label>Senha</label>
     
     <input type="password" id="lsn" placeholder="••••••" onkeydown="if(event.key==='Enter')doLogin()" style="width:100%;padding:14px;background:#0a0a0a;border:1px solid #2a2a2a;border-radius:10px;color:#fff;font-size:1.1rem;margin-bottom:12px;box-sizing:border-box;">
-    <button class="l-btn" onclick="doLogin()">ENTRAR</button>
+    <button class="l-btn" type="submit">ENTRAR</button>
     </div>
+</form>
 </div>
 
 <div id="app-screen" style="display:none">
