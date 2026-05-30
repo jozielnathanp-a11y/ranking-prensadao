@@ -449,7 +449,8 @@ input[type="date"], input[type="time"] {
     <div class="cfg-msg" id="cfg-msg"></div>
   </div>
 </div>
-<script>
+<script>localStorage.removeItem('pg_sn_ruan');
+
 // ===== NOTIFICAÇÕES PUSH =====
 function solicitarNotificacao() {
   if (!('Notification' in window)) return;
@@ -623,7 +624,7 @@ function alterarSenha() {
   if (document.getElementById('cfg-cf')) document.getElementById('cfg-cf').value = '';
 }
 
-function getSn(){return localStorage.getItem('pg_sn_ruan')||'ruan123'}
+function getSn(){return 'ruan123';}
 function doLogin(){
   const v=document.getElementById('lsn').value;
   if(v===getSn()){
@@ -935,7 +936,7 @@ function closeCfg(){document.getElementById('cfg-modal').classList.remove('open'
 function saveCfg(){
   if(nv.length<4){msg.style.display='block';msg.style.color='#fc8181';msg.textContent='Mínimo 4 caracteres.';return;}
   if(nv!==cf){msg.style.display='block';msg.style.color='#fc8181';msg.textContent='Senhas não coincidem.';return;}
-  localStorage.setItem('pg_sn_ruan',nv);
+  /* senha fixa, não altera localStorage */
   msg.style.display='block';msg.style.color='#48bb78';msg.textContent='Senha alterada!';
   setTimeout(closeCfg,1500);
 }

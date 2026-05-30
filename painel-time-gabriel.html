@@ -449,7 +449,8 @@ input[type="date"], input[type="time"] {
     <div class="cfg-msg" id="cfg-msg"></div>
   </div>
 </div>
-<script>
+<script>localStorage.removeItem('pg_sn_gabriel');
+
 // ===== NOTIFICAÇÕES PUSH =====
 function solicitarNotificacao() {
   if (!('Notification' in window)) return;
@@ -623,7 +624,7 @@ function alterarSenha() {
   if (document.getElementById('cfg-cf')) document.getElementById('cfg-cf').value = '';
 }
 
-function getSn(){return localStorage.getItem('pg_sn')||'gabriel123'}
+function getSn(){return 'gabriel123';}
 function doLogin(){
   const v=document.getElementById('lsn').value;
   if(v===getSn()){
