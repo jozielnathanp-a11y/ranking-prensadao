@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>Teste Login</title>
+<style>
+#login{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;background:#000;color:#fff}
+#login.oculto{display:none!important}
+#app{display:none;background:#111;color:#fff;min-height:100vh;padding:20px}
+#app.visivel{display:block!important}
+</style>
+</head>
+<body>
+<div id="login">
+  <h2>TESTE LOGIN</h2>
+  <input type="password" id="lsn" placeholder="senha">
+  <button id="btn-login">ENTRAR</button>
+  <div id="lerr" style="display:none;color:red">Senha errada</div>
+</div>
+<div id="app">
+  <h2>✅ LOGIN FUNCIONOU!</h2>
+  <p>Você está dentro do app.</p>
+</div>
+<script>
+function doLogin(){
+  var v = document.getElementById('lsn').value.trim();
+  if(v === 'teste123'){
+    document.getElementById('login').classList.add('oculto');
+    document.getElementById('app').classList.add('visivel');
+  } else {
+    document.getElementById('lerr').style.display='block';
+    setTimeout(function(){document.getElementById('lerr').style.display='none';},2000);
+  }
+}
+document.addEventListener('DOMContentLoaded', function(){
+  document.getElementById('btn-login').addEventListener('click', doLogin);
+  document.getElementById('lsn').addEventListener('keydown', function(e){
+    if(e.key==='Enter') doLogin();
+  });
+});
+</script>
+</body>
+</html>
