@@ -455,17 +455,13 @@ input[type="date"], input[type="time"] {
 <script>function getSn(){return 'ruan123';}
 function doLogin(){
   var v=document.getElementById('lsn').value.trim();
+  alert('digitou: ['+v+'] esperado: ['+getSn()+'] igual: '+(v===getSn()));
   if(v===getSn()){
     document.getElementById('login-screen').style.cssText='display:none!important';
     document.getElementById('app-screen').style.cssText='display:block!important;min-height:100vh;padding-bottom:70px';
-    window.requestAnimationFrame(function(){
-      window.requestAnimationFrame(function(){
-        try{initApp();}catch(e){console.error('initApp:',e);}
-      });
-    });
+    alert('tela mudou!');
+    try{initApp();}catch(e){alert('initApp erro: '+e);}
   }else{
-    var err=document.getElementById('lerr');
-    if(err){err.style.display='block';setTimeout(function(){err.style.display='none';},2000);}
     var inp=document.getElementById('lsn');
     if(inp){inp.style.borderColor='#fc5c5c';setTimeout(function(){inp.style.borderColor='#2a2a2a';},2000);}
   }
