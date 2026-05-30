@@ -469,7 +469,7 @@ function doLogin(){
     try{initApp();}catch(e){console.error(e);}
   }else{
     document.getElementById('lerr').style.display='block';
-    setTimeout(function(){document.getElementById('lerr').style.display='none';},2000);
+    setTimeout(function function(){document.getElementById('lerr').style.display='none';},2000);
   }
 }
 // ===== NOTIFICAÇÕES PUSH =====
@@ -552,8 +552,8 @@ var COLAB_EMOJI = '🥈';
 var SB_URL = 'https://trbyynbtuzpszdvjivbs.supabase.co';
 var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRyYnl5bmJ0dXpwc3pkdmppdmJzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3ODIyODAxOCwiZXhwIjoyMDkzODA0MDE4fQ.OZq8bycNQWEpdbxPiSuB9gt7A0fPKNkawcrtE5XpGFg';
 var SB_H = {'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json'};
-function sbGet(t,q){return fetch(SB_URL+'/rest/v1/'+t+'?'+(q||'order=ts.asc'),{headers:SB_H}).then(function(r){return r.json();}).catch(function(){return [];});}
-function sbPost(t,d){if(!d)return;return fetch(SB_URL+'/rest/v1/'+t,{method:'POST',headers:Object.assign({},SB_H,{'Prefer':'return=minimal'}),body:JSON.stringify(d)}).catch(function(){});}
+function sbGet(t,q){return fetch(SB_URL+'/rest/v1/'+t+'?'+(q||'order=ts.asc'),{headers:SB_H}).then(function(r){return r.json();}).catch(function function(){return [];});}
+function sbPost(t,d){if(!d)return;return fetch(SB_URL+'/rest/v1/'+t,{method:'POST',headers:Object.assign({},SB_H,{'Prefer':'return=minimal'}),body:JSON.stringify(d)}).catch(function function(){});}
 
 // Polling do chat (atualiza a cada 8s quando aba chat está aberta)
 var _chatPoll=null;
@@ -607,7 +607,7 @@ function renderMsgs(cid) {
       + '</div>';
   }).join('');
 }
-loadMsgsSB(){
+function loadMsgsSB(){
   sbGet('prd_mensagens','para=eq.caua&order=ts.asc&limit=50').then(function(msgs){
     if(!Array.isArray(msgs)||!msgs.length)return;
     var key='prd_msgs_caua';
@@ -1037,7 +1037,7 @@ function chatUploadMidia(input) {
         if (st) st.textContent = '✅ Pronto!';
       } else { if (st) st.textContent = '❌ Erro'; }
     })
-    .catch(function(){ if (st) st.textContent = '❌ Erro'; });
+    .catch(function function(){ if (st) st.textContent = '❌ Erro'; });
 }
 
 function chatEnviarMsg() {
@@ -1241,7 +1241,7 @@ function agRender() {
   }).join('');
 }
 
-window.addEventListener('load', function() {
+window.addEventListener('load', function function() {
   try { chatRender(); } catch(e) {}
   try { agRender(); } catch(e) {}
 });
@@ -1293,7 +1293,7 @@ function ajudaEnviarFoto(msgId, input) {
       chatSaveMsgs(msgs);
       chatRender();
     })
-    .catch(function() { if(st) st.textContent = '❌ Erro'; });
+    .catch(function function() { if(st) st.textContent = '❌ Erro'; });
 }
 
 </script></body></html>
