@@ -1,17 +1,4 @@
-<!DOCTY// LOGIN VIA PROMPT NATIVO
-(function(){
-  var SN = 'caua123';
-  var ok = false;
-  for(var t=0; t<3; t++){
-    var v = prompt('Prensadão — Digite a senha:');
-    if(v === null){ window.location.href='about:blank'; return; }
-    if(v.trim() === SN){ ok = true; break; }
-    if(t < 2) alert('Senha incorreta. Tente novamente.');
-  }
-  if(!ok){ document.body.innerHTML='<div style="color:#fff;background:#000;height:100vh;display:flex;align-items:center;justify-content:center;font-size:1.2rem">Acesso negado</div>'; return; }
-})();
-
-PE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
