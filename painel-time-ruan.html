@@ -626,16 +626,25 @@ function alterarSenha() {
 
 function getSn(){return localStorage.getItem('pg_sn_ruan')||'ruan123'}
 function doLogin(){
-  const v=document.getElementById('lsn').value;
-  if(v===getSn()){
-    document.getElementById('login-screen').style.display='none';
-    document.getElementById('app-screen').style.display='block';
-    if(document.getElementById('top-av'))document.getElementById('top-av').src=FT;
-    if(document.getElementById('p-foto'))document.getElementById('p-foto').src=FT;
-    initApp();
-  } else {
-    const e=document.getElementById('lerr');e.style.display='block';setTimeout(()=>e.style.display='none',2000);
-  }
+  try {
+    var v = document.getElementById('lsn').value.trim();
+    var sn = getSn();
+    if(v === sn){
+      var ls = document.getElementById('login-screen');
+      var ap = document.getElementById('app-screen');
+      if(ls) ls.style.display='none';
+      if(ap) { ap.style.display='block'; ap.style.visibility='visible'; }
+      var av = document.getElementById('top-av');
+      var pf = document.getElementById('p-foto');
+      if(av) av.src = FT;
+      if(pf) pf.src = FT;
+      try { initApp(); } catch(e) { console.error('initApp erro:', e); }
+    } else {
+      var err = document.getElementById('lerr');
+      if(err){ err.style.display='block'; setTimeout(function(){ err.style.display='none'; }, 2000); }
+      else { document.getElementById('lsn').style.borderColor='#fc5c5c'; setTimeout(function(){ document.getElementById('lsn').style.borderColor='#2a2a2a'; }, 2000); }
+    }
+  } catch(e) { console.error('doLogin erro:', e); }
 }
 
 function initApp(){
