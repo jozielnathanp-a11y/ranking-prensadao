@@ -643,11 +643,7 @@ function alterarSenha() {
 
 
 
-function initApp(){
-  solicitarNotificacao();
-  renderHist();renderMeta();buildTks();loadSv();
-  document.getElementById('pt-data').value=new Date().toISOString().split('T')[0];
-}
+function initApp(){console.log('initApp desabilitado para teste');}
 
 function renderMeta(){
   const t=137,pct=Math.min((t/320)*100,100);
