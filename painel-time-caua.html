@@ -456,11 +456,13 @@ input[type="date"], input[type="time"] {
 function doLogin(){
   var v=document.getElementById('lsn').value.trim();
   if(v===getSn()){
-    document.getElementById('login-screen').style.display='none';
-    document.getElementById('app-screen').style.display='block';
-    if(document.getElementById('top-av'))document.getElementById('top-av').src=FT;
-    if(document.getElementById('p-foto'))document.getElementById('p-foto').src=FT;
-    try{initApp();}catch(e){console.error(e);}
+    document.getElementById('login-screen').style.cssText='display:none!important';
+    document.getElementById('app-screen').style.cssText='display:block!important;min-height:100vh;padding-bottom:70px';
+    window.requestAnimationFrame(function(){
+      window.requestAnimationFrame(function(){
+        try{initApp();}catch(e){console.error('initApp:',e);}
+      });
+    });
   }else{
     var err=document.getElementById('lerr');
     if(err){err.style.display='block';setTimeout(function(){err.style.display='none';},2000);}
