@@ -256,8 +256,13 @@ input[type="date"], input[type="time"] {
 .notif-btn.bloq  { border-color: #fc5c5c; color: #fc5c5c; }
 
 
-#login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px;background:#000}
-#app-screen{display:none;min-height:100vh;padding-bottom:70px}
+
+
+
+#login-screen{display:flex!important;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px;background:#000}
+#login-screen.oculto{display:none!important}
+#app-screen{display:none!important;min-height:100vh;padding-bottom:70px}
+#app-screen.visivel{display:block!important}
 </style>
 </head>
 <body>
@@ -459,8 +464,8 @@ input[type="date"], input[type="time"] {
 function doLogin(){
   var v=document.getElementById('lsn').value.trim();
   if(v===getSn()){
-    document.getElementById('login-screen').style.display='none';
-    document.getElementById('app-screen').style.display='block';
+    document.getElementById('login-screen').classList.add('oculto');
+    document.getElementById('app-screen').classList.add('visivel');
     try{initApp();}catch(e){console.error(e);}
   }else{
     document.getElementById('lerr').style.display='block';
