@@ -562,7 +562,6 @@ function _chatLoadSB(){
   });
 }
 // Polling de mensagens do gestor
-function _
 function renderMsgs(cid) {
   var lista = document.getElementById('msgs-colab-lista');
   if (!lista) return;
@@ -588,7 +587,7 @@ function renderMsgs(cid) {
       + '</div>';
   }).join('');
 }
-loadMsgsSB(){
+function loadMsgsSB(){
   sbGet('prd_mensagens','para=eq.kauany&order=ts.asc&limit=50').then(function(msgs){
     if(!Array.isArray(msgs)||!msgs.length)return;
     var key='prd_msgs_kauany';

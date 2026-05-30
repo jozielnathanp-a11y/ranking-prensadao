@@ -451,8 +451,7 @@ input[type="date"], input[type="time"] {
     <div class="cfg-msg" id="cfg-msg"></div>
   </div>
 </div>
-<script>try {
-localStorage.removeItem('pg_sn_ruan');
+<script>localStorage.removeItem('pg_sn_ruan');
 
 // ===== NOTIFICAÇÕES PUSH =====
 function solicitarNotificacao() {
@@ -563,7 +562,6 @@ function _chatLoadSB(){
   });
 }
 // Polling de mensagens do gestor
-function _
 function renderMsgs(cid) {
   var lista = document.getElementById('msgs-colab-lista');
   if (!lista) return;
@@ -589,7 +587,7 @@ function renderMsgs(cid) {
       + '</div>';
   }).join('');
 }
-loadMsgsSB(){
+function loadMsgsSB(){
   sbGet('prd_mensagens','para=eq.ruan&order=ts.asc&limit=50').then(function(msgs){
     if(!Array.isArray(msgs)||!msgs.length)return;
     var key='prd_msgs_ruan';
@@ -1290,16 +1288,7 @@ function ajudaEnviarFoto(msgId, input) {
 }
 
 
-} catch(e) { alert('ERRO JS: ' + e.message + ' | linha: ' + e.lineNumber); }
 
-// Tentar doLogin diretamente ao clicar
-document.addEventListener('DOMContentLoaded', function(){
-  var btn = document.getElementById('btn-entrar') || document.querySelector('.l-btn');
-  if(btn){
-    btn.addEventListener('click', function(e){
-      e.preventDefault();
-      try{ doLogin(); } catch(err){ alert('doLogin erro: '+err.message); }
-    });
   }
 });
 </script></body></html>
