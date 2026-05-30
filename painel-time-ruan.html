@@ -19,7 +19,7 @@ body{font-family:'Segoe UI',sans-serif;background:#0a0a0a;color:#fff;min-height:
 .l-card input:focus{outline:none;border-color:#ff6b00}
 .l-btn{width:100%;padding:14px;background:linear-gradient(135deg,#ff6b00,#ff9500);border:none;border-radius:12px;color:#fff;font-size:1rem;font-weight:800;cursor:pointer;letter-spacing:1px}
 .l-err{color:#fc8181;font-size:0.82rem;text-align:center;margin-top:10px;display:none}
-#app-screen{display:none;min-height:100vh;padding-bottom:70px}
+#app-screen{display:block;min-height:100vh;padding-bottom:70px}
 .top-hdr{background:#111;border-bottom:1px solid #1a1a1a;padding:14px 18px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
 .top-av{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #ff6b00}
 .top-nm{font-size:0.95rem;font-weight:800}
@@ -255,6 +255,7 @@ input[type="date"], input[type="time"] {
 .notif-btn.ativo { border-color: #48bb78; color: #48bb78; }
 .notif-btn.bloq  { border-color: #fc5c5c; color: #fc5c5c; }
 
+.hidden{display:none!important}
 </style>
 <!-- deploy-ts:1780103139 -->
 </head>
@@ -273,7 +274,7 @@ input[type="date"], input[type="time"] {
     </div>
 </div>
 
-<div id="app-screen" style="display:none">
+<div id="app-screen" class="hidden">
   <div class="top-hdr">
     <img class="top-av" id="top-av" src="" alt="G">
     <div>
@@ -624,27 +625,18 @@ function alterarSenha() {
   if (document.getElementById('cfg-cf')) document.getElementById('cfg-cf').value = '';
 }
 
+
 function getSn(){return 'ruan123';}
 function doLogin(){
-  try {
-    var v = document.getElementById('lsn').value.trim();
-    var sn = getSn();
-    if(v === sn){
-      var ls = document.getElementById('login-screen');
-      var ap = document.getElementById('app-screen');
-      if(ls) ls.style.display='none';
-      if(ap) { ap.style.display='block'; ap.style.visibility='visible'; }
-      var av = document.getElementById('top-av');
-      var pf = document.getElementById('p-foto');
-      if(av) av.src = FT;
-      if(pf) pf.src = FT;
-      try { initApp(); } catch(e) { console.error('initApp erro:', e); }
-    } else {
-      var err = document.getElementById('lerr');
-      if(err){ err.style.display='block'; setTimeout(function(){ err.style.display='none'; }, 2000); }
-      else { document.getElementById('lsn').style.borderColor='#fc5c5c'; setTimeout(function(){ document.getElementById('lsn').style.borderColor='#2a2a2a'; }, 2000); }
-    }
-  } catch(e) { console.error('doLogin erro:', e); }
+  var v=document.getElementById('lsn').value.trim();
+  if(v===getSn()){
+    document.getElementById('login-screen').classList.add('hidden');
+    document.getElementById('app-screen').classList.remove('hidden');
+    try{initApp();}catch(e){console.error(e);}
+  }else{
+    document.getElementById('lsn').style.borderColor='#fc5c5c';
+    setTimeout(function(){document.getElementById('lsn').style.borderColor='#2a2a2a';},2000);
+  }
 }
 
 function initApp(){
