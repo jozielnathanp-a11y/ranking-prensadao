@@ -627,15 +627,24 @@ function alterarSenha() {
 
 function getSn(){return 'ruan123';}
 function doLogin(){
-  const v=document.getElementById('lsn').value;
-  if(v===getSn()){
-    document.getElementById('login-screen').style.display='none';
-    document.getElementById('app-screen').style.display='block';
-    if(document.getElementById('top-av'))document.getElementById('top-av').src=FT;
-    if(document.getElementById('p-foto'))document.getElementById('p-foto').src=FT;
-    initApp();
-  } else {
-    const e=document.getElementById('lerr');e.style.display='block';setTimeout(()=>e.style.display='none',2000);
+  try {
+    var v = document.getElementById('lsn').value;
+    var sn = getSn();
+    alert('DEBUG: digitado=[' + v + '] esperado=[' + sn + '] igual=' + (v===sn));
+    if(v === sn){
+      var ls = document.getElementById('login-screen');
+      var as = document.getElementById('app-screen');
+      alert('login-screen display=' + ls.style.display + ' | app-screen display=' + as.style.display);
+      ls.style.display = 'none';
+      as.style.display = 'block';
+      alert('Feito! login=none app=block');
+      initApp();
+    } else {
+      var e = document.getElementById('lerr');
+      if(e){ e.style.display='block'; setTimeout(function(){ e.style.display='none'; }, 2000); }
+    }
+  } catch(err) {
+    alert('ERRO doLogin: ' + err.message);
   }
 }
 
