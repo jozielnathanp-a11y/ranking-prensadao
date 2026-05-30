@@ -9,7 +9,7 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Segoe UI',sans-serif;background:#0a0a0a;color:#fff;min-height:100vh}
-
+#login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px}
 .l-logo{font-size:3rem;margin-bottom:10px}
 .l-brand{font-size:1.4rem;font-weight:900;letter-spacing:2px;margin-bottom:4px}
 .l-sub{font-size:0.82rem;color:#555;margin-bottom:36px}
@@ -19,7 +19,7 @@ body{font-family:'Segoe UI',sans-serif;background:#0a0a0a;color:#fff;min-height:
 .l-card input:focus{outline:none;border-color:#ff6b00}
 .l-btn{width:100%;padding:14px;background:linear-gradient(135deg,#ff6b00,#ff9500);border:none;border-radius:12px;color:#fff;font-size:1rem;font-weight:800;cursor:pointer;letter-spacing:1px}
 .l-err{color:#fc8181;font-size:0.82rem;text-align:center;margin-top:10px;display:none}
-
+#app-screen{display:none;min-height:100vh;padding-bottom:70px}
 .top-hdr{background:#111;border-bottom:1px solid #1a1a1a;padding:14px 18px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
 .top-av{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #ff6b00}
 .top-nm{font-size:0.95rem;font-weight:800}
@@ -255,42 +255,24 @@ input[type="date"], input[type="time"] {
 .notif-btn.ativo { border-color: #48bb78; color: #48bb78; }
 .notif-btn.bloq  { border-color: #fc5c5c; color: #fc5c5c; }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px}
-#app-screen{display:none;min-height:100vh;padding-bottom:70px}
 </style>
 </head>
 <body>
 
 <div id="login-screen">
-  <div style="font-size:3rem;margin-bottom:10px">🔥</div>
-  <div style="font-size:1.4rem;font-weight:800;color:#fff;letter-spacing:2px;margin-bottom:4px">PRENSADÃO</div>
-  <div style="color:#888;font-size:0.9rem;margin-bottom:32px">Painel do Time</div>
-  <div style="background:#111;border:1px solid #222;border-radius:16px;padding:28px;width:100%;max-width:320px">
-    <label style="color:#aaa;font-size:0.85rem;display:block;margin-bottom:8px">Senha</label>
-    <input type="password" id="lsn" placeholder="••••••"
-      style="width:100%;padding:14px;background:#0a0a0a;border:1px solid #2a2a2a;border-radius:10px;color:#fff;font-size:1.1rem;margin-bottom:12px;box-sizing:border-box">
+  <div class="l-logo">🔥</div>
+  
+  <div class="l-brand">PRENSADÃO</div>
+  <div class="l-sub">Painel do Time</div>
+  <div class="l-card">
+    <label>Senha</label>
+    
+    <input type="password" id="lsn" placeholder="••••••" onkeydown="if(event.key==='Enter')doLogin()" style="width:100%;padding:14px;background:#0a0a0a;border:1px solid #2a2a2a;border-radius:10px;color:#fff;font-size:1.1rem;margin-bottom:12px;box-sizing:border-box;">
     <button class="l-btn" onclick="doLogin()">ENTRAR</button>
-    <div id="lerr" style="color:#fc8181;font-size:0.82rem;text-align:center;margin-top:10px;display:none">Senha incorreta</div>
-  </div>
+    </div>
 </div>
 
-<div id="app-screen">
+<div id="app-screen" style="display:none">
   <div class="top-hdr">
     <img class="top-av" id="top-av" src="" alt="G">
     <div>
@@ -467,20 +449,7 @@ input[type="date"], input[type="time"] {
     <div class="cfg-msg" id="cfg-msg"></div>
   </div>
 </div>
-<script>var _SN = 'caua123';
-function getSn(){return _SN;}
-function doLogin(){
-  const v=document.getElementById('lsn').value;
-  if(v===getSn()){
-    document.getElementById('login-screen').style.display='none';
-    document.getElementById('app-screen').style.display='block';
-    initApp();
-  } else {
-    const e=document.getElementById('lerr');
-    if(e){e.style.display='block';setTimeout(function(){e.style.display='none';},2000);}
-  }
-}
-
+<script>
 // ===== NOTIFICAÇÕES PUSH =====
 function solicitarNotificacao() {
   if (!('Notification' in window)) return;
@@ -616,7 +585,7 @@ function renderMsgs(cid) {
       + '</div>';
   }).join('');
 }
-function loadMsgsSB(){
+loadMsgsSB(){
   sbGet('prd_mensagens','para=eq.caua&order=ts.asc&limit=50').then(function(msgs){
     if(!Array.isArray(msgs)||!msgs.length)return;
     var key='prd_msgs_caua';
@@ -654,8 +623,19 @@ function alterarSenha() {
   if (document.getElementById('cfg-cf')) document.getElementById('cfg-cf').value = '';
 }
 
-
-
+function getSn(){return localStorage.getItem('pg_sn_caua')||'caua123'}
+function doLogin(){
+  const v=document.getElementById('lsn').value;
+  if(v===getSn()){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app-screen').style.display='block';
+    if(document.getElementById('top-av'))document.getElementById('top-av').src=FT;
+    if(document.getElementById('p-foto'))document.getElementById('p-foto').src=FT;
+    initApp();
+  } else {
+    const e=document.getElementById('lerr');e.style.display='block';setTimeout(()=>e.style.display='none',2000);
+  }
+}
 
 function initApp(){
   solicitarNotificacao();
