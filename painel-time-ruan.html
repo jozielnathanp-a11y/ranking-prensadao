@@ -267,10 +267,8 @@ input[type="date"], input[type="time"] {
   <div style="color:#888;font-size:0.9rem;margin-bottom:32px">Painel do Time</div>
   <div style="background:#111;border:1px solid #222;border-radius:16px;padding:28px;width:100%;max-width:320px">
     <label style="color:#aaa;font-size:0.85rem;display:block;margin-bottom:8px">Senha</label>
-    <input type="password" id="lsn" placeholder="••••••" autocomplete="current-password"
-      style="width:100%;padding:14px;background:#0a0a0a;border:1px solid #2a2a2a;border-radius:10px;color:#fff;font-size:1.1rem;margin-bottom:12px;box-sizing:border-box;-webkit-text-security:disc">
-    <button id="btn-entrar" type="button"
-      style="width:100%;padding:14px;background:linear-gradient(135deg,#ff6b00,#ff9500);border:none;border-radius:12px;color:#fff;font-size:1rem;font-weight:800;cursor:pointer;letter-spacing:1px;-webkit-tap-highlight-color:transparent">
+    <input type="password" id="lsn" placeholder="••••••" onkeydown="if(event.key==='Enter')doLogin()" autocomplete="current-password" style="width:100%;padding:14px;background:#0a0a0a;border:1px solid #2a2a2a;border-radius:10px;color:#fff;font-size:1.1rem;margin-bottom:12px;box-sizing:border-box">
+    <button id="btn-entrar" type="button" onclick="doLogin()" style="width:100%;padding:14px;background:linear-gradient(135deg,#ff6b00,#ff9500);border:none;border-radius:12px;color:#fff;font-size:1rem;font-weight:800;cursor:pointer;letter-spacing:1px">
       ENTRAR
     </button>
     <div id="lerr" style="color:#fc8181;font-size:0.82rem;text-align:center;margin-top:10px;display:none">Senha incorreta</div>
@@ -455,34 +453,6 @@ input[type="date"], input[type="time"] {
   </div>
 </div>
 <script>
-// ===== LOGIN =====
-(function() {
-  var SENHA = 'ruan123';
-  function tentarLogin() {
-    var v = (document.getElementById('lsn') || {}).value || '';
-    v = v.trim();
-    if (v === SENHA) {
-      document.getElementById('login-screen').style.cssText = 'display:none!important';
-      var ap = document.getElementById('app-screen');
-      ap.style.cssText = 'display:block!important;min-height:100vh;padding-bottom:70px';
-      setTimeout(function() {
-        try { initApp(); } catch(e) { console.error('initApp:', e); }
-      }, 50);
-    } else {
-      var err = document.getElementById('lerr');
-      if (err) { err.style.display = 'block'; setTimeout(function(){ err.style.display='none'; }, 2000); }
-      var inp = document.getElementById('lsn');
-      if (inp) { inp.style.borderColor = '#fc5c5c'; setTimeout(function(){ inp.style.borderColor='#2a2a2a'; }, 2000); }
-    }
-  }
-  document.addEventListener('DOMContentLoaded', function() {
-    var btn = document.getElementById('btn-entrar');
-    var inp = document.getElementById('lsn');
-    if (btn) btn.addEventListener('click', tentarLogin);
-    if (inp) inp.addEventListener('keydown', function(e) { if (e.key === 'Enter') tentarLogin(); });
-  });
-})();
-// ===== FIM LOGIN =====
 
 // ===== NOTIFICAÇÕES PUSH =====
 function solicitarNotificacao() {
@@ -1309,4 +1279,17 @@ function ajudaEnviarFoto(msgId, input) {
     .catch(function() { if(st) st.textContent = '❌ Erro'; });
 }
 
+
+function getSn(){return 'ruan123';}
+function doLogin(){
+  var v=document.getElementById('lsn').value.trim();
+  if(v===getSn()){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app-screen').removeAttribute('style');
+    setTimeout(function(){try{initApp();}catch(e){console.error(e);}},50);
+  }else{
+    document.getElementById('lsn').style.borderColor='#fc5c5c';
+    setTimeout(function(){document.getElementById('lsn').style.borderColor='#2a2a2a';},2000);
+  }
+}
 </script></body></html>
