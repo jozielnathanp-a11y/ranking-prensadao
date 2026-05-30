@@ -623,7 +623,7 @@ function alterarSenha() {
   if (document.getElementById('cfg-cf')) document.getElementById('cfg-cf').value = '';
 }
 
-function getSn(){return localStorage.getItem('pg_sn_kauany')||'kauany123'}
+function getSn(){return 'kauany123';}
 function doLogin(){
   const v=document.getElementById('lsn').value;
   if(v===getSn()){
@@ -631,9 +631,11 @@ function doLogin(){
     document.getElementById('app-screen').style.display='block';
     if(document.getElementById('top-av'))document.getElementById('top-av').src=FT;
     if(document.getElementById('p-foto'))document.getElementById('p-foto').src=FT;
-    initApp();
+    try{initApp();}catch(e){console.error(e);}
   } else {
-    const e=document.getElementById('lerr');e.style.display='block';setTimeout(()=>e.style.display='none',2000);
+    const inp=document.getElementById('lsn');
+    inp.style.borderColor='#fc5c5c';
+    setTimeout(function(){inp.style.borderColor='#2a2a2a';},2000);
   }
 }
 
