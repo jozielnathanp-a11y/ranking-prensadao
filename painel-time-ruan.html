@@ -451,7 +451,8 @@ input[type="date"], input[type="time"] {
     <div class="cfg-msg" id="cfg-msg"></div>
   </div>
 </div>
-<script>localStorage.removeItem('pg_sn_ruan');
+<script>try {
+localStorage.removeItem('pg_sn_ruan');
 
 // ===== NOTIFICAÇÕES PUSH =====
 function solicitarNotificacao() {
@@ -1288,4 +1289,17 @@ function ajudaEnviarFoto(msgId, input) {
     .catch(function() { if(st) st.textContent = '❌ Erro'; });
 }
 
+
+} catch(e) { alert('ERRO JS: ' + e.message + ' | linha: ' + e.lineNumber); }
+
+// Tentar doLogin diretamente ao clicar
+document.addEventListener('DOMContentLoaded', function(){
+  var btn = document.getElementById('btn-entrar') || document.querySelector('.l-btn');
+  if(btn){
+    btn.addEventListener('click', function(e){
+      e.preventDefault();
+      try{ doLogin(); } catch(err){ alert('doLogin erro: '+err.message); }
+    });
+  }
+});
 </script></body></html>
