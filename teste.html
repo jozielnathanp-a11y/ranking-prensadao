@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Teste Login</title>
+<style>
+body{background:#000;color:#fff;font-family:sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0}
+#login{text-align:center}
+input{display:block;width:200px;padding:12px;margin:10px auto;background:#111;border:1px solid #333;color:#fff;font-size:1rem;border-radius:8px}
+button{display:block;width:200px;padding:12px;margin:10px auto;background:#e53e3e;border:none;color:#fff;font-size:1rem;border-radius:8px;cursor:pointer}
+#app{display:none;text-align:center;font-size:2rem}
+</style>
+</head>
+<body>
+<div id="login">
+  <p>Digite a senha:</p>
+  <input type="password" id="senha" placeholder="senha">
+  <button onclick="entrar()">ENTRAR</button>
+  <p id="erro" style="color:red;display:none">Senha errada</p>
+</div>
+<div id="app">
+  ✅ LOGADO!<br><br>
+  <button onclick="document.getElementById('app').style.display='none';document.getElementById('login').style.display='block'">Sair</button>
+</div>
+<script>
+function entrar(){
+  var v = document.getElementById('senha').value;
+  if(v === 'ruan123'){
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+  } else {
+    document.getElementById('erro').style.display = 'block';
+    setTimeout(function(){ document.getElementById('erro').style.display='none'; }, 2000);
+  }
+}
+document.getElementById('senha').addEventListener('keydown', function(e){
+  if(e.key === 'Enter') entrar();
+});
+</script>
+</body>
+</html>
