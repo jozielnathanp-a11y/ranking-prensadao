@@ -119,24 +119,7 @@ function desbloquearSom(){
 
 function tocarAudio(ehBr, teamName){
   try{
-    const tn=(teamName||'').toLowerCase();
-    // Brasil → vinheta Copa Qatar 2022
-    if(tn.match(/brazil|brasil/)){
-      const a=new Audio(BRASIL_SRCS[0]);
-      a.volume=1.0; a.play().catch(e=>console.warn(e));
-      return;
-    }
-    // Time brasileiro (Libertadores) → hino do clube
-    if(ehBr){
-      for(const [key,url] of Object.entries(HINOS_MAP)){
-        if(tn.includes(key)){
-          const a=new Audio(url); a.volume=1.0; a.play().catch(e=>console.warn(e));
-          return;
-        }
-      }
-    }
-    // Todas as outras seleções → Fox Sports
-    const a=new Audio(FOX_SRC);
+    const a=new Audio(BRASIL_SRCS[0]);
     a.volume=1.0; a.play().catch(e=>console.warn(e));
   }catch(e){console.warn(e);}
 }
