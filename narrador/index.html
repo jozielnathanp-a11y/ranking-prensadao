@@ -119,6 +119,8 @@ function desbloquearSom(){
 
 function tocarAudio(ehBr, teamName){
   try{
+    const tn=(teamName||'').toLowerCase();
+    if(!tn.match(/brazil|brasil/)) return; // silêncio para outros times
     const a=new Audio(BRASIL_SRCS[0]);
     a.volume=1.0; a.play().catch(e=>console.warn(e));
   }catch(e){console.warn(e);}
