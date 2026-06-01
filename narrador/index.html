@@ -76,6 +76,7 @@
 </div>
 <div class="tabs">
   <button class="tab active" onclick="mudarAba('fifa.world',this)">🌍 Copa do Mundo</button>
+  <button class="tab" onclick="mudarAba('fifa.friendly',this)">🤝 Amistosos</button>
   <button class="tab" onclick="mudarAba('conmebol.libertadores',this)">🏆 Libertadores</button>
 </div>
 <div class="section">
@@ -101,7 +102,8 @@ const TIMES_BR=["brazil", "brasil", "flamengo", "palmeiras", "corinthians", "sã
 
 const LIGAS = {
   'fifa.world':              '🌍 Copa do Mundo',
-  'conmebol.libertadores':   '🏆 Libertadores'
+  'conmebol.libertadores':   '🏆 Libertadores',
+  'fifa.friendly':           '🤝 Amistosos'
 };
 
 let somDesbloqueado=false, brasilIdx=0;
