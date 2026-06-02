@@ -276,8 +276,8 @@ input[type="date"], input[type="time"] {
   <div class="top-hdr">
     <img class="top-av" id="top-av" src="" alt="G">
     <div>
-      <div class="top-nm">Gabriel Vogt</div>
-      <div class="top-cargo">Prensadão Centro</div>
+      <div class="top-nm">Ruan</div>
+      <div class="top-cargo">Garçom</div>
     </div>
     <div class="top-pts-wrap">
       <div class="top-pts-num" id="top-pts">39</div>
@@ -292,7 +292,7 @@ input[type="date"], input[type="time"] {
     <div class="p-card">
       <img class="p-foto" src="" id="p-foto" alt="G">
       <div>
-        <div class="p-nome">Gabriel Vogt</div>
+        <div class="p-nome">Ruan</div>
         <div class="p-pos">4️⃣ 4º lugar no ranking</div>
         <div class="p-saldo" id="p-saldo">39 pts</div>
         <div class="p-slbl">Ciclo 20/05 – 20/06</div>
@@ -755,7 +755,7 @@ async function submitCL(){
   const dt=new Date().toLocaleDateString('pt-BR');
   if(tks.every(s=>s===null)){alert('Responda pelo menos uma tarefa!');return;}
   document.getElementById('sub-btn').disabled=true;document.getElementById('sub-btn').textContent='⏳ Enviando...';
-  let msg='*✅ Checklist de Limpeza Semanal*\n*Colaborador:* Gabriel Vogt\n*Data:* '+dt+'\n\n*Tarefas:*\n';
+  let msg='*✅ Checklist de Limpeza Semanal*\n*Colaborador:* Ruan\n*Data:* '+dt+'\n\n*Tarefas:*\n';
   let ok=true;
   tks.forEach((s,i)=>{
     const n=TRF[i].substring(0,50)+'...';
@@ -823,7 +823,7 @@ function envCh(){
   const now=new Date();
   const ch={id:now.getTime(),tipo:tpSel,tipoLabel:tls[tpSel],urgencia:urgSel||'baixa',mensagem:msg,vale:vale||null,anexo:chAnx||null,data:now.toLocaleDateString('pt-BR'),hora:now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),status:'aberto',resposta:null};
   const chs=getChs();chs.unshift(ch);localStorage.setItem(STORE+'_ch',JSON.stringify(chs));
-  let wpp='*💬 Fale com o Gestor — Prensadão*\n*Colaborador:* Gabriel Vogt\n*Tipo:* '+ch.tipoLabel+'\n*Urgência:* '+(uls[ch.urgencia]||'')+'\n*Data:* '+ch.data+' às '+ch.hora;
+  let wpp='*💬 Fale com o Gestor — Prensadão*\n*Colaborador:* Ruan\n*Tipo:* '+ch.tipoLabel+'\n*Urgência:* '+(uls[ch.urgencia]||'')+'\n*Data:* '+ch.data+' às '+ch.hora;
   if(vale)wpp+='\n*Valor/Porcentagem:* '+vale;
   if(msg)wpp+='\n\n*Mensagem:*\n'+msg;
   if(chAnx)wpp+='\n\n📎 Anexo: '+chAnx;
@@ -844,7 +844,7 @@ function envPt(){
   const tp=document.getElementById('pt-tipo').value,mot=document.getElementById('pt-mot').value.trim();
   if(!dt||!mot){alert('Preencha a data e o motivo!');return;}
   const tls={atraso:'Atraso',esqueci:'Esqueceu de bater',saida:'Saída antecipada',falta:'Falta',outro:'Outro'};
-  let wpp='*🕐 Notificação de Ponto — Prensadão*\n*Colaborador:* Gabriel Vogt\n*Tipo:* '+tls[tp]+'\n*Data:* '+dt+(hr?' às '+hr:'')+'\n*Motivo:* '+mot;
+  let wpp='*🕐 Notificação de Ponto — Prensadão*\n*Colaborador:* Ruan\n*Tipo:* '+tls[tp]+'\n*Data:* '+dt+(hr?' às '+hr:'')+'\n*Motivo:* '+mot;
   if(ptAnx)wpp+='\n📎 Documento: '+ptAnx;
   const now=new Date();
   const chs=getChs();
@@ -1058,7 +1058,7 @@ function chatEnviarAjuda() {
   var desc = document.getElementById('ajuda-desc-inp');
   if (!desc || !desc.value.trim()) { alert('Descreva a tarefa!'); return; }
   var msgs = chatGetMsgs();
-  var msgAjuda = { id: Date.now(), ts: Date.now(), de: 'gabriel', nome: 'Gabriel Vogt', emoji: '🤝', texto: desc.value.trim(), midia: null, tipo: 'ajuda', pts: 3, share: 3, aceitoPor: null, aceitoPorNome: null };
+  var msgAjuda = { id: Date.now(), ts: Date.now(), de: 'ruan', nome: 'Ruan', emoji: '🤝', texto: desc.value.trim(), midia: null, tipo: 'ajuda', pts: 3, share: 3, aceitoPor: null, aceitoPorNome: null };
   msgs.push(msgAjuda);
   chatSaveMsgs(msgs);
   sbPost('prd_chat_grupo', msgAjuda);
@@ -1078,14 +1078,14 @@ function chatAceitar(msgId) {
   if (msgs[idx].de === 'gabriel') { alert('Você não pode aceitar sua própria tarefa!'); return; }
   if (msgs[idx].aceitoPor) { alert('Já foi aceita por ' + msgs[idx].aceitoPorNome + '!'); return; }
   msgs[idx].aceitoPor = 'gabriel';
-  msgs[idx].aceitoPorNome = 'Gabriel Vogt';
+  msgs[idx].aceitoPorNome = 'Ruan';
   // Registrar +3 pts para quem aceitou
   try {
     var ganhos = JSON.parse(localStorage.getItem('prd_ajuda_ganhos') || '[]');
-    ganhos.push({ ts: Date.now(), de: 'gabriel', nome: 'Gabriel Vogt', pts: 3, motivo: 'Ajudou: ' + msgs[idx].texto.substring(0,40) });
+    ganhos.push({ ts: Date.now(), de: 'ruan', nome: 'Ruan', pts: 3, motivo: 'Ajudou: ' + msgs[idx].texto.substring(0,40) });
     localStorage.setItem('prd_ajuda_ganhos', JSON.stringify(ganhos));
   } catch(e) {}
-  msgs.push({ id: Date.now()+1, ts: Date.now(), de: 'sistema', nome: 'Sistema', emoji: '🤖', texto: '✅ Gabriel Vogt aceitou ajudar! +3 pts para cada. Gestor será notificado.', midia: null, tipo: 'sistema' });
+  msgs.push({ id: Date.now()+1, ts: Date.now(), de: 'sistema', nome: 'Sistema', emoji: '🤖', texto: '✅ Ruan aceitou ajudar! +3 pts para cada. Gestor será notificado.', midia: null, tipo: 'sistema' });
   chatSaveMsgs(msgs);
   chatRender();
 }
@@ -1181,7 +1181,7 @@ function agCriar() {
   var desc = document.getElementById('ag-desc-inp');
   var quem = document.getElementById('ag-quem-sel');
   var items = agGetItems();
-  items.push({ id: Date.now(), ts: Date.now(), titulo: titulo.value.trim(), datahora: dt.value, desc: desc ? desc.value.trim() : '', quem: quem ? quem.value : 'todos', criadoPor: 'gabriel', criadoPorNome: 'Gabriel Vogt', status: 'pendente' });
+  items.push({ id: Date.now(), ts: Date.now(), titulo: titulo.value.trim(), datahora: dt.value, desc: desc ? desc.value.trim() : '', quem: quem ? quem.value : 'todos', criadoPor: 'gabriel', criadoPorNome: 'Ruan', status: 'pendente' });
   agSaveItems(items);
   titulo.value = ''; dtEl.value = ''; hrEl.value = '';
   if (desc) desc.value = '';
