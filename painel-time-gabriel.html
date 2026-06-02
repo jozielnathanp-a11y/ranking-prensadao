@@ -255,10 +255,15 @@ input[type="date"], input[type="time"] {
 .notif-btn.ativo { border-color: #48bb78; color: #48bb78; }
 .notif-btn.bloq  { border-color: #fc5c5c; color: #fc5c5c; }
 
+
+.toast-erro{position:fixed;top:24px;left:50%;transform:translateX(-50%) translateY(-80px);background:#e74c3c;color:#fff;padding:14px 28px;border-radius:12px;font-size:0.95rem;font-weight:700;z-index:9999;transition:transform 0.35s cubic-bezier(.175,.885,.32,1.275);box-shadow:0 4px 20px rgba(231,76,60,0.5);text-align:center;}
+.toast-erro.show{transform:translateX(-50%) translateY(0);}
+
 </style>
 </head>
 <body>
 
+<div class="toast-erro" id="toast-erro">🔒 Senha incorreta!</div>
 <div id="login-screen">
   <div class="l-logo">🔥</div>
   
@@ -610,11 +615,11 @@ function alterarSenha() {
   var nv = document.getElementById('cfg-nv') ? document.getElementById('cfg-nv').value : '';
   var cf = document.getElementById('cfg-cf') ? document.getElementById('cfg-cf').value : '';
   if (!at || !nv || !cf) { alert('Preencha todos os campos.'); return; }
-  if (at !== getSn()) { alert('Senha atual incorreta.'); return; }
-  if (nv !== cf) { alert('Nova senha e confirmação não conferem.'); return; }
-  if (nv.length < 4) { alert('Senha deve ter pelo menos 4 caracteres.'); return; }
+  if (at !== getSn()) { showToastErro('🔒 Senha incorreta! Tente novamente.'); return; }
+  if (nv !== cf) { showToastErro('🔒 Senha incorreta! Tente novamente.'); return; }
+  if (nv.length < 4) { showToastErro('🔒 Senha incorreta! Tente novamente.'); return; }
   localStorage.setItem('pg_sn', nv);
-  alert('✅ Senha alterada com sucesso!');
+  showToastErro('🔒 Senha incorreta! Tente novamente.');
   if (document.getElementById('cfg-at')) document.getElementById('cfg-at').value = '';
   if (document.getElementById('cfg-nv')) document.getElementById('cfg-nv').value = '';
   if (document.getElementById('cfg-cf')) document.getElementById('cfg-cf').value = '';
@@ -1452,4 +1457,12 @@ function uploadFoto(input, idx) {
   reader.readAsDataURL(f);
 }
 
+
+function showToastErro(msg){
+  var t=document.getElementById('toast-erro');
+  if(!t)return;
+  t.textContent=msg||'🔒 Senha incorreta!';
+  t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},2500);
+}
 </script></body></html>
