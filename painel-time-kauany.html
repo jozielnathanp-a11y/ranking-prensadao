@@ -276,7 +276,7 @@ input[type="date"], input[type="time"] {
   <div class="top-hdr">
     <img class="top-av" id="top-av" src="" alt="G">
     <div>
-      <div class="top-nm">Ruan</div>
+      <div class="top-nm">Kauany</div>
       <div class="top-cargo">Prensadão Centro</div>
     </div>
     <div class="top-pts-wrap">
@@ -292,7 +292,7 @@ input[type="date"], input[type="time"] {
     <div class="p-card">
       <img class="p-foto" src="" id="p-foto" alt="G">
       <div>
-        <div class="p-nome">Ruan</div>
+        <div class="p-nome">Kauany</div>
         <div class="p-pos">🥇 1º lugar no ranking</div>
         <div class="p-saldo" id="p-saldo">81 pts</div>
         <div class="p-slbl">Ciclo 20/05 – 20/06</div>
@@ -445,7 +445,7 @@ input[type="date"], input[type="time"] {
     <input type="password" id="cfg-cf" placeholder="Confirmar nova senha">
     <button class="cfg-save-btn" onclick="alterarSenha()">🔒 Alterar Senha</button>
 
-    <button class="cfg-sv" localStorage.removeItem('pg_sn_ruan');
+    <button class="cfg-sv" localStorage.removeItem('pg_sn_kauany');
 
 // ===== NOTIFICAÇÕES PUSH =====
 function solicitarNotificacao() {
@@ -560,7 +560,7 @@ function _chatLoadSB(){
 function renderMsgs(cid) {
   var lista = document.getElementById('msgs-colab-lista');
   if (!lista) return;
-  var key = 'prd_msgs_ruan';
+  var key = 'prd_msgs_kauany';
   var msgs = [];
   try { msgs = JSON.parse(localStorage.getItem(key) || '[]'); } catch(e) {}
   // Filtrar só mensagens do gestor (não chamados)
@@ -585,7 +585,7 @@ function renderMsgs(cid) {
 function loadMsgsSB(){
   sbGet('prd_mensagens','para=eq.kauany&order=ts.asc&limit=50').then(function(msgs){
     if(!Array.isArray(msgs)||!msgs.length)return;
-    var key='prd_msgs_ruan';
+    var key='prd_msgs_kauany';
     var local=[];try{local=JSON.parse(localStorage.getItem(key)||'[]');}catch(e){}
     var sbIds=msgs.map(function(m){return m.id;});
     var only=local.filter(function(m){return !m.id||sbIds.indexOf(m.id)<0;});
@@ -600,7 +600,7 @@ const CC='dewulu3tj',CP='checklist_prensadao',JP='5542988819420',GR='12036328975
 const FT='https://res.cloudinary.com/dewulu3tj/image/upload/v1780062694/checklist_prensadao/colaborador_ruan.jpg';
 const HIST=[{"data": "2026-05-20", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 43}, {"data": "2026-05-22", "pontos": 3, "motivo": "Trabalho em equipe", "tipo": "Ganho", "saldo": 46}, {"data": "2026-05-22", "pontos": 3, "motivo": "Dia sem erro (Semana Perfeita)", "tipo": "Ganho", "saldo": 49}, {"data": "2026-05-22", "pontos": 5, "motivo": "Checklist semanal feita", "tipo": "Ganho", "saldo": 54}, {"data": "2026-05-23", "pontos": 3, "motivo": "Proatividade — limpeza final da noite", "tipo": "Ganho", "saldo": 57}, {"data": "2026-05-24", "pontos": 3, "motivo": "Dia sem erro (Semana Perfeita)", "tipo": "Ganho", "saldo": 60}, {"data": "2026-05-24", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 63}, {"data": "2026-05-24", "pontos": 3, "motivo": "Proatividade — embalagens", "tipo": "Ganho", "saldo": 66}, {"data": "2026-05-26", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 69}, {"data": "2026-05-27", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 72}, {"data": "2026-05-27", "pontos": 3, "motivo": "Proatividade — maionese", "tipo": "Ganho", "saldo": 75}, {"data": "2026-05-28", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 78}, {"data": "2026-05-28", "pontos": 3, "motivo": "Proatividade — maionese", "tipo": "Ganho", "saldo": 81}];
 const TRF=["Realizar a higienização das mesas utilizando esponja e sabão, limpar a escada e organizar o salão superior.", "Realizar a higienização do freezer expositor da coca e organizar os refrigerantes embaixo do balcão, mantendo a área limpa para o atendimento.", "Lavar os potinhos de molho e os porta-guardanapos e preencher para que não faltem durante a semana.", "Limpar as bandejas com água e sabão, e fazer uma contagem semanal das bandejas fundas e rasas.", "Realizar a higienização e organização dos recipientes de etiquetas. Listar os que estão em falta ou com baixa quantidade."];
-const STORE='pg_ruan';
+const STORE='pg_kauany';
 let tks=[null,null,null,null,null],phs=[null,null,null,null,null],excnt=0,exphs={},rat=0,histOpen=false;
 let tpSel=null,urgSel=null,chAnx=null,ptAnx=null;
 
@@ -759,7 +759,7 @@ async function submitCL(){
   const dt=new Date().toLocaleDateString('pt-BR');
   if(tks.every(s=>s===null)){alert('Responda pelo menos uma tarefa!');return;}
   document.getElementById('sub-btn').disabled=true;document.getElementById('sub-btn').textContent='⏳ Enviando...';
-  let msg='*✅ Checklist de Limpeza Semanal*\n*Colaborador:* Ruan\n*Data:* '+dt+'\n\n*Tarefas:*\n';
+  let msg='*✅ Checklist de Limpeza Semanal*\n*Colaborador:* Kauany\n*Data:* '+dt+'\n\n*Tarefas:*\n';
   let ok=true;
   tks.forEach((s,i)=>{
     const n=TRF[i].substring(0,50)+'...';
@@ -827,7 +827,7 @@ function envCh(){
   const now=new Date();
   const ch={id:now.getTime(),tipo:tpSel,tipoLabel:tls[tpSel],urgencia:urgSel||'baixa',mensagem:msg,vale:vale||null,anexo:chAnx||null,data:now.toLocaleDateString('pt-BR'),hora:now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),status:'aberto',resposta:null};
   const chs=getChs();chs.unshift(ch);localStorage.setItem(STORE+'_ch',JSON.stringify(chs));
-  let wpp='*💬 Fale com o Gestor — Prensadão*\n*Colaborador:* Ruan\n*Tipo:* '+ch.tipoLabel+'\n*Urgência:* '+(uls[ch.urgencia]||'')+'\n*Data:* '+ch.data+' às '+ch.hora;
+  let wpp='*💬 Fale com o Gestor — Prensadão*\n*Colaborador:* Kauany\n*Tipo:* '+ch.tipoLabel+'\n*Urgência:* '+(uls[ch.urgencia]||'')+'\n*Data:* '+ch.data+' às '+ch.hora;
   if(vale)wpp+='\n*Valor/Porcentagem:* '+vale;
   if(msg)wpp+='\n\n*Mensagem:*\n'+msg;
   if(chAnx)wpp+='\n\n📎 Anexo: '+chAnx;
@@ -848,7 +848,7 @@ function envPt(){
   const tp=document.getElementById('pt-tipo').value,mot=document.getElementById('pt-mot').value.trim();
   if(!dt||!mot){alert('Preencha a data e o motivo!');return;}
   const tls={atraso:'Atraso',esqueci:'Esqueceu de bater',saida:'Saída antecipada',falta:'Falta',outro:'Outro'};
-  let wpp='*🕐 Notificação de Ponto — Prensadão*\n*Colaborador:* Ruan\n*Tipo:* '+tls[tp]+'\n*Data:* '+dt+(hr?' às '+hr:'')+'\n*Motivo:* '+mot;
+  let wpp='*🕐 Notificação de Ponto — Prensadão*\n*Colaborador:* Kauany\n*Tipo:* '+tls[tp]+'\n*Data:* '+dt+(hr?' às '+hr:'')+'\n*Motivo:* '+mot;
   if(ptAnx)wpp+='\n📎 Documento: '+ptAnx;
   const now=new Date();
   const chs=getChs();
