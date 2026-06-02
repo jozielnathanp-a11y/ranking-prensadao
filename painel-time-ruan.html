@@ -641,11 +641,10 @@ function doLogin(){
 
 function solicitarNotificacao(){try{if(Notification&&Notification.permission==='default')Notification.requestPermission();}catch(e){}}
 function initApp(){
-  roletaInit();
   solicitarNotificacao();
   renderHist();
   renderMeta();
-  buildTks();
+  renderTK();
   loadSv();
   var ptData = document.getElementById('pt-data');
   if(ptData) ptData.value = new Date().toISOString().split('T')[0];
