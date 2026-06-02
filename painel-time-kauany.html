@@ -343,7 +343,7 @@ input[type="date"], input[type="time"] {
       <button class="sub-btn" onclick="submitCL()" id="sub-btn">📤 Enviar Checklist</button>
     </div>
     <div class="ok-scr" id="ok-scr">
-      <div class="em">🎉</div><h2>Checklist enviada!</h2><p>Boa semana, Gabriel!</p>
+      <div class="em">🎉</div><h2>Checklist enviada!</h2><p>Boa semana, Kauany!</p>
     </div>
   </div><!-- FALE COM GESTOR -->
   <div id="tab-fale" class="tab-c">
@@ -1320,7 +1320,7 @@ function updProg(){
   document.getElementById('prog-txt').textContent=d+' de 5 tarefas concluídas';
 }
 
-async function upTk(i,inp){
+async async function upTk(i,inp){
   const f=inp.files[0];if(!f)return;
   const st=document.getElementById('phs-'+i);st.textContent='⏳ Enviando...';
   const fd=new FormData();fd.append('file',f);fd.append('upload_preset',CP);
@@ -1331,7 +1331,7 @@ async function upTk(i,inp){
     else st.textContent='❌ Erro.';
   }catch(e){st.textContent='❌ Erro.';}
 }
-function upTk(i,inp){
+async function upTk(i,inp){
   const f=inp.files[0];if(!f)return;
   const st=document.getElementById('phs-'+i);st.textContent='⏳ Enviando...';
   const fd=new FormData();fd.append('file',f);fd.append('upload_preset',CP);
@@ -1350,10 +1350,18 @@ function autoSave(){
 }
 function loadSv(){
   try{
+    // Garantir que form está visível e ok-scr oculto
+    var fa = document.getElementById('cl-form-area');
+    var ok = document.getElementById('ok-scr');
+    if(fa) fa.style.display='block';
+    if(ok) ok.style.display='none';
+    var sb = document.getElementById('sub-btn');
+    if(sb){ sb.disabled=false; sb.textContent='📤 Enviar Checklist'; }
+    // Restaurar respostas salvas
     const d=JSON.parse(localStorage.getItem(STORE+'_cl')||'{}');
     if(d.tks)d.tks.forEach((s,i)=>{if(s)selTk(i,s);});
     if(d.phs)phs=d.phs;
-    if(d.obs)document.getElementById('obs-cl').value=d.obs;
+    if(d.obs){ var el=document.getElementById('obs-cl'); if(el) el.value=d.obs; }
     if(d.rat)setRat(d.rat);
   }catch(e){}
 }
