@@ -626,8 +626,10 @@ function getSn(){return 'kauany123';}
 function doLogin(){
   const v=document.getElementById('lsn').value;
   if(v===getSn()){
-    document.getElementById('login-screen').style.display='none';
-    document.getElementById('app-screen').style.display='block';
+    const ls=document.getElementById('login-screen');
+    const as=document.getElementById('app-screen');
+    if(ls){ls.style.cssText='display:none!important';}
+    if(as){as.style.cssText='display:block!important;min-height:100vh;padding-bottom:70px';}
     if(document.getElementById('top-av'))document.getElementById('top-av').src=FT;
     if(document.getElementById('p-foto'))document.getElementById('p-foto').src=FT;
     initApp();
@@ -637,17 +639,9 @@ function doLogin(){
 }
 
 function initApp(){
-  try {
-    solicitarNotificacao();
-    renderHist();
-    renderMeta();
-    buildTks();
-    loadSv();
-    document.getElementById('pt-data').value=new Date().toISOString().split('T')[0];
-  } catch(err) {
-    console.error('initApp ERRO:', err.message, err.stack);
-    alert('Erro ao carregar: ' + err.message);
-  }
+  solicitarNotificacao();
+  renderHist();renderMeta();buildTks();loadSv();
+  document.getElementById('pt-data').value=new Date().toISOString().split('T')[0];
 }
 
 function renderMeta(){
@@ -935,6 +929,7 @@ function swTab(t){
 
   if(t==='chat'){chatStartPoll();}
   if(t==='msgs'){loadMsgsSB();}
+  if(t==='agenda'){loadAgendaSB();}
 }
 
 function openCfg(){document.getElementById('cfg-modal').classList.add('open');}
