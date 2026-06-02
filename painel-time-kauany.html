@@ -600,6 +600,15 @@ const HIST=[{"data": "2026-05-20", "pontos": 40, "motivo": "Início do 2º Ciclo
 const TRF=["Realizar a higienização das mesas utilizando esponja e sabão, limpar a escada e organizar o salão superior.", "Realizar a higienização do freezer expositor da Coca e organizar os refrigerantes embaixo do balcão, mantendo a área limpa para o atendimento.", "Lavar os potinhos de molho e os porta-guardanapos e preencher para que não faltem durante a semana.", "Limpar as bandejas com água e sabão, e fazer uma contagem semanal das bandejas fundas e rasas.", "Realizar a higienização e a organização dos recipientes contendo etiquetas de identificação dos lanches. Elaborar uma lista dos que se encontram em falta ou com baixa quantidade."];
 const STORE='pg_kauany';
 let tks=[null,null,null,null,null],phs=[null,null,null,null,null],excnt=0,exphs={},rat=0,histOpen=false;
+
+// Estado do checklist
+var CL_STATE = {tasks: {}};
+try {
+  var _sv = localStorage.getItem(STORE + '_clv2');
+  if (_sv) CL_STATE = JSON.parse(_sv);
+  if (!CL_STATE.tasks) CL_STATE.tasks = {};
+} catch(e) { CL_STATE = {tasks: {}}; }
+
 let tpSel=null,urgSel=null,chAnx=null,ptAnx=null;
 
 
@@ -738,12 +747,23 @@ async function upEx(id,inp){
 function setRat(v){rat=v;document.querySelectorAll('.rat span').forEach((s,i)=>s.className=i<v?'sel':'');autoSave();}
 
 
+
 function autoSave(){
-  localStorage.setItem(STORE+'_cl',JSON.stringify({tks,phs,obs:document.getElementById('obs-cl').value,rat}));
-  sbPost('prd_checklist', {colab_id: COLAB_ID, tks: tks, obs: document.getElementById('obs-cl') ? document.getElementById('obs-cl').value : '', semana: new Date().toISOString().slice(0,10), ts: Date.now()});
-  saveChecklistSB(tks, phs, document.getElementById('obs-cl')?.value, rat);
-  const i=document.getElementById('sv-ind');i.style.display='block';setTimeout(()=>i.style.display='none',1500);
+  try {
+    localStorage.setItem(STORE + '_clv2', JSON.stringify(CL_STATE));
+  } catch(e){}
+  var obs = document.getElementById('obs-cl');
+  sbPost('prd_checklist', {
+    colab_id: COLAB_ID,
+    tks: CL_STATE.tasks,
+    obs: obs ? obs.value : '',
+    semana: new Date().toISOString().slice(0,10),
+    ts: Date.now()
+  });
+  var i = document.getElementById('sv-ind');
+  if(i){ i.style.display='block'; setTimeout(function(){ i.style.display='none'; }, 1500); }
 }
+
 
 function loadSv(){
   try{

@@ -600,6 +600,15 @@ const HIST=[{"data": "2026-05-20", "pontos": 3, "motivo": "Feedback positivo de 
 const TRF=["Efetuar a organização e higienização do balcão da mesa térmica e prateleira de molhos.", "Efetuar a higienização das mesas e a organização das garrafas que serão retornadas.", "Limpar as mesas amarelas e vermelhas do lado de fora, bem como as mesas de madeira no salão, com uma esponja e sabão.", "Higienizar o freezer e fazer a contagem das canecas.", "Limpar e organizar área kids salão, lavar piso área kids externa."];
 const STORE='pg_ruan';
 let tks=[null,null,null,null,null],phs=[null,null,null,null,null],excnt=0,exphs={},rat=0,histOpen=false;
+
+// Estado do checklist
+var CL_STATE = {tasks: {}};
+try {
+  var _sv = localStorage.getItem(STORE + '_clv2');
+  if (_sv) CL_STATE = JSON.parse(_sv);
+  if (!CL_STATE.tasks) CL_STATE.tasks = {};
+} catch(e) { CL_STATE = {tasks: {}}; }
+
 let tpSel=null,urgSel=null,chAnx=null,ptAnx=null;
 
 
@@ -738,12 +747,23 @@ async function upEx(id,inp){
 function setRat(v){rat=v;document.querySelectorAll('.rat span').forEach((s,i)=>s.className=i<v?'sel':'');autoSave();}
 
 
+
 function autoSave(){
-  localStorage.setItem(STORE+'_cl',JSON.stringify({tks,phs,obs:document.getElementById('obs-cl').value,rat}));
-  sbPost('prd_checklist', {colab_id: COLAB_ID, tks: tks, obs: document.getElementById('obs-cl') ? document.getElementById('obs-cl').value : '', semana: new Date().toISOString().slice(0,10), ts: Date.now()});
-  saveChecklistSB(tks, phs, document.getElementById('obs-cl')?.value, rat);
-  const i=document.getElementById('sv-ind');i.style.display='block';setTimeout(()=>i.style.display='none',1500);
+  try {
+    localStorage.setItem(STORE + '_clv2', JSON.stringify(CL_STATE));
+  } catch(e){}
+  var obs = document.getElementById('obs-cl');
+  sbPost('prd_checklist', {
+    colab_id: COLAB_ID,
+    tks: CL_STATE.tasks,
+    obs: obs ? obs.value : '',
+    semana: new Date().toISOString().slice(0,10),
+    ts: Date.now()
+  });
+  var i = document.getElementById('sv-ind');
+  if(i){ i.style.display='block'; setTimeout(function(){ i.style.display='none'; }, 1500); }
 }
+
 
 function loadSv(){
   try{
