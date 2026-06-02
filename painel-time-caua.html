@@ -1060,8 +1060,10 @@ function chatEnviarAjuda() {
   var desc = document.getElementById('ajuda-desc-inp');
   if (!desc || !desc.value.trim()) { alert('Descreva a tarefa!'); return; }
   var msgs = chatGetMsgs();
-  msgs.push({ id: Date.now(), ts: Date.now(), de: 'caua', nome: 'Cauã', emoji: '🤝', texto: desc.value.trim(), midia: null, tipo: 'ajuda', pts: 3, share: 3, aceitoPor: null, aceitoPorNome: null });
+  var msgAjuda = { id: Date.now(), ts: Date.now(), de: 'caua', nome: 'Cauã', emoji: '🤝', texto: desc.value.trim(), midia: null, tipo: 'ajuda', pts: 3, share: 3, aceitoPor: null, aceitoPorNome: null };
+  msgs.push(msgAjuda);
   chatSaveMsgs(msgs);
+  sbPost('prd_chat_grupo', msgAjuda);
   desc.value = '';
   var box = document.getElementById('ajuda-form-box');
   if (box) box.style.display = 'none';
