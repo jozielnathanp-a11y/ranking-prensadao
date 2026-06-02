@@ -1370,4 +1370,136 @@ function renderAgendaColab(eventos) {
       '</div>';
   }).join('');
 }
+
+// === ROLETA ===
+var ROLETA_TRF = ["Organizar e higienizar o balcão da mesa térmica e prateleira de molhos", "Higienizar as mesas e organizar as garrafas que serão retornadas", "Limpar as mesas amarelas e vermelhas do lado de fora e as mesas de madeira no salão", "Higienizar o freezer e fazer a contagem das canecas", "Limpar e organizar área kids do salão e lavar o piso da área kids externa", "Higienizar as mesas com esponja e sabão, limpar a escada e organizar o salão superior", "Higienizar o freezer expositor da Coca e organizar os refrigerantes embaixo do balcão", "Lavar os potinhos de molho e os porta-guardanapos e preencher para não faltar", "Limpar as bandejas com água e sabão e fazer contagem semanal das bandejas fundas e rasas", "Higienizar e organizar os recipientes de etiquetas e listar os que estão em falta"];
+var ROLETA_CORES = ["#e74c3c", "#e67e22", "#f1c40f", "#2ecc71", "#1abc9c", "#3498db", "#9b59b6", "#e91e63", "#00bcd4", "#ff5722"];
+var roletaGirando = false;
+var roletaAngulo = 0;
+var roletaTarefaAtual = -1;
+var roletaHist = [];
+try { roletaHist = JSON.parse(localStorage.getItem('roleta_hist') || '[]'); } catch(e){}
+
+function roletaDraw(ang) {
+  var canvas = document.getElementById('roleta-canvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var n = ROLETA_TRF.length;
+  var slice = (2 * Math.PI) / n;
+  var cx = 140, cy = 140, r = 130;
+  ctx.clearRect(0, 0, 280, 280);
+  for (var i = 0; i < n; i++) {
+    var start = ang + i * slice;
+    var end = start + slice;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, r, start, end);
+    ctx.closePath();
+    ctx.fillStyle = ROLETA_CORES[i % ROLETA_CORES.length];
+    ctx.fill();
+    ctx.strokeStyle = '#1a1a1a';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(start + slice / 2);
+    ctx.textAlign = 'right';
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 10px sans-serif';
+    var label = (i + 1) + '. ' + ROLETA_TRF[i].substring(0, 20) + '...';
+    ctx.fillText(label, r - 6, 4);
+    ctx.restore();
+  }
+  ctx.beginPath();
+  ctx.arc(cx, cy, 18, 0, 2 * Math.PI);
+  ctx.fillStyle = '#1a1a1a';
+  ctx.fill();
+  ctx.strokeStyle = '#ff6b00';
+  ctx.lineWidth = 3;
+  ctx.stroke();
+}
+
+function roletaGirar() {
+  if (roletaGirando) return;
+  roletaGirando = true;
+  document.getElementById('btn-girar').disabled = true;
+  document.getElementById('roleta-resultado').style.display = 'none';
+  document.getElementById('roleta-ok').style.display = 'none';
+  document.getElementById('roleta-foto-area').style.display = 'block';
+  document.getElementById('roleta-foto-status').textContent = '';
+  var voltas = (5 + Math.random() * 5) * 2 * Math.PI;
+  var duracao = 3000 + Math.random() * 1500;
+  var inicio = null;
+  var angInicio = roletaAngulo;
+  var angFim = angInicio + voltas;
+  function animar(ts) {
+    if (!inicio) inicio = ts;
+    var prog = Math.min((ts - inicio) / duracao, 1);
+    var ease = 1 - Math.pow(1 - prog, 3);
+    roletaAngulo = angInicio + (angFim - angInicio) * ease;
+    roletaDraw(roletaAngulo);
+    if (prog < 1) {
+      requestAnimationFrame(animar);
+    } else {
+      roletaGirando = false;
+      document.getElementById('btn-girar').disabled = false;
+      var n = ROLETA_TRF.length;
+      var slice = (2 * Math.PI) / n;
+      var normalizado = (((-roletaAngulo - Math.PI / 2) % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+      roletaTarefaAtual = Math.floor(normalizado / slice) % n;
+      document.getElementById('roleta-tarefa-txt').textContent = ROLETA_TRF[roletaTarefaAtual];
+      document.getElementById('roleta-resultado').style.display = 'block';
+    }
+  }
+  requestAnimationFrame(animar);
+}
+
+function roletaEnviarFoto(input) {
+  var f = input.files[0];
+  if (!f) return;
+  var st = document.getElementById('roleta-foto-status');
+  st.textContent = '⏳ Enviando foto...';
+  var fd = new FormData();
+  fd.append('file', f);
+  fd.append('upload_preset', 'checklist_prensadao');
+  fd.append('cloud_name', 'dewulu3tj');
+  fetch('https://api.cloudinary.com/v1_1/dewulu3tj/image/upload', { method: 'POST', body: fd })
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
+      if (!data.secure_url) { st.textContent = '❌ Erro no envio.'; return; }
+      var entrada = { ts: Date.now(), tarefa: ROLETA_TRF[roletaTarefaAtual], foto: data.secure_url, pts: 2 };
+      roletaHist.push(entrada);
+      localStorage.setItem('roleta_hist', JSON.stringify(roletaHist));
+      sbPost('prd_mensagens', {
+        ts: Date.now(), de: COLAB_ID, para: 'gestor', tipo: 'roleta',
+        texto: '🎰 Tarefa da roleta concluída: ' + entrada.tarefa,
+        foto: data.secure_url, pts: 2, nome: COLAB_NM
+      });
+      document.getElementById('roleta-foto-area').style.display = 'none';
+      document.getElementById('roleta-ok').style.display = 'block';
+      roletaRenderHist();
+    })
+    .catch(function(){ st.textContent = '❌ Erro. Tente novamente.'; });
+}
+
+function roletaRenderHist() {
+  var el = document.getElementById('roleta-hist');
+  if (!el || !roletaHist.length) return;
+  el.innerHTML = '<div style="font-size:0.8rem;color:#888;font-weight:700;margin-bottom:8px">📋 Tarefas concluídas:</div>' +
+    roletaHist.slice().reverse().map(function(h) {
+      var d = new Date(h.ts);
+      var hora = d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
+      return '<div style="background:#111;border-radius:10px;padding:10px 12px;margin-bottom:8px;border-left:3px solid #48bb78">' +
+        '<div style="font-size:0.75rem;color:#48bb78;font-weight:700">+2 pts · ' + hora + '</div>' +
+        '<div style="font-size:0.85rem;color:#ddd;margin-top:2px">' + h.tarefa.substring(0,70) + '</div>' +
+        '</div>';
+    }).join('');
+}
+
+function roletaInit() {
+  roletaDraw(0);
+  roletaRenderHist();
+}
+// === FIM ROLETA ===
+
 </script></body></html>
