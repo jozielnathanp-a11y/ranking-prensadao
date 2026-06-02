@@ -1384,27 +1384,72 @@ function renderProg() {
   if (txt) txt.textContent = done + ' de ' + total + ' tarefas concluídas';
 }
 
+
 function uploadFoto(input, idx) {
   var f = input.files[0];
   if (!f) return;
-  var st = document.createElement('div');
-  st.style.cssText = 'font-size:0.8rem;color:#aaa;margin-top:4px';
-  st.textContent = '⏳ Enviando foto...';
-  input.parentNode.appendChild(st);
-  var fd = new FormData();
-  fd.append('file', f);
-  fd.append('upload_preset', 'checklist_prensadao');
-  fd.append('cloud_name', 'dewulu3tj');
-  fetch('https://api.cloudinary.com/v1_1/dewulu3tj/image/upload', { method: 'POST', body: fd })
-    .then(function(r){ return r.json(); })
-    .then(function(data) {
-      if (!data.secure_url) { st.textContent = '❌ Erro no envio.'; return; }
-      if (!CL_STATE.tasks) CL_STATE.tasks = {};
-      if (!CL_STATE.tasks[idx]) CL_STATE.tasks[idx] = {};
-      CL_STATE.tasks[idx].foto = data.secure_url;
-      autoSave();
-      renderTK();
-    })
-    .catch(function(){ st.textContent = '❌ Erro. Tente novamente.'; });
+  if (!CL_STATE.tasks) CL_STATE.tasks = {};
+  if (!CL_STATE.tasks[idx]) CL_STATE.tasks[idx] = {};
+  if (!CL_STATE.tasks[idx].fotos) CL_STATE.tasks[idx].fotos = [];
+  var fotos = CL_STATE.tasks[idx].fotos;
+  if (fotos.length >= 3) { alert('Maximo de 3 fotos por tarefa!'); return; }
+  var st = document.getElementById('foto-status-' + idx);
+  if (st) st.textContent = 'Processando foto...';
+
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var img = new Image();
+    img.onload = function() {
+      var canvas = document.createElement('canvas');
+      var MAX = 1280;
+      var ratio = Math.min(MAX / img.width, MAX / img.height, 1);
+      canvas.width  = Math.round(img.width  * ratio);
+      canvas.height = Math.round(img.height * ratio);
+      var ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+      // Carimbo de data/hora + nome
+      var agora = new Date();
+      var pad = function(n){ return n.toString().padStart(2,'0'); };
+      var stamp = pad(agora.getDate()) + '/' + pad(agora.getMonth()+1) + '/' + agora.getFullYear() +
+                  '  ' + pad(agora.getHours()) + ':' + pad(agora.getMinutes()) + ':' + pad(agora.getSeconds());
+      var label = COLAB_NM + ' | ' + stamp;
+
+      var fSize = Math.max(16, Math.round(canvas.width * 0.032));
+      var pad2  = Math.round(fSize * 0.5);
+      var bh    = fSize + pad2 * 2;
+
+      // Fundo escuro embaixo
+      ctx.fillStyle = 'rgba(0,0,0,0.65)';
+      ctx.fillRect(0, canvas.height - bh, canvas.width, bh);
+
+      // Texto branco
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold ' + fSize + 'px monospace';
+      ctx.textAlign = 'left';
+      ctx.fillText(label, pad2, canvas.height - pad2);
+
+      canvas.toBlob(function(blob) {
+        if (st) st.textContent = 'Enviando...';
+        var fd = new FormData();
+        fd.append('file', blob, 'foto.jpg');
+        fd.append('upload_preset', 'checklist_prensadao');
+        fd.append('cloud_name', 'dewulu3tj');
+        fetch('https://api.cloudinary.com/v1_1/dewulu3tj/image/upload', {method:'POST',body:fd})
+          .then(function(r){ return r.json(); })
+          .then(function(data) {
+            if (!data.secure_url) { if (st) st.textContent = 'Erro no envio.'; return; }
+            fotos.push(data.secure_url);
+            CL_STATE.tasks[idx].fotos = fotos;
+            autoSave();
+            renderTK();
+          })
+          .catch(function(){ if (st) st.textContent = 'Erro. Tente novamente.'; });
+      }, 'image/jpeg', 0.88);
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(f);
 }
+
 </script></body></html>
