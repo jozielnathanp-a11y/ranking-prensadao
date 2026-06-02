@@ -1177,26 +1177,33 @@ function agAgendar() {
   if (!titulo || !data || !hora) { alert('Preencha título, data e horário.'); return; }
   var sels = document.querySelectorAll('.ag-colab-item.sel');
   var convocados = [];
-  var phones = [];
+  var convocadosIds = [];
   sels.forEach(function(s) {
     convocados.push(s.getAttribute('data-nome'));
-    phones.push(s.getAttribute('data-phone'));
+    convocadosIds.push(s.getAttribute('data-colabid') || s.getAttribute('data-id') || '');
   });
-  if (phones.length === 0) {
-    COLABORADORES.forEach(function(c) { phones.push(c.phone); convocados.push(c.nome); });
+  if (convocados.length === 0) {
+    COLABORADORES.forEach(function(c) { convocados.push(c.nome); convocadosIds.push(c.id); });
   }
+  // Salvar no Supabase para aparecer nos painéis dos operadores
+  var evento = {
+    titulo: titulo,
+    data: data,
+    hora: hora,
+    tipo: tipo,
+    local: local,
+    convocados: convocados,
+    convocados_ids: convocadosIds,
+    ts: Date.now(),
+    ativo: true
+  };
   var agenda = getAgenda();
-  agenda.push({ titulo: titulo, data: data, hora: hora, tipo: tipo, local: local, convocados: convocados, ts: Date.now() });
+  agenda.push(evento);
   saveAgenda(agenda);
-  // Enviar WPP para cada convocado
-  var tipoLabel = {reuniao:'Reunião',tarefa:'Tarefa',treinamento:'Treinamento',avaliacao:'Avaliação',outro:'Compromisso'}[tipo] || tipo;
-  var dataFmt = data.split('-').reverse().join('/');
-  phones.forEach(function(phone, i) {
-    var nome = convocados[i];
-    var msg = '*Prensadão — ' + tipoLabel + '* 📅\n\nOlá, ' + nome + '! Você tem um agendamento:\n\n📌 *' + titulo + '*\n📅 ' + dataFmt + ' às ' + hora + (local ? '\n📍 ' + local : '') + '\n\nAté lá! 💪';
-    setTimeout(function() {
-      window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(msg), '_blank');
-    }, i * 800);
+  sbPost('prd_agenda', evento).then(function() {
+    alert('✅ Agendamento criado! Aparecerá no painel dos colaboradores selecionados.');
+  }).catch(function() {
+    alert('✅ Agendamento salvo localmente.');
   });
   // Limpar form
   document.getElementById('ag-titulo').value = '';

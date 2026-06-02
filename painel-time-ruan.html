@@ -417,7 +417,8 @@ input[type="date"], input[type="time"] {
   
 </div>
 <div id="tab-chat" class="tab-c" style="padding:12px 12px 0"><div class="chat-wrap"><div class="chat-msgs" id="chat-msgs"></div><div class="chat-ia"><div class="chat-tools"><button class="ct-btn" id="btn-ajuda" onclick="chatToggleAjuda()">🤝 Pedir Ajuda</button><label class="ct-btn" for="chat-file-inp">📷 Foto</label><input type="file" id="chat-file-inp" accept="image/*" style="display:none" onchange="chatUploadMidia(this)"></div><div class="ajuda-form-box" id="ajuda-form-box"><div style="font-size:0.73rem;color:#f6ad55;font-weight:700;margin-bottom:6px">🤝 Pedir ajuda em tarefa</div><input id="ajuda-desc-inp" class="ag-inp" placeholder="Descreva a tarefa..."><button onclick="chatEnviarAjuda()" style="width:100%;padding:8px;background:#1a3a1a;border:1px solid #48bb78;border-radius:8px;color:#48bb78;font-size:0.82rem;font-weight:700;cursor:pointer">Enviar pedido</button></div><img class="chat-prev" id="chat-prev-img"><div class="chat-upst" id="chat-upst-msg"></div><div class="chat-row"><textarea class="chat-inp" id="chat-txt-inp" placeholder="Mensagem pro grupo..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();chatEnviarMsg();}"></textarea><button class="chat-sbtn" onclick="chatEnviarMsg()">➤</button></div></div></div></div>
-<div id="tab-agenda" class="tab-c"><button onclick="document.getElementById('ag-form-box').style.display=document.getElementById('ag-form-box').style.display==='block'?'none':'block'" style="width:100%;padding:12px;background:linear-gradient(135deg,#1a1a2e,#4a90d9);border:none;border-radius:12px;color:#fff;font-size:0.87rem;font-weight:700;cursor:pointer;margin-bottom:12px">+ Novo Agendamento</button><div id="ag-form-box" class="ag-form-box"><input id="ag-titulo-inp" class="ag-inp" placeholder="Título..."><div class="ag-dt-row"><input id="ag-data-inp" type="date" placeholder="Data"><input id="ag-hora-inp" type="time" placeholder="Hora"></div><input id="ag-desc-inp" class="ag-inp" placeholder="Descrição (opcional)"><select id="ag-quem-sel" class="ag-inp"><option value="todos">👥 Para todos</option><option value="gabriel">Gabriel</option><option value="ruan">Ruan</option><option value="caua">Cauã</option><option value="kauany">Kauany</option></select><button onclick="agCriar()" style="width:100%;padding:11px;background:linear-gradient(135deg,#1a1a2e,#4a90d9);border:none;border-radius:8px;color:#fff;font-size:0.87rem;font-weight:700;cursor:pointer">✅ Criar</button></div><div class="ag-fils"><button class="ag-fil active" onclick="agFil('todos',this)">Todos</button><button class="ag-fil" onclick="agFil('hoje',this)">Hoje</button><button class="ag-fil" onclick="agFil('semana',this)">Semana</button><button class="ag-fil" onclick="agFil('pendente',this)">Pendentes</button><button class="ag-fil" onclick="agFil('concluido',this)">Concluídos</button></div><div id="ag-lista"></div></div>
+<div id="tab-agenda" class="tab-c"><button onclick="document.getElementById('ag-form-box').style.display=document.getElementById('ag-form-box').style.display==='block'?'none':'block'" style="width:100%;padding:12px;background:linear-gradient(135deg,#1a1a2e,#4a90d9);border:none;border-radius:12px;color:#fff;font-size:0.87rem;font-weight:700;cursor:pointer;margin-bottom:12px">+ Novo Agendamento</button><div id="ag-form-box" class="ag-form-box"><input id="ag-titulo-inp" class="ag-inp" placeholder="Título..."><div class="ag-dt-row"><input id="ag-data-inp" type="date" placeholder="Data"><input id="ag-hora-inp" type="time" placeholder="Hora"></div><input id="ag-desc-inp" class="ag-inp" placeholder="Descrição (opcional)"><select id="ag-quem-sel" class="ag-inp"><option value="todos">👥 Para todos</option><option value="gabriel">Gabriel</option><option value="ruan">Ruan</option><option value="caua">Cauã</option><option value="kauany">Kauany</option></select><button onclick="agCriar()" style="width:100%;padding:11px;background:linear-gradient(135deg,#1a1a2e,#4a90d9);border:none;border-radius:8px;color:#fff;font-size:0.87rem;font-weight:700;cursor:pointer">✅ Criar</button></div><div class="ag-fils"><button class="ag-fil active" onclick="agFil('todos',this)">Todos</button><button class="ag-fil" onclick="agFil('hoje',this)">Hoje</button><button class="ag-fil" onclick="agFil('semana',this)">Semana</button><button class="ag-fil" onclick="agFil('pendente',this)">Pendentes</button><button class="ag-fil" onclick="agFil('concluido',this)">Concluídos</button></div><div id="ag-lista"></div><div style="margin-top:16px"><div style="font-size:.9rem;font-weight:600;margin-bottom:10px;color:#aaa">📅 Meus Agendamentos</div><div id="agenda-lista-colab"></div></div>
+</div>
 <div class="bot-nav">
     <button class="nav-b active" id="nav-inicio" onclick="swTab('inicio')"><span class="ni">🏠</span><span class="nl">Início</span></button>
     <button class="nav-b" id="nav-checklist" onclick="swTab('checklist')"><span class="ni">✅</span><span class="nl">Checklist</span></button>
@@ -444,12 +445,7 @@ input[type="date"], input[type="time"] {
     <input type="password" id="cfg-cf" placeholder="Confirmar nova senha">
     <button class="cfg-save-btn" onclick="alterarSenha()">🔒 Alterar Senha</button>
 
-    <button class="cfg-sv" onclick="saveCfg()">Salvar</button>
-    <button class="cfg-cn" onclick="closeCfg()">Cancelar</button>
-    <div class="cfg-msg" id="cfg-msg"></div>
-  </div>
-</div>
-<script>localStorage.removeItem('pg_sn_ruan');
+    <button class="cfg-sv" localStorage.removeItem('pg_sn_ruan');
 
 // ===== NOTIFICAÇÕES PUSH =====
 function solicitarNotificacao() {
@@ -1300,4 +1296,37 @@ function ajudaEnviarFoto(msgId, input) {
 
 
 
+
+// === AGENDA — buscar do Supabase ===
+function loadAgendaSB() {
+  var hoje = new Date().toISOString().split('T')[0];
+  sbGet('prd_agenda', 'data=gte.' + hoje + '&order=data.asc,hora.asc&limit=20').then(function(eventos) {
+    if (!Array.isArray(eventos)) return;
+    // Filtrar só os que incluem este colaborador (ou todos se convocados_ids vazio)
+    var meus = eventos.filter(function(e) {
+      if (!e.convocados_ids || e.convocados_ids.length === 0) return true;
+      return e.convocados_ids.indexOf('ruan') >= 0;
+    });
+    renderAgendaColab(meus);
+  });
+}
+
+function renderAgendaColab(eventos) {
+  var el = document.getElementById('agenda-lista-colab');
+  if (!el) return;
+  if (!eventos.length) {
+    el.innerHTML = '<div style="color:#666;text-align:center;padding:20px">Nenhum agendamento próximo</div>';
+    return;
+  }
+  var tipoLabel = {reuniao:'🤝 Reunião',tarefa:'📋 Tarefa',treinamento:'🎓 Treinamento',avaliacao:'📊 Avaliação',outro:'📌 Compromisso'};
+  el.innerHTML = eventos.map(function(e) {
+    var dataFmt = (e.data || '').split('-').reverse().join('/');
+    return '<div style="background:#111;border:1px solid #222;border-radius:12px;padding:14px;margin-bottom:10px">' +
+      '<div style="font-size:0.75rem;color:#f6ad55;font-weight:700;margin-bottom:4px">' + (tipoLabel[e.tipo] || '📌') + '</div>' +
+      '<div style="font-weight:700;font-size:0.95rem;margin-bottom:6px">' + e.titulo + '</div>' +
+      '<div style="font-size:0.8rem;color:#aaa">📅 ' + dataFmt + ' às ' + (e.hora || '') + '</div>' +
+      (e.local ? '<div style="font-size:0.8rem;color:#aaa">📍 ' + e.local + '</div>' : '') +
+      '</div>';
+  }).join('');
+}
 </script></body></html>
