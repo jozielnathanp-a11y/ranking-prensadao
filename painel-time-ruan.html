@@ -635,7 +635,7 @@ function loadMsgsSB(){
 const CC='dewulu3tj',CP='checklist_prensadao',JP='5542988819420',GR='120363289757731618@g.us';
 const FT='https://res.cloudinary.com/dewulu3tj/image/upload/v1780062694/checklist_prensadao/colaborador_ruan.jpg';
 const HIST=[{"data": "2026-05-20", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 3}, {"data": "2026-05-20", "pontos": 40, "motivo": "Início do 2º Ciclo", "tipo": "Ganho", "saldo": 43}, {"data": "2026-05-22", "pontos": 3, "motivo": "Trabalho em equipe", "tipo": "Ganho", "saldo": 46}, {"data": "2026-05-22", "pontos": 3, "motivo": "Dia sem erro (Semana Perfeita)", "tipo": "Ganho", "saldo": 49}, {"data": "2026-05-22", "pontos": 5, "motivo": "Checklist semanal feita", "tipo": "Ganho", "saldo": 54}, {"data": "2026-05-23", "pontos": 3, "motivo": "Proatividade — limpeza final da noite", "tipo": "Ganho", "saldo": 57}, {"data": "2026-05-24", "pontos": 3, "motivo": "Dia sem erro (Semana Perfeita)", "tipo": "Ganho", "saldo": 60}, {"data": "2026-05-24", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 63}, {"data": "2026-05-24", "pontos": 3, "motivo": "Proatividade — embalagens", "tipo": "Ganho", "saldo": 66}, {"data": "2026-05-26", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 69}, {"data": "2026-05-27", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 72}, {"data": "2026-05-27", "pontos": 3, "motivo": "Proatividade — maionese", "tipo": "Ganho", "saldo": 75}, {"data": "2026-05-28", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 78}, {"data": "2026-05-28", "pontos": 3, "motivo": "Proatividade — maionese", "tipo": "Ganho", "saldo": 81}, {"data": "2026-05-29", "pontos": 5, "motivo": "Checklist semanal feita", "tipo": "Ganho", "saldo": 86}, {"data": "2026-06-01", "pontos": 3, "motivo": "Proatividade — ficou na prensa", "tipo": "Ganho", "saldo": 89}, {"data": "2026-06-01", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 92}];
-const TRF=["Realizar a higienização das mesas utilizando esponja e sabão, limpar a escada e organizar o salão superior.", "Realizar a higienização do freezer expositor da coca e organizar os refrigerantes embaixo do balcão, mantendo a área limpa para o atendimento.", "Lavar os potinhos de molho e os porta-guardanapos e preencher para que não faltem durante a semana.", "Limpar as bandejas com água e sabão, e fazer uma contagem semanal das bandejas fundas e rasas.", "Realizar a higienização e organização dos recipientes de etiquetas. Listar os que estão em falta ou com baixa quantidade."];
+const TRF=["Efetuar a organização e higienização do balcão da mesa térmica e prateleira de molhos.", "Efetuar a higienização das mesas e a organização das garrafas que serão retornadas.", "Limpar as mesas amarelas e vermelhas do lado de fora, bem como as mesas de madeira no salão, com uma esponja e sabão.", "Higienizar o freezer e fazer a contagem das canecas.", "Limpar e organizar área kids salão, lavar piso área kids externa."];
 const STORE='pg_ruan';
 let tks=[null,null,null,null,null],phs=[null,null,null,null,null],excnt=0,exphs={},rat=0,histOpen=false;
 let tpSel=null,urgSel=null,chAnx=null,ptAnx=null;
@@ -1369,6 +1369,81 @@ function renderAgendaColab(eventos) {
       (e.local ? '<div style="font-size:0.8rem;color:#aaa">📍 ' + e.local + '</div>' : '') +
       '</div>';
   }).join('');
+}
+
+
+function renderTK() {
+  var c = document.getElementById('tk-container');
+  if (!c) return;
+  c.innerHTML = '';
+  TRF.forEach(function(t, i) {
+    var done = CL_STATE.tasks && CL_STATE.tasks[i] && CL_STATE.tasks[i].done;
+    var foto = CL_STATE.tasks && CL_STATE.tasks[i] && CL_STATE.tasks[i].foto;
+    var div = document.createElement('div');
+    div.className = 'tk-item' + (done ? ' tk-done' : '');
+    div.innerHTML =
+      '<div class="tk-header">' +
+        '<span class="tk-num">' + (i+1) + '</span>' +
+        '<span class="tk-txt">' + t + '</span>' +
+        '<span class="tk-check" id="ck-' + i + '" onclick="toggleTK(' + i + ')">' + (done ? '✅' : '⬜') + '</span>' +
+      '</div>' +
+      '<div class="tk-foto-area" id="foto-area-' + i + '" style="' + (done ? '' : 'display:none') + '">' +
+        (foto
+          ? '<img src="' + foto + '" class="tk-foto-preview" onclick="window.open(this.src)" />'
+          : '<label class="tk-foto-label" for="foto-' + i + '">📷 Adicionar foto (opcional)</label>' +
+            '<input type="file" id="foto-' + i + '" accept="image/*" capture="environment" style="display:none" onchange="uploadFoto(this,' + i + ')">'
+        ) +
+      '</div>';
+    c.appendChild(div);
+  });
+  renderProg();
+}
+
+function toggleTK(i) {
+  if (!CL_STATE.tasks) CL_STATE.tasks = {};
+  if (!CL_STATE.tasks[i]) CL_STATE.tasks[i] = {};
+  CL_STATE.tasks[i].done = !CL_STATE.tasks[i].done;
+  autoSave();
+  renderTK();
+}
+
+function renderProg() {
+  var total = TRF.length;
+  var done = 0;
+  if (CL_STATE.tasks) {
+    Object.keys(CL_STATE.tasks).forEach(function(k) {
+      if (CL_STATE.tasks[k] && CL_STATE.tasks[k].done) done++;
+    });
+  }
+  var pct = Math.round((done / total) * 100);
+  var fill = document.getElementById('prog-fill');
+  var txt = document.getElementById('prog-txt');
+  if (fill) fill.style.width = pct + '%';
+  if (txt) txt.textContent = done + ' de ' + total + ' tarefas concluídas';
+}
+
+function uploadFoto(input, idx) {
+  var f = input.files[0];
+  if (!f) return;
+  var st = document.createElement('div');
+  st.style.cssText = 'font-size:0.8rem;color:#aaa;margin-top:4px';
+  st.textContent = '⏳ Enviando foto...';
+  input.parentNode.appendChild(st);
+  var fd = new FormData();
+  fd.append('file', f);
+  fd.append('upload_preset', 'checklist_prensadao');
+  fd.append('cloud_name', 'dewulu3tj');
+  fetch('https://api.cloudinary.com/v1_1/dewulu3tj/image/upload', { method: 'POST', body: fd })
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
+      if (!data.secure_url) { st.textContent = '❌ Erro no envio.'; return; }
+      if (!CL_STATE.tasks) CL_STATE.tasks = {};
+      if (!CL_STATE.tasks[idx]) CL_STATE.tasks[idx] = {};
+      CL_STATE.tasks[idx].foto = data.secure_url;
+      autoSave();
+      renderTK();
+    })
+    .catch(function(){ st.textContent = '❌ Erro. Tente novamente.'; });
 }
 
 // === ROLETA ===
