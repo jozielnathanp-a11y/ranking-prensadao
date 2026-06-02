@@ -872,7 +872,8 @@ function swTab(t){
   document.getElementById('tab-'+t).classList.add('active');
   document.getElementById('nav-'+t).classList.add('active');
 
-  if(t==='chat'){chatStartPoll();}
+  if(t==='chat'){chatStartPoll();
+  if(t==='checklist'){buildTks();loadSv();}}
   if(t==='msgs'){loadMsgsSB();}
 }
 
@@ -1280,6 +1281,7 @@ function renderAgendaColab(eventos) {
 
 function buildTks(){
   const c=document.getElementById('tk-container');
+  if(!c){setTimeout(buildTks,200);return;}
   c.innerHTML=TRF.map((t,i)=>`
     <div class="tk" id="tk-${i}">
       <div class="tk-desc">${i+1}. ${t}</div>
