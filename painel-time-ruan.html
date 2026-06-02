@@ -1091,8 +1091,13 @@ function chatAceitar(msgId) {
     ganhos.push({ ts: Date.now(), de: 'ruan', nome: 'Ruan', pts: 3, motivo: 'Ajudou: ' + msgs[idx].texto.substring(0,40) });
     localStorage.setItem('prd_ajuda_ganhos', JSON.stringify(ganhos));
   } catch(e) {}
-  msgs.push({ id: Date.now()+1, ts: Date.now(), de: 'sistema', nome: 'Sistema', emoji: '🤖', texto: '✅ Ruan aceitou ajudar! +3 pts para cada. Gestor será notificado.', midia: null, tipo: 'sistema' });
+  var msgSistema = { id: Date.now()+1, ts: Date.now(), de: 'sistema', nome: 'Sistema', emoji: '🤖', texto: '✅ Ruan aceitou ajudar! +3 pts para cada. Gestor será notificado.', midia: null, tipo: 'sistema' };
+  msgs.push(msgSistema);
   chatSaveMsgs(msgs);
+  // Sincronizar ajuda aceita e msg sistema no Supabase
+  var ajudaAtualizada = msgs[idx];
+  sbPost('prd_chat_grupo', ajudaAtualizada);
+  sbPost('prd_chat_grupo', msgSistema);
   chatRender();
 }
 
