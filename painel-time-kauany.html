@@ -766,13 +766,31 @@ function autoSave(){
 
 
 function loadSv(){
-  try{
-    const d=JSON.parse(localStorage.getItem(STORE+'_cl')||'{}');
-    if(d.tks)d.tks.forEach((s,i)=>{if(s)selTk(i,s);});
-    if(d.phs)phs=d.phs;
-    if(d.obs)document.getElementById('obs-cl').value=d.obs;
-    if(d.rat)setRat(d.rat);
-  }catch(e){}
+  try {
+    // Tentar carregar formato novo primeiro
+    var sv2 = localStorage.getItem(STORE + '_clv2');
+    if (sv2) {
+      var parsed = JSON.parse(sv2);
+      if (parsed && parsed.tasks) {
+        CL_STATE = parsed;
+        renderTK();
+        return;
+      }
+    }
+    // Fallback: formato antigo
+    var d = JSON.parse(localStorage.getItem(STORE + '_cl') || '{}');
+    if (d.tks) {
+      d.tks.forEach(function(s, i) {
+        if (s === 'sim') {
+          if (!CL_STATE.tasks[i]) CL_STATE.tasks[i] = {};
+          CL_STATE.tasks[i].done = true;
+        }
+      });
+    }
+    if (d.obs) { var el = document.getElementById('obs-cl'); if(el) el.value = d.obs; }
+    if (d.rat) setRat(d.rat);
+    renderTK();
+  } catch(e) { renderTK(); }
 }
 
 async function submitCL(){
