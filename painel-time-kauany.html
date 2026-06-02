@@ -1378,47 +1378,6 @@ function renderAgendaColab(eventos) {
 
 
 
-function renderTK() {
-  var c = document.getElementById('tk-container');
-  if (!c) return;
-  c.innerHTML = '';
-  TRF.forEach(function(t, i) {
-    var state = (CL_STATE.tasks && CL_STATE.tasks[i]) ? CL_STATE.tasks[i] : {};
-    var done = state.done || false;
-    var fotos = state.fotos || [];
-    var div = document.createElement('div');
-    div.className = 'tk-item' + (done ? ' tk-done' : '');
-    div.id = 'tk-item-' + i;
-    var fotosHtml = '';
-    fotos.forEach(function(url, fi) {
-      fotosHtml += '<div style="position:relative;display:inline-block;margin:4px">' +
-        '<img src="' + url + '" style="width:72px;height:72px;object-fit:cover;border-radius:8px;cursor:pointer" onclick="window.open(\'' + url + '\')" />' +
-        (done ? '' : '<span onclick="removeFoto(' + i + ',' + fi + ')" style="position:absolute;top:-4px;right:-4px;background:#e74c3c;color:#fff;border-radius:50%;width:18px;height:18px;font-size:11px;line-height:18px;text-align:center;cursor:pointer">x</span>') +
-        '</div>';
-    });
-    var addFotoHtml = '';
-    if (!done && fotos.length < 3) {
-      addFotoHtml = '<label for="foto-' + i + '" style="display:inline-block;margin:4px;padding:8px 12px;background:#1a3a1a;border:2px dashed #48bb78;border-radius:8px;color:#48bb78;font-size:0.8rem;cursor:pointer">' +
-        (fotos.length === 0 ? 'Adicionar foto (obrigatorio)' : 'Adicionar mais (' + fotos.length + '/3)') +
-        '</label>' +
-        '<input type="file" id="foto-' + i + '" accept="image/*" capture="environment" style="display:none" onchange="uploadFoto(this,' + i + ')">';
-    }
-    var cor = fotos.length === 0 ? '#e74c3c' : '#48bb78';
-    var contHtml = done ? '' : '<div style="font-size:0.75rem;color:' + cor + ';margin-top:4px">' +
-      (fotos.length === 0 ? 'Minimo 1 foto obrigatoria' : fotos.length + '/3 foto(s)') + '</div>';
-    div.innerHTML =
-      '<div class="tk-header">' +
-        '<span class="tk-num">' + (i+1) + '</span>' +
-        '<span class="tk-txt">' + t + '</span>' +
-        '<span class="tk-check" onclick="toggleTK(' + i + ')" style="cursor:pointer">' + (done ? '' : '') + '</span>' +
-      '</div>' +
-      '<div style="padding:8px 0 4px">' + fotosHtml + addFotoHtml + contHtml +
-        '<div id="foto-status-' + i + '" style="font-size:0.8rem;color:#aaa;margin-top:4px"></div>' +
-      '</div>';
-    c.appendChild(div);
-  });
-  renderProg();
-}
 function toggleTK(i) {
   if (!CL_STATE.tasks) CL_STATE.tasks = {};
   if (!CL_STATE.tasks[i]) CL_STATE.tasks[i] = {};
@@ -1515,6 +1474,66 @@ function uploadFoto(input, idx) {
     img.src = e.target.result;
   };
   reader.readAsDataURL(f);
+}
+
+
+function renderTK() {
+  var c = document.getElementById('tk-container');
+  if (!c) return;
+  c.innerHTML = '';
+  if (!CL_STATE || !CL_STATE.tasks) CL_STATE = {tasks: {}};
+  TRF.forEach(function(t, i) {
+    var state = CL_STATE.tasks[i] || {};
+    var done  = state.done  || false;
+    var fotos = state.fotos || [];
+    var div = document.createElement('div');
+    div.className = 'tk-item' + (done ? ' tk-done' : '');
+
+    // Fotos já enviadas
+    var fotosHtml = '';
+    fotos.forEach(function(url, fi) {
+      fotosHtml +=
+        '<div style="position:relative;display:inline-block;margin:4px">' +
+          '<img src="' + url + '" onclick="window.open(this.src)" ' +
+            'style="width:72px;height:72px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid #48bb78">' +
+          (done ? '' :
+            '<span onclick="removeFoto(' + i + ',' + fi + ')" ' +
+              'style="position:absolute;top:-4px;right:-4px;background:#e74c3c;color:#fff;border-radius:50%;width:18px;height:18px;font-size:11px;line-height:18px;text-align:center;cursor:pointer">x</span>'
+          ) +
+        '</div>';
+    });
+
+    // Botão adicionar foto
+    var addFotoHtml = '';
+    if (!done && fotos.length < 3) {
+      addFotoHtml =
+        '<label for="foto-' + i + '" ' +
+          'style="display:inline-block;margin:6px 4px 0;padding:8px 14px;background:#1a3a1a;border:2px dashed #48bb78;border-radius:8px;color:#48bb78;font-size:0.82rem;cursor:pointer">' +
+          (fotos.length === 0 ? '📷 Adicionar foto (obrigatório)' : '📷 Mais (' + fotos.length + '/3)') +
+        '</label>' +
+        '<input type="file" id="foto-' + i + '" accept="image/*" capture="environment" style="display:none" onchange="uploadFoto(this,' + i + ')">';
+    }
+
+    // Aviso mín/máx
+    var avisoHtml = done ? '' :
+      '<div style="font-size:0.75rem;margin-top:4px;color:' + (fotos.length === 0 ? '#e74c3c' : '#48bb78') + '">' +
+        (fotos.length === 0 ? '⚠️ Mínimo 1 foto obrigatória' : '✅ ' + fotos.length + '/3 foto(s)') +
+      '</div>';
+
+    div.innerHTML =
+      '<div class="tk-header">' +
+        '<span class="tk-num">' + (i + 1) + '</span>' +
+        '<span class="tk-txt">' + t + '</span>' +
+        '<span class="tk-check" onclick="toggleTK(' + i + ')" style="cursor:pointer;font-size:1.2rem">' + (done ? '✅' : '⬜') + '</span>' +
+      '</div>' +
+      '<div style="padding:6px 0 8px 0">' +
+        fotosHtml + addFotoHtml + avisoHtml +
+        '<div id="foto-status-' + i + '" style="font-size:0.8rem;color:#aaa;margin-top:4px"></div>' +
+      '</div>';
+
+    c.appendChild(div);
+  });
+  renderProg();
 }
 
 </script></body></html>
