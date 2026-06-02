@@ -598,7 +598,7 @@ function loadMsgsSB(){
 
 const CC='dewulu3tj',CP='checklist_prensadao',JP='5542988819420',GR='120363289757731618@g.us';
 const FT='https://res.cloudinary.com/dewulu3tj/image/upload/v1780062694/checklist_prensadao/colaborador_ruan.jpg';
-const HIST=[{"data": "2026-05-20", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 43}, {"data": "2026-05-22", "pontos": 3, "motivo": "Trabalho em equipe", "tipo": "Ganho", "saldo": 46}, {"data": "2026-05-22", "pontos": 3, "motivo": "Dia sem erro (Semana Perfeita)", "tipo": "Ganho", "saldo": 49}, {"data": "2026-05-22", "pontos": 5, "motivo": "Checklist semanal feita", "tipo": "Ganho", "saldo": 54}, {"data": "2026-05-23", "pontos": 3, "motivo": "Proatividade — limpeza final da noite", "tipo": "Ganho", "saldo": 57}, {"data": "2026-05-24", "pontos": 3, "motivo": "Dia sem erro (Semana Perfeita)", "tipo": "Ganho", "saldo": 60}, {"data": "2026-05-24", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 63}, {"data": "2026-05-24", "pontos": 3, "motivo": "Proatividade — embalagens", "tipo": "Ganho", "saldo": 66}, {"data": "2026-05-26", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 69}, {"data": "2026-05-27", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 72}, {"data": "2026-05-27", "pontos": 3, "motivo": "Proatividade — maionese", "tipo": "Ganho", "saldo": 75}, {"data": "2026-05-28", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 78}, {"data": "2026-05-28", "pontos": 3, "motivo": "Proatividade — maionese", "tipo": "Ganho", "saldo": 81}];
+const HIST=[{"data": "2026-05-20", "pontos": 40, "motivo": "Início do 2º Ciclo", "tipo": "Ganho", "saldo": 40}, {"data": "2026-05-30", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 43}, {"data": "2026-05-30", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 46}, {"data": "2026-05-30", "pontos": 3, "motivo": "Proatividade na prensa", "tipo": "Ganho", "saldo": 49}];
 const TRF=["Realizar a higienização das mesas utilizando esponja e sabão, limpar a escada e organizar o salão superior.", "Realizar a higienização do freezer expositor da coca e organizar os refrigerantes embaixo do balcão, mantendo a área limpa para o atendimento.", "Lavar os potinhos de molho e os porta-guardanapos e preencher para que não faltem durante a semana.", "Limpar as bandejas com água e sabão, e fazer uma contagem semanal das bandejas fundas e rasas.", "Realizar a higienização e organização dos recipientes de etiquetas. Listar os que estão em falta ou com baixa quantidade."];
 const STORE='pg_kauany';
 let tks=[null,null,null,null,null],phs=[null,null,null,null,null],excnt=0,exphs={},rat=0,histOpen=false;
@@ -646,11 +646,7 @@ function initApp(){
   document.getElementById('pt-data').value=new Date().toISOString().split('T')[0];
 }
 
-function renderMeta(){
-  const t=137,pct=Math.min((t/320)*100,100);
-  document.getElementById('meta-fill').style.width=pct+'%';
-  document.getElementById('meta-atual').textContent=t+' pts';
-}
+function renderMeta(){const t=236,pct=Math.min((t/320)*100,100);document.getElementById('meta-fill').style.width=pct+'%';document.getElementById('meta-atual').textContent=t+' pts';}
 
 function renderHist(){
   const lst=document.getElementById('hist-lista');
