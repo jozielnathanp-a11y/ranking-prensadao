@@ -447,6 +447,35 @@ input[type="date"], input[type="time"] {
       </div>
     </div>
 
+
+    <!-- Gerenciar Checklists -->
+    <div class="mon-section" id="sec-ger-cl">
+      <div class="mon-title" onclick="gesClToggle()" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between">
+        <span>⚙️ Gerenciar Checklists</span>
+        <span id="ger-cl-arrow" style="font-size:0.8rem;color:#aaa">▼</span>
+      </div>
+      <div id="ger-cl-body" style="display:none;margin-top:12px">
+
+        <!-- Selecionar colaborador -->
+        <div style="margin-bottom:12px">
+          <label style="font-size:0.8rem;color:#aaa;display:block;margin-bottom:6px">Colaborador:</label>
+          <div style="display:flex;flex-wrap:wrap;gap:8px" id="ger-cl-sel"></div>
+        </div>
+
+        <!-- Lista de tarefas editável -->
+        <div id="ger-cl-tarefas" style="margin-bottom:12px"></div>
+
+        <!-- Botões de ação -->
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px">
+          <button onclick="gesClAddTarefa()" style="padding:10px;background:#1a2a3a;border:1px dashed #3498db;border-radius:10px;color:#3498db;font-weight:700;cursor:pointer">+ Adicionar tarefa</button>
+          <button onclick="gesClSalvar()" style="padding:12px;background:linear-gradient(135deg,#ff6b00,#e65c00);color:#fff;border:none;border-radius:10px;font-weight:800;cursor:pointer">💾 Salvar alterações</button>
+          <button onclick="gesClZerar()" style="padding:12px;background:#1a0000;border:1px solid #e74c3c;color:#e74c3c;border-radius:10px;font-weight:700;cursor:pointer">🗑️ Zerar progresso (como se não tivesse feito)</button>
+        </div>
+
+        <div id="ger-cl-status" style="text-align:center;font-size:0.85rem;margin-top:10px;color:#aaa"></div>
+      </div>
+    </div>
+
     <!-- Checklist -->
     <div class="mon-section">
       <div class="mon-title">✅ Checklist do Time</div>
@@ -1620,6 +1649,170 @@ function gesAprovarChecklist(colabId, colabNome, semana, feitas, total) {
   alert('✅ Aprovado! +5 pts para ' + colabNome);
   monRenderChecklistSB();
 }
+
+
+// === GERENCIAR CHECKLISTS ===
+var GES_CL_COLAB = null;
+var GES_CL_TAREFAS_MAP = {
+  'ruan':    [
+    "Efetuar a organização e higienização do balcão da mesa térmica e prateleira de molhos.",
+    "Efetuar a higienização das mesas e a organização das garrafas que serão retornadas.",
+    "Limpar as mesas amarelas e vermelhas do lado de fora, bem como as mesas de madeira no salão, com uma esponja e sabão.",
+    "Higienizar o freezer e fazer a contagem das canecas.",
+    "Limpar e organizar área kids salão, lavar piso área kids externa."
+  ],
+  'kauany':  [
+    "Realizar a higienização das mesas utilizando esponja e sabão, limpar a escada e organizar o salão superior.",
+    "Realizar a higienização do freezer expositor da Coca e organizar os refrigerantes embaixo do balcão, mantendo a área limpa para o atendimento.",
+    "Lavar os potinhos de molho e os porta-guardanapos e preencher para que não faltem durante a semana.",
+    "Limpar as bandejas com água e sabão, e fazer uma contagem semanal das bandejas fundas e rasas.",
+    "Realizar a higienização e a organização dos recipientes contendo etiquetas de identificação dos lanches. Elaborar uma lista dos que se encontram em falta ou com baixa quantidade."
+  ],
+  'caua':    [
+    "Higienização das mesas, escada e salão superior.",
+    "Higienização do freezer e organização dos refrigerantes.",
+    "Lavar potinhos de molho e porta-guardanapos.",
+    "Limpar bandejas e contar fundas e rasas.",
+    "Higienização dos recipientes de etiquetas."
+  ],
+  'gabriel': [
+    "Higienização das mesas, escada e salão superior.",
+    "Higienização do freezer e organização dos refrigerantes.",
+    "Lavar potinhos de molho e porta-guardanapos.",
+    "Limpar bandejas e contar fundas e rasas.",
+    "Higienização dos recipientes de etiquetas."
+  ]
+};
+
+function gesClToggle() {
+  var body = document.getElementById('ger-cl-body');
+  var arrow = document.getElementById('ger-cl-arrow');
+  if (!body) return;
+  var open = body.style.display !== 'none';
+  body.style.display = open ? 'none' : 'block';
+  if (arrow) arrow.textContent = open ? '▼' : '▲';
+  if (!open && !GES_CL_COLAB) gesClInitSel();
+}
+
+function gesClInitSel() {
+  var sel = document.getElementById('ger-cl-sel');
+  if (!sel) return;
+  sel.innerHTML = COLABORADORES.map(function(c) {
+    return '<button onclick="gesClSelectColab(\'' + c.id + '\')" id="ger-sel-' + c.id + '" ' +
+      'style="padding:8px 14px;border-radius:20px;border:2px solid #333;background:#111;color:#aaa;font-weight:700;cursor:pointer">' +
+      (c.emoji || '') + ' ' + c.nome + '</button>';
+  }).join('');
+}
+
+function gesClSelectColab(id) {
+  GES_CL_COLAB = id;
+  // Destacar botão selecionado
+  COLABORADORES.forEach(function(c) {
+    var btn = document.getElementById('ger-sel-' + c.id);
+    if (btn) {
+      btn.style.borderColor = c.id === id ? '#ff6b00' : '#333';
+      btn.style.color = c.id === id ? '#ff6b00' : '#aaa';
+      btn.style.background = c.id === id ? '#1a0d00' : '#111';
+    }
+  });
+  gesClRenderTarefas();
+}
+
+function gesClRenderTarefas() {
+  var el = document.getElementById('ger-cl-tarefas');
+  if (!el || !GES_CL_COLAB) return;
+  var tarefas = GES_CL_TAREFAS_MAP[GES_CL_COLAB] || [];
+  el.innerHTML = '<div style="font-size:0.8rem;color:#aaa;margin-bottom:8px">Tarefas (' + tarefas.length + '):</div>' +
+    tarefas.map(function(t, i) {
+      return '<div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:8px" id="ger-tk-row-' + i + '">' +
+        '<span style="color:#aaa;font-size:0.85rem;padding-top:10px;min-width:18px">' + (i+1) + '.</span>' +
+        '<textarea id="ger-tk-' + i + '" rows="2" style="flex:1;background:#0d0d0d;border:1px solid #333;border-radius:8px;color:#ddd;padding:8px;font-size:0.82rem;resize:vertical">' + t + '</textarea>' +
+        '<button onclick="gesClRemoverTarefa(' + i + ')" style="padding:6px 10px;background:#1a0000;border:1px solid #e74c3c;border-radius:8px;color:#e74c3c;cursor:pointer;font-size:0.8rem;margin-top:4px">✕</button>' +
+      '</div>';
+    }).join('');
+}
+
+function gesClAddTarefa() {
+  if (!GES_CL_COLAB) { alert('Selecione um colaborador primeiro!'); return; }
+  GES_CL_TAREFAS_MAP[GES_CL_COLAB] = GES_CL_TAREFAS_MAP[GES_CL_COLAB] || [];
+  GES_CL_TAREFAS_MAP[GES_CL_COLAB].push('');
+  gesClRenderTarefas();
+  // Focar no novo campo
+  var newIdx = GES_CL_TAREFAS_MAP[GES_CL_COLAB].length - 1;
+  setTimeout(function(){ var el = document.getElementById('ger-tk-' + newIdx); if(el) el.focus(); }, 100);
+}
+
+function gesClRemoverTarefa(idx) {
+  if (!GES_CL_COLAB) return;
+  if (!confirm('Remover tarefa ' + (idx+1) + '?')) return;
+  GES_CL_TAREFAS_MAP[GES_CL_COLAB].splice(idx, 1);
+  gesClRenderTarefas();
+}
+
+function gesClLerCampos() {
+  if (!GES_CL_COLAB) return [];
+  var tarefas = GES_CL_TAREFAS_MAP[GES_CL_COLAB] || [];
+  return tarefas.map(function(t, i) {
+    var el = document.getElementById('ger-tk-' + i);
+    return el ? el.value.trim() : t;
+  }).filter(function(t){ return t.length > 0; });
+}
+
+function gesClSalvar() {
+  if (!GES_CL_COLAB) { alert('Selecione um colaborador primeiro!'); return; }
+  var novas = gesClLerCampos();
+  if (novas.length === 0) { alert('Adicione pelo menos 1 tarefa!'); return; }
+
+  GES_CL_TAREFAS_MAP[GES_CL_COLAB] = novas;
+
+  // Salvar no Supabase para sincronizar com o painel do colaborador
+  sbPost('prd_tarefas', {
+    colab_id: GES_CL_COLAB,
+    tarefas: novas,
+    ts: Date.now(),
+    atualizado_por: 'gestor'
+  }).then(function() {
+    var st = document.getElementById('ger-cl-status');
+    if (st) { st.style.color = '#48bb78'; st.textContent = '✅ Tarefas salvas! O painel do colaborador vai atualizar automaticamente.'; }
+    gesClRenderTarefas();
+    // Atualizar visualização do checklist também
+    monRenderChecklistSB();
+  }).catch(function() {
+    // Salvar localmente como fallback
+    localStorage.setItem('ges_trf_' + GES_CL_COLAB, JSON.stringify(novas));
+    var st = document.getElementById('ger-cl-status');
+    if (st) { st.style.color = '#f1c40f'; st.textContent = '⚠️ Salvo localmente. Verifique a conexão.'; }
+  });
+}
+
+function gesClZerar() {
+  if (!GES_CL_COLAB) { alert('Selecione um colaborador primeiro!'); return; }
+  var colab = COLABORADORES.find(function(c){ return c.id === GES_CL_COLAB; });
+  var nome = colab ? colab.nome : GES_CL_COLAB;
+  if (!confirm('Zerar o progresso do checklist de ' + nome + '?\nIsso vai apagar todas as marcações e fotos desta semana.')) return;
+
+  // Deletar da tabela prd_checklist
+  fetch(SB_URL + '/rest/v1/prd_checklist?colab_id=eq.' + GES_CL_COLAB, {
+    method: 'DELETE',
+    headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
+  }).then(function() {
+    // Notificar colaborador
+    sbPost('prd_mensagens', {
+      ts: Date.now(), de: 'gestor', para: GES_CL_COLAB, tipo: 'notif',
+      texto: '🔄 Seu checklist foi zerado pelo gestor. Pode começar novamente!',
+      nome: 'Gestor'
+    });
+    var st = document.getElementById('ger-cl-status');
+    if (st) { st.style.color = '#e74c3c'; st.textContent = '🗑️ Checklist de ' + nome + ' zerado!'; }
+    // Remover aprovação local
+    localStorage.removeItem('ges_cl_aprovado_' + GES_CL_COLAB + '_' + new Date().toISOString().slice(0,10));
+    monRenderChecklistSB();
+  }).catch(function() {
+    var st = document.getElementById('ger-cl-status');
+    if (st) { st.style.color = '#e74c3c'; st.textContent = '❌ Erro ao zerar. Tente novamente.'; }
+  });
+}
+// === FIM GERENCIAR CHECKLISTS ===
 
 </script>
 </body>
