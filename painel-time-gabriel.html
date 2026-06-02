@@ -1283,17 +1283,18 @@ function ajudaEnviarFoto(msgId, input) {
 }
 
 
-// === AGENDA — buscar do Supabase ===
+// === AGENDA — buscar do Supabase via prd_mensagens ===
 function loadAgendaSB() {
-  var hoje = new Date().toISOString().split('T')[0];
-  sbGet('prd_agenda', 'data=gte.' + hoje + '&order=data.asc,hora.asc&limit=20').then(function(eventos) {
-    if (!Array.isArray(eventos)) return;
-    // Filtrar só os que incluem este colaborador (ou todos se convocados_ids vazio)
-    var meus = eventos.filter(function(e) {
-      if (!e.convocados_ids || e.convocados_ids.length === 0) return true;
-      return e.convocados_ids.indexOf('gabriel') >= 0;
-    });
-    renderAgendaColab(meus);
+  sbGet('prd_mensagens', 'para=eq.gabriel&tipo=eq.agenda&order=ts.desc&limit=30').then(function(msgs) {
+    if (!Array.isArray(msgs)) return;
+    var hoje = new Date().toISOString().split('T')[0];
+    var eventos = msgs.map(function(m) {
+      var d = {};
+      try { d = JSON.parse(m.dados || '{}'); } catch(e) {}
+      return { titulo: m.texto, data: d.data || '', hora: d.hora || '', tipo: d.tipo || '', local: d.local || '', ts: m.ts };
+    }).filter(function(e) { return e.data >= hoje; });
+    eventos.sort(function(a,b){ return (a.data+a.hora) < (b.data+b.hora) ? -1 : 1; });
+    renderAgendaColab(eventos);
   });
 }
 

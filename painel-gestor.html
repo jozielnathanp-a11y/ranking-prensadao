@@ -1200,11 +1200,21 @@ function agAgendar() {
   var agenda = getAgenda();
   agenda.push(evento);
   saveAgenda(agenda);
-  sbPost('prd_agenda', evento).then(function() {
-    alert('✅ Agendamento criado! Aparecerá no painel dos colaboradores selecionados.');
-  }).catch(function() {
-    alert('✅ Agendamento salvo localmente.');
+  // Enviar via prd_mensagens para cada convocado (tipo='agenda')
+  var ids = convocadosIds.length > 0 ? convocadosIds : COLABORADORES.map(function(c){ return c.id; });
+  ids.forEach(function(colabId) {
+    sbPost('prd_mensagens', {
+      para: colabId,
+      de: 'gestor',
+      nome: 'Josiel (Gestor)',
+      tipo: 'agenda',
+      texto: titulo,
+      dados: JSON.stringify({ data: data, hora: hora, tipo: tipo, local: local, convocados: convocados }),
+      lida: false,
+      ts: Date.now()
+    });
   });
+  alert('✅ Agendamento criado! Aparecerá na aba Agenda dos colaboradores selecionados.');
   // Limpar form
   document.getElementById('ag-titulo').value = '';
   document.getElementById('ag-data').value = '';
