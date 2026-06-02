@@ -951,11 +951,11 @@ function tsFmt(ts){ const d=new Date(ts); return d.toLocaleDateString('pt-BR')+'
 function tipoLabel(t){ return {recado:'💬 Recado',tarefa:'📋 Tarefa',doc:'📄 Solicitar Doc',foto:'📷 Solicitar Foto',aviso:'⚠️ Aviso'}[t]||t; }
 
 
-let msgRespAnexoURL_ruan = null;
+let msgRespAnexoURL_kauany = null;
 
 
 
-async function uploadRespColab_ruan(msgId, input){
+async function uploadRespColab_kauany(msgId, input){
   const file=input.files[0]; if(!file) return;
   const st=document.getElementById('rst-'+msgId); st.textContent='⏳ Enviando...';
   const fd=new FormData(); fd.append('file',file); fd.append('upload_preset','checklist_prensadao');
@@ -963,25 +963,25 @@ async function uploadRespColab_ruan(msgId, input){
     const r=await fetch('https://api.cloudinary.com/v1_1/dewulu3tj/upload',{method:'POST',body:fd});
     const d=await r.json();
     if(d.secure_url){
-      msgRespAnexoURL_ruan = d.secure_url;
+      msgRespAnexoURL_kauany = d.secure_url;
       if(file.type.startsWith('image/')){document.getElementById('rpv-'+msgId).src=d.secure_url;document.getElementById('rpv-'+msgId).style.display='block';}
       st.textContent='✅ Enviado!';
     } else st.textContent='❌ Erro.';
   }catch(e){st.textContent='❌ Erro.';}
 }
 
-function enviarRespColab_ruan(msgId){
+function enviarRespColab_kauany(msgId){
   const txt=document.getElementById('ri-'+msgId)?.value?.trim();
-  if(!txt && !msgRespAnexoURL_ruan){ alert('Escreva uma resposta ou anexe um arquivo!'); return; }
+  if(!txt && !msgRespAnexoURL_kauany){ alert('Escreva uma resposta ou anexe um arquivo!'); return; }
   const msgs=getMsgs('kauany');
   const idx=msgs.findIndex(m=>String(m.id)===String(msgId));
   if(idx>=0){
     msgs[idx].resposta=txt||'(sem texto)';
-    msgs[idx].respAnexo=msgRespAnexoURL_ruan;
+    msgs[idx].respAnexo=msgRespAnexoURL_kauany;
     msgs[idx].respTs=Date.now();
     msgs[idx].status='respondido';
     saveMsgs('kauany',msgs);
-    msgRespAnexoURL_ruan=null;
+    msgRespAnexoURL_kauany=null;
   }
   alert('✅ Resposta enviada!');
 }
@@ -1224,7 +1224,7 @@ function agRender() {
   else if (agFiltro === 'concluido') items = items.filter(function(a){ return a.status === 'concluido'; });
   items.sort(function(a,b){ return new Date(a.datahora) - new Date(b.datahora); });
   if (!items.length) { lista.innerHTML = '<div style="text-align:center;padding:40px;color:#333"><div style="font-size:2rem;margin-bottom:8px">📅</div><p>Nenhum agendamento</p></div>'; return; }
-  var QL = { todos:'👥 Todos', gabriel:'Gabriel', ruan:'Kauany', caua:'Cauã', kauany:'Kauany', gestor:'Josiel' };
+  var QL = { todos:'👥 Todos', gabriel:'Gabriel', ruan:'Ruan', caua:'Cauã', kauany:'Kauany', gestor:'Josiel' };
   lista.innerHTML = items.map(function(a) {
     var atr = new Date(a.datahora) < new Date() && a.status === 'pendente';
     var cls = a.status === 'concluido' ? 'concluido' : (atr ? 'atrasado' : '');
