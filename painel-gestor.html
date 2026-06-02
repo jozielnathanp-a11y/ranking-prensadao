@@ -871,7 +871,7 @@ function renderChamados(){
       '<textarea class="resp-inp" id="ri-'+c.id+'" placeholder="Escreva sua resposta...">'+(c.resposta||'')+'</textarea>'+
       '<div class="btn-row">'+
       '<button class="btn-resp" data-colabid="'+c._colabId+'" data-cid="'+c.id+'">&#x2705; Salvar</button>'+
-      '<button class="btn-wpp" data-colabid="'+c._colabId+'" data-cid="'+c.id+'" data-phone="'+c._phone+'">&#128242; WPP</button>'+
+      
       (c.status==="aberto"?'<button class="btn-fechar" data-colabid="'+c._colabId+'" data-cid="'+c.id+'">Fechar</button>':'')+
       (c.status==="aberto"?'<button class="btn-rejeitar" data-colabid="'+c._colabId+'" data-cid="'+c.id+'" style="background:#3a1a1a;border:1px solid #fc5c5c;color:#fc5c5c;padding:7px 14px;border-radius:8px;font-size:0.78rem;font-weight:700;cursor:pointer">❌ Rejeitar</button>':'')+
       '</div></div></div>';
