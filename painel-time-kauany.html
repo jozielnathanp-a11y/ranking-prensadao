@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0a0a0a">
@@ -279,11 +276,11 @@ input[type="date"], input[type="time"] {
   <div class="top-hdr">
     <img class="top-av" id="top-av" src="" alt="G">
     <div>
-      <div class="top-nm">Kauany</div>
+      <div class="top-nm">Ruan</div>
       <div class="top-cargo">Prensadão Centro</div>
     </div>
     <div class="top-pts-wrap">
-      <div class="top-pts-num" id="top-pts">40</div>
+      <div class="top-pts-num" id="top-pts">81</div>
     <button class="notif-btn" id="notif-btn" onclick="ativarNotificacao()">🔔 Ativar notificações</button>
       <div class="top-pts-lbl">pontos</div>
     </div>
@@ -293,11 +290,11 @@ input[type="date"], input[type="time"] {
   <!-- INÍCIO -->
   <div id="tab-inicio" class="tab-c active">
     <div class="p-card">
-      <img class="p-foto" src="https://res.cloudinary.com/dewulu3tj/image/upload/v1780085390/checklist_prensadao/colaborador_kauany.jpg" id="p-foto" alt="G">
+      <img class="p-foto" src="" id="p-foto" alt="G">
       <div>
-        <div class="p-nome">Kauany</div>
-        <div class="p-pos">— Sem pontuação ainda</div>
-        <div class="p-saldo" id="p-saldo">40 pts</div>
+        <div class="p-nome">Ruan</div>
+        <div class="p-pos">🥇 1º lugar no ranking</div>
+        <div class="p-saldo" id="p-saldo">81 pts</div>
         <div class="p-slbl">Ciclo 20/05 – 20/06</div>
       </div>
     </div>
@@ -420,7 +417,7 @@ input[type="date"], input[type="time"] {
   
 </div>
 <div id="tab-chat" class="tab-c" style="padding:12px 12px 0"><div class="chat-wrap"><div class="chat-msgs" id="chat-msgs"></div><div class="chat-ia"><div class="chat-tools"><button class="ct-btn" id="btn-ajuda" onclick="chatToggleAjuda()">🤝 Pedir Ajuda</button><label class="ct-btn" for="chat-file-inp">📷 Foto</label><input type="file" id="chat-file-inp" accept="image/*" style="display:none" onchange="chatUploadMidia(this)"></div><div class="ajuda-form-box" id="ajuda-form-box"><div style="font-size:0.73rem;color:#f6ad55;font-weight:700;margin-bottom:6px">🤝 Pedir ajuda em tarefa</div><input id="ajuda-desc-inp" class="ag-inp" placeholder="Descreva a tarefa..."><button onclick="chatEnviarAjuda()" style="width:100%;padding:8px;background:#1a3a1a;border:1px solid #48bb78;border-radius:8px;color:#48bb78;font-size:0.82rem;font-weight:700;cursor:pointer">Enviar pedido</button></div><img class="chat-prev" id="chat-prev-img"><div class="chat-upst" id="chat-upst-msg"></div><div class="chat-row"><textarea class="chat-inp" id="chat-txt-inp" placeholder="Mensagem pro grupo..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();chatEnviarMsg();}"></textarea><button class="chat-sbtn" onclick="chatEnviarMsg()">➤</button></div></div></div></div>
-<div id="tab-agenda" class="tab-c"><button onclick="document.getElementById('ag-form-box').style.display=document.getElementById('ag-form-box').style.display==='block'?'none':'block'" style="width:100%;padding:12px;background:linear-gradient(135deg,#1a1a2e,#4a90d9);border:none;border-radius:12px;color:#fff;font-size:0.87rem;font-weight:700;cursor:pointer;margin-bottom:12px">+ Novo Agendamento</button><div id="ag-form-box" class="ag-form-box"><input id="ag-titulo-inp" class="ag-inp" placeholder="Título..."><div class="ag-dt-row"><input id="ag-data-inp" type="date" placeholder="Data"><input id="ag-hora-inp" type="time" placeholder="Hora"></div><input id="ag-desc-inp" class="ag-inp" placeholder="Descrição (opcional)"><select id="ag-quem-sel" class="ag-inp"><option value="todos">👥 Para todos</option><option value="gabriel">Gabriel</option><option value="ruan">Ruan</option><option value="caua">Cauã</option><option value="kauany">Kauany</option></select><button onclick="agCriar()" style="width:100%;padding:11px;background:linear-gradient(135deg,#1a1a2e,#4a90d9);border:none;border-radius:8px;color:#fff;font-size:0.87rem;font-weight:700;cursor:pointer">✅ Criar</button></div><div class="ag-fils"><button class="ag-fil active" onclick="agFil('todos',this)">Todos</button><button class="ag-fil" onclick="agFil('hoje',this)">Hoje</button><button class="ag-fil" onclick="agFil('semana',this)">Semana</button><button class="ag-fil" onclick="agFil('pendente',this)">Pendentes</button><button class="ag-fil" onclick="agFil('concluido',this)">Concluídos</button></div><div id="ag-lista"></div><div style="margin-top:16px"><div style="font-size:.9rem;font-weight:600;margin-bottom:10px;color:#aaa">📅 Meus Agendamentos</div><div id="agenda-lista-colab"></div></div>
+<div id="tab-agenda" class="tab-c"><button onclick="document.getElementById('ag-form-box').style.display=document.getElementById('ag-form-box').style.display==='block'?'none':'block'" style="width:100%;padding:12px;background:linear-gradient(135deg,#1a1a2e,#4a90d9);border:none;border-radius:12px;color:#fff;font-size:0.87rem;font-weight:700;cursor:pointer;margin-bottom:12px">+ Novo Agendamento</button><div id="ag-form-box" class="ag-form-box"><input id="ag-titulo-inp" class="ag-inp" placeholder="Título..."><div class="ag-dt-row"><input id="ag-data-inp" type="date" placeholder="Data"><input id="ag-hora-inp" type="time" placeholder="Hora"></div><input id="ag-desc-inp" class="ag-inp" placeholder="Descrição (opcional)"><select id="ag-quem-sel" class="ag-inp"><option value="todos">👥 Para todos</option><option value="gabriel">Gabriel</option><option value="kauany">Ruan</option><option value="caua">Cauã</option><option value="kauany">Kauany</option></select><button onclick="agCriar()" style="width:100%;padding:11px;background:linear-gradient(135deg,#1a1a2e,#4a90d9);border:none;border-radius:8px;color:#fff;font-size:0.87rem;font-weight:700;cursor:pointer">✅ Criar</button></div><div class="ag-fils"><button class="ag-fil active" onclick="agFil('todos',this)">Todos</button><button class="ag-fil" onclick="agFil('hoje',this)">Hoje</button><button class="ag-fil" onclick="agFil('semana',this)">Semana</button><button class="ag-fil" onclick="agFil('pendente',this)">Pendentes</button><button class="ag-fil" onclick="agFil('concluido',this)">Concluídos</button></div><div id="ag-lista"></div><div style="margin-top:16px"><div style="font-size:.9rem;font-weight:600;margin-bottom:10px;color:#aaa">📅 Meus Agendamentos</div><div id="agenda-lista-colab"></div></div>
 </div>
 <div class="bot-nav">
     <button class="nav-b active" id="nav-inicio" onclick="swTab('inicio')"><span class="ni">🏠</span><span class="nl">Início</span></button>
@@ -448,7 +445,7 @@ input[type="date"], input[type="time"] {
     <input type="password" id="cfg-cf" placeholder="Confirmar nova senha">
     <button class="cfg-save-btn" onclick="alterarSenha()">🔒 Alterar Senha</button>
 
-    <button class="cfg-sv" localStorage.removeItem('pg_sn_kauany');
+    <button class="cfg-sv" localStorage.removeItem('pg_sn_ruan');
 
 // ===== NOTIFICAÇÕES PUSH =====
 function solicitarNotificacao() {
@@ -524,7 +521,7 @@ function enviarNotificacao(titulo, corpo, icone) {
 
 var COLAB_ID = 'kauany';
 var COLAB_NOME = 'Kauany';
-var COLAB_EMOJI = '🥉';
+var COLAB_EMOJI = '⭐';
 
 // ===== SUPABASE BACKEND =====
 var SB_URL = 'https://trbyynbtuzpszdvjivbs.supabase.co';
@@ -562,7 +559,7 @@ function _chatLoadSB(){
 function renderMsgs(cid) {
   var lista = document.getElementById('msgs-colab-lista');
   if (!lista) return;
-  var key = 'prd_msgs_kauany';
+  var key = 'prd_msgs_ruan';
   var msgs = [];
   try { msgs = JSON.parse(localStorage.getItem(key) || '[]'); } catch(e) {}
   // Filtrar só mensagens do gestor (não chamados)
@@ -587,7 +584,7 @@ function renderMsgs(cid) {
 function loadMsgsSB(){
   sbGet('prd_mensagens','para=eq.kauany&order=ts.asc&limit=50').then(function(msgs){
     if(!Array.isArray(msgs)||!msgs.length)return;
-    var key='prd_msgs_kauany';
+    var key='prd_msgs_ruan';
     var local=[];try{local=JSON.parse(localStorage.getItem(key)||'[]');}catch(e){}
     var sbIds=msgs.map(function(m){return m.id;});
     var only=local.filter(function(m){return !m.id||sbIds.indexOf(m.id)<0;});
@@ -599,10 +596,10 @@ function loadMsgsSB(){
 
 
 const CC='dewulu3tj',CP='checklist_prensadao',JP='5542988819420',GR='120363289757731618@g.us';
-const FT='https://res.cloudinary.com/dewulu3tj/image/upload/v1780085390/checklist_prensadao/colaborador_kauany.jpg';
-const HIST=[];
-const TRF=["Efetuar a organização e higienização do balcão da mesa térmica e prateleira de molhos.", "Efetuar a higienização das mesas e a organização das garrafas que serão retornadas.", "Limpar as mesas amarelas e vermelhas do lado de fora e as mesas de madeira no salão com esponja e sabão.", "Higienizar o freezer e fazer a contagem das canecas.", "Limpar e organizar área kids salão, lavar piso da área kids externa."];
-const STORE='pg_kauany';
+const FT='https://res.cloudinary.com/dewulu3tj/image/upload/v1780062694/checklist_prensadao/colaborador_ruan.jpg';
+const HIST=[{"data": "2026-05-20", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 43}, {"data": "2026-05-22", "pontos": 3, "motivo": "Trabalho em equipe", "tipo": "Ganho", "saldo": 46}, {"data": "2026-05-22", "pontos": 3, "motivo": "Dia sem erro (Semana Perfeita)", "tipo": "Ganho", "saldo": 49}, {"data": "2026-05-22", "pontos": 5, "motivo": "Checklist semanal feita", "tipo": "Ganho", "saldo": 54}, {"data": "2026-05-23", "pontos": 3, "motivo": "Proatividade — limpeza final da noite", "tipo": "Ganho", "saldo": 57}, {"data": "2026-05-24", "pontos": 3, "motivo": "Dia sem erro (Semana Perfeita)", "tipo": "Ganho", "saldo": 60}, {"data": "2026-05-24", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 63}, {"data": "2026-05-24", "pontos": 3, "motivo": "Proatividade — embalagens", "tipo": "Ganho", "saldo": 66}, {"data": "2026-05-26", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 69}, {"data": "2026-05-27", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 72}, {"data": "2026-05-27", "pontos": 3, "motivo": "Proatividade — maionese", "tipo": "Ganho", "saldo": 75}, {"data": "2026-05-28", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 78}, {"data": "2026-05-28", "pontos": 3, "motivo": "Proatividade — maionese", "tipo": "Ganho", "saldo": 81}];
+const TRF=["Realizar a higienização das mesas utilizando esponja e sabão, limpar a escada e organizar o salão superior.", "Realizar a higienização do freezer expositor da coca e organizar os refrigerantes embaixo do balcão, mantendo a área limpa para o atendimento.", "Lavar os potinhos de molho e os porta-guardanapos e preencher para que não faltem durante a semana.", "Limpar as bandejas com água e sabão, e fazer uma contagem semanal das bandejas fundas e rasas.", "Realizar a higienização e organização dos recipientes de etiquetas. Listar os que estão em falta ou com baixa quantidade."];
+const STORE='pg_ruan';
 let tks=[null,null,null,null,null],phs=[null,null,null,null,null],excnt=0,exphs={},rat=0,histOpen=false;
 let tpSel=null,urgSel=null,chAnx=null,ptAnx=null;
 
@@ -624,17 +621,21 @@ function alterarSenha() {
 
 function getSn(){return 'kauany123';}
 function doLogin(){
-  const v=document.getElementById('lsn').value;
-  if(v===getSn()){
-    const ls=document.getElementById('login-screen');
-    const as=document.getElementById('app-screen');
-    if(ls){ls.style.cssText='display:none!important';}
-    if(as){as.style.cssText='display:block!important;min-height:100vh;padding-bottom:70px';}
-    if(document.getElementById('top-av'))document.getElementById('top-av').src=FT;
-    if(document.getElementById('p-foto'))document.getElementById('p-foto').src=FT;
-    initApp();
-  } else {
-    const e=document.getElementById('lerr');e.style.display='block';setTimeout(()=>e.style.display='none',2000);
+  try {
+    var v = document.getElementById('lsn').value;
+    var sn = getSn();
+    if(v === sn){
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('app-screen').style.display = 'block';
+      if(document.getElementById('top-av')) document.getElementById('top-av').src = FT;
+      if(document.getElementById('p-foto')) document.getElementById('p-foto').src = FT;
+      initApp();
+    } else {
+      var e = document.getElementById('lerr');
+      if(e){ e.style.display='block'; setTimeout(function(){ e.style.display='none'; },2000); }
+    }
+  } catch(err) {
+    alert('Erro ao entrar: ' + err.message);
   }
 }
 
@@ -757,7 +758,7 @@ async function submitCL(){
   const dt=new Date().toLocaleDateString('pt-BR');
   if(tks.every(s=>s===null)){alert('Responda pelo menos uma tarefa!');return;}
   document.getElementById('sub-btn').disabled=true;document.getElementById('sub-btn').textContent='⏳ Enviando...';
-  let msg='*✅ Checklist de Limpeza Semanal*\n*Colaborador:* Kauany\n*Data:* '+dt+'\n\n*Tarefas:*\n';
+  let msg='*✅ Checklist de Limpeza Semanal*\n*Colaborador:* Ruan\n*Data:* '+dt+'\n\n*Tarefas:*\n';
   let ok=true;
   tks.forEach((s,i)=>{
     const n=TRF[i].substring(0,50)+'...';
@@ -825,7 +826,7 @@ function envCh(){
   const now=new Date();
   const ch={id:now.getTime(),tipo:tpSel,tipoLabel:tls[tpSel],urgencia:urgSel||'baixa',mensagem:msg,vale:vale||null,anexo:chAnx||null,data:now.toLocaleDateString('pt-BR'),hora:now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),status:'aberto',resposta:null};
   const chs=getChs();chs.unshift(ch);localStorage.setItem(STORE+'_ch',JSON.stringify(chs));
-  let wpp='*💬 Fale com o Gestor — Prensadão*\n*Colaborador:* Kauany\n*Tipo:* '+ch.tipoLabel+'\n*Urgência:* '+(uls[ch.urgencia]||'')+'\n*Data:* '+ch.data+' às '+ch.hora;
+  let wpp='*💬 Fale com o Gestor — Prensadão*\n*Colaborador:* Ruan\n*Tipo:* '+ch.tipoLabel+'\n*Urgência:* '+(uls[ch.urgencia]||'')+'\n*Data:* '+ch.data+' às '+ch.hora;
   if(vale)wpp+='\n*Valor/Porcentagem:* '+vale;
   if(msg)wpp+='\n\n*Mensagem:*\n'+msg;
   if(chAnx)wpp+='\n\n📎 Anexo: '+chAnx;
@@ -846,7 +847,7 @@ function envPt(){
   const tp=document.getElementById('pt-tipo').value,mot=document.getElementById('pt-mot').value.trim();
   if(!dt||!mot){alert('Preencha a data e o motivo!');return;}
   const tls={atraso:'Atraso',esqueci:'Esqueceu de bater',saida:'Saída antecipada',falta:'Falta',outro:'Outro'};
-  let wpp='*🕐 Notificação de Ponto — Prensadão*\n*Colaborador:* Kauany\n*Tipo:* '+tls[tp]+'\n*Data:* '+dt+(hr?' às '+hr:'')+'\n*Motivo:* '+mot;
+  let wpp='*🕐 Notificação de Ponto — Prensadão*\n*Colaborador:* Ruan\n*Tipo:* '+tls[tp]+'\n*Data:* '+dt+(hr?' às '+hr:'')+'\n*Motivo:* '+mot;
   if(ptAnx)wpp+='\n📎 Documento: '+ptAnx;
   const now=new Date();
   const chs=getChs();
@@ -929,7 +930,6 @@ function swTab(t){
 
   if(t==='chat'){chatStartPoll();}
   if(t==='msgs'){loadMsgsSB();}
-  if(t==='agenda'){loadAgendaSB();}
 }
 
 function openCfg(){document.getElementById('cfg-modal').classList.add('open');}
@@ -950,11 +950,11 @@ function tsFmt(ts){ const d=new Date(ts); return d.toLocaleDateString('pt-BR')+'
 function tipoLabel(t){ return {recado:'💬 Recado',tarefa:'📋 Tarefa',doc:'📄 Solicitar Doc',foto:'📷 Solicitar Foto',aviso:'⚠️ Aviso'}[t]||t; }
 
 
-let msgRespAnexoURL_kauany = null;
+let msgRespAnexoURL_ruan = null;
 
 
 
-async function uploadRespColab_kauany(msgId, input){
+async function uploadRespColab_ruan(msgId, input){
   const file=input.files[0]; if(!file) return;
   const st=document.getElementById('rst-'+msgId); st.textContent='⏳ Enviando...';
   const fd=new FormData(); fd.append('file',file); fd.append('upload_preset','checklist_prensadao');
@@ -962,25 +962,25 @@ async function uploadRespColab_kauany(msgId, input){
     const r=await fetch('https://api.cloudinary.com/v1_1/dewulu3tj/upload',{method:'POST',body:fd});
     const d=await r.json();
     if(d.secure_url){
-      msgRespAnexoURL_kauany = d.secure_url;
+      msgRespAnexoURL_ruan = d.secure_url;
       if(file.type.startsWith('image/')){document.getElementById('rpv-'+msgId).src=d.secure_url;document.getElementById('rpv-'+msgId).style.display='block';}
       st.textContent='✅ Enviado!';
     } else st.textContent='❌ Erro.';
   }catch(e){st.textContent='❌ Erro.';}
 }
 
-function enviarRespColab_kauany(msgId){
+function enviarRespColab_ruan(msgId){
   const txt=document.getElementById('ri-'+msgId)?.value?.trim();
-  if(!txt && !msgRespAnexoURL_kauany){ alert('Escreva uma resposta ou anexe um arquivo!'); return; }
+  if(!txt && !msgRespAnexoURL_ruan){ alert('Escreva uma resposta ou anexe um arquivo!'); return; }
   const msgs=getMsgs('kauany');
   const idx=msgs.findIndex(m=>String(m.id)===String(msgId));
   if(idx>=0){
     msgs[idx].resposta=txt||'(sem texto)';
-    msgs[idx].respAnexo=msgRespAnexoURL_kauany;
+    msgs[idx].respAnexo=msgRespAnexoURL_ruan;
     msgs[idx].respTs=Date.now();
     msgs[idx].status='respondido';
     saveMsgs('kauany',msgs);
-    msgRespAnexoURL_kauany=null;
+    msgRespAnexoURL_ruan=null;
   }
   alert('✅ Resposta enviada!');
 }
@@ -1103,7 +1103,7 @@ function chatRender() {
   var wrap = document.getElementById('chat-msgs');
   if (!wrap) return;
   var msgs = chatGetMsgs();
-  var FMAP = { gabriel: 'https://res.cloudinary.com/dewulu3tj/image/upload/v1780062694/checklist_prensadao/colaborador_gabriel.jpg', ruan: 'https://res.cloudinary.com/dewulu3tj/image/upload/v1780062694/checklist_prensadao/colaborador_ruan.jpg', caua: 'https://res.cloudinary.com/dewulu3tj/image/upload/v1780062695/checklist_prensadao/colaborador_caua.jpg', kauany: 'https://res.cloudinary.com/dewulu3tj/image/upload/v1780085390/checklist_prensadao/colaborador_kauany.jpg', gestor: '' };
+  var FMAP = { gabriel: 'https://res.cloudinary.com/dewulu3tj/image/upload/v1780062694/checklist_prensadao/colaborador_gabriel.jpg', ruan: 'https://res.cloudinary.com/dewulu3tj/image/upload/v1780062694/checklist_prensadao/colaborador_ruan.jpg', caua: 'https://res.cloudinary.com/dewulu3tj/image/upload/v1780062695/checklist_prensadao/colaborador_caua.jpg', kauany: '', gestor: '' };
   if (!msgs.length) {
     wrap.innerHTML = '<div style="text-align:center;padding:40px;color:#333"><div style="font-size:2rem;margin-bottom:8px">💬</div><p>Nenhuma mensagem ainda</p></div>';
     return;
@@ -1223,7 +1223,7 @@ function agRender() {
   else if (agFiltro === 'concluido') items = items.filter(function(a){ return a.status === 'concluido'; });
   items.sort(function(a,b){ return new Date(a.datahora) - new Date(b.datahora); });
   if (!items.length) { lista.innerHTML = '<div style="text-align:center;padding:40px;color:#333"><div style="font-size:2rem;margin-bottom:8px">📅</div><p>Nenhum agendamento</p></div>'; return; }
-  var QL = { todos:'👥 Todos', gabriel:'Gabriel', ruan:'Ruan', caua:'Cauã', kauany:'Kauany', gestor:'Josiel' };
+  var QL = { todos:'👥 Todos', gabriel:'Gabriel', ruan:'Kauany', caua:'Cauã', kauany:'Kauany', gestor:'Josiel' };
   lista.innerHTML = items.map(function(a) {
     var atr = new Date(a.datahora) < new Date() && a.status === 'pendente';
     var cls = a.status === 'concluido' ? 'concluido' : (atr ? 'atrasado' : '');
@@ -1293,6 +1293,8 @@ function ajudaEnviarFoto(msgId, input) {
     })
     .catch(function() { if(st) st.textContent = '❌ Erro'; });
 }
+
+
 
 
 // === AGENDA — buscar do Supabase via prd_mensagens ===
