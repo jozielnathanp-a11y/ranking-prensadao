@@ -640,10 +640,16 @@ function doLogin(){
   }
 }
 
+
+function solicitarNotificacao(){try{if(Notification&&Notification.permission==='default')Notification.requestPermission();}catch(e){}}
 function initApp(){
   solicitarNotificacao();
-  renderHist();renderMeta();buildTks();loadSv();
-  document.getElementById('pt-data').value=new Date().toISOString().split('T')[0];
+  renderHist();
+  renderMeta();
+  buildTks();
+  loadSv();
+  var ptData = document.getElementById('pt-data');
+  if(ptData) ptData.value = new Date().toISOString().split('T')[0];
 }
 
 function renderMeta(){const t=236,pct=Math.min((t/320)*100,100);document.getElementById('meta-fill').style.width=pct+'%';document.getElementById('meta-atual').textContent=t+' pts';}
