@@ -637,9 +637,17 @@ function doLogin(){
 }
 
 function initApp(){
-  solicitarNotificacao();
-  renderHist();renderMeta();buildTks();loadSv();
-  document.getElementById('pt-data').value=new Date().toISOString().split('T')[0];
+  try {
+    solicitarNotificacao();
+    renderHist();
+    renderMeta();
+    buildTks();
+    loadSv();
+    document.getElementById('pt-data').value=new Date().toISOString().split('T')[0];
+  } catch(err) {
+    console.error('initApp ERRO:', err.message, err.stack);
+    alert('Erro ao carregar: ' + err.message);
+  }
 }
 
 function renderMeta(){
