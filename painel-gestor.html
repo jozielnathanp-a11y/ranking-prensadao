@@ -1350,53 +1350,7 @@ function monRenderSolicitacoes() {
 }
 
 
-function monRenderChecklistSB() {
-  sbGet('prd_checklist', 'order=ts.desc').then(function(rows) {
-    if (!Array.isArray(rows) || !rows.length) { monRenderChecklist(); return; }
-    var grid = document.getElementById('mon-check-grid');
-    if (!grid) return;
-    var TAREFAS = [
-      "Higienização das mesas, escada e salão superior",
-      "Higienização do freezer e organização dos refrigerantes",
-      "Lavar potinhos de molho e porta-guardanapos",
-      "Limpar bandejas e contar fundas e rasas",
-      "Higienização dos recipientes de etiquetas"
-    ];
-    // Pegar o registro mais recente de cada colab
-    var latest = {};
-    rows.forEach(function(row) {
-      if (!latest[row.colab_id] || row.ts > latest[row.colab_id].ts) {
-        latest[row.colab_id] = row;
-      }
-    });
-    var cards = COLABORADORES.map(function(c) {
-      var dados = latest[c.id] || {};
-      var tks = dados.tks || [];
-      var total = TAREFAS.length;
-      var feitas = tks.filter(function(v){ return v === 'sim'; }).length;
-      var pct = total > 0 ? Math.round(feitas/total*100) : 0;
-      var cls = feitas === total ? 'ok' : (feitas > 0 ? 'parcial' : 'vazio');
-      var foto = FOTOS_MON[c.id] || '';
-      var av = foto
-        ? '<img src="' + foto + '" style="width:28px;height:28px;border-radius:50%;object-fit:cover;margin-right:6px;vertical-align:middle">'
-        : '<span style="margin-right:4px">' + (c.emoji||'👤') + '</span>';
-      var itens = TAREFAS.map(function(lbl, i) {
-        var val = Array.isArray(tks) ? tks[i] : null;
-        var ok = val === 'sim';
-        var nao = val === 'nao';
-        var icon = ok ? '✅' : (nao ? '❌' : '○');
-        return '<div class="mon-check-item ' + (ok?'feito':nao?'nao':'') + '">' + icon + ' ' + lbl + '</div>';
-      }).join('');
-      var semana = dados.semana ? '<div class="mon-ts">Semana: ' + dados.semana + '</div>' : '<div class="mon-ts" style="color:#555">Sem dados ainda</div>';
-      return '<div class="mon-check-card ' + cls + '">' +
-        '<div class="mon-check-nome">' + av + c.nome + '</div>' +
-        '<div class="mon-check-prog">' + feitas + ' de ' + total + ' tarefas ✅</div>' +
-        '<div class="mon-check-bar"><div class="mon-check-bar-fill" style="width:' + pct + '%"></div></div>' +
-        itens + semana + '</div>';
-    }).join('');
-    grid.innerHTML = cards;
-  });
-}
+
 // --- Checklist ---
 function monRenderChecklist() {
   var grid = document.getElementById('mon-check-grid');
@@ -1507,6 +1461,166 @@ document.addEventListener('click', function(ev) {
     return;
   }
 });
+
+function monRenderChecklistSB() {
+  sbGet('prd_checklist', 'order=ts.desc').then(function(rows) {
+    var grid = document.getElementById('mon-check-grid');
+    if (!grid) return;
+
+    // Tarefas por colaborador
+    var TAREFAS_MAP = {
+      'ruan':    [
+        "Organizar e higienizar o balcão da mesa térmica e prateleira de molhos",
+        "Higienizar as mesas e organizar as garrafas que serão retornadas",
+        "Limpar as mesas amarelas/vermelhas do lado de fora e as mesas de madeira no salão",
+        "Higienizar o freezer e fazer a contagem das canecas",
+        "Limpar e organizar área kids salão e lavar piso área kids externa"
+      ],
+      'kauany':  [
+        "Higienizar as mesas com esponja e sabão, limpar a escada e organizar o salão superior",
+        "Higienizar o freezer expositor da Coca e organizar os refrigerantes embaixo do balcão",
+        "Lavar os potinhos de molho e os porta-guardanapos e preencher para não faltar",
+        "Limpar as bandejas com água e sabão e fazer contagem semanal das bandejas fundas e rasas",
+        "Higienizar e organizar os recipientes de etiquetas e listar os que estão em falta"
+      ],
+      'caua':    [
+        "Higienização das mesas, escada e salão superior",
+        "Higienização do freezer e organização dos refrigerantes",
+        "Lavar potinhos de molho e porta-guardanapos",
+        "Limpar bandejas e contar fundas e rasas",
+        "Higienização dos recipientes de etiquetas"
+      ],
+      'gabriel': [
+        "Higienização das mesas, escada e salão superior",
+        "Higienização do freezer e organização dos refrigerantes",
+        "Lavar potinhos de molho e porta-guardanapos",
+        "Limpar bandejas e contar fundas e rasas",
+        "Higienização dos recipientes de etiquetas"
+      ]
+    };
+
+    var latest = {};
+    if (Array.isArray(rows)) {
+      rows.forEach(function(row) {
+        if (!latest[row.colab_id] || row.ts > latest[row.colab_id].ts) {
+          latest[row.colab_id] = row;
+        }
+      });
+    }
+
+    var cards = COLABORADORES.map(function(c) {
+      var dados   = latest[c.id] || {};
+      var tks     = dados.tks || [];
+      var TAREFAS = TAREFAS_MAP[c.id] || [];
+      var total   = TAREFAS.length;
+
+      // Suporte ao novo formato (array de objetos com .done e .fotos)
+      // e ao formato antigo (array de strings 'sim'/'nao')
+      var feitas = 0;
+      var itensHtml = TAREFAS.map(function(lbl, i) {
+        var tk = Array.isArray(tks) ? tks[i] : null;
+        var done, fotos;
+        if (tk && typeof tk === 'object') {
+          done  = tk.done || false;
+          fotos = tk.fotos || [];
+        } else {
+          done  = tk === 'sim' || tk === true;
+          fotos = tk && tk.foto ? [tk.foto] : [];
+        }
+        if (done) feitas++;
+        var icon = done ? '✅' : '⬜';
+
+        // Fotos em miniatura clicáveis
+        var fotosHtml = fotos.length
+          ? '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">' +
+              fotos.map(function(url) {
+                return '<img src="' + url + '" onclick="gesCheckFoto(\'' + url + '\')" ' +
+                  'style="width:64px;height:64px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid ' + (done ? '#48bb78' : '#555') + '">';
+              }).join('') +
+            '</div>'
+          : (done ? '<div style="font-size:0.72rem;color:#e74c3c;margin-top:4px">⚠️ Sem foto</div>' : '');
+
+        return '<div style="background:#0d0d0d;border-radius:10px;padding:10px 12px;margin-bottom:8px;border-left:3px solid ' + (done ? '#48bb78' : '#333') + '">' +
+          '<div style="display:flex;align-items:flex-start;gap:8px">' +
+            '<span style="font-size:1rem;margin-top:2px">' + icon + '</span>' +
+            '<span style="font-size:0.82rem;color:' + (done ? '#ccc' : '#666') + ';flex:1;line-height:1.4">' + lbl + '</span>' +
+          '</div>' +
+          fotosHtml +
+        '</div>';
+      }).join('');
+
+      var pct = total > 0 ? Math.round(feitas / total * 100) : 0;
+      var semana = dados.semana || dados.ts ? (dados.semana || new Date(dados.ts).toLocaleDateString('pt-BR')) : null;
+      var aprovado = localStorage.getItem('ges_cl_aprovado_' + c.id + '_' + (dados.semana || ''));
+      var foto = FOTOS_MON[c.id] || '';
+      var av = foto
+        ? '<img src="' + foto + '" style="width:32px;height:32px;border-radius:50%;object-fit:cover;margin-right:8px;vertical-align:middle">'
+        : '<span style="margin-right:6px">' + (c.emoji || '👤') + '</span>';
+
+      var btnAprovar = '';
+      if (feitas > 0 && dados.semana) {
+        if (aprovado) {
+          btnAprovar = '<div style="text-align:center;padding:10px;background:#1a3a1a;border-radius:10px;color:#48bb78;font-weight:700;margin-top:12px">✅ Checklist aprovada! +5 pts</div>';
+        } else {
+          btnAprovar = '<button onclick="gesAprovarChecklist(\'' + c.id + '\',\'' + c.nome + '\',\'' + (dados.semana||'') + '\',' + feitas + ',' + total + ')" ' +
+            'style="width:100%;margin-top:12px;padding:12px;background:linear-gradient(135deg,#ff6b00,#e65c00);color:#fff;border:none;border-radius:10px;font-weight:800;font-size:0.9rem;cursor:pointer">' +
+            '⭐ Aprovar checklist (+5 pts)</button>';
+        }
+      }
+
+      return '<div style="background:#111;border-radius:14px;padding:16px;margin-bottom:16px">' +
+        '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">' +
+          '<div style="font-size:1rem;font-weight:700;color:#fff">' + av + c.nome + '</div>' +
+          '<div style="font-size:0.8rem;color:' + (pct===100?'#48bb78':pct>0?'#f1c40f':'#e74c3c') + ';font-weight:700">' + feitas + '/' + total + ' (' + pct + '%)</div>' +
+        '</div>' +
+        '<div style="background:#0a0a0a;border-radius:8px;height:6px;margin-bottom:12px">' +
+          '<div style="background:' + (pct===100?'#48bb78':pct>0?'#f1c40f':'#e74c3c') + ';height:6px;border-radius:8px;width:' + pct + '%"></div>' +
+        '</div>' +
+        itensHtml +
+        (semana ? '<div style="font-size:0.72rem;color:#555;margin-top:4px">Enviado: ' + semana + '</div>' : '<div style="font-size:0.72rem;color:#555;margin-top:4px">Sem dados ainda</div>') +
+        btnAprovar +
+      '</div>';
+    }).join('');
+
+    grid.innerHTML = cards || '<div style="color:#555;text-align:center;padding:20px">Nenhuma checklist enviada ainda.</div>';
+  });
+}
+
+function gesCheckFoto(url) {
+  var overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.92);z-index:9999;display:flex;align-items:center;justify-content:center;cursor:pointer';
+  overlay.onclick = function(){ document.body.removeChild(overlay); };
+  overlay.innerHTML = '<img src="' + url + '" style="max-width:95vw;max-height:90vh;border-radius:12px;box-shadow:0 0 40px rgba(0,0,0,0.8)">';
+  document.body.appendChild(overlay);
+}
+
+function gesAprovarChecklist(colabId, colabNome, semana, feitas, total) {
+  if (!confirm('Aprovar checklist de ' + colabNome + ' e dar +5 pts?')) return;
+  // Registrar aprovação local
+  localStorage.setItem('ges_cl_aprovado_' + colabId + '_' + semana, '1');
+  // Lançar pontos via sbPost
+  sbPost('prd_pontos', {
+    colab_id: colabId,
+    nome: colabNome,
+    pontos: 5,
+    motivo: 'Checklist semanal aprovada pelo gestor (' + feitas + '/' + total + ' tarefas)',
+    tipo: 'Ganho',
+    data: new Date().toISOString().slice(0,10),
+    ts: Date.now()
+  });
+  // Notificar colaborador
+  sbPost('prd_mensagens', {
+    ts: Date.now(),
+    de: 'gestor',
+    para: colabId,
+    tipo: 'notif',
+    texto: '✅ Sua checklist da semana foi aprovada pelo gestor! +5 pts adicionados. Bom trabalho!',
+    nome: 'Gestor'
+  });
+  alert('✅ Aprovado! +5 pts para ' + colabNome);
+  monRenderChecklistSB();
+}
+
 </script>
 </body>
 </html>
