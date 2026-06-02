@@ -640,7 +640,7 @@ function initApp(){
   solicitarNotificacao();
   renderHist();
   renderMeta();
-  buildTks();
+  setTimeout(buildTks,100);
   loadSv();
   var ptData = document.getElementById('pt-data');
   if(ptData) ptData.value = new Date().toISOString().split('T')[0];
@@ -659,22 +659,28 @@ function renderHist(){
 function toggleHist(){histOpen=!histOpen;renderHist();document.querySelector('.vm-btn').textContent=histOpen?'Ver menos ▲':'Ver histórico completo ▼';}
 
 function buildTks(){
-  const c=document.getElementById('tk-container');
-  c.innerHTML=TRF.map((t,i)=>`
-    <div class="tk" id="tk-${i}">
-      <div class="tk-desc">${i+1}. ${t}</div>
-      <div class="rg">
-        <div class="rb" onclick="selTk(${i},'sim')">✅ Sim</div>
-        <div class="rb" onclick="selTk(${i},'nao')">❌ Não</div>
-      </div>
-      <div class="pu" id="pu-${i}" style="display:none">
-        <label class="ul-btn" for="ph-${i}">📷 Selecionar foto (obrigatória)</label>
-        <input type="file" id="ph-${i}" accept="image/*" style="display:none" onchange="upTk(${i},this)">
-        <div class="ul-st" id="phs-${i}"></div>
-        <img class="ph-pv" id="phv-${i}">
-      </div>
-      <div class="ja" id="ja-${i}"><textarea id="jt-${i}" placeholder="Por que não foi feito?" oninput="autoSave()"></textarea></div>
-    </div>`).join('');
+  var c=document.getElementById('tk-container');
+  if(!c){setTimeout(buildTks,300);return;}
+  c.innerHTML=TRF.map(function(t,i){
+    return '<div class="tk" id="tk-'+i+'">' +
+      '<div class="tk-desc">'+(i+1)+'. '+t+'</div>' +
+      '<div class="rg">' +
+        '<div class="rb" onclick="selTk('+i+',\'sim\')">✅ Sim</div>' +
+        '<div class="rb" onclick="selTk('+i+',\'nao\')">❌ Não</div>' +
+      '</div>' +
+      '<div class="pu" id="pu-'+i+'" style="display:none">' +
+        '<label class="ul-btn" for="ph-'+i+'">📷 Selecionar foto (obrigatória)</label>' +
+        '<input type="file" id="ph-'+i+'" accept="image/*" style="display:none" onchange="upTk('+i+',this)">' +
+        '<div class="ul-st" id="phs-'+i+'"></div>' +
+        '<img class="ph-pv" id="phv-'+i+'">' +
+      '</div>' +
+      '<div class="ja" id="ja-'+i+'"><textarea id="jt-'+i+'" placeholder="Por que não foi feito?" oninput="autoSave()"></textarea></div>' +
+    '</div>';
+  }).join('');
+  // forçar repintura
+  c.style.display='none';
+  c.offsetHeight;
+  c.style.display='';
 }
 
 function selTk(i,v){
@@ -925,6 +931,7 @@ function swTab(t){
   document.getElementById('tab-'+t).classList.add('active');
   document.getElementById('nav-'+t).classList.add('active');
 
+  if(t==='checklist'){setTimeout(function(){setTimeout(buildTks,100);loadSv();},50);}
   if(t==='chat'){chatStartPoll();}
   if(t==='msgs'){loadMsgsSB();}
 }
