@@ -267,7 +267,7 @@ input[type="date"], input[type="time"] {
 .resp-ex{font-size:0.8rem;color:#aaa;margin-bottom:10px;border-left:3px solid #4a90d9;padding-left:10px}.resp-ex strong{color:#4a90d9;display:block;font-size:0.72rem;margin-bottom:4px}
 .resp-inp{width:100%;padding:10px;background:#1a1a1a;border:1.5px solid #2a2a2a;border-radius:8px;color:#fff;font-size:0.83rem;resize:vertical;min-height:70px}.resp-inp:focus{outline:none;border-color:#4a90d9}
 .btn-row{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}.btn-resp{flex:1;padding:10px;background:linear-gradient(135deg,#1a1a2e,#4a90d9);border:none;border-radius:8px;color:#fff;font-size:0.82rem;font-weight:700;cursor:pointer;min-width:80px}
-.btn-wpp{padding:10px 12px;background:#0d2818;border:1px solid #25d366;border-radius:8px;color:#25d366;font-size:0.82rem;cursor:pointer}.btn-fechar{padding:10px 12px;background:none;border:1px solid #2a2a2a;border-radius:8px;color:#555;font-size:0.82rem;cursor:pointer}
+.btn-fechar{padding:10px 12px;background:none;border:1px solid #2a2a2a;border-radius:8px;color:#555;font-size:0.82rem;cursor:pointer}
 .empty-st{text-align:center;padding:50px 20px;color:#333}.empty-st .ei{font-size:2.5rem;margin-bottom:10px}
 .paineis-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.pl-card{background:#111;border:1px solid #1e1e1e;border-radius:14px;padding:16px}
 .pl-av{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #4a90d9;margin-bottom:10px;display:block}
@@ -1438,13 +1438,7 @@ document.addEventListener('click', function(e) {
     return;
   }
 
-  // btn-wpp -> respWpp
-  if (t.classList && t.classList.contains('btn-wpp')) {
-    respWpp(t.dataset.colabid, parseInt(t.dataset.cid), t.dataset.phone);
-    return;
-  }
-
-  // btn-fechar -> fechar
+    // btn-fechar -> fechar
   if (t.classList && t.classList.contains('btn-fechar')) {
     fechar(t.dataset.colabid, parseInt(t.dataset.cid));
     return;
@@ -1470,10 +1464,6 @@ document.addEventListener('click', function(ev) {
 
   if (t.classList.contains('btn-resp')) {
     responder(t.getAttribute('data-colabid'), parseInt(t.getAttribute('data-cid')));
-    return;
-  }
-  if (t.classList.contains('btn-wpp')) {
-    respWpp(t.getAttribute('data-colabid'), parseInt(t.getAttribute('data-cid')), t.getAttribute('data-phone'));
     return;
   }
   if (t.classList.contains('btn-fechar')) {
