@@ -255,14 +255,6 @@ input[type="date"], input[type="time"] {
 .notif-btn.ativo { border-color: #48bb78; color: #48bb78; }
 .notif-btn.bloq  { border-color: #fc5c5c; color: #fc5c5c; }
 
-
-.tk-item{background:#111;border:1px solid #1e1e1e;border-radius:14px;padding:14px 16px;margin-bottom:10px;transition:border 0.2s;}
-.tk-item.tk-done{border-color:#48bb78;}
-.tk-header{display:flex;align-items:flex-start;gap:10px;}
-.tk-num{background:#ff6b00;color:#fff;font-weight:800;font-size:0.78rem;min-width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
-.tk-txt{flex:1;font-size:0.85rem;color:#bbb;line-height:1.5;}
-.tk-check{font-size:1.3rem;cursor:pointer;flex-shrink:0;margin-top:0px;}
-
 </style>
 </head>
 <body>
@@ -610,7 +602,6 @@ const STORE='pg_ruan';
 let tks=[null,null,null,null,null],phs=[null,null,null,null,null],excnt=0,exphs={},rat=0,histOpen=false;
 
 // Estado do checklist
-var CL_STATE = {tasks: {}};
 try {
   var _sv = localStorage.getItem(STORE + '_clv2');
   if (_sv) CL_STATE = JSON.parse(_sv);
@@ -661,7 +652,7 @@ function initApp(){
   solicitarNotificacao();
   renderHist();
   renderMeta();
-  renderTK();
+  buildTks();
   loadSv();
   var ptData = document.getElementById('pt-data');
   if(ptData) ptData.value = new Date().toISOString().split('T')[0];
@@ -678,55 +669,6 @@ function renderHist(){
   }).join('');
 }
 function toggleHist(){histOpen=!histOpen;renderHist();document.querySelector('.vm-btn').textContent=histOpen?'Ver menos ▲':'Ver histórico completo ▼';}
-
-function buildTks(){
-  const c=document.getElementById('tk-container');
-  c.innerHTML=TRF.map((t,i)=>`
-    <div class="tk" id="tk-${i}">
-      <div class="tk-desc">${i+1}. ${t}</div>
-      <div class="rg">
-        <div class="rb" onclick="selTk(${i},'sim')">✅ Sim</div>
-        <div class="rb" onclick="selTk(${i},'nao')">❌ Não</div>
-      </div>
-      <div class="pu" id="pu-${i}" style="display:none">
-        <label class="ul-btn" for="ph-${i}">📷 Selecionar foto (obrigatória)</label>
-        <input type="file" id="ph-${i}" accept="image/*" style="display:none" onchange="upTk(${i},this)">
-        <div class="ul-st" id="phs-${i}"></div>
-        <img class="ph-pv" id="phv-${i}">
-      </div>
-      <div class="ja" id="ja-${i}"><textarea id="jt-${i}" placeholder="Por que não foi feito?" oninput="autoSave()"></textarea></div>
-    </div>`).join('');
-}
-
-function selTk(i,v){
-  tks[i]=v;
-  const card=document.getElementById('tk-'+i);
-  const btns=card.querySelectorAll('.rb');
-  btns[0].className='rb'+(v==='sim'?' ss':'');
-  btns[1].className='rb'+(v==='nao'?' sn':'');
-  card.className='tk'+(v==='sim'?' done':' notd');
-  document.getElementById('pu-'+i).style.display=v==='sim'?'block':'none';
-  document.getElementById('ja-'+i).style.display=v==='nao'?'block':'none';
-  updProg();autoSave();
-}
-
-function updProg(){
-  const d=tks.filter(s=>s==='sim').length;
-  document.getElementById('prog-fill').style.width=(d/5*100)+'%';
-  document.getElementById('prog-txt').textContent=d+' de 5 tarefas concluídas';
-}
-
-async function upTk(i,inp){
-  const f=inp.files[0];if(!f)return;
-  const st=document.getElementById('phs-'+i);st.textContent='⏳ Enviando...';
-  const fd=new FormData();fd.append('file',f);fd.append('upload_preset',CP);
-  try{
-    const r=await fetch('https://api.cloudinary.com/v1_1/'+CC+'/image/upload',{method:'POST',body:fd});
-    const d=await r.json();
-    if(d.secure_url){phs[i]=d.secure_url;document.getElementById('phv-'+i).src=d.secure_url;document.getElementById('phv-'+i).style.display='block';st.textContent='✅ Enviada!';autoSave();}
-    else st.textContent='❌ Erro.';
-  }catch(e){st.textContent='❌ Erro.';}
-}
 
 function addExtra(){
   const id=excnt++;
@@ -1334,149 +1276,121 @@ function renderAgendaColab(eventos) {
 }
 
 
-function renderTK() {
-  var c = document.getElementById('tk-container');
-  if (!c) return;
-  c.innerHTML = '';
-  TRF.forEach(function(t, i) {
-    var state = (CL_STATE.tasks && CL_STATE.tasks[i]) ? CL_STATE.tasks[i] : {};
-    var done = state.done || false;
-    var fotos = state.fotos || [];
-    var div = document.createElement('div');
-    div.className = 'tk-item' + (done ? ' tk-done' : '');
-    div.id = 'tk-item-' + i;
-    var fotosHtml = '';
-    fotos.forEach(function(url, fi) {
-      fotosHtml += '<div style="position:relative;display:inline-block;margin:4px">' +
-        '<img src="' + url + '" style="width:72px;height:72px;object-fit:cover;border-radius:8px;cursor:pointer" onclick="window.open(\'' + url + '\')" />' +
-        (done ? '' : '<span onclick="removeFoto(' + i + ',' + fi + ')" style="position:absolute;top:-4px;right:-4px;background:#e74c3c;color:#fff;border-radius:50%;width:18px;height:18px;font-size:11px;line-height:18px;text-align:center;cursor:pointer">x</span>') +
-        '</div>';
-    });
-    var addFotoHtml = '';
-    if (!done && fotos.length < 3) {
-      addFotoHtml = '<label for="foto-' + i + '" style="display:inline-block;margin:4px;padding:8px 12px;background:#1a3a1a;border:2px dashed #48bb78;border-radius:8px;color:#48bb78;font-size:0.8rem;cursor:pointer">' +
-        (fotos.length === 0 ? 'Adicionar foto (obrigatorio)' : 'Adicionar mais (' + fotos.length + '/3)') +
-        '</label>' +
-        '<input type="file" id="foto-' + i + '" accept="image/*" capture="environment" style="display:none" onchange="uploadFoto(this,' + i + ')">';
-    }
-    var cor = fotos.length === 0 ? '#e74c3c' : '#48bb78';
-    var contHtml = done ? '' : '<div style="font-size:0.75rem;color:' + cor + ';margin-top:4px">' +
-      (fotos.length === 0 ? 'Minimo 1 foto obrigatoria' : fotos.length + '/3 foto(s)') + '</div>';
-    div.innerHTML =
-      '<div class="tk-header">' +
-        '<span class="tk-num">' + (i+1) + '</span>' +
-        '<span class="tk-txt">' + t + '</span>' +
-        '<span class="tk-check" onclick="toggleTK(' + i + ')" style="cursor:pointer">' + (done ? '✅' : '⬜') + '</span>' +
-      '</div>' +
-      '<div style="padding:8px 0 4px">' + fotosHtml + addFotoHtml + contHtml +
-        '<div id="foto-status-' + i + '" style="font-size:0.8rem;color:#aaa;margin-top:4px"></div>' +
-      '</div>';
-    c.appendChild(div);
-  });
-  renderProg();
+</script></body></html
+
+function buildTks(){
+  const c=document.getElementById('tk-container');
+  c.innerHTML=TRF.map((t,i)=>`
+    <div class="tk" id="tk-${i}">
+      <div class="tk-desc">${i+1}. ${t}</div>
+      <div class="rg">
+        <div class="rb" onclick="selTk(${i},'sim')">✅ Sim</div>
+        <div class="rb" onclick="selTk(${i},'nao')">❌ Não</div>
+      </div>
+      <div class="pu" id="pu-${i}" style="display:none">
+        <label class="ul-btn" for="ph-${i}">📷 Selecionar foto (obrigatória)</label>
+        <input type="file" id="ph-${i}" accept="image/*" style="display:none" onchange="upTk(${i},this)">
+        <div class="ul-st" id="phs-${i}"></div>
+        <img class="ph-pv" id="phv-${i}">
+      </div>
+      <div class="ja" id="ja-${i}"><textarea id="jt-${i}" placeholder="Por que não foi feito?" oninput="autoSave()"></textarea></div>
+    </div>`).join('');
 }
-function toggleTK(i) {
-  if (!CL_STATE.tasks) CL_STATE.tasks = {};
-  if (!CL_STATE.tasks[i]) CL_STATE.tasks[i] = {};
-  var fotos = CL_STATE.tasks[i].fotos || [];
-  if (!CL_STATE.tasks[i].done && fotos.length === 0) {
-    alert('Adicione pelo menos 1 foto antes de marcar como concluido!');
-    return;
-  }
-  CL_STATE.tasks[i].done = !CL_STATE.tasks[i].done;
-  autoSave();
-  renderTK();
+function selTk(i,v){
+  tks[i]=v;
+  const card=document.getElementById('tk-'+i);
+  const btns=card.querySelectorAll('.rb');
+  btns[0].className='rb'+(v==='sim'?' ss':'');
+  btns[1].className='rb'+(v==='nao'?' sn':'');
+  card.className='tk'+(v==='sim'?' done':' notd');
+  document.getElementById('pu-'+i).style.display=v==='sim'?'block':'none';
+  document.getElementById('ja-'+i).style.display=v==='nao'?'block':'none';
+  updProg();autoSave();
 }
-function removeFoto(taskIdx, fotoIdx) {
-  if (!CL_STATE.tasks || !CL_STATE.tasks[taskIdx]) return;
-  var fotos = CL_STATE.tasks[taskIdx].fotos || [];
-  fotos.splice(fotoIdx, 1);
-  CL_STATE.tasks[taskIdx].fotos = fotos;
-  autoSave();
-  renderTK();
+function updProg(){
+  const d=tks.filter(s=>s==='sim').length;
+  document.getElementById('prog-fill').style.width=(d/5*100)+'%';
+  document.getElementById('prog-txt').textContent=d+' de 5 tarefas concluídas';
 }
-function renderProg() {
-  var total = TRF.length, done = 0;
-  if (CL_STATE.tasks) Object.keys(CL_STATE.tasks).forEach(function(k){ if (CL_STATE.tasks[k] && CL_STATE.tasks[k].done) done++; });
-  var pct = Math.round((done/total)*100);
-  var fill = document.getElementById('prog-fill');
-  var txt = document.getElementById('prog-txt');
-  if (fill) fill.style.width = pct + '%';
-  if (txt) txt.textContent = done + ' de ' + total + ' tarefas concluidas';
+
+async function upTk(i,inp){
+  const f=inp.files[0];if(!f)return;
+  const st=document.getElementById('phs-'+i);st.textContent='⏳ Enviando...';
+  const fd=new FormData();fd.append('file',f);fd.append('upload_preset',CP);
+  try{
+    const r=await fetch('https://api.cloudinary.com/v1_1/'+CC+'/image/upload',{method:'POST',body:fd});
+    const d=await r.json();
+    if(d.secure_url){phs[i]=d.secure_url;document.getElementById('phv-'+i).src=d.secure_url;document.getElementById('phv-'+i).style.display='block';st.textContent='✅ Enviada!';autoSave();}
+    else st.textContent='❌ Erro.';
+  }catch(e){st.textContent='❌ Erro.';}
+}
+function upTk(i,inp){
+  const f=inp.files[0];if(!f)return;
+  const st=document.getElementById('phs-'+i);st.textContent='⏳ Enviando...';
+  const fd=new FormData();fd.append('file',f);fd.append('upload_preset',CP);
+  try{
+    const r=await fetch('https://api.cloudinary.com/v1_1/'+CC+'/image/upload',{method:'POST',body:fd});
+    const d=await r.json();
+    if(d.secure_url){phs[i]=d.secure_url;document.getElementById('phv-'+i).src=d.secure_url;document.getElementById('phv-'+i).style.display='block';st.textContent='✅ Enviada!';autoSave();}
+    else st.textContent='❌ Erro.';
+  }catch(e){st.textContent='❌ Erro.';}
 }
 function autoSave(){
-  localStorage.setItem(STORE+'_clv2', JSON.stringify(CL_STATE));
-  sbPost('prd_checklist', {colab_id: COLAB_ID, tks: CL_STATE.tasks, semana: new Date().toISOString().slice(0,10), ts: Date.now()});
-  var ind=document.getElementById('sv-ind');
-  if(ind){ind.style.display='block';setTimeout(function(){ind.style.display='none';},1500);}
+  localStorage.setItem(STORE+'_cl',JSON.stringify({tks,phs,obs:document.getElementById('obs-cl').value,rat}));
+  sbPost('prd_checklist', {colab_id: COLAB_ID, tks: tks, obs: document.getElementById('obs-cl') ? document.getElementById('obs-cl').value : '', semana: new Date().toISOString().slice(0,10), ts: Date.now()});
+  saveChecklistSB(tks, phs, document.getElementById('obs-cl')?.value, rat);
+  const i=document.getElementById('sv-ind');i.style.display='block';setTimeout(()=>i.style.display='none',1500);
 }
 function loadSv(){
   try{
-    var sv=localStorage.getItem(STORE+'_clv2');
-    if(sv){var p=JSON.parse(sv);if(p&&p.tasks){CL_STATE=p;renderTK();return;}}
-    var d=JSON.parse(localStorage.getItem(STORE+'_cl')||'{}');
-    if(d.obs){var el=document.getElementById('obs-cl');if(el)el.value=d.obs;}
-    renderTK();
-  }catch(e){renderTK();}
+    const d=JSON.parse(localStorage.getItem(STORE+'_cl')||'{}');
+    if(d.tks)d.tks.forEach((s,i)=>{if(s)selTk(i,s);});
+    if(d.phs)phs=d.phs;
+    if(d.obs)document.getElementById('obs-cl').value=d.obs;
+    if(d.rat)setRat(d.rat);
+  }catch(e){}
 }
 
-function uploadFoto(input, idx) {
-  var f = input.files[0];
-  if (!f) return;
-  if (!CL_STATE.tasks) CL_STATE.tasks = {};
-  if (!CL_STATE.tasks[idx]) CL_STATE.tasks[idx] = {};
-  if (!CL_STATE.tasks[idx].fotos) CL_STATE.tasks[idx].fotos = [];
-  var fotos = CL_STATE.tasks[idx].fotos;
-  if (fotos.length >= 3) { alert('Maximo de 3 fotos por tarefa!'); return; }
-  var st = document.getElementById('foto-status-' + idx);
-  if (st) st.textContent = 'Processando foto...';
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    var img = new Image();
-    img.onload = function() {
-      var canvas = document.createElement('canvas');
-      var MAX = 1280;
-      var ratio = Math.min(MAX / img.width, MAX / img.height, 1);
-      canvas.width  = Math.round(img.width  * ratio);
-      canvas.height = Math.round(img.height * ratio);
-      var ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      var agora = new Date();
-      var pad = function(n){ return n.toString().padStart(2,'0'); };
-      var stamp = pad(agora.getDate()) + '/' + pad(agora.getMonth()+1) + '/' + agora.getFullYear() +
-                  '  ' + pad(agora.getHours()) + ':' + pad(agora.getMinutes()) + ':' + pad(agora.getSeconds());
-      var label = COLAB_NM + ' | ' + stamp;
-      var fSize = Math.max(16, Math.round(canvas.width * 0.032));
-      var pad2  = Math.round(fSize * 0.5);
-      var bh    = fSize + pad2 * 2;
-      ctx.fillStyle = 'rgba(0,0,0,0.65)';
-      ctx.fillRect(0, canvas.height - bh, canvas.width, bh);
-      ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold ' + fSize + 'px monospace';
-      ctx.textAlign = 'left';
-      ctx.fillText(label, pad2, canvas.height - pad2);
-      canvas.toBlob(function(blob) {
-        if (st) st.textContent = 'Enviando...';
-        var fd = new FormData();
-        fd.append('file', blob, 'foto.jpg');
-        fd.append('upload_preset', 'checklist_prensadao');
-        fd.append('cloud_name', 'dewulu3tj');
-        fetch('https://api.cloudinary.com/v1_1/dewulu3tj/image/upload', {method:'POST',body:fd})
-          .then(function(r){ return r.json(); })
-          .then(function(data) {
-            if (!data.secure_url) { if (st) st.textContent = 'Erro no envio.'; return; }
-            fotos.push(data.secure_url);
-            CL_STATE.tasks[idx].fotos = fotos;
-            autoSave();
-            renderTK();
-          })
-          .catch(function(){ if (st) st.textContent = 'Erro. Tente novamente.'; });
-      }, 'image/jpeg', 0.88);
-    };
-    img.src = e.target.result;
-  };
-  reader.readAsDataURL(f);
+async function submitCL(){
+  const dt=new Date().toLocaleDateString('pt-BR');
+  if(tks.every(s=>s===null)){alert('Responda pelo menos uma tarefa!');return;}
+  document.getElementById('sub-btn').disabled=true;document.getElementById('sub-btn').textContent='⏳ Enviando...';
+  let msg='*✅ Checklist de Limpeza Semanal*\n*Colaborador:* Gabriel Vogt\n*Data:* '+dt+'\n\n*Tarefas:*\n';
+  let ok=true;
+  tks.forEach((s,i)=>{
+    const n=TRF[i].substring(0,50)+'...';
+    if(s==='sim'){msg+='✅ '+n;if(phs[i])msg+='\n📷 '+phs[i];msg+='\n';}
+    else{ok=false;msg+='❌ '+n+'\n';}
+  });
+  const exs=document.querySelectorAll('.ex-item');
+  if(exs.length>0){msg+='\n*Extras ('+exs.length+'):*\n';exs.forEach(el=>{const id=el.id.replace('ex-','');const desc=document.getElementById('exd-'+id)?.value||'';if(desc)msg+='⭐ '+desc+(exphs[id]?'\n📷 '+exphs[id]:'')+' \n';});}
+  const obs=document.getElementById('obs-cl').value;
+  if(obs)msg+='\n*Obs:* '+obs;
+  msg+='\n\n*Pontos base:* +'+(ok?'5':'0')+' pts';
+  localStorage.removeItem(STORE+'_cl');
+  document.getElementById('cl-form-area').style.display='none';
+  document.getElementById('ok-scr').style.display='block';
+  setTimeout(()=>window.open('https://wa.me/'+GR+'?text='+encodeURIComponent(msg),'_blank'),1000);
 }
-
-</script></body></html
+function submitCL(){
+  const dt=new Date().toLocaleDateString('pt-BR');
+  if(tks.every(s=>s===null)){alert('Responda pelo menos uma tarefa!');return;}
+  document.getElementById('sub-btn').disabled=true;document.getElementById('sub-btn').textContent='⏳ Enviando...';
+  let msg='*✅ Checklist de Limpeza Semanal*\n*Colaborador:* Gabriel Vogt\n*Data:* '+dt+'\n\n*Tarefas:*\n';
+  let ok=true;
+  tks.forEach((s,i)=>{
+    const n=TRF[i].substring(0,50)+'...';
+    if(s==='sim'){msg+='✅ '+n;if(phs[i])msg+='\n📷 '+phs[i];msg+='\n';}
+    else{ok=false;msg+='❌ '+n+'\n';}
+  });
+  const exs=document.querySelectorAll('.ex-item');
+  if(exs.length>0){msg+='\n*Extras ('+exs.length+'):*\n';exs.forEach(el=>{const id=el.id.replace('ex-','');const desc=document.getElementById('exd-'+id)?.value||'';if(desc)msg+='⭐ '+desc+(exphs[id]?'\n📷 '+exphs[id]:'')+' \n';});}
+  const obs=document.getElementById('obs-cl').value;
+  if(obs)msg+='\n*Obs:* '+obs;
+  msg+='\n\n*Pontos base:* +'+(ok?'5':'0')+' pts';
+  localStorage.removeItem(STORE+'_cl');
+  document.getElementById('cl-form-area').style.display='none';
+  document.getElementById('ok-scr').style.display='block';
+  setTimeout(()=>window.open('https://wa.me/'+GR+'?text='+encodeURIComponent(msg),'_blank'),1000);
+}
 </script></body></html>
