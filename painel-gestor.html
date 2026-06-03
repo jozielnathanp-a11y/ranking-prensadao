@@ -956,7 +956,7 @@ function atualizarPtsRanking(colabId, delta, motivo) {
 function responder(cid,id){
   const resp=document.getElementById("ri-"+id).value.trim();
   if(!resp){ alert("Escreva uma resposta!"); return; }
-  const chs=getChs(cid), idx=chs.findIndex(c=>c.id===id);
+  const chs=getChs(cid), idx=chs.findIndex(c=>String(c.id)===String(id));
   if(idx>=0){ chs[idx].resposta=resp; chs[idx].status="respondido"; saveChs(cid,chs); }
   alert("✅ Resposta salva!"); renderChamados(); renderGeral();
 }
@@ -1443,13 +1443,13 @@ document.addEventListener('click', function(e) {
 
   // btn-resp -> responder
   if (t.classList && t.classList.contains('btn-resp')) {
-    responder(t.dataset.colabid, parseInt(t.dataset.cid));
+    responder(t.dataset.colabid, t.dataset.cid);
     return;
   }
 
     // btn-fechar -> fechar
   if (t.classList && t.classList.contains('btn-fechar')) {
-    fechar(t.dataset.colabid, parseInt(t.dataset.cid));
+    fechar(t.dataset.colabid, t.dataset.cid);
     return;
   }
 
