@@ -1,0 +1,16 @@
+[
+  {
+    "id": "1780497548144",
+    "colaboradorId": "caua",
+    "colaboradorNome": "Cauã",
+    "tipo": "vale",
+    "tipoLabel": "Solicitação de Vale",
+    "urgencia": "baixa",
+    "data": "03/06/2026 às 11:39",
+    "timestamp": 1780497548144,
+    "valor": "40%",
+    "mensagem": "Para mim pagar o aluguel do meu apartamento",
+    "status": "pendente",
+    "phone": "5542988709227"
+  }
+]
