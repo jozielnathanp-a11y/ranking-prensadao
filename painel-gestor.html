@@ -957,8 +957,25 @@ function responder(cid,id){
   const resp=document.getElementById("ri-"+id).value.trim();
   if(!resp){ alert("Escreva uma resposta!"); return; }
   const chs=getChs(cid), idx=chs.findIndex(c=>String(c.id)===String(id));
+  const ch = idx>=0 ? chs[idx] : null;
   if(idx>=0){ chs[idx].resposta=resp; chs[idx].status="respondido"; saveChs(cid,chs); }
-  alert("✅ Resposta salva!"); renderChamados(); renderGeral();
+
+  // Atualizar no Supabase e notificar colaborador
+  atualizarStatusSB(cid, id, 'respondido', resp, function(){
+    // Enviar mensagem de resposta para o painel do colaborador
+    var tipoLabel = (ch && ch.tipoLabel) ? ch.tipoLabel : 'sua solicitacao';
+    var msgTexto = '✅ *Resposta do Gestor*\n*Ref:* ' + tipoLabel + '\n\n' + resp;
+    sbPost('prd_mensagens', {
+      ts: Date.now(),
+      de: 'gestor',
+      para: cid,
+      nome: 'Josiel (Gestor)',
+      texto: msgTexto,
+      lida: false
+    });
+  });
+
+  alert("✅ Resposta salva! O colaborador será notificado no painel."); renderChamados(); renderGeral();
 }
 
 function respWpp(cid,id,phone){
