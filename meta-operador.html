@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#0a0a0a">
+<title>Meta do Mês — Prensadão</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#fff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding:20px}
+.wrap{max-width:420px;margin:0 auto}
+.header{text-align:center;padding:28px 0 24px}
+.header h1{font-size:1.15rem;font-weight:900;color:#ff9500;letter-spacing:1px}
+.header p{font-size:0.75rem;color:#555;margin-top:6px}
+.card{background:#111;border:1.5px solid #ff6b00;border-radius:18px;padding:20px;margin-bottom:14px}
+.card-title{font-size:0.75rem;font-weight:800;color:#ff9500;margin-bottom:14px;letter-spacing:0.5px;text-transform:uppercase}
+.row{display:flex;gap:10px;margin-bottom:16px}
+.mini{flex:1;background:#1a1a1a;border-radius:14px;padding:16px;text-align:center}
+.mini-label{font-size:0.68rem;color:#666;margin-bottom:8px}
+.mini-pct{font-size:2rem;font-weight:900;color:#ff9500;line-height:1}
+.mini-sub{font-size:0.7rem;margin-top:6px}
+.mini-sub.ok{color:#48bb78}.mini-sub.atras{color:#fc8181}.mini-sub.zero{color:#444}.mini-sub.bonus{color:#a78bfa}
+.barra-wrap{margin-bottom:14px}
+.barra-label{display:flex;justify-content:space-between;font-size:0.72rem;color:#555;margin-bottom:6px}
+.barra-bg{background:#1e1e1e;border-radius:99px;height:16px;overflow:hidden}
+.barra-fill{height:16px;border-radius:99px;transition:width 0.8s ease}
+.sems{display:flex;flex-direction:column;gap:10px}
+.sem-row{display:flex;align-items:center;gap:8px;font-size:0.75rem}
+.sem-nome{color:#666;width:140px;flex-shrink:0}
+.sem-bg{flex:1;background:#1e1e1e;border-radius:99px;height:9px;overflow:hidden}
+.sem-fill{height:9px;border-radius:99px;transition:width 0.5s}
+.sem-pct{color:#555;font-weight:700;width:36px;text-align:right;flex-shrink:0}
+.status-geral{text-align:center;padding:20px;font-size:1rem;font-weight:800;border-radius:14px;margin-bottom:14px}
+.status-geral.ok{background:#0a1a0a;color:#48bb78;border:1px solid #48bb78}
+.status-geral.atras{background:#1a0a0a;color:#fc8181;border:1px solid #fc8181}
+.status-geral.bonus{background:#0f0a1a;color:#a78bfa;border:1px solid #a78bfa}
+.status-geral.zero{background:#111;color:#555;border:1px solid #222}
+.atualizado{text-align:center;font-size:0.68rem;color:#333;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <h1>🎯 META DO MÊS</h1>
+    <p>Junho 2026 · Prensadão Centro</p>
+  </div>
+
+  <div id="status-geral" class="status-geral zero">Carregando...</div>
+
+  <div class="card">
+    <div class="card-title">Progresso</div>
+    <div class="row">
+      <div class="mini">
+        <div class="mini-label">📅 Hoje</div>
+        <div class="mini-pct" id="pct-dia">—</div>
+        <div class="mini-sub zero" id="status-dia">—</div>
+      </div>
+      <div class="mini">
+        <div class="mini-label">📆 No mês</div>
+        <div class="mini-pct" id="pct-mes">0%</div>
+        <div class="mini-sub zero" id="status-mes">—</div>
+      </div>
+    </div>
+    <div class="barra-wrap">
+      <div class="barra-label"><span>0%</span><span id="label-dir">100%</span></div>
+      <div class="barra-bg"><div class="barra-fill" id="barra-mes" style="width:0%"></div></div>
+    </div>
+    <div class="sems" id="sems"></div>
+  </div>
+
+  <div class="atualizado" id="atualizado"></div>
+</div>
+
+<script>
+// Lê os dados do localStorage — mesma chave da página do gestor
+var MT       = 81493.02;
+var MT_MAX   = 85567.67;
+var MD_BASE  = 3134.35;
+var DIAS     = ["2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-06", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-13", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-19", "2026-06-20", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-27", "2026-06-29", "2026-06-30"];
+var TOTAL    = 26;
+var SEMS     = [{"label": "Sem 1 (01/06–06/06)", "dias": 6, "pctAcum": 23.1}, {"label": "Sem 2 (08/06–13/06)", "dias": 6, "pctAcum": 46.2}, {"label": "Sem 3 (15/06–20/06)", "dias": 6, "pctAcum": 69.2}, {"label": "Sem 4 (22/06–27/06)", "dias": 6, "pctAcum": 92.3}, {"label": "Sem 5 (29/06–30/06)", "dias": 2, "pctAcum": 100.0}];
+
+function hoje(){ return new Date().toISOString().slice(0,10); }
+function getDados(){ try{ return JSON.parse(localStorage.getItem('meta_jun26')||'{}'); }catch(e){ return {}; } }
+
+function calcMetaDia(dados, idx){
+  var fatAcum = 0;
+  for(var i=0; i<idx; i++){
+    var reg = dados[DIAS[i]];
+    if(reg && reg.fechado) fatAcum += reg.faturado;
+  }
+  var diasRestantes = TOTAL - idx;
+  if(diasRestantes <= 0) return MD_BASE;
+  var metaRestante = MT - fatAcum;
+  var metaAjustada = metaRestante / diasRestantes;
+  var metaMaxDia = (MT_MAX - fatAcum) / diasRestantes;
+  return Math.max(0, Math.min(metaAjustada, metaMaxDia));
+}
+
+function fatMes(dados){ var t=0; for(var k in dados) t+=(dados[k].faturado||0); return t; }
+
+function diasUteisPct(){
+  var hj = hoje(); var idx = DIAS.indexOf(hj);
+  return idx < 0 ? 0 : Math.round((idx+1)/TOTAL*1000)/10;
+}
+
+function render(){
+  var dados = getDados();
+  var hj = hoje();
+  var idxHoje = DIAS.indexOf(hj);
+  var reg = dados[hj] || {faturado:0, fechado:false};
+  var mHoje = idxHoje >= 0 ? calcMetaDia(dados, idxHoje) : MD_BASE;
+  var fat = reg.faturado;
+  var fatTotal = fatMes(dados);
+
+  // % dia
+  var pd = mHoje > 0 ? Math.round(fat/mHoje*1000)/10 : 0;
+  document.getElementById('pct-dia').textContent = idxHoje >= 0 ? pd.toFixed(0)+'%' : '—';
+  var sd = document.getElementById('status-dia');
+  if(idxHoje<0){sd.textContent='Fora do mês';sd.className='mini-sub zero';}
+  else if(fat===0){sd.textContent='Aguardando';sd.className='mini-sub zero';}
+  else if(pd>=100){sd.textContent='✅ Meta do dia!';sd.className='mini-sub ok';}
+  else{sd.textContent='Em andamento';sd.className='mini-sub atras';}
+
+  // % mês
+  var pmBase = Math.round(fatTotal/MT*1000)/10;
+  document.getElementById('pct-mes').textContent = pmBase.toFixed(0)+'%';
+  var sm = document.getElementById('status-mes');
+  var pe = diasUteisPct();
+  if(fatTotal===0){sm.textContent='Sem dados';sm.className='mini-sub zero';}
+  else if(pmBase>=105){sm.textContent='🚀 Teto atingido!';sm.className='mini-sub bonus';}
+  else if(pmBase>=100){sm.textContent='✅ Meta batida!';sm.className='mini-sub ok';}
+  else if(pmBase>=pe){sm.textContent='No ritmo ✅';sm.className='mini-sub ok';}
+  else{sm.textContent='Abaixo do ritmo';sm.className='mini-sub atras';}
+
+  // Barra
+  var barraW = Math.min(100, pmBase/1.05);
+  var b = document.getElementById('barra-mes');
+  b.style.width = barraW+'%';
+  b.style.background = pmBase>=105?'#a78bfa':pmBase>=100?'#48bb78':pmBase>=70?'linear-gradient(90deg,#ff6b00,#f6ad55)':'linear-gradient(90deg,#ff6b00,#ff9500)';
+  document.getElementById('label-dir').textContent = pmBase>=100?'✅':'Falta '+(100-Math.min(100,pmBase)).toFixed(0)+'%';
+
+  // Status geral
+  var sg = document.getElementById('status-geral');
+  if(fatTotal===0){sg.textContent='Aguardando lançamentos de hoje';sg.className='status-geral zero';}
+  else if(pmBase>=105){sg.textContent='🚀 Teto de 105% atingido!';sg.className='status-geral bonus';}
+  else if(pmBase>=100){sg.textContent='✅ Meta do mês batida!';sg.className='status-geral ok';}
+  else if(pmBase>=pe){sg.textContent='✅ No ritmo — continue assim!';sg.className='status-geral ok';}
+  else{sg.textContent='⚠️ Abaixo do ritmo — vamos acelerar!';sg.className='status-geral atras';}
+
+  // Semanas
+  document.getElementById('sems').innerHTML = SEMS.map(function(s){
+    var fill = pmBase>=s.pctAcum?100:Math.max(0,Math.round(pmBase/s.pctAcum*1000)/10);
+    var cor  = pmBase>=s.pctAcum?'#48bb78':fill>50?'#f6ad55':'#ff6b00';
+    return '<div class="sem-row">'+
+      '<span class="sem-nome">'+s.label+'</span>'+
+      '<div class="sem-bg"><div class="sem-fill" style="width:'+Math.min(100,fill)+'%;background:'+cor+'"></div></div>'+
+      '<span class="sem-pct">'+s.pctAcum+'%</span>'+
+    '</div>';
+  }).join('');
+
+  // Última atualização
+  var dias = Object.keys(dados).sort();
+  if(dias.length){
+    var ult = dias[dias.length-1].split('-');
+    document.getElementById('atualizado').textContent = 'Último lançamento: '+ult[2]+'/'+ult[1]+'/'+ult[0];
+  }
+}
+
+render();
+// Atualiza a cada 60s automaticamente
+setInterval(render, 60000);
+</script>
+</body>
+</html>

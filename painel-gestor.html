@@ -372,13 +372,6 @@ input[type="date"], input[type="time"] {
 
 
 
-.meta-sems{display:flex;flex-direction:column;gap:6px;margin-top:4px}
-.meta-sem-row{display:flex;align-items:center;gap:8px;font-size:0.72rem}
-.meta-sem-nome{color:#888;width:130px;flex-shrink:0}
-.meta-sem-bg{flex:1;background:#1e1e1e;border-radius:99px;height:7px;overflow:hidden}
-.meta-sem-fill{height:7px;border-radius:99px;transition:width 0.5s}
-.meta-sem-pct{color:#aaa;font-weight:700;width:34px;text-align:right;flex-shrink:0}
-
 </style>
 </head>
 <body>
@@ -397,10 +390,14 @@ input[type="date"], input[type="time"] {
 
 <div id="app-screen" style="display:none">
 <div class="top-hdr"><div class="top-nm">🛂 Painel do Gestor <span class="badge-ab" id="badge-ab">0</span></div></div>
-<div id="tab-geral" class="tab-c active"><div class="meta-row">
-    <div class="meta-mini">
-      <div class="meta-mini-label">📅 META DO DIA</div>
-      <div class="meta-mini-pct" id="meta-pct-dia">0%</div>
+<div id="tab-geral" class="tab-c active"><a href="https://jozielnathanp-a11y.github.io/ranking-prensadao/meta-junho.html" target="_blank" style="display:flex;align-items:center;gap:10px;background:#111;border:1.5px solid #ff6b00;border-radius:14px;padding:14px 16px;margin-bottom:14px;text-decoration:none;color:#ff9500;font-weight:800;font-size:0.9rem">
+  <span style="font-size:1.3rem">🎯</span>
+  <div>
+    <div>Meta Junho 2026</div>
+    <div style="font-size:0.7rem;color:#666;font-weight:400;margin-top:2px">Acompanhamento de faturamento</div>
+  </div>
+  <span style="margin-left:auto;color:#555;font-size:1.1rem">›</span>
+</a><div class="meta-mini-pct" id="meta-pct-dia">0%</div>
       <div class="meta-mini-sub" id="meta-dia-status">—</div>
     </div>
     <div class="meta-mini">
