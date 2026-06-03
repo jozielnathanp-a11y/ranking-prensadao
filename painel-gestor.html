@@ -776,7 +776,7 @@ var _chsCache = {};
 
 function loadChamadosSB(callback) {
   // Buscar todos os chamados de todos os colaboradores
-  sbGet('prd_mensagens', 'tipo=eq.chamado&order=ts.desc&limit=100')
+  sbGet('prd_mensagens', 'para=eq.gestor&order=ts.desc&limit=200')
     .then(function(rows) {
       if (!Array.isArray(rows)) rows = [];
       _chsCache = {};
