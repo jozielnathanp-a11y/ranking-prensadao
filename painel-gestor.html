@@ -882,7 +882,7 @@ function getAllChamados() {
     });
     all = all.concat(chs);
   });
-  all.sort(function(a,b){ return b.id - a.id; });
+  all.sort(function(a,b){ return (b.ts||b.id) > (a.ts||a.id) ? 1 : -1; });
   return all;
 }
 function renderChamados(){
@@ -906,7 +906,7 @@ function renderChamados(){
       (c.anexo?'<div style="margin-bottom:8px"><a href="'+c.anexo+'" target="_blank" style="color:#4a90d9;font-size:0.78rem">📎 Ver anexo</a></div>':'')+
       '<div class="resp-area">'+
       (c.resposta?'<div class="resp-ex"><strong>Sua resposta:</strong>'+c.resposta+'</div>':'')+
-      '<textarea class="resp-inp" id="ri-'+c.id+'" placeholder="Escreva sua resposta...">'+(c.resposta||'')+'</textarea>'+
+      '<textarea class="resp-inp" id="ri-'+c.id+'" placeholder="Escreva sua resposta..." onclick="event.stopPropagation()" onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()">'+(c.resposta||'')+'</textarea>'+
       '<div class="btn-row">'+
       '<button class="btn-resp" data-colabid="'+c._colabId+'" data-cid="'+c.id+'">&#x2705; Salvar</button>'+
       
