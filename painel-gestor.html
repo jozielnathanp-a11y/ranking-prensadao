@@ -808,7 +808,7 @@ function atualizarStatusSB(cid, id, novoStatus, resposta, callback) {
     sbGet('prd_mensagens', 'tipo=eq.chamado&de=eq.'+cid+'&order=ts.desc&limit=50')
       .then(function(rows) {
         var row = (rows||[]).find(function(r) {
-          try { return JSON.parse(r.texto).id === id; } catch(e) { return false; }
+          try { return String(JSON.parse(r.texto).id) === String(id); } catch(e) { return false; }
         });
         if (!row) return;
         var chObj = {};
@@ -1472,15 +1472,15 @@ document.addEventListener('click', function(ev) {
   if (!t) return;
 
   if (t.classList.contains('btn-resp')) {
-    responder(t.getAttribute('data-colabid'), parseInt(t.getAttribute('data-cid')));
+    responder(t.getAttribute('data-colabid'), t.getAttribute('data-cid'));
     return;
   }
   if (t.classList.contains('btn-fechar')) {
-    fechar(t.getAttribute('data-colabid'), parseInt(t.getAttribute('data-cid')));
+    fechar(t.getAttribute('data-colabid'), t.getAttribute('data-cid'));
     return;
   }
   if (t.classList.contains('btn-rejeitar')) {
-    rejeitarSB(t.getAttribute('data-colabid'), parseInt(t.getAttribute('data-cid')));
+    rejeitarSB(t.getAttribute('data-colabid'), t.getAttribute('data-cid'));
     return;
   }
 
