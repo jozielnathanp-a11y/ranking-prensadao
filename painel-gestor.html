@@ -866,7 +866,13 @@ function rejeitarSB(cid, id) {
 
 // Polling chamados a cada 10s
 setInterval(function() {
-  loadChamadosSB(function() { renderChamados(); renderGeral(); });
+  // Não re-renderizar se o gestor está digitando em algum campo de resposta
+  var focusedEl = document.activeElement;
+  var digitando = focusedEl && (focusedEl.tagName === 'TEXTAREA' || focusedEl.tagName === 'INPUT');
+  loadChamadosSB(function() {
+    if (!digitando) { renderChamados(); }
+    renderGeral();
+  });
 }, 10000);
 
 // ================================
