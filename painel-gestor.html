@@ -1434,11 +1434,14 @@ function monRenderChecklist() {
 document.addEventListener('click', function(e) {
   var t = e.target;
 
-  // colab-card -> filtrarColab
+  // colab-card -> filtrarColab (ignorar se clicou em input/textarea/button)
   var card = t.closest ? t.closest('.colab-card') : null;
   if (card && card.dataset.colabid) {
-    filtrarColab(card.dataset.colabid);
-    return;
+    var tag = t.tagName ? t.tagName.toLowerCase() : '';
+    if (tag !== 'input' && tag !== 'textarea' && tag !== 'button' && tag !== 'select') {
+      filtrarColab(card.dataset.colabid);
+      return;
+    }
   }
 
   // btn-resp -> responder
