@@ -27,6 +27,9 @@
   .radio-btn.selected-sim { background: #48bb78; border-color: #48bb78; color: white; }
   .radio-btn.selected-nao { background: #fc8181; border-color: #fc8181; color: white; }
   .photo-upload { margin-top: 10px; }
+  .photo-slots { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+  .photo-slot { flex: 1; min-width: 90px; }
+  .photo-slots-label { font-size: 0.82rem; color: #4a90d9; font-weight: 600; margin-bottom: 4px; }
   .photo-upload label { font-size: 0.82rem; color: #666; margin-bottom: 4px; }
   .photo-preview { width: 100%; max-height: 180px; object-fit: cover; border-radius: 8px; margin-top: 8px; display: none; }
   .upload-btn { display: block; width: 100%; padding: 8px; background: #ebf8ff; border: 1.5px dashed #4a90d9; border-radius: 8px; text-align: center; cursor: pointer; font-size: 0.85rem; color: #2b6cb0; font-weight: 500; }
@@ -139,11 +142,27 @@
         <div class="radio-btn nao" onclick="selectTask(0,'nao')">❌ Não</div>
       </div>
       <div class="photo-upload" id="photo-area-0" style="display:none">
-        <label>📷 Foto comprovando (obrigatória):</label>
-        <label class="upload-btn" for="photo-0">📁 Selecionar foto</label>
-        <input type="file" id="photo-0" accept="image/*" style="display:none" onchange="uploadPhoto(0, this)">
-        <div class="upload-status" id="status-0"></div>
-        <img class="photo-preview" id="preview-0">
+        <div class="photo-slots-label">📷 Fotos (mín. 1 obrigatória, máx. 3):</div>
+        <div class="photo-slots" id="slots-0">
+          <div class="photo-slot" id="slot-0-0">
+            <label class="upload-btn" for="photo-0-0">📁 Foto 1</label>
+            <input type="file" id="photo-0-0" accept="image/*" capture="environment" style="display:none" onchange="uploadPhoto(0,0,this)">
+            <div class="upload-status" id="status-0-0"></div>
+            <img class="photo-preview" id="preview-0-0">
+          </div>
+          <div class="photo-slot" id="slot-0-1">
+            <label class="upload-btn" for="photo-0-1">📁 Foto 2</label>
+            <input type="file" id="photo-0-1" accept="image/*" capture="environment" style="display:none" onchange="uploadPhoto(0,1,this)">
+            <div class="upload-status" id="status-0-1"></div>
+            <img class="photo-preview" id="preview-0-1">
+          </div>
+          <div class="photo-slot" id="slot-0-2">
+            <label class="upload-btn" for="photo-0-2">📁 Foto 3</label>
+            <input type="file" id="photo-0-2" accept="image/*" capture="environment" style="display:none" onchange="uploadPhoto(0,2,this)">
+            <div class="upload-status" id="status-0-2"></div>
+            <img class="photo-preview" id="preview-0-2">
+          </div>
+        </div>
       </div>
       <div id="justif-area-0" style="display:none; margin-top:10px;">
         <label>Por que não foi feito?</label>
@@ -158,11 +177,27 @@
         <div class="radio-btn nao" onclick="selectTask(1,'nao')">❌ Não</div>
       </div>
       <div class="photo-upload" id="photo-area-1" style="display:none">
-        <label>📷 Foto comprovando (obrigatória):</label>
-        <label class="upload-btn" for="photo-1">📁 Selecionar foto</label>
-        <input type="file" id="photo-1" accept="image/*" style="display:none" onchange="uploadPhoto(1, this)">
-        <div class="upload-status" id="status-1"></div>
-        <img class="photo-preview" id="preview-1">
+        <div class="photo-slots-label">📷 Fotos (mín. 1 obrigatória, máx. 3):</div>
+        <div class="photo-slots" id="slots-1">
+          <div class="photo-slot" id="slot-1-0">
+            <label class="upload-btn" for="photo-1-0">📁 Foto 1</label>
+            <input type="file" id="photo-1-0" accept="image/*" capture="environment" style="display:none" onchange="uploadPhoto(1,0,this)">
+            <div class="upload-status" id="status-1-0"></div>
+            <img class="photo-preview" id="preview-1-0">
+          </div>
+          <div class="photo-slot" id="slot-1-1">
+            <label class="upload-btn" for="photo-1-1">📁 Foto 2</label>
+            <input type="file" id="photo-1-1" accept="image/*" capture="environment" style="display:none" onchange="uploadPhoto(1,1,this)">
+            <div class="upload-status" id="status-1-1"></div>
+            <img class="photo-preview" id="preview-1-1">
+          </div>
+          <div class="photo-slot" id="slot-1-2">
+            <label class="upload-btn" for="photo-1-2">📁 Foto 3</label>
+            <input type="file" id="photo-1-2" accept="image/*" capture="environment" style="display:none" onchange="uploadPhoto(1,2,this)">
+            <div class="upload-status" id="status-1-2"></div>
+            <img class="photo-preview" id="preview-1-2">
+          </div>
+        </div>
       </div>
       <div id="justif-area-1" style="display:none; margin-top:10px;">
         <label>Por que não foi feito?</label>
@@ -177,11 +212,27 @@
         <div class="radio-btn nao" onclick="selectTask(2,'nao')">❌ Não</div>
       </div>
       <div class="photo-upload" id="photo-area-2" style="display:none">
-        <label>📷 Foto comprovando (obrigatória):</label>
-        <label class="upload-btn" for="photo-2">📁 Selecionar foto</label>
-        <input type="file" id="photo-2" accept="image/*" style="display:none" onchange="uploadPhoto(2, this)">
-        <div class="upload-status" id="status-2"></div>
-        <img class="photo-preview" id="preview-2">
+        <div class="photo-slots-label">📷 Fotos (mín. 1 obrigatória, máx. 3):</div>
+        <div class="photo-slots" id="slots-2">
+          <div class="photo-slot" id="slot-2-0">
+            <label class="upload-btn" for="photo-2-0">📁 Foto 1</label>
+            <input type="file" id="photo-2-0" accept="image/*" capture="environment" style="display:none" onchange="uploadPhoto(2,0,this)">
+            <div class="upload-status" id="status-2-0"></div>
+            <img class="photo-preview" id="preview-2-0">
+          </div>
+          <div class="photo-slot" id="slot-2-1">
+            <label class="upload-btn" for="photo-2-1">📁 Foto 2</label>
+            <input type="file" id="photo-2-1" accept="image/*" capture="environment" style="display:none" onchange="uploadPhoto(2,1,this)">
+            <div class="upload-status" id="status-2-1"></div>
+            <img class="photo-preview" id="preview-2-1">
+          </div>
+          <div class="photo-slot" id="slot-2-2">
+            <label class="upload-btn" for="photo-2-2">📁 Foto 3</label>
+            <input type="file" id="photo-2-2" accept="image/*" capture="environment" style="display:none" onchange="uploadPhoto(2,2,this)">
+            <div class="upload-status" id="status-2-2"></div>
+            <img class="photo-preview" id="preview-2-2">
+          </div>
+        </div>
       </div>
       <div id="justif-area-2" style="display:none; margin-top:10px;">
         <label>Por que não foi feito?</label>
@@ -196,11 +247,27 @@
         <div class="radio-btn nao" onclick="selectTask(3,'nao')">❌ Não</div>
       </div>
       <div class="photo-upload" id="photo-area-3" style="display:none">
-        <label>📷 Foto comprovando (obrigatória):</label>
-        <label class="upload-btn" for="photo-3">📁 Selecionar foto</label>
-        <input type="file" id="photo-3" accept="image/*" style="display:none" onchange="uploadPhoto(3, this)">
-        <div class="upload-status" id="status-3"></div>
-        <img class="photo-preview" id="preview-3">
+        <div class="photo-slots-label">📷 Fotos (mín. 1 obrigatória, máx. 3):</div>
+        <div class="photo-slots" id="slots-3">
+          <div class="photo-slot" id="slot-3-0">
+            <label class="upload-btn" for="photo-3-0">📁 Foto 1</label>
+            <input type="file" id="photo-3-0" accept="image/*" capture="environment" style="display:none" onchange="uploadPhoto(3,0,this)">
+            <div class="upload-status" id="status-3-0"></div>
+            <img class="photo-preview" id="preview-3-0">
+          </div>
+          <div class="photo-slot" id="slot-3-1">
+            <label class="upload-btn" for="photo-3-1">📁 Foto 2</label>
+            <input type="file" id="photo-3-1" accept="image/*" capture="environment" style="display:none" onchange="uploadPhoto(3,1,this)">
+            <div class="upload-status" id="status-3-1"></div>
+            <img class="photo-preview" id="preview-3-1">
+          </div>
+          <div class="photo-slot" id="slot-3-2">
+            <label class="upload-btn" for="photo-3-2">📁 Foto 3</label>
+            <input type="file" id="photo-3-2" accept="image/*" capture="environment" style="display:none" onchange="uploadPhoto(3,2,this)">
+            <div class="upload-status" id="status-3-2"></div>
+            <img class="photo-preview" id="preview-3-2">
+          </div>
+        </div>
       </div>
       <div id="justif-area-3" style="display:none; margin-top:10px;">
         <label>Por que não foi feito?</label>
@@ -215,11 +282,27 @@
         <div class="radio-btn nao" onclick="selectTask(4,'nao')">❌ Não</div>
       </div>
       <div class="photo-upload" id="photo-area-4" style="display:none">
-        <label>📷 Foto comprovando (obrigatória):</label>
-        <label class="upload-btn" for="photo-4">📁 Selecionar foto</label>
-        <input type="file" id="photo-4" accept="image/*" style="display:none" onchange="uploadPhoto(4, this)">
-        <div class="upload-status" id="status-4"></div>
-        <img class="photo-preview" id="preview-4">
+        <div class="photo-slots-label">📷 Fotos (mín. 1 obrigatória, máx. 3):</div>
+        <div class="photo-slots" id="slots-4">
+          <div class="photo-slot" id="slot-4-0">
+            <label class="upload-btn" for="photo-4-0">📁 Foto 1</label>
+            <input type="file" id="photo-4-0" accept="image/*" capture="environment" style="display:none" onchange="uploadPhoto(4,0,this)">
+            <div class="upload-status" id="status-4-0"></div>
+            <img class="photo-preview" id="preview-4-0">
+          </div>
+          <div class="photo-slot" id="slot-4-1">
+            <label class="upload-btn" for="photo-4-1">📁 Foto 2</label>
+            <input type="file" id="photo-4-1" accept="image/*" capture="environment" style="display:none" onchange="uploadPhoto(4,1,this)">
+            <div class="upload-status" id="status-4-1"></div>
+            <img class="photo-preview" id="preview-4-1">
+          </div>
+          <div class="photo-slot" id="slot-4-2">
+            <label class="upload-btn" for="photo-4-2">📁 Foto 3</label>
+            <input type="file" id="photo-4-2" accept="image/*" capture="environment" style="display:none" onchange="uploadPhoto(4,2,this)">
+            <div class="upload-status" id="status-4-2"></div>
+            <img class="photo-preview" id="preview-4-2">
+          </div>
+        </div>
       </div>
       <div id="justif-area-4" style="display:none; margin-top:10px;">
         <label>Por que não foi feito?</label>
@@ -274,7 +357,7 @@ const CLOUDINARY_PRESET = 'checklist_prensadao';
 const GRUPO_PRENSADAO = '120363289757731618@g.us';
 
 let taskStatus = [null, null, null, null, null];
-let photoURLs = [null, null, null, null, null];
+let photoURLs = [[null,null,null], [null,null,null], [null,null,null], [null,null,null], [null,null,null]];
 let extraCount = 0;
 let ratingValue = 0;
 let extraPhotoURLs = {};
@@ -338,32 +421,31 @@ function updateProgress() {
   document.getElementById('progress-text').textContent = done + ' de 5 tarefas concluídas';
 }
 
-async function uploadPhoto(index, input) {
+async function uploadPhoto(taskIdx, slotIdx, input) {
   const file = input.files[0];
   if (!file) return;
-  const status = document.getElementById('status-' + index);
-  const preview = document.getElementById('preview-' + index);
-  status.textContent = '⏳ Enviando foto...';
+  const status = document.getElementById('status-' + taskIdx + '-' + slotIdx);
+  const preview = document.getElementById('preview-' + taskIdx + '-' + slotIdx);
+  status.textContent = '⏳ Enviando...';
   const formData = new FormData();
   formData.append('file', file);
   formData.append('upload_preset', CLOUDINARY_PRESET);
-  try {
-    const res = await fetch('https://api.cloudinary.com/v1_1/' + CLOUDINARY_CLOUD + '/image/upload', { method: 'POST', body: formData });
-    const data = await res.json();
-    if (data.secure_url) {
-      photoURLs[index] = data.secure_url;
-      preview.src = data.secure_url;
-      preview.style.display = 'block';
-      status.textContent = '✅ Foto enviada!';
-      autoSave();
-    } else {
-      status.textContent = '❌ Erro no envio. Tente novamente.';
-    }
-  } catch(e) {
-    status.textContent = '❌ Erro no envio. Verifique a conexão.';
-  }
+  fetch('https://api.cloudinary.com/v1_1/' + CLOUDINARY_CLOUD + '/image/upload', { method: 'POST', body: formData })
+    .then(r => r.json())
+    .then(data => {
+      if (data.secure_url) {
+        if (!photoURLs[taskIdx]) photoURLs[taskIdx] = [null, null, null];
+        photoURLs[taskIdx][slotIdx] = data.secure_url;
+        preview.src = data.secure_url;
+        preview.style.display = 'block';
+        status.textContent = '✅ Enviada!';
+        autoSave();
+      } else {
+        status.textContent = '❌ Erro. Tente novamente.';
+      }
+    })
+    .catch(() => { status.textContent = '❌ Erro de conexão.'; });
 }
-
 function addExtra() {
   const id = extraCount++;
   const div = document.createElement('div');
@@ -424,6 +506,20 @@ async function submitForm() {
   if (!data) { alert('Preencha a data!'); return; }
   if (taskStatus.every(s => s === null)) { alert('Responda pelo menos uma tarefa!'); return; }
 
+  // Verificar: toda tarefa marcada "sim" precisa de pelo menos 1 foto
+  let semFoto = [];
+  taskStatus.forEach((s, i) => {
+    if (s === 'sim') {
+      const fotos = photoURLs[i] || [];
+      const temFoto = fotos.some(f => f !== null && f !== undefined);
+      if (!temFoto) semFoto.push(i + 1);
+    }
+  });
+  if (semFoto.length > 0) {
+    alert('📷 Obrigatório: adicione pelo menos 1 foto nas tarefas: ' + semFoto.map(n => 'Tarefa ' + n).join(', '));
+    return;
+  }
+
   const btn = document.getElementById('submit-btn');
   btn.disabled = true;
   btn.textContent = '⏳ Enviando...';
@@ -439,7 +535,8 @@ async function submitForm() {
   taskStatus.forEach((s, i) => {
     if (s === 'sim') {
       resumo += '✅ ' + taskNames[i];
-      if (photoURLs[i]) resumo += '\n📷 ' + photoURLs[i];
+      const fotos = (photoURLs[i] || []).filter(f => f);
+      fotos.forEach((url, fi) => { resumo += '\n📷' + (fi+1) + ' ' + url; });
       resumo += '\n';
     } else if (s === 'nao') {
       todasFeitas = false;
