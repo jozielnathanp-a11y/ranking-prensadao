@@ -690,10 +690,27 @@ function buildTks(){
         '<div class="rb" onclick="selTk('+i+',\'nao\')">❌ Não</div>' +
       '</div>' +
       '<div class="pu" id="pu-'+i+'" style="display:none">' +
-        '<label class="ul-btn" for="ph-'+i+'">📷 Selecionar foto (obrigatória)</label>' +
-        '<input type="file" id="ph-'+i+'" accept="image/*" style="display:none" onchange="upTk('+i+',this)">' +
-        '<div class="ul-st" id="phs-'+i+'"></div>' +
-        '<img class="ph-pv" id="phv-'+i+'">' +
+        '<div class="pu-label">📷 Fotos (mín. 1 obrigatória, máx. 3):</div>' +
+        '<div class="pu-slots">' +
+          '<div class="pu-slot">' +
+            '<label class="ul-btn" for="ph-'+i+'-0">📁 Foto 1</label>' +
+            '<input type="file" id="ph-'+i+'-0" accept="image/*" capture="environment" style="display:none" onchange="upTk('+i+',0,this)">' +
+            '<div class="ul-st" id="phs-'+i+'-0"></div>' +
+            '<img class="ph-pv" id="phv-'+i+'-0">' +
+          '</div>' +
+          '<div class="pu-slot">' +
+            '<label class="ul-btn" for="ph-'+i+'-1">📁 Foto 2</label>' +
+            '<input type="file" id="ph-'+i+'-1" accept="image/*" capture="environment" style="display:none" onchange="upTk('+i+',1,this)">' +
+            '<div class="ul-st" id="phs-'+i+'-1"></div>' +
+            '<img class="ph-pv" id="phv-'+i+'-1">' +
+          '</div>' +
+          '<div class="pu-slot">' +
+            '<label class="ul-btn" for="ph-'+i+'-2">📁 Foto 3</label>' +
+            '<input type="file" id="ph-'+i+'-2" accept="image/*" capture="environment" style="display:none" onchange="upTk('+i+',2,this)">' +
+            '<div class="ul-st" id="phs-'+i+'-2"></div>' +
+            '<img class="ph-pv" id="phv-'+i+'-2">' +
+          '</div>' +
+        '</div>' +
       '</div>' +
       '<div class="ja" id="ja-'+i+'"><textarea id="jt-'+i+'" placeholder="Por que não foi feito?" oninput="autoSave()"></textarea></div>' +
     '</div>';
