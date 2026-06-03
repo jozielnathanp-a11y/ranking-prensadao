@@ -805,7 +805,7 @@ function atualizarStatusSB(cid, id, novoStatus, resposta, callback) {
   var ch = chs.find(function(x) { return x.id === id; });
   if (!ch || !ch._sbid) {
     // Fallback: buscar direto no SB
-    sbGet('prd_mensagens', 'tipo=eq.chamado&de=eq.'+cid+'&order=ts.desc&limit=50')
+    sbGet('prd_mensagens', 'de=eq.'+cid+'&para=eq.gestor&order=ts.desc&limit=50')
       .then(function(rows) {
         var row = (rows||[]).find(function(r) {
           try { return String(JSON.parse(r.texto).id) === String(id); } catch(e) { return false; }
@@ -959,29 +959,66 @@ function atualizarPtsRanking(colabId, delta, motivo) {
 }
 // ===========================
 
-function responder(cid,id){
-  const resp=document.getElementById("ri-"+id).value.trim();
-  if(!resp){ alert("Escreva uma resposta!"); return; }
-  const chs=getChs(cid), idx=chs.findIndex(c=>String(c.id)===String(id));
-  const ch = idx>=0 ? chs[idx] : null;
-  if(idx>=0){ chs[idx].resposta=resp; chs[idx].status="respondido"; saveChs(cid,chs); }
+function responder(cid, id) {
+  var inp = document.getElementById('ri-' + id);
+  if (!inp) { alert('Campo não encontrado.'); return; }
+  var resp = inp.value.trim();
+  if (!resp) { alert('Escreva uma resposta!'); return; }
 
-  // Atualizar no Supabase e notificar colaborador
-  atualizarStatusSB(cid, id, 'respondido', resp, function(){
-    // Enviar mensagem de resposta para o painel do colaborador
-    var tipoLabel = (ch && ch.tipoLabel) ? ch.tipoLabel : 'sua solicitacao';
-    var msgTexto = '✅ *Resposta do Gestor*\n*Ref:* ' + tipoLabel + '\n\n' + resp;
-    sbPost('prd_mensagens', {
-      ts: Date.now(),
-      de: 'gestor',
-      para: cid,
-      nome: 'Josiel (Gestor)',
-      texto: msgTexto,
-      lida: false
+  // Buscar sbid no botão que disparou (ou no cache)
+  var btn = document.querySelector('[data-cid="'+id+'"][data-sbid]');
+  var sbid = btn ? btn.getAttribute('data-sbid') : null;
+
+  // Se não tem sbid, buscar no cache
+  if (!sbid) {
+    var chs = getChs(cid);
+    var ch = chs.find(function(x) { return String(x.id) === String(id); });
+    if (ch && ch._sbid) sbid = ch._sbid;
+  }
+
+  // Atualizar texto do chamado no Supabase via PATCH
+  function fazerPatch(rowId) {
+    // Buscar texto atual para atualizar status e resposta
+    sbGet('prd_mensagens', 'id=eq.' + rowId).then(function(rows) {
+      if (!rows || !rows[0]) { alert('Registro não encontrado no banco.'); return; }
+      var chObj = {};
+      try { chObj = JSON.parse(rows[0].texto); } catch(e) {}
+      chObj.status = 'respondido';
+      chObj.resposta = resp;
+      fetch(SB_URL + '/rest/v1/prd_mensagens?id=eq.' + rowId, {
+        method: 'PATCH',
+        headers: Object.assign({}, SB_H, { 'Prefer': 'return=minimal' }),
+        body: JSON.stringify({ texto: JSON.stringify(chObj) })
+      }).then(function() {
+        // Notificar colaborador
+        var tipoLabel = chObj.tipoLabel || 'sua solicitacao';
+        sbPost('prd_mensagens', {
+          ts: Date.now(),
+          de: 'gestor',
+          para: cid,
+          nome: 'Josiel (Gestor)',
+          texto: '✅ Resposta do Gestor\nRef: ' + tipoLabel + '\n\n' + resp,
+          lida: false
+        });
+        alert('✅ Resposta enviada! O colaborador verá no painel.');
+        loadChamadosSB(function() { renderChamados(); renderGeral(); });
+      });
     });
-  });
+  }
 
-  alert("✅ Resposta salva! O colaborador será notificado no painel."); renderChamados(); renderGeral();
+  if (sbid) {
+    fazerPatch(sbid);
+    return;
+  }
+
+  // Fallback: buscar pelo de=cid
+  sbGet('prd_mensagens', 'de=eq.' + cid + '&para=eq.gestor&order=ts.desc&limit=50').then(function(rows) {
+    var row = (rows || []).find(function(r) {
+      try { return String(JSON.parse(r.texto).id) === String(id); } catch(e) { return false; }
+    });
+    if (!row) { alert('Solicitação não encontrada. Tente recarregar a página.'); return; }
+    fazerPatch(row.id);
+  });
 }
 
 function respWpp(cid,id,phone){
