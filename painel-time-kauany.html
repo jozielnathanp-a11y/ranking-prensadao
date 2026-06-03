@@ -794,7 +794,7 @@ function setRat(v){rat=v;document.querySelectorAll('.rat span').forEach((s,i)=>s
 
 function autoSave(){
   localStorage.setItem(STORE+'_cl',JSON.stringify({tks,phs,obs:document.getElementById('obs-cl').value,rat}));
-  sbPost('prd_checklist', {colab_id: COLAB_ID, tks: tks, obs: document.getElementById('obs-cl') ? document.getElementById('obs-cl').value : '', semana: new Date().toISOString().slice(0,10), ts: Date.now()});
+  sbPost('prd_checklist', {colab_id: COLAB_ID, tks: tks, phs: phUrls.map(function(s){return (s||[]).filter(function(f){return f&&f!==null;});}), obs: document.getElementById('obs-cl') ? document.getElementById('obs-cl').value : '', semana: new Date().toISOString().slice(0,10), ts: Date.now()});
   saveChecklistSB(tks, phs, document.getElementById('obs-cl')?.value, rat);
   const i=document.getElementById('sv-ind');i.style.display='block';setTimeout(()=>i.style.display='none',1500);
 }
@@ -822,7 +822,7 @@ async function submitCL(){
   let ok=true;
   tks.forEach((s,i)=>{
     const n=TRF[i].substring(0,50)+'...';
-    if(s==='sim'){msg+='✅ '+n;if(phs[i])msg+='\n📷 '+phs[i];msg+='\n';}
+    if(s==='sim'){msg+='✅ '+n;(phUrls[i]||[]).filter(function(f){return f;}).forEach(function(f,fi){msg+='\n📷'+(fi+1)+' '+f;});msg+='\n';}
     else{ok=false;msg+='❌ '+n+'\n';}
   });
   const exs=document.querySelectorAll('.ex-item');

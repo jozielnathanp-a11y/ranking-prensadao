@@ -541,6 +541,11 @@ input[type="date"], input[type="time"] {
 </div>
 
 <!-- ABA AGENDA -->
+<div id="tab-checklist" class="tab-c">
+  <h2 style="font-size:1.1rem;color:#ff6b00;margin-bottom:16px">📋 Checklists da Semana</h2>
+  <div id="mon-check-grid"></div>
+</div>
+
 <div id="tab-agenda" class="tab-c" style="display:none">
   <div style="padding:16px">
     <div style="font-size:1rem;font-weight:700;margin-bottom:12px;">📅 Agendar</div>
@@ -594,7 +599,8 @@ input[type="date"], input[type="time"] {
 <button class="nav-b" id="nav-monitor" onclick="swTab('monitor')"><span class="ni">👁️</span><span class="nl">Monitor</span></button>
 <button class="nav-b" id="nav-chat" onclick="swTab('chat')"><span class="ni">💬</span><span class="nl">Chat</span></button>
 <button class="nav-b" id="nav-feedback" onclick="swTab('feedback')"><span class="ni">⭐</span><span class="nl">Feedback</span></button>
-<button class="nav-b" id="nav-agenda" onclick="swTab('agenda')"><span class="ni">📅</span><span class="nl">Agenda</span></button>
+<button class="nav-b" id="nav-checklist" onclick="swTab('checklist')"><span class="ni">📋</span><span class="nl">Checklists</span></button>
+  <button class="nav-b" id="nav-agenda" onclick="swTab('agenda')"><span class="ni">📅</span><span class="nl">Agenda</span></button>
 </div>
 </div>
 
@@ -869,6 +875,7 @@ setInterval(function() {
   // Não re-renderizar se o gestor está digitando em algum campo de resposta
   var focusedEl = document.activeElement;
   var digitando = focusedEl && (focusedEl.tagName === 'TEXTAREA' || focusedEl.tagName === 'INPUT');
+  setInterval(monRenderChecklistSB, 30000);
   loadChamadosSB(function() {
     if (!digitando) { renderChamados(); }
     renderGeral();
@@ -1626,7 +1633,11 @@ function monRenderChecklistSB() {
           fotos = tk.fotos || [];
         } else {
           done  = tk === 'sim' || tk === true;
-          fotos = tk && tk.foto ? [tk.foto] : [];
+          fotos = [];
+        // phs é array de arrays: phs[i] = [url1, url2, url3]
+        var phs = (dados.phs || []);
+        var phSlots = Array.isArray(phs[i]) ? phs[i] : (phs[i] ? [phs[i]] : []);
+        fotos = phSlots.filter(function(f){ return f && f !== null; });
         }
         if (done) feitas++;
         var icon = done ? '✅' : '⬜';
