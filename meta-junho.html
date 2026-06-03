@@ -12,32 +12,36 @@ body{background:#0a0a0a;color:#fff;font-family:-apple-system,BlinkMacSystemFont,
 .header{text-align:center;padding:24px 0 20px}
 .header h1{font-size:1.1rem;font-weight:900;color:#ff9500;letter-spacing:1px}
 .header p{font-size:0.75rem;color:#666;margin-top:4px}
-.card{background:#111;border:1.5px solid #ff6b00;border-radius:18px;padding:20px;margin-bottom:16px}
+.card{background:#111;border:1.5px solid #ff6b00;border-radius:18px;padding:20px;margin-bottom:14px}
 .card-title{font-size:0.78rem;font-weight:800;color:#ff9500;margin-bottom:14px;letter-spacing:0.5px;text-transform:uppercase}
 .row{display:flex;gap:10px;margin-bottom:14px}
 .mini{flex:1;background:#1a1a1a;border-radius:14px;padding:14px;text-align:center}
 .mini-label{font-size:0.68rem;color:#777;margin-bottom:6px}
 .mini-pct{font-size:1.8rem;font-weight:900;color:#ff9500}
-.mini-sub{font-size:0.7rem;margin-top:4px}
-.mini-sub.ok{color:#48bb78}
-.mini-sub.atras{color:#fc8181}
-.mini-sub.zero{color:#555}
-.barra-wrap{margin-bottom:14px}
+.mini-sub{font-size:0.68rem;margin-top:4px}
+.mini-sub.ok{color:#48bb78}.mini-sub.atras{color:#fc8181}.mini-sub.zero{color:#555}
+.barra-wrap{margin-bottom:12px}
 .barra-label{display:flex;justify-content:space-between;font-size:0.72rem;color:#666;margin-bottom:5px}
 .barra-bg{background:#1e1e1e;border-radius:99px;height:12px;overflow:hidden}
 .barra-fill{height:12px;border-radius:99px;transition:width 0.6s ease}
-.input-wrap{display:flex;gap:8px;align-items:center;margin-bottom:6px}
+.alerta{background:#1a1a0a;border:1px solid #f6ad55;border-radius:12px;padding:12px;font-size:0.78rem;color:#f6ad55;margin-bottom:12px;line-height:1.5}
+.alerta.ok{background:#0a1a0a;border-color:#48bb78;color:#48bb78}
+.input-wrap{display:flex;gap:8px;align-items:center;margin-bottom:8px}
 .meta-input{flex:1;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;padding:12px 14px;color:#fff;font-size:1rem}
 .meta-input:focus{outline:none;border-color:#ff6b00}
 .btn-ok{background:#ff6b00;color:#fff;border:none;border-radius:12px;padding:12px 18px;font-weight:900;cursor:pointer;font-size:1rem}
-.btn-limpar{width:100%;background:#1a1a1a;color:#fc8181;border:1px solid #2a2a2a;border-radius:12px;padding:10px;font-weight:700;cursor:pointer;font-size:0.8rem;margin-top:6px}
+.btn-sec{width:100%;background:#1a1a1a;color:#aaa;border:1px solid #2a2a2a;border-radius:12px;padding:10px;font-weight:700;cursor:pointer;font-size:0.78rem;margin-top:6px}
+.btn-danger{color:#fc8181;border-color:#fc8181}
 .sems{display:flex;flex-direction:column;gap:8px}
 .sem-row{display:flex;align-items:center;gap:8px;font-size:0.74rem}
 .sem-nome{color:#888;width:140px;flex-shrink:0}
 .sem-bg{flex:1;background:#1e1e1e;border-radius:99px;height:8px;overflow:hidden}
 .sem-fill{height:8px;border-radius:99px;transition:width 0.5s}
 .sem-pct{color:#aaa;font-weight:700;width:36px;text-align:right;flex-shrink:0}
-.faturado-wrap{text-align:center;padding:10px 0 4px;font-size:0.72rem;color:#555}
+.hist-item{font-size:0.74rem;color:#888;padding:6px 0;border-bottom:1px solid #1a1a1a;display:flex;justify-content:space-between}
+.hist-item:last-child{border-bottom:none}
+.hist-val{color:#ff9500;font-weight:700}
+.hint{font-size:0.7rem;color:#555;text-align:center;margin-top:6px}
 </style>
 </head>
 <body>
@@ -48,7 +52,8 @@ body{background:#0a0a0a;color:#fff;font-family:-apple-system,BlinkMacSystemFont,
   </div>
 
   <div class="card">
-    <div class="card-title">Progresso</div>
+    <div class="card-title">Hoje</div>
+    <div id="alerta-dia"></div>
     <div class="row">
       <div class="mini">
         <div class="mini-label">📅 Meta do Dia</div>
@@ -62,8 +67,8 @@ body{background:#0a0a0a;color:#fff;font-family:-apple-system,BlinkMacSystemFont,
       </div>
     </div>
     <div class="barra-wrap">
-      <div class="barra-label"><span>Mês</span><span id="label-falta">Falta 100%</span></div>
-      <div class="barra-bg"><div class="barra-fill" id="barra-mes" style="width:0%;background:linear-gradient(90deg,#ff6b00,#ff9500)"></div></div>
+      <div class="barra-label"><span>Progresso mensal</span><span id="label-falta">Falta 100%</span></div>
+      <div class="barra-bg"><div class="barra-fill" id="barra-mes" style="width:0%"></div></div>
     </div>
     <div class="sems" id="sems"></div>
   </div>
@@ -71,49 +76,92 @@ body{background:#0a0a0a;color:#fff;font-family:-apple-system,BlinkMacSystemFont,
   <div class="card">
     <div class="card-title">Lançar faturamento</div>
     <div class="input-wrap">
-      <input class="meta-input" type="number" id="inp" placeholder="R$ do dia de hoje" step="0.01" min="0">
+      <input class="meta-input" type="number" id="inp" placeholder="R$ faturado hoje" step="0.01" min="0">
       <button class="btn-ok" onclick="lancar()">✔</button>
     </div>
-    <button class="btn-limpar" onclick="zerarDia()">Zerar dia de hoje</button>
-    <div class="faturado-wrap" id="faturado-label"></div>
+    <button class="btn-sec" onclick="fecharDia()">✅ Fechar dia</button>
+    <div class="hint">Feche o dia ao final do expediente para calcular o rollover</div>
+    <button class="btn-sec btn-danger" onclick="zerarTudo()" style="margin-top:8px">🗑 Zerar tudo</button>
+  </div>
+
+  <div class="card" id="hist-card" style="display:none">
+    <div class="card-title">Histórico de dias</div>
+    <div id="hist-lista"></div>
   </div>
 </div>
 
 <script>
 var MT = 81493.02;
-var MD = MT / 26;
+var MD_BASE = 3134.35;
+var DIAS_UTEIS = ["2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-06", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-13", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-19", "2026-06-20", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-27", "2026-06-29", "2026-06-30"];
 var SEMS = [{"label": "Sem 1 (01/06–06/06)", "dias": 6, "pctAcum": 23.1}, {"label": "Sem 2 (08/06–13/06)", "dias": 6, "pctAcum": 46.2}, {"label": "Sem 3 (15/06–20/06)", "dias": 6, "pctAcum": 69.2}, {"label": "Sem 4 (22/06–27/06)", "dias": 6, "pctAcum": 92.3}, {"label": "Sem 5 (29/06–30/06)", "dias": 2, "pctAcum": 100.0}];
+var TOTAL_DIAS = 26;
 
-function diasUteis(){
-  var hoje = new Date();
-  var d = new Date(2026,5,1);
-  var c = 0;
-  while(d.getMonth()===5 && d<=hoje){
-    if(d.getDay()!==0) c++;
-    d.setDate(d.getDate()+1);
+function hoje(){ return new Date().toISOString().slice(0,10); }
+
+function getDados(){
+  try{ return JSON.parse(localStorage.getItem('meta_jun26')||'{}'); }
+  catch(e){ return {}; }
+}
+function salvar(d){ localStorage.setItem('meta_jun26', JSON.stringify(d)); }
+
+// Calcula meta do dia atual com rollover
+function metaHoje(dados){
+  var hj = hoje();
+  var idxHoje = DIAS_UTEIS.indexOf(hj);
+  if(idxHoje < 0) return MD_BASE; // fora do mês
+
+  // Soma o que faltou nos dias anteriores fechados
+  var deficit = 0;
+  for(var i=0; i<idxHoje; i++){
+    var dia = DIAS_UTEIS[i];
+    var reg = dados[dia];
+    if(reg && reg.fechado){
+      // Dias restantes a partir deste dia
+      var restantes = TOTAL_DIAS - i;
+      // O deficit deste dia é dividido pelos dias restantes
+      if(reg.faturado < MD_BASE){
+        deficit += (MD_BASE - reg.faturado) / (TOTAL_DIAS - i - 1 || 1);
+      }
+    }
   }
-  return c;
+  return MD_BASE + deficit;
+}
+
+function fatMes(dados){
+  var total = 0;
+  for(var k in dados){ total += (dados[k].faturado||0); }
+  return total;
+}
+
+function diasUteisPorcentagem(){
+  var hj = hoje();
+  var idx = DIAS_UTEIS.indexOf(hj);
+  return idx < 0 ? 0 : Math.round((idx+1)/TOTAL_DIAS*1000)/10;
 }
 
 function render(){
-  var fat = parseFloat(localStorage.getItem('meta_fat_jun26')||'0');
-  var fatH = parseFloat(localStorage.getItem('meta_fat_hoje')||'0');
-  var dp = diasUteis();
+  var dados = getDados();
+  var hj = hoje();
+  var reg = dados[hj] || {faturado:0, fechado:false};
+  var mHoje = metaHoje(dados);
+  var fat = reg.faturado;
+  var fatTotal = fatMes(dados);
 
-  // Dia
-  var pd = fatH>0 ? Math.round(fatH/MD*1000)/10 : 0;
+  // % dia
+  var pd = fat > 0 ? Math.round(fat/mHoje*1000)/10 : 0;
   document.getElementById('pct-dia').textContent = pd.toFixed(1)+'%';
   var sd = document.getElementById('status-dia');
-  if(fatH===0){sd.textContent='Sem lançamento';sd.className='mini-sub zero';}
+  if(fat===0){sd.textContent='Sem lançamento';sd.className='mini-sub zero';}
   else if(pd>=100){sd.textContent='✅ Meta atingida!';sd.className='mini-sub ok';}
   else{sd.textContent='Falta '+(100-pd).toFixed(0)+'%';sd.className='mini-sub atras';}
 
-  // Mês
-  var pm = Math.min(100, Math.round(fat/MT*1000)/10);
+  // % mês
+  var pm = Math.min(100, Math.round(fatTotal/MT*1000)/10);
   document.getElementById('pct-mes').textContent = pm.toFixed(1)+'%';
   var sm = document.getElementById('status-mes');
-  var pe = Math.min(100, Math.round(dp/26*1000)/10);
-  if(fat===0){sm.textContent='Sem lançamento';sm.className='mini-sub zero';}
+  var pe = diasUteisPorcentagem();
+  if(fatTotal===0){sm.textContent='Sem lançamento';sm.className='mini-sub zero';}
   else if(pm>=100){sm.textContent='✅ Meta batida!';sm.className='mini-sub ok';}
   else if(pm>=pe){sm.textContent='✅ No ritmo';sm.className='mini-sub ok';}
   else{sm.textContent='Atrás do ritmo';sm.className='mini-sub atras';}
@@ -124,36 +172,79 @@ function render(){
   b.style.background = pm>=100?'#48bb78':pm>=70?'linear-gradient(90deg,#ff6b00,#f6ad55)':'linear-gradient(90deg,#ff6b00,#ff9500)';
   document.getElementById('label-falta').textContent = pm>=100?'✅ Meta batida!':'Falta '+(100-pm).toFixed(1)+'%';
 
+  // Alerta rollover
+  var al = document.getElementById('alerta-dia');
+  var deficit = mHoje - MD_BASE;
+  if(deficit > 1){
+    al.className='alerta';
+    al.innerHTML = '⚠️ Dia anterior não bateu a meta.<br>Meta de hoje ajustada: +R$ ' + deficit.toFixed(2).replace('.',',') + ' carry‑over';
+  } else if(fat >= mHoje && fat > 0){
+    al.className='alerta ok';
+    al.innerHTML = '✅ Meta do dia batida!';
+  } else {
+    al.innerHTML='';
+    al.className='';
+  }
+
   // Semanas
   document.getElementById('sems').innerHTML = SEMS.map(function(s){
-    var fill = Math.min(100, pm>=s.pctAcum?100:Math.round(pm/s.pctAcum*1000)/10);
+    var fill = pm>=s.pctAcum ? 100 : Math.round(pm/s.pctAcum*1000)/10;
     var cor = pm>=s.pctAcum?'#48bb78':'#ff6b00';
     return '<div class="sem-row">'+
       '<span class="sem-nome">'+s.label+'</span>'+
-      '<div class="sem-bg"><div class="sem-fill" style="width:'+fill+'%;background:'+cor+'"></div></div>'+
+      '<div class="sem-bg"><div class="sem-fill" style="width:'+Math.min(100,fill)+'%;background:'+cor+'"></div></div>'+
       '<span class="sem-pct">'+s.pctAcum+'%</span>'+
     '</div>';
   }).join('');
 
-  // Label faturado
-  var fl = document.getElementById('faturado-label');
-  if(fl) fl.textContent = fat>0 ? 'Acumulado no mês: R$ '+fat.toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.') : '';
+  // Histórico
+  var dias = Object.keys(dados).sort().reverse().slice(0,7);
+  var hist = document.getElementById('hist-lista');
+  var hcard = document.getElementById('hist-card');
+  if(dias.length){
+    hcard.style.display='block';
+    hist.innerHTML = dias.map(function(d){
+      var r = dados[d];
+      var parts = d.split('-');
+      var label = parts[2]+'/'+parts[1];
+      var status = r.fechado ? (r.faturado>=MD_BASE?'✅':'⚠️') : '🔄';
+      return '<div class="hist-item"><span>'+status+' '+label+(r.fechado?'':' (aberto)')+'</span><span class="hist-val">'+Math.round(r.faturado/MD_BASE*100)+'%</span></div>';
+    }).join('');
+  } else {
+    hcard.style.display='none';
+  }
 }
 
 function lancar(){
   var v = parseFloat(document.getElementById('inp').value);
   if(isNaN(v)||v<=0){alert('Valor inválido');return;}
-  var fat = parseFloat(localStorage.getItem('meta_fat_jun26')||'0');
-  var fatH = parseFloat(localStorage.getItem('meta_fat_hoje')||'0');
-  localStorage.setItem('meta_fat_jun26',(fat+v).toFixed(2));
-  localStorage.setItem('meta_fat_hoje',(fatH+v).toFixed(2));
+  var dados = getDados();
+  var hj = hoje();
+  if(!dados[hj]) dados[hj]={faturado:0,fechado:false};
+  dados[hj].faturado = Math.round((dados[hj].faturado+v)*100)/100;
+  salvar(dados);
   document.getElementById('inp').value='';
   render();
 }
 
-function zerarDia(){
-  if(!confirm('Zerar faturamento de hoje?')) return;
-  localStorage.removeItem('meta_fat_hoje');
+function fecharDia(){
+  var dados = getDados();
+  var hj = hoje();
+  if(!dados[hj]) dados[hj]={faturado:0,fechado:false};
+  var mH = metaHoje(dados);
+  var fat = dados[hj].faturado;
+  var msg = fat >= mH
+    ? '✅ Meta batida! Fechar o dia?'
+    : '⚠️ Meta não atingida ('+Math.round(fat/mH*100)+'%). O valor restante será distribuído nos próximos dias. Fechar?';
+  if(!confirm(msg)) return;
+  dados[hj].fechado = true;
+  salvar(dados);
+  render();
+}
+
+function zerarTudo(){
+  if(!confirm('Zerar todo o histórico do mês?')) return;
+  localStorage.removeItem('meta_jun26');
   render();
 }
 
