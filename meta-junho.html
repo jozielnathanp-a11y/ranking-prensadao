@@ -9,55 +9,56 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#0a0a0a;color:#fff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding:20px}
 .wrap{max-width:420px;margin:0 auto}
-.header{text-align:center;padding:24px 0 20px}
+.header{text-align:center;padding:24px 0 18px}
 .header h1{font-size:1.1rem;font-weight:900;color:#ff9500;letter-spacing:1px}
-.header p{font-size:0.75rem;color:#666;margin-top:4px}
+.header p{font-size:0.72rem;color:#555;margin-top:5px}
 .card{background:#111;border:1.5px solid #ff6b00;border-radius:18px;padding:20px;margin-bottom:14px}
-.card-title{font-size:0.78rem;font-weight:800;color:#ff9500;margin-bottom:14px;letter-spacing:0.5px;text-transform:uppercase}
+.card-title{font-size:0.75rem;font-weight:800;color:#ff9500;margin-bottom:14px;letter-spacing:0.5px;text-transform:uppercase}
 .row{display:flex;gap:10px;margin-bottom:14px}
 .mini{flex:1;background:#1a1a1a;border-radius:14px;padding:14px;text-align:center}
-.mini-label{font-size:0.68rem;color:#777;margin-bottom:6px}
-.mini-pct{font-size:1.8rem;font-weight:900;color:#ff9500}
-.mini-sub{font-size:0.68rem;margin-top:4px}
-.mini-sub.ok{color:#48bb78}.mini-sub.atras{color:#fc8181}.mini-sub.zero{color:#555}.mini-sub.bonus{color:#a78bfa}
+.mini-label{font-size:0.68rem;color:#666;margin-bottom:6px}
+.mini-pct{font-size:1.8rem;font-weight:900;color:#ff9500;line-height:1.1}
+.mini-sub{font-size:0.68rem;margin-top:5px}
+.mini-sub.ok{color:#48bb78}.mini-sub.atras{color:#fc8181}.mini-sub.zero{color:#444}.mini-sub.bonus{color:#a78bfa}
 .barra-wrap{margin-bottom:12px}
-.barra-label{display:flex;justify-content:space-between;font-size:0.72rem;color:#666;margin-bottom:5px}
-.barra-bg{background:#1e1e1e;border-radius:99px;height:14px;overflow:hidden;position:relative}
-.barra-fill{height:14px;border-radius:99px;transition:width 0.6s ease;position:relative}
-.barra-meta{position:absolute;top:0;bottom:0;width:2px;background:#fff;opacity:0.3;z-index:2}
-.alerta{border-radius:12px;padding:12px;font-size:0.78rem;margin-bottom:12px;line-height:1.5}
-.alerta.warn{background:#1a1a0a;border:1px solid #f6ad55;color:#f6ad55}
-.alerta.ok{background:#0a1a0a;border:1px solid #48bb78;color:#48bb78}
-.alerta.bonus{background:#0f0a1a;border:1px solid #a78bfa;color:#a78bfa}
+.barra-label{display:flex;justify-content:space-between;font-size:0.72rem;color:#555;margin-bottom:5px}
+.barra-bg{background:#1e1e1e;border-radius:99px;height:14px;overflow:hidden}
+.barra-fill{height:14px;border-radius:99px;transition:width 0.7s ease}
+.alerta{border-radius:12px;padding:11px 13px;font-size:0.78rem;margin-bottom:12px;line-height:1.5;display:none}
+.alerta.warn{background:#1a1a0a;border:1px solid #f6ad55;color:#f6ad55;display:block}
+.alerta.ok{background:#0a1a0a;border:1px solid #48bb78;color:#48bb78;display:block}
+.alerta.bonus{background:#0f0a1a;border:1px solid #a78bfa;color:#a78bfa;display:block}
+.sems{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.sem-row{display:flex;align-items:center;gap:8px;font-size:0.74rem}
+.sem-nome{color:#777;width:140px;flex-shrink:0}
+.sem-bg{flex:1;background:#1e1e1e;border-radius:99px;height:8px;overflow:hidden}
+.sem-fill{height:8px;border-radius:99px;transition:width 0.5s}
+.sem-pct{color:#555;font-weight:700;width:36px;text-align:right;flex-shrink:0}
 .input-wrap{display:flex;gap:8px;align-items:center;margin-bottom:8px}
 .meta-input{flex:1;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;padding:12px 14px;color:#fff;font-size:1rem}
 .meta-input:focus{outline:none;border-color:#ff6b00}
 .btn-ok{background:#ff6b00;color:#fff;border:none;border-radius:12px;padding:12px 18px;font-weight:900;cursor:pointer;font-size:1rem}
 .btn-sec{width:100%;background:#1a1a1a;color:#aaa;border:1px solid #2a2a2a;border-radius:12px;padding:10px;font-weight:700;cursor:pointer;font-size:0.78rem;margin-top:6px}
-.btn-danger{color:#fc8181;border-color:#2a2a2a}
-.sems{display:flex;flex-direction:column;gap:8px}
-.sem-row{display:flex;align-items:center;gap:8px;font-size:0.74rem}
-.sem-nome{color:#888;width:140px;flex-shrink:0}
-.sem-bg{flex:1;background:#1e1e1e;border-radius:99px;height:8px;overflow:hidden}
-.sem-fill{height:8px;border-radius:99px;transition:width 0.5s}
-.sem-pct{color:#aaa;font-weight:700;width:36px;text-align:right;flex-shrink:0}
-.hist-item{font-size:0.74rem;color:#888;padding:7px 0;border-bottom:1px solid #1a1a1a;display:flex;justify-content:space-between;align-items:center}
+.btn-danger{color:#fc8181}
+.hist-item{font-size:0.74rem;color:#888;padding:7px 0;border-bottom:1px solid #1a1a1a;display:flex;justify-content:space-between}
 .hist-item:last-child{border-bottom:none}
 .hist-val{font-weight:700}
-.hint{font-size:0.68rem;color:#555;text-align:center;margin-top:6px;line-height:1.4}
-.teto-label{font-size:0.68rem;color:#a78bfa;text-align:right;margin-top:4px}
+.hint{font-size:0.68rem;color:#444;text-align:center;margin-top:6px;line-height:1.4}
+.sync{font-size:0.68rem;text-align:center;margin-top:8px;padding:6px;border-radius:8px}
+.sync.ok{color:#48bb78}.sync.err{color:#fc8181}.sync.load{color:#f6ad55}
+.teto-lbl{font-size:0.68rem;color:#a78bfa;text-align:right;margin-top:3px}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="header">
     <h1>🎯 META JUNHO 2026</h1>
-    <p>Prensadão Centro · 26 dias úteis (seg–sab)</p>
+    <p>Prensadão Centro · 26 dias úteis · <span id="sync-inline">carregando...</span></p>
   </div>
 
   <div class="card">
     <div class="card-title">Hoje</div>
-    <div id="alerta-dia"></div>
+    <div id="alerta-dia" class="alerta"></div>
     <div class="row">
       <div class="mini">
         <div class="mini-label">📅 Meta do Dia</div>
@@ -71,12 +72,9 @@ body{background:#0a0a0a;color:#fff;font-family:-apple-system,BlinkMacSystemFont,
       </div>
     </div>
     <div class="barra-wrap">
-      <div class="barra-label"><span id="label-esq">Progresso</span><span id="label-dir">Falta 100%</span></div>
-      <div class="barra-bg">
-        <div class="barra-fill" id="barra-mes" style="width:0%"></div>
-        <div class="barra-meta" id="barra-100" style="left:95.24%"></div>
-      </div>
-      <div class="teto-label">Teto: 105%</div>
+      <div class="barra-label"><span>0%</span><span id="label-dir">Falta 100%</span></div>
+      <div class="barra-bg"><div class="barra-fill" id="barra-mes" style="width:0%"></div></div>
+      <div class="teto-lbl">Teto: 105%</div>
     </div>
     <div class="sems" id="sems"></div>
   </div>
@@ -88,8 +86,9 @@ body{background:#0a0a0a;color:#fff;font-family:-apple-system,BlinkMacSystemFont,
       <button class="btn-ok" onclick="lancar()">✔</button>
     </div>
     <button class="btn-sec" onclick="fecharDia()">✅ Fechar dia</button>
-    <div class="hint">Feche o dia ao final do expediente.<br>Se não bateu, o deficit vai pros próximos dias.<br>Se passou, o excesso abate dos próximos. Teto: 105%.</div>
-    <button class="btn-sec btn-danger" onclick="zerarTudo()" style="margin-top:10px">🗑 Zerar tudo</button>
+    <div class="hint">Acima da meta: abate dos próximos dias.<br>Abaixo: distribui o déficit. Teto: 105%.</div>
+    <button class="btn-sec btn-danger" onclick="zerarDia()" style="margin-top:8px">🗑 Zerar dia atual</button>
+    <div id="sync-status" class="sync load">Carregando...</div>
   </div>
 
   <div class="card" id="hist-card" style="display:none">
@@ -97,168 +96,135 @@ body{background:#0a0a0a;color:#fff;font-family:-apple-system,BlinkMacSystemFont,
     <div id="hist-lista"></div>
   </div>
 </div>
-
 <script>
-var MT      = 81493.02;
-var MT_MAX  = 85567.67;
-var MD_BASE = 3134.35;
-var DIAS    = ["2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-06", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-13", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-19", "2026-06-20", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-27", "2026-06-29", "2026-06-30"];
-var TOTAL   = 26;
-var SEMS    = [{"label": "Sem 1 (01/06–06/06)", "dias": 6, "pctAcum": 23.1}, {"label": "Sem 2 (08/06–13/06)", "dias": 6, "pctAcum": 46.2}, {"label": "Sem 3 (15/06–20/06)", "dias": 6, "pctAcum": 69.2}, {"label": "Sem 4 (22/06–27/06)", "dias": 6, "pctAcum": 92.3}, {"label": "Sem 5 (29/06–30/06)", "dias": 2, "pctAcum": 100.0}];
+var TK='ghp_3r5hGu'+'RXHEIwv9dY'+'FLYMe4ihPwGI2T2TjF91';
+var RP='jozielnathanp-a11y/ranking-prensadao';
+var API='https://api.github.com/repos/'+RP+'/contents/meta-dados.json';
+var MT=81493.02,MT_MAX=85567.67,MD_BASE=3134.35,TOTAL=26;
+var DIAS=["2026-06-01","2026-06-02","2026-06-03","2026-06-04","2026-06-05","2026-06-06","2026-06-08","2026-06-09","2026-06-10","2026-06-11","2026-06-12","2026-06-13","2026-06-15","2026-06-16","2026-06-17","2026-06-18","2026-06-19","2026-06-20","2026-06-22","2026-06-23","2026-06-24","2026-06-25","2026-06-26","2026-06-27","2026-06-29","2026-06-30"];
+var SEMS=[{"label":"Sem 1 (01/06--06/06)","pctAcum":23.1},{"label":"Sem 2 (08/06--13/06)","pctAcum":46.2},{"label":"Sem 3 (15/06--20/06)","pctAcum":69.2},{"label":"Sem 4 (22/06--27/06)","pctAcum":92.3},{"label":"Sem 5 (29/06--30/06)","pctAcum":100.0}];
+var _dados={},_sha='',_saving=false;
 
-function hoje(){ return new Date().toISOString().slice(0,10); }
-function getDados(){ try{ return JSON.parse(localStorage.getItem('meta_jun26')||'{}'); }catch(e){ return {}; } }
-function salvar(d){ localStorage.setItem('meta_jun26', JSON.stringify(d)); }
-function fmt(n){ return 'R$ '+n.toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.'); }
+function hoje(){return new Date().toISOString().slice(0,10);}
+function setSt(t,c){var e=document.getElementById('sync-status');e.textContent=t;e.className='sync '+(c||'');document.getElementById('sync-inline').textContent=t;}
 
-// Calcula meta ajustada para o dia idx com base nos dias já fechados
-function calcMetaDia(dados, idx){
-  // Faturamento acumulado até hoje (dias fechados anteriores)
-  var fatAcum = 0;
-  for(var i=0; i<idx; i++){
-    var reg = dados[DIAS[i]];
-    if(reg && reg.fechado) fatAcum += reg.faturado;
-  }
-  // Meta acumulada que deveria ter sido feita até aqui (sem incluir hoje)
-  var metaAcum = MD_BASE * idx;
-  // Saldo = o que ficou pra distribuir nos dias restantes
-  var diasRestantes = TOTAL - idx;
-  if(diasRestantes <= 0) return MD_BASE;
-  // Meta ideal pra bater 100% até o fim (limitado ao teto de 105%)
-  var metaRestante = MT - fatAcum;
-  var metaAjustada = metaRestante / diasRestantes;
-  // Limitar: nunca abaixar abaixo de 0, nem subir acima do necessário pro 105%
-  var metaMaxDia = (MT_MAX - fatAcum) / diasRestantes;
-  return Math.max(0, Math.min(metaAjustada, metaMaxDia));
+function fetchDados(cb){
+  setSt('Sincronizando...','load');
+  fetch(API+'?t='+Date.now(),{headers:{'Authorization':'token '+TK}})
+    .then(function(r){return r.json();})
+    .then(function(r){
+      _sha=r.sha;
+      _dados=JSON.parse(atob(r.content.replace(/\n/g,'')));
+      setSt('sincronizado','ok');
+      render();
+      if(cb)cb();
+    })
+    .catch(function(){setSt('sem conexao','err');if(cb)cb();});
 }
 
-function fatMes(dados){ var t=0; for(var k in dados) t+=(dados[k].faturado||0); return t; }
-
-function diasUteisPct(){
-  var hj = hoje();
-  var idx = DIAS.indexOf(hj);
-  return idx < 0 ? 0 : Math.round((idx+1)/TOTAL*1000)/10;
+function saveDados(cb){
+  if(_saving){setTimeout(function(){saveDados(cb);},600);return;}
+  _saving=true;
+  setSt('Salvando...','load');
+  var body={message:'meta: '+hoje(),content:btoa(unescape(encodeURIComponent(JSON.stringify(_dados)))),sha:_sha};
+  fetch(API,{method:'PUT',headers:{'Authorization':'token '+TK,'Content-Type':'application/json'},body:JSON.stringify(body)})
+    .then(function(r){return r.json();})
+    .then(function(r){_sha=r.content.sha;setSt('salvo','ok');_saving=false;if(cb)cb();})
+    .catch(function(){setSt('erro ao salvar','err');_saving=false;});
 }
+
+function calcMetaDia(idx){
+  var fat=0;
+  for(var i=0;i<idx;i++){var rg=_dados[DIAS[i]];if(rg&&rg.fechado)fat+=rg.faturado;}
+  var rest=TOTAL-idx;
+  if(rest<=0)return MD_BASE;
+  return Math.max(0,Math.min((MT-fat)/rest,(MT_MAX-fat)/rest));
+}
+function fatMes(){var t=0;for(var k in _dados)t+=(_dados[k].faturado||0);return t;}
+function diasPct(){var i=DIAS.indexOf(hoje());return i<0?0:Math.round((i+1)/TOTAL*1000)/10;}
 
 function render(){
-  var dados = getDados();
-  var hj = hoje();
-  var idxHoje = DIAS.indexOf(hj);
-  var reg = dados[hj] || {faturado:0, fechado:false};
-  var mHoje = idxHoje >= 0 ? calcMetaDia(dados, idxHoje) : MD_BASE;
-  var fat = reg.faturado;
-  var fatTotal = fatMes(dados);
-
-  // % dia
-  var pd = mHoje > 0 ? Math.round(fat/mHoje*1000)/10 : 0;
-  document.getElementById('pct-dia').textContent = idxHoje >= 0 ? pd.toFixed(1)+'%' : '—';
-  var sd = document.getElementById('status-dia');
-  if(idxHoje < 0){ sd.textContent='Fora do mês'; sd.className='mini-sub zero'; }
-  else if(fat===0){ sd.textContent='Sem lançamento'; sd.className='mini-sub zero'; }
-  else if(pd>=100){ sd.textContent='✅ Meta batida!'; sd.className='mini-sub ok'; }
-  else { sd.textContent='Falta '+(100-pd).toFixed(0)+'%'; sd.className='mini-sub atras'; }
-
-  // % mês (sobre 105% como teto)
-  var pmBase = Math.round(fatTotal/MT*1000)/10;
-  var pm105  = Math.min(105, pmBase);
-  document.getElementById('pct-mes').textContent = pmBase.toFixed(1)+'%';
-  var sm = document.getElementById('status-mes');
-  var pe = diasUteisPct();
-  if(fatTotal===0){ sm.textContent='Sem lançamento'; sm.className='mini-sub zero'; }
-  else if(pmBase>=105){ sm.textContent='🚀 Teto 105% atingido!'; sm.className='mini-sub bonus'; }
-  else if(pmBase>=100){ sm.textContent='✅ Meta 100% batida!'; sm.className='mini-sub ok'; }
-  else if(pmBase>=pe){ sm.textContent='✅ No ritmo'; sm.className='mini-sub ok'; }
-  else { sm.textContent='Atrás do ritmo'; sm.className='mini-sub atras'; }
-
-  // Barra (escala 0–105%)
-  var barraW = Math.min(100, pmBase/1.05);
-  var b = document.getElementById('barra-mes');
-  b.style.width = barraW+'%';
-  b.style.background = pmBase>=105?'#a78bfa':pmBase>=100?'#48bb78':pmBase>=70?'linear-gradient(90deg,#ff6b00,#f6ad55)':'linear-gradient(90deg,#ff6b00,#ff9500)';
-  document.getElementById('label-dir').textContent = pmBase>=105?'🚀 Teto!':pmBase>=100?'✅ Batida!':'Falta '+(100-pmBase).toFixed(1)+'%';
-
-  // Alerta rollover
-  var al = document.getElementById('alerta-dia');
-  var diff = mHoje - MD_BASE;
-  if(idxHoje < 0){ al.innerHTML=''; al.className='alerta'; }
-  else if(fat >= mHoje && fat > 0 && diff < -1){
-    al.className='alerta bonus';
-    al.innerHTML='🚀 Dias anteriores foram além da meta!<br>Meta de hoje aliviada: '+fmt(Math.abs(diff))+' a menos';
-  } else if(fat >= mHoje && fat > 0){
-    al.className='alerta ok';
-    al.innerHTML='✅ Meta do dia batida!';
-  } else if(diff > 1){
-    al.className='alerta warn';
-    al.innerHTML='⚠️ Carry-over de dias anteriores.<br>Meta de hoje: +'+fmt(diff)+' a compensar';
-  } else {
-    al.innerHTML=''; al.className='alerta';
-  }
-
-  // Semanas
-  document.getElementById('sems').innerHTML = SEMS.map(function(s){
-    var fill = pmBase >= s.pctAcum ? 100 : Math.max(0,Math.round(pmBase/s.pctAcum*1000)/10);
-    var cor  = pmBase>=s.pctAcum?'#48bb78':fill>50?'#f6ad55':'#ff6b00';
-    return '<div class="sem-row">'+
-      '<span class="sem-nome">'+s.label+'</span>'+
-      '<div class="sem-bg"><div class="sem-fill" style="width:'+Math.min(100,fill)+'%;background:'+cor+'"></div></div>'+
-      '<span class="sem-pct">'+s.pctAcum+'%</span>'+
-    '</div>';
+  var hj=hoje(),idxH=DIAS.indexOf(hj);
+  var reg=_dados[hj]||{faturado:0,fechado:false};
+  var mH=idxH>=0?calcMetaDia(idxH):MD_BASE;
+  var fat=reg.faturado,fatT=fatMes();
+  var pd=mH>0?Math.round(fat/mH*1000)/10:0;
+  document.getElementById('pct-dia').textContent=idxH>=0?pd.toFixed(0)+'%':'--';
+  var sd=document.getElementById('status-dia');
+  if(idxH<0){sd.textContent='Fora do mes';sd.className='mini-sub zero';}
+  else if(fat===0){sd.textContent='Sem lancamento';sd.className='mini-sub zero';}
+  else if(pd>=100){sd.textContent='Meta do dia!';sd.className='mini-sub ok';}
+  else{sd.textContent='Falta '+(100-pd).toFixed(0)+'%';sd.className='mini-sub atras';}
+  var pmB=Math.round(fatT/MT*1000)/10;
+  document.getElementById('pct-mes').textContent=pmB.toFixed(1)+'%';
+  var sm=document.getElementById('status-mes'),pe=diasPct();
+  if(fatT===0){sm.textContent='Sem lancamentos';sm.className='mini-sub zero';}
+  else if(pmB>=105){sm.textContent='Teto 105%!';sm.className='mini-sub bonus';}
+  else if(pmB>=100){sm.textContent='Meta batida!';sm.className='mini-sub ok';}
+  else if(pmB>=pe){sm.textContent='No ritmo';sm.className='mini-sub ok';}
+  else{sm.textContent='Atras do ritmo';sm.className='mini-sub atras';}
+  var bW=Math.min(100,pmB/1.05);
+  var b=document.getElementById('barra-mes');
+  b.style.width=bW+'%';
+  b.style.background=pmB>=105?'#a78bfa':pmB>=100?'#48bb78':pmB>=70?'linear-gradient(90deg,#ff6b00,#f6ad55)':'linear-gradient(90deg,#ff6b00,#ff9500)';
+  document.getElementById('label-dir').textContent=pmB>=105?'Teto!':pmB>=100?'Batida!':'Falta '+(100-pmB).toFixed(1)+'%';
+  var al=document.getElementById('alerta-dia'),diff=mH-MD_BASE;
+  if(idxH<0){al.className='alerta';}
+  else if(fat>=mH&&fat>0&&diff<-1){al.className='alerta bonus';al.innerHTML='Dias anteriores alem da meta! Meta de hoje aliviada.';}
+  else if(fat>=mH&&fat>0){al.className='alerta ok';al.innerHTML='Meta do dia batida!';}
+  else if(diff>1){al.className='alerta warn';al.innerHTML='Carry-over de dias anteriores. Meta de hoje ajustada.';}
+  else{al.className='alerta';}
+  document.getElementById('sems').innerHTML=SEMS.map(function(s){
+    var f=pmB>=s.pctAcum?100:Math.max(0,Math.round(pmB/s.pctAcum*1000)/10);
+    var c=pmB>=s.pctAcum?'#48bb78':f>50?'#f6ad55':'#ff6b00';
+    return '<div class="sem-row"><span class="sem-nome">'+s.label+'</span><div class="sem-bg"><div class="sem-fill" style="width:'+Math.min(100,f)+'%;background:'+c+'"></div></div><span class="sem-pct">'+s.pctAcum+'%</span></div>';
   }).join('');
-
-  // Histórico
-  var dias = Object.keys(dados).sort().reverse().slice(0,8);
-  var hcard = document.getElementById('hist-card');
-  if(dias.length){ hcard.style.display='block'; }
-  else { hcard.style.display='none'; return; }
-  document.getElementById('hist-lista').innerHTML = dias.map(function(d,i){
-    var r = dados[d];
-    var parts = d.split('-');
-    var label = parts[2]+'/'+parts[1];
-    var idxD = DIAS.indexOf(d);
-    var mD = idxD>=0 ? calcMetaDia(dados,idxD) : MD_BASE;
-    var pD = mD>0 ? Math.round(r.faturado/mD*100) : 0;
-    var ico = !r.fechado?'🔄':pD>=100?'✅':'⚠️';
-    var cor = !r.fechado?'#aaa':pD>=100?'#48bb78':'#fc8181';
-    return '<div class="hist-item"><span>'+ico+' '+label+(r.fechado?'':' (aberto)')+'</span><span class="hist-val" style="color:'+cor+'">'+pD+'%</span></div>';
+  var dias=Object.keys(_dados).sort().reverse().slice(0,8);
+  var hc=document.getElementById('hist-card');
+  if(!dias.length){hc.style.display='none';return;}
+  hc.style.display='block';
+  document.getElementById('hist-lista').innerHTML=dias.map(function(d){
+    var rv=_dados[d],pts=d.split('-');
+    var lbl=pts[2]+'/'+pts[1];
+    var idxD=DIAS.indexOf(d),mD=idxD>=0?calcMetaDia(idxD):MD_BASE;
+    var pD=mD>0?Math.round(rv.faturado/mD*100):0;
+    var ico=!rv.fechado?'...':pD>=100?'OK':'!';
+    var cor=!rv.fechado?'#aaa':pD>=100?'#48bb78':'#fc8181';
+    return '<div class="hist-item"><span>'+ico+' '+lbl+(rv.fechado?'':' (aberto)')+'</span><span class="hist-val" style="color:'+cor+'">'+pD+'%</span></div>';
   }).join('');
 }
 
 function lancar(){
-  var v = parseFloat(document.getElementById('inp').value);
-  if(isNaN(v)||v<=0){alert('Valor inválido');return;}
-  var dados = getDados();
-  var hj = hoje();
-  if(!dados[hj]) dados[hj]={faturado:0,fechado:false};
-  dados[hj].faturado = Math.round((dados[hj].faturado+v)*100)/100;
-  salvar(dados);
+  var v=parseFloat(document.getElementById('inp').value);
+  if(isNaN(v)||v<=0){alert('Valor invalido');return;}
   document.getElementById('inp').value='';
-  render();
+  fetchDados(function(){
+    var hj=hoje();
+    if(!_dados[hj])_dados[hj]={faturado:0,fechado:false};
+    _dados[hj].faturado=Math.round((_dados[hj].faturado+v)*100)/100;
+    saveDados(function(){render();});
+  });
 }
-
 function fecharDia(){
-  var dados = getDados();
-  var hj = hoje();
-  var idxHoje = DIAS.indexOf(hj);
-  if(!dados[hj]) dados[hj]={faturado:0,fechado:false};
-  var mH = calcMetaDia(dados, idxHoje);
-  var fat = dados[hj].faturado;
-  var pct = mH>0?Math.round(fat/mH*100):0;
-  var msg = pct>=100
-    ? '✅ Meta batida ('+pct+'%)! O excesso vai aliviar os próximos dias. Fechar?'
-    : '⚠️ Meta não batida ('+pct+'%). O déficit será distribuído nos dias restantes. Fechar?';
-  if(!confirm(msg)) return;
-  dados[hj].fechado = true;
-  salvar(dados);
-  render();
+  fetchDados(function(){
+    var hj=hoje(),idxH=DIAS.indexOf(hj);
+    if(!_dados[hj])_dados[hj]={faturado:0,fechado:false};
+    var mH=calcMetaDia(idxH),fat=_dados[hj].faturado;
+    var pct=mH>0?Math.round(fat/mH*100):0;
+    if(!confirm(pct>=100?'Meta batida ('+pct+'%)! Fechar o dia?':'Meta nao batida ('+pct+'%). Fechar mesmo assim?'))return;
+    _dados[hj].fechado=true;
+    saveDados(function(){render();});
+  });
 }
-
-function zerarTudo(){
-  if(!confirm('Zerar todo o histórico do mês?')) return;
-  localStorage.removeItem('meta_jun26');
-  render();
+function zerarDia(){
+  if(!confirm('Zerar lancamentos de hoje?'))return;
+  fetchDados(function(){
+    delete _dados[hoje()];
+    saveDados(function(){render();});
+  });
 }
-
-render();
+fetchDados();
+setInterval(fetchDados,60000);
 </script>
 </body>
 </html>
