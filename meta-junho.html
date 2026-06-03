@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#0a0a0a">
+<title>Meta Junho 2026 — Prensadão</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#fff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding:20px}
+.wrap{max-width:420px;margin:0 auto}
+.header{text-align:center;padding:24px 0 20px}
+.header h1{font-size:1.1rem;font-weight:900;color:#ff9500;letter-spacing:1px}
+.header p{font-size:0.75rem;color:#666;margin-top:4px}
+.card{background:#111;border:1.5px solid #ff6b00;border-radius:18px;padding:20px;margin-bottom:16px}
+.card-title{font-size:0.78rem;font-weight:800;color:#ff9500;margin-bottom:14px;letter-spacing:0.5px;text-transform:uppercase}
+.row{display:flex;gap:10px;margin-bottom:14px}
+.mini{flex:1;background:#1a1a1a;border-radius:14px;padding:14px;text-align:center}
+.mini-label{font-size:0.68rem;color:#777;margin-bottom:6px}
+.mini-pct{font-size:1.8rem;font-weight:900;color:#ff9500}
+.mini-sub{font-size:0.7rem;margin-top:4px}
+.mini-sub.ok{color:#48bb78}
+.mini-sub.atras{color:#fc8181}
+.mini-sub.zero{color:#555}
+.barra-wrap{margin-bottom:14px}
+.barra-label{display:flex;justify-content:space-between;font-size:0.72rem;color:#666;margin-bottom:5px}
+.barra-bg{background:#1e1e1e;border-radius:99px;height:12px;overflow:hidden}
+.barra-fill{height:12px;border-radius:99px;transition:width 0.6s ease}
+.input-wrap{display:flex;gap:8px;align-items:center;margin-bottom:6px}
+.meta-input{flex:1;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;padding:12px 14px;color:#fff;font-size:1rem}
+.meta-input:focus{outline:none;border-color:#ff6b00}
+.btn-ok{background:#ff6b00;color:#fff;border:none;border-radius:12px;padding:12px 18px;font-weight:900;cursor:pointer;font-size:1rem}
+.btn-limpar{width:100%;background:#1a1a1a;color:#fc8181;border:1px solid #2a2a2a;border-radius:12px;padding:10px;font-weight:700;cursor:pointer;font-size:0.8rem;margin-top:6px}
+.sems{display:flex;flex-direction:column;gap:8px}
+.sem-row{display:flex;align-items:center;gap:8px;font-size:0.74rem}
+.sem-nome{color:#888;width:140px;flex-shrink:0}
+.sem-bg{flex:1;background:#1e1e1e;border-radius:99px;height:8px;overflow:hidden}
+.sem-fill{height:8px;border-radius:99px;transition:width 0.5s}
+.sem-pct{color:#aaa;font-weight:700;width:36px;text-align:right;flex-shrink:0}
+.faturado-wrap{text-align:center;padding:10px 0 4px;font-size:0.72rem;color:#555}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <h1>🎯 META JUNHO 2026</h1>
+    <p>Prensadão Centro · 26 dias úteis (seg–sab)</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Progresso</div>
+    <div class="row">
+      <div class="mini">
+        <div class="mini-label">📅 Meta do Dia</div>
+        <div class="mini-pct" id="pct-dia">0%</div>
+        <div class="mini-sub zero" id="status-dia">—</div>
+      </div>
+      <div class="mini">
+        <div class="mini-label">📆 Meta Mensal</div>
+        <div class="mini-pct" id="pct-mes">0%</div>
+        <div class="mini-sub zero" id="status-mes">—</div>
+      </div>
+    </div>
+    <div class="barra-wrap">
+      <div class="barra-label"><span>Mês</span><span id="label-falta">Falta 100%</span></div>
+      <div class="barra-bg"><div class="barra-fill" id="barra-mes" style="width:0%;background:linear-gradient(90deg,#ff6b00,#ff9500)"></div></div>
+    </div>
+    <div class="sems" id="sems"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Lançar faturamento</div>
+    <div class="input-wrap">
+      <input class="meta-input" type="number" id="inp" placeholder="R$ do dia de hoje" step="0.01" min="0">
+      <button class="btn-ok" onclick="lancar()">✔</button>
+    </div>
+    <button class="btn-limpar" onclick="zerarDia()">Zerar dia de hoje</button>
+    <div class="faturado-wrap" id="faturado-label"></div>
+  </div>
+</div>
+
+<script>
+var MT = 81493.02;
+var MD = MT / 26;
+var SEMS = [{"label": "Sem 1 (01/06–06/06)", "dias": 6, "pctAcum": 23.1}, {"label": "Sem 2 (08/06–13/06)", "dias": 6, "pctAcum": 46.2}, {"label": "Sem 3 (15/06–20/06)", "dias": 6, "pctAcum": 69.2}, {"label": "Sem 4 (22/06–27/06)", "dias": 6, "pctAcum": 92.3}, {"label": "Sem 5 (29/06–30/06)", "dias": 2, "pctAcum": 100.0}];
+
+function diasUteis(){
+  var hoje = new Date();
+  var d = new Date(2026,5,1);
+  var c = 0;
+  while(d.getMonth()===5 && d<=hoje){
+    if(d.getDay()!==0) c++;
+    d.setDate(d.getDate()+1);
+  }
+  return c;
+}
+
+function render(){
+  var fat = parseFloat(localStorage.getItem('meta_fat_jun26')||'0');
+  var fatH = parseFloat(localStorage.getItem('meta_fat_hoje')||'0');
+  var dp = diasUteis();
+
+  // Dia
+  var pd = fatH>0 ? Math.round(fatH/MD*1000)/10 : 0;
+  document.getElementById('pct-dia').textContent = pd.toFixed(1)+'%';
+  var sd = document.getElementById('status-dia');
+  if(fatH===0){sd.textContent='Sem lançamento';sd.className='mini-sub zero';}
+  else if(pd>=100){sd.textContent='✅ Meta atingida!';sd.className='mini-sub ok';}
+  else{sd.textContent='Falta '+(100-pd).toFixed(0)+'%';sd.className='mini-sub atras';}
+
+  // Mês
+  var pm = Math.min(100, Math.round(fat/MT*1000)/10);
+  document.getElementById('pct-mes').textContent = pm.toFixed(1)+'%';
+  var sm = document.getElementById('status-mes');
+  var pe = Math.min(100, Math.round(dp/26*1000)/10);
+  if(fat===0){sm.textContent='Sem lançamento';sm.className='mini-sub zero';}
+  else if(pm>=100){sm.textContent='✅ Meta batida!';sm.className='mini-sub ok';}
+  else if(pm>=pe){sm.textContent='✅ No ritmo';sm.className='mini-sub ok';}
+  else{sm.textContent='Atrás do ritmo';sm.className='mini-sub atras';}
+
+  // Barra
+  var b = document.getElementById('barra-mes');
+  b.style.width = pm+'%';
+  b.style.background = pm>=100?'#48bb78':pm>=70?'linear-gradient(90deg,#ff6b00,#f6ad55)':'linear-gradient(90deg,#ff6b00,#ff9500)';
+  document.getElementById('label-falta').textContent = pm>=100?'✅ Meta batida!':'Falta '+(100-pm).toFixed(1)+'%';
+
+  // Semanas
+  document.getElementById('sems').innerHTML = SEMS.map(function(s){
+    var fill = Math.min(100, pm>=s.pctAcum?100:Math.round(pm/s.pctAcum*1000)/10);
+    var cor = pm>=s.pctAcum?'#48bb78':'#ff6b00';
+    return '<div class="sem-row">'+
+      '<span class="sem-nome">'+s.label+'</span>'+
+      '<div class="sem-bg"><div class="sem-fill" style="width:'+fill+'%;background:'+cor+'"></div></div>'+
+      '<span class="sem-pct">'+s.pctAcum+'%</span>'+
+    '</div>';
+  }).join('');
+
+  // Label faturado
+  var fl = document.getElementById('faturado-label');
+  if(fl) fl.textContent = fat>0 ? 'Acumulado no mês: R$ '+fat.toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.') : '';
+}
+
+function lancar(){
+  var v = parseFloat(document.getElementById('inp').value);
+  if(isNaN(v)||v<=0){alert('Valor inválido');return;}
+  var fat = parseFloat(localStorage.getItem('meta_fat_jun26')||'0');
+  var fatH = parseFloat(localStorage.getItem('meta_fat_hoje')||'0');
+  localStorage.setItem('meta_fat_jun26',(fat+v).toFixed(2));
+  localStorage.setItem('meta_fat_hoje',(fatH+v).toFixed(2));
+  document.getElementById('inp').value='';
+  render();
+}
+
+function zerarDia(){
+  if(!confirm('Zerar faturamento de hoje?')) return;
+  localStorage.removeItem('meta_fat_hoje');
+  render();
+}
+
+render();
+</script>
+</body>
+</html>

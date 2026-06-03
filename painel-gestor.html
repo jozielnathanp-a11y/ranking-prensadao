@@ -372,25 +372,6 @@ input[type="date"], input[type="time"] {
 
 
 
-.meta-card{background:#111;border:1.5px solid #ff6b00;border-radius:16px;padding:18px;margin-bottom:16px}
-.meta-title{font-size:0.85rem;font-weight:800;color:#ff9500;margin-bottom:12px;letter-spacing:0.5px}
-.meta-row{display:flex;gap:10px;margin-bottom:12px}
-.meta-mini{flex:1;background:#1a1a1a;border-radius:12px;padding:12px;text-align:center}
-.meta-mini-label{font-size:0.68rem;color:#777;margin-bottom:6px}
-.meta-mini-pct{font-size:1.5rem;font-weight:900;color:#ff9500}
-.meta-mini-sub{font-size:0.68rem;margin-top:3px}
-.meta-mini-sub.ok{color:#48bb78}
-.meta-mini-sub.atras{color:#fc8181}
-.meta-mini-sub.zero{color:#555}
-.meta-barra-wrap{margin-bottom:10px}
-.meta-barra-label{display:flex;justify-content:space-between;font-size:0.72rem;color:#666;margin-bottom:4px}
-.meta-barra-bg{background:#1e1e1e;border-radius:99px;height:10px;overflow:hidden}
-.meta-barra-fill{height:10px;border-radius:99px;transition:width 0.6s ease}
-.meta-input-wrap{display:flex;gap:8px;align-items:center;margin-bottom:10px}
-.meta-input{flex:1;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:10px 12px;color:#fff;font-size:0.9rem}
-.meta-input:focus{outline:none;border-color:#ff6b00}
-.meta-btn{background:#ff6b00;color:#fff;border:none;border-radius:10px;padding:10px 16px;font-weight:800;cursor:pointer;font-size:0.85rem}
-.meta-btn-limpar{background:#1a1a1a;color:#fc8181;border:1px solid #fc8181;border-radius:10px;padding:10px 12px;font-weight:700;cursor:pointer;font-size:0.78rem}
 .meta-sems{display:flex;flex-direction:column;gap:6px;margin-top:4px}
 .meta-sem-row{display:flex;align-items:center;gap:8px;font-size:0.72rem}
 .meta-sem-nome{color:#888;width:130px;flex-shrink:0}
@@ -416,9 +397,7 @@ input[type="date"], input[type="time"] {
 
 <div id="app-screen" style="display:none">
 <div class="top-hdr"><div class="top-nm">🛂 Painel do Gestor <span class="badge-ab" id="badge-ab">0</span></div></div>
-<div id="tab-geral" class="tab-c active"><div class="meta-card" id="meta-card">
-  <div class="meta-title">🎯 META DO MÊS — Junho 2026</div>
-  <div class="meta-row">
+<div id="tab-geral" class="tab-c active"><div class="meta-row">
     <div class="meta-mini">
       <div class="meta-mini-label">📅 META DO DIA</div>
       <div class="meta-mini-pct" id="meta-pct-dia">0%</div>
@@ -793,7 +772,6 @@ function initApp(){
 
 
 function renderGeral(){
-  renderMetaCard();
   const todos = getAllChamados();
   const ab = todos.filter(c=>c.status==="aberto").length;
   const rp = todos.filter(c=>c.status==="respondido").length;
@@ -1883,98 +1861,9 @@ var atual = parseFloat(localStorage.getItem('meta_faturado_jun26')||'0');
   var novo = atual + val;
   localStorage.setItem('meta_faturado_jun26', novo.toFixed(2));
   inp.value = '';
-  renderMetaCard();
 }
 
 
-
-var META_TOTAL = 81493.02;
-var META_DIAS = 26;
-var META_DIA_VAL = META_TOTAL / META_DIAS;
-var META_SEMS = [{"label": "Sem 1 (01/06–06/06)", "dias": 6, "pctAcum": 23.1}, {"label": "Sem 2 (08/06–13/06)", "dias": 6, "pctAcum": 46.2}, {"label": "Sem 3 (15/06–20/06)", "dias": 6, "pctAcum": 69.2}, {"label": "Sem 4 (22/06–27/06)", "dias": 6, "pctAcum": 92.3}, {"label": "Sem 5 (29/06–30/06)", "dias": 2, "pctAcum": 100.0}];
-
-function diasUteisAteHoje(){
-  var hoje = new Date();
-  var d = new Date(2026,5,1); // 1 jun
-  var count = 0;
-  while(d <= hoje && d.getMonth()===5){
-    if(d.getDay()!==0) count++;
-    d.setDate(d.getDate()+1);
-  }
-  return count;
-}
-
-function renderMetaCard(){
-  var fat = parseFloat(localStorage.getItem('meta_faturado_jun26')||'0');
-  var fatHoje = parseFloat(localStorage.getItem('meta_faturado_hoje')||'0');
-  var hoje = new Date();
-  var diasPassados = diasUteisAteHoje();
-
-  // Meta do dia
-  var pctDia = fatHoje > 0 ? Math.round(fatHoje / META_DIA_VAL * 1000)/10 : 0;
-  var pctDiaEl = document.getElementById('meta-pct-dia');
-  if(pctDiaEl) pctDiaEl.textContent = pctDia.toFixed(1) + '%';
-  var diaStatus = document.getElementById('meta-dia-status');
-  if(diaStatus){
-    if(fatHoje === 0){ diaStatus.textContent = 'Sem lançamento'; diaStatus.className='meta-mini-sub zero'; }
-    else if(pctDia >= 100){ diaStatus.textContent = '✅ Meta atingida!'; diaStatus.className='meta-mini-sub ok'; }
-    else { var falt = META_DIA_VAL - fatHoje; diaStatus.textContent = 'Falta ' + pctDia.toFixed(0) + '%'; diaStatus.className='meta-mini-sub atras'; }
-  }
-
-  // Meta mensal
-  var pctMes = Math.min(100, Math.round(fat / META_TOTAL * 1000)/10);
-  var pctMesEl = document.getElementById('meta-pct-mes');
-  if(pctMesEl) pctMesEl.textContent = pctMes.toFixed(1) + '%';
-  var mesStatus = document.getElementById('meta-mes-status');
-  if(mesStatus){
-    if(fat === 0){ mesStatus.textContent = 'Sem lançamento'; mesStatus.className='meta-mini-sub zero'; }
-    else if(pctMes >= 100){ mesStatus.textContent = '✅ Meta batida!'; mesStatus.className='meta-mini-sub ok'; }
-    else {
-      var pctEsperado = Math.min(100, Math.round(diasPassados / META_DIAS * 1000)/10);
-      if(pctMes >= pctEsperado){ mesStatus.textContent = '✅ No ritmo'; mesStatus.className='meta-mini-sub ok'; }
-      else { mesStatus.textContent = 'Atrás do ritmo'; mesStatus.className='meta-mini-sub atras'; }
-    }
-  }
-
-  // Barra total
-  var barra = document.getElementById('meta-barra-total');
-  if(barra){ barra.style.width = pctMes + '%'; barra.style.background = pctMes>=100?'#48bb78':pctMes>=70?'linear-gradient(90deg,#ff6b00,#f6ad55)':'linear-gradient(90deg,#fc8181,#ff6b00)'; }
-  var labelDir = document.getElementById('meta-label-direita');
-  if(labelDir) labelDir.textContent = 'Falta ' + (100-pctMes).toFixed(1) + '%';
-
-  // Semanas
-  var sems = document.getElementById('meta-sems');
-  if(sems){
-    sems.innerHTML = META_SEMS.map(function(s){
-      var atingido = pctMes >= s.pctAcum;
-      var cor = atingido ? '#48bb78' : '#ff6b00';
-      var fill = Math.min(100, Math.round(pctMes / s.pctAcum * 1000)/10);
-      return '<div class="meta-sem-row">' +
-        '<span class="meta-sem-nome">' + s.label + '</span>' +
-        '<div class="meta-sem-bg"><div class="meta-sem-fill" style="width:'+fill+'%;background:'+cor+'"></div></div>' +
-        '<span class="meta-sem-pct">' + s.pctAcum + '%</span>' +
-      '</div>';
-    }).join('');
-  }
-}
-
-function atualizarMeta(){
-  var inp = document.getElementById('meta-valor-input');
-  var val = parseFloat(inp.value);
-  if(isNaN(val)||val<0){alert('Valor inválido');return;}
-  var atual = parseFloat(localStorage.getItem('meta_faturado_jun26')||'0');
-  localStorage.setItem('meta_faturado_jun26', (atual+val).toFixed(2));
-  var hoje = parseFloat(localStorage.getItem('meta_faturado_hoje')||'0');
-  localStorage.setItem('meta_faturado_hoje', (hoje+val).toFixed(2));
-  inp.value='';
-  renderMetaCard();
-}
-
-function zerarMeta(){
-  if(!confirm('Zerar faturamento de hoje?')) return;
-  localStorage.removeItem('meta_faturado_hoje');
-  renderMetaCard();
-}
 
 </script>
 </body>
