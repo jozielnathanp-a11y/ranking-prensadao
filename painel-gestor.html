@@ -599,6 +599,15 @@ input[type="date"], input[type="time"] {
 </div>
 
 <script>
+
+  // Forçar login a cada carregamento — sem sessão persistida
+  document.addEventListener('DOMContentLoaded', function(){
+    var ls = document.getElementById('login-screen');
+    var as = document.getElementById('app-screen');
+    if(ls) ls.style.display = 'block';
+    if(as) as.style.display = 'none';
+  });
+
 // ===== NOTIFICAÇÕES PUSH =====
 function solicitarNotificacao() {
   if (!('Notification' in window)) return;
