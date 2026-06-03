@@ -19,29 +19,33 @@ body{background:#0a0a0a;color:#fff;font-family:-apple-system,BlinkMacSystemFont,
 .mini-label{font-size:0.68rem;color:#777;margin-bottom:6px}
 .mini-pct{font-size:1.8rem;font-weight:900;color:#ff9500}
 .mini-sub{font-size:0.68rem;margin-top:4px}
-.mini-sub.ok{color:#48bb78}.mini-sub.atras{color:#fc8181}.mini-sub.zero{color:#555}
+.mini-sub.ok{color:#48bb78}.mini-sub.atras{color:#fc8181}.mini-sub.zero{color:#555}.mini-sub.bonus{color:#a78bfa}
 .barra-wrap{margin-bottom:12px}
 .barra-label{display:flex;justify-content:space-between;font-size:0.72rem;color:#666;margin-bottom:5px}
-.barra-bg{background:#1e1e1e;border-radius:99px;height:12px;overflow:hidden}
-.barra-fill{height:12px;border-radius:99px;transition:width 0.6s ease}
-.alerta{background:#1a1a0a;border:1px solid #f6ad55;border-radius:12px;padding:12px;font-size:0.78rem;color:#f6ad55;margin-bottom:12px;line-height:1.5}
-.alerta.ok{background:#0a1a0a;border-color:#48bb78;color:#48bb78}
+.barra-bg{background:#1e1e1e;border-radius:99px;height:14px;overflow:hidden;position:relative}
+.barra-fill{height:14px;border-radius:99px;transition:width 0.6s ease;position:relative}
+.barra-meta{position:absolute;top:0;bottom:0;width:2px;background:#fff;opacity:0.3;z-index:2}
+.alerta{border-radius:12px;padding:12px;font-size:0.78rem;margin-bottom:12px;line-height:1.5}
+.alerta.warn{background:#1a1a0a;border:1px solid #f6ad55;color:#f6ad55}
+.alerta.ok{background:#0a1a0a;border:1px solid #48bb78;color:#48bb78}
+.alerta.bonus{background:#0f0a1a;border:1px solid #a78bfa;color:#a78bfa}
 .input-wrap{display:flex;gap:8px;align-items:center;margin-bottom:8px}
 .meta-input{flex:1;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;padding:12px 14px;color:#fff;font-size:1rem}
 .meta-input:focus{outline:none;border-color:#ff6b00}
 .btn-ok{background:#ff6b00;color:#fff;border:none;border-radius:12px;padding:12px 18px;font-weight:900;cursor:pointer;font-size:1rem}
 .btn-sec{width:100%;background:#1a1a1a;color:#aaa;border:1px solid #2a2a2a;border-radius:12px;padding:10px;font-weight:700;cursor:pointer;font-size:0.78rem;margin-top:6px}
-.btn-danger{color:#fc8181;border-color:#fc8181}
+.btn-danger{color:#fc8181;border-color:#2a2a2a}
 .sems{display:flex;flex-direction:column;gap:8px}
 .sem-row{display:flex;align-items:center;gap:8px;font-size:0.74rem}
 .sem-nome{color:#888;width:140px;flex-shrink:0}
 .sem-bg{flex:1;background:#1e1e1e;border-radius:99px;height:8px;overflow:hidden}
 .sem-fill{height:8px;border-radius:99px;transition:width 0.5s}
 .sem-pct{color:#aaa;font-weight:700;width:36px;text-align:right;flex-shrink:0}
-.hist-item{font-size:0.74rem;color:#888;padding:6px 0;border-bottom:1px solid #1a1a1a;display:flex;justify-content:space-between}
+.hist-item{font-size:0.74rem;color:#888;padding:7px 0;border-bottom:1px solid #1a1a1a;display:flex;justify-content:space-between;align-items:center}
 .hist-item:last-child{border-bottom:none}
-.hist-val{color:#ff9500;font-weight:700}
-.hint{font-size:0.7rem;color:#555;text-align:center;margin-top:6px}
+.hist-val{font-weight:700}
+.hint{font-size:0.68rem;color:#555;text-align:center;margin-top:6px;line-height:1.4}
+.teto-label{font-size:0.68rem;color:#a78bfa;text-align:right;margin-top:4px}
 </style>
 </head>
 <body>
@@ -57,7 +61,7 @@ body{background:#0a0a0a;color:#fff;font-family:-apple-system,BlinkMacSystemFont,
     <div class="row">
       <div class="mini">
         <div class="mini-label">📅 Meta do Dia</div>
-        <div class="mini-pct" id="pct-dia">0%</div>
+        <div class="mini-pct" id="pct-dia">—</div>
         <div class="mini-sub zero" id="status-dia">—</div>
       </div>
       <div class="mini">
@@ -67,8 +71,12 @@ body{background:#0a0a0a;color:#fff;font-family:-apple-system,BlinkMacSystemFont,
       </div>
     </div>
     <div class="barra-wrap">
-      <div class="barra-label"><span>Progresso mensal</span><span id="label-falta">Falta 100%</span></div>
-      <div class="barra-bg"><div class="barra-fill" id="barra-mes" style="width:0%"></div></div>
+      <div class="barra-label"><span id="label-esq">Progresso</span><span id="label-dir">Falta 100%</span></div>
+      <div class="barra-bg">
+        <div class="barra-fill" id="barra-mes" style="width:0%"></div>
+        <div class="barra-meta" id="barra-100" style="left:95.24%"></div>
+      </div>
+      <div class="teto-label">Teto: 105%</div>
     </div>
     <div class="sems" id="sems"></div>
   </div>
@@ -80,116 +88,116 @@ body{background:#0a0a0a;color:#fff;font-family:-apple-system,BlinkMacSystemFont,
       <button class="btn-ok" onclick="lancar()">✔</button>
     </div>
     <button class="btn-sec" onclick="fecharDia()">✅ Fechar dia</button>
-    <div class="hint">Feche o dia ao final do expediente para calcular o rollover</div>
-    <button class="btn-sec btn-danger" onclick="zerarTudo()" style="margin-top:8px">🗑 Zerar tudo</button>
+    <div class="hint">Feche o dia ao final do expediente.<br>Se não bateu, o deficit vai pros próximos dias.<br>Se passou, o excesso abate dos próximos. Teto: 105%.</div>
+    <button class="btn-sec btn-danger" onclick="zerarTudo()" style="margin-top:10px">🗑 Zerar tudo</button>
   </div>
 
   <div class="card" id="hist-card" style="display:none">
-    <div class="card-title">Histórico de dias</div>
+    <div class="card-title">Histórico</div>
     <div id="hist-lista"></div>
   </div>
 </div>
 
 <script>
-var MT = 81493.02;
+var MT      = 81493.02;
+var MT_MAX  = 85567.67;
 var MD_BASE = 3134.35;
-var DIAS_UTEIS = ["2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-06", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-13", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-19", "2026-06-20", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-27", "2026-06-29", "2026-06-30"];
-var SEMS = [{"label": "Sem 1 (01/06–06/06)", "dias": 6, "pctAcum": 23.1}, {"label": "Sem 2 (08/06–13/06)", "dias": 6, "pctAcum": 46.2}, {"label": "Sem 3 (15/06–20/06)", "dias": 6, "pctAcum": 69.2}, {"label": "Sem 4 (22/06–27/06)", "dias": 6, "pctAcum": 92.3}, {"label": "Sem 5 (29/06–30/06)", "dias": 2, "pctAcum": 100.0}];
-var TOTAL_DIAS = 26;
+var DIAS    = ["2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-06", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-13", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-19", "2026-06-20", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-27", "2026-06-29", "2026-06-30"];
+var TOTAL   = 26;
+var SEMS    = [{"label": "Sem 1 (01/06–06/06)", "dias": 6, "pctAcum": 23.1}, {"label": "Sem 2 (08/06–13/06)", "dias": 6, "pctAcum": 46.2}, {"label": "Sem 3 (15/06–20/06)", "dias": 6, "pctAcum": 69.2}, {"label": "Sem 4 (22/06–27/06)", "dias": 6, "pctAcum": 92.3}, {"label": "Sem 5 (29/06–30/06)", "dias": 2, "pctAcum": 100.0}];
 
 function hoje(){ return new Date().toISOString().slice(0,10); }
-
-function getDados(){
-  try{ return JSON.parse(localStorage.getItem('meta_jun26')||'{}'); }
-  catch(e){ return {}; }
-}
+function getDados(){ try{ return JSON.parse(localStorage.getItem('meta_jun26')||'{}'); }catch(e){ return {}; } }
 function salvar(d){ localStorage.setItem('meta_jun26', JSON.stringify(d)); }
+function fmt(n){ return 'R$ '+n.toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.'); }
 
-// Calcula meta do dia atual com rollover
-function metaHoje(dados){
-  var hj = hoje();
-  var idxHoje = DIAS_UTEIS.indexOf(hj);
-  if(idxHoje < 0) return MD_BASE; // fora do mês
-
-  // Soma o que faltou nos dias anteriores fechados
-  var deficit = 0;
-  for(var i=0; i<idxHoje; i++){
-    var dia = DIAS_UTEIS[i];
-    var reg = dados[dia];
-    if(reg && reg.fechado){
-      // Dias restantes a partir deste dia
-      var restantes = TOTAL_DIAS - i;
-      // O deficit deste dia é dividido pelos dias restantes
-      if(reg.faturado < MD_BASE){
-        deficit += (MD_BASE - reg.faturado) / (TOTAL_DIAS - i - 1 || 1);
-      }
-    }
+// Calcula meta ajustada para o dia idx com base nos dias já fechados
+function calcMetaDia(dados, idx){
+  // Faturamento acumulado até hoje (dias fechados anteriores)
+  var fatAcum = 0;
+  for(var i=0; i<idx; i++){
+    var reg = dados[DIAS[i]];
+    if(reg && reg.fechado) fatAcum += reg.faturado;
   }
-  return MD_BASE + deficit;
+  // Meta acumulada que deveria ter sido feita até aqui (sem incluir hoje)
+  var metaAcum = MD_BASE * idx;
+  // Saldo = o que ficou pra distribuir nos dias restantes
+  var diasRestantes = TOTAL - idx;
+  if(diasRestantes <= 0) return MD_BASE;
+  // Meta ideal pra bater 100% até o fim (limitado ao teto de 105%)
+  var metaRestante = MT - fatAcum;
+  var metaAjustada = metaRestante / diasRestantes;
+  // Limitar: nunca abaixar abaixo de 0, nem subir acima do necessário pro 105%
+  var metaMaxDia = (MT_MAX - fatAcum) / diasRestantes;
+  return Math.max(0, Math.min(metaAjustada, metaMaxDia));
 }
 
-function fatMes(dados){
-  var total = 0;
-  for(var k in dados){ total += (dados[k].faturado||0); }
-  return total;
-}
+function fatMes(dados){ var t=0; for(var k in dados) t+=(dados[k].faturado||0); return t; }
 
-function diasUteisPorcentagem(){
+function diasUteisPct(){
   var hj = hoje();
-  var idx = DIAS_UTEIS.indexOf(hj);
-  return idx < 0 ? 0 : Math.round((idx+1)/TOTAL_DIAS*1000)/10;
+  var idx = DIAS.indexOf(hj);
+  return idx < 0 ? 0 : Math.round((idx+1)/TOTAL*1000)/10;
 }
 
 function render(){
   var dados = getDados();
   var hj = hoje();
+  var idxHoje = DIAS.indexOf(hj);
   var reg = dados[hj] || {faturado:0, fechado:false};
-  var mHoje = metaHoje(dados);
+  var mHoje = idxHoje >= 0 ? calcMetaDia(dados, idxHoje) : MD_BASE;
   var fat = reg.faturado;
   var fatTotal = fatMes(dados);
 
   // % dia
-  var pd = fat > 0 ? Math.round(fat/mHoje*1000)/10 : 0;
-  document.getElementById('pct-dia').textContent = pd.toFixed(1)+'%';
+  var pd = mHoje > 0 ? Math.round(fat/mHoje*1000)/10 : 0;
+  document.getElementById('pct-dia').textContent = idxHoje >= 0 ? pd.toFixed(1)+'%' : '—';
   var sd = document.getElementById('status-dia');
-  if(fat===0){sd.textContent='Sem lançamento';sd.className='mini-sub zero';}
-  else if(pd>=100){sd.textContent='✅ Meta atingida!';sd.className='mini-sub ok';}
-  else{sd.textContent='Falta '+(100-pd).toFixed(0)+'%';sd.className='mini-sub atras';}
+  if(idxHoje < 0){ sd.textContent='Fora do mês'; sd.className='mini-sub zero'; }
+  else if(fat===0){ sd.textContent='Sem lançamento'; sd.className='mini-sub zero'; }
+  else if(pd>=100){ sd.textContent='✅ Meta batida!'; sd.className='mini-sub ok'; }
+  else { sd.textContent='Falta '+(100-pd).toFixed(0)+'%'; sd.className='mini-sub atras'; }
 
-  // % mês
-  var pm = Math.min(100, Math.round(fatTotal/MT*1000)/10);
-  document.getElementById('pct-mes').textContent = pm.toFixed(1)+'%';
+  // % mês (sobre 105% como teto)
+  var pmBase = Math.round(fatTotal/MT*1000)/10;
+  var pm105  = Math.min(105, pmBase);
+  document.getElementById('pct-mes').textContent = pmBase.toFixed(1)+'%';
   var sm = document.getElementById('status-mes');
-  var pe = diasUteisPorcentagem();
-  if(fatTotal===0){sm.textContent='Sem lançamento';sm.className='mini-sub zero';}
-  else if(pm>=100){sm.textContent='✅ Meta batida!';sm.className='mini-sub ok';}
-  else if(pm>=pe){sm.textContent='✅ No ritmo';sm.className='mini-sub ok';}
-  else{sm.textContent='Atrás do ritmo';sm.className='mini-sub atras';}
+  var pe = diasUteisPct();
+  if(fatTotal===0){ sm.textContent='Sem lançamento'; sm.className='mini-sub zero'; }
+  else if(pmBase>=105){ sm.textContent='🚀 Teto 105% atingido!'; sm.className='mini-sub bonus'; }
+  else if(pmBase>=100){ sm.textContent='✅ Meta 100% batida!'; sm.className='mini-sub ok'; }
+  else if(pmBase>=pe){ sm.textContent='✅ No ritmo'; sm.className='mini-sub ok'; }
+  else { sm.textContent='Atrás do ritmo'; sm.className='mini-sub atras'; }
 
-  // Barra
+  // Barra (escala 0–105%)
+  var barraW = Math.min(100, pmBase/1.05);
   var b = document.getElementById('barra-mes');
-  b.style.width = pm+'%';
-  b.style.background = pm>=100?'#48bb78':pm>=70?'linear-gradient(90deg,#ff6b00,#f6ad55)':'linear-gradient(90deg,#ff6b00,#ff9500)';
-  document.getElementById('label-falta').textContent = pm>=100?'✅ Meta batida!':'Falta '+(100-pm).toFixed(1)+'%';
+  b.style.width = barraW+'%';
+  b.style.background = pmBase>=105?'#a78bfa':pmBase>=100?'#48bb78':pmBase>=70?'linear-gradient(90deg,#ff6b00,#f6ad55)':'linear-gradient(90deg,#ff6b00,#ff9500)';
+  document.getElementById('label-dir').textContent = pmBase>=105?'🚀 Teto!':pmBase>=100?'✅ Batida!':'Falta '+(100-pmBase).toFixed(1)+'%';
 
   // Alerta rollover
   var al = document.getElementById('alerta-dia');
-  var deficit = mHoje - MD_BASE;
-  if(deficit > 1){
-    al.className='alerta';
-    al.innerHTML = '⚠️ Dia anterior não bateu a meta.<br>Meta de hoje ajustada: +R$ ' + deficit.toFixed(2).replace('.',',') + ' carry‑over';
+  var diff = mHoje - MD_BASE;
+  if(idxHoje < 0){ al.innerHTML=''; al.className='alerta'; }
+  else if(fat >= mHoje && fat > 0 && diff < -1){
+    al.className='alerta bonus';
+    al.innerHTML='🚀 Dias anteriores foram além da meta!<br>Meta de hoje aliviada: '+fmt(Math.abs(diff))+' a menos';
   } else if(fat >= mHoje && fat > 0){
     al.className='alerta ok';
-    al.innerHTML = '✅ Meta do dia batida!';
+    al.innerHTML='✅ Meta do dia batida!';
+  } else if(diff > 1){
+    al.className='alerta warn';
+    al.innerHTML='⚠️ Carry-over de dias anteriores.<br>Meta de hoje: +'+fmt(diff)+' a compensar';
   } else {
-    al.innerHTML='';
-    al.className='';
+    al.innerHTML=''; al.className='alerta';
   }
 
   // Semanas
   document.getElementById('sems').innerHTML = SEMS.map(function(s){
-    var fill = pm>=s.pctAcum ? 100 : Math.round(pm/s.pctAcum*1000)/10;
-    var cor = pm>=s.pctAcum?'#48bb78':'#ff6b00';
+    var fill = pmBase >= s.pctAcum ? 100 : Math.max(0,Math.round(pmBase/s.pctAcum*1000)/10);
+    var cor  = pmBase>=s.pctAcum?'#48bb78':fill>50?'#f6ad55':'#ff6b00';
     return '<div class="sem-row">'+
       '<span class="sem-nome">'+s.label+'</span>'+
       '<div class="sem-bg"><div class="sem-fill" style="width:'+Math.min(100,fill)+'%;background:'+cor+'"></div></div>'+
@@ -198,21 +206,21 @@ function render(){
   }).join('');
 
   // Histórico
-  var dias = Object.keys(dados).sort().reverse().slice(0,7);
-  var hist = document.getElementById('hist-lista');
+  var dias = Object.keys(dados).sort().reverse().slice(0,8);
   var hcard = document.getElementById('hist-card');
-  if(dias.length){
-    hcard.style.display='block';
-    hist.innerHTML = dias.map(function(d){
-      var r = dados[d];
-      var parts = d.split('-');
-      var label = parts[2]+'/'+parts[1];
-      var status = r.fechado ? (r.faturado>=MD_BASE?'✅':'⚠️') : '🔄';
-      return '<div class="hist-item"><span>'+status+' '+label+(r.fechado?'':' (aberto)')+'</span><span class="hist-val">'+Math.round(r.faturado/MD_BASE*100)+'%</span></div>';
-    }).join('');
-  } else {
-    hcard.style.display='none';
-  }
+  if(dias.length){ hcard.style.display='block'; }
+  else { hcard.style.display='none'; return; }
+  document.getElementById('hist-lista').innerHTML = dias.map(function(d,i){
+    var r = dados[d];
+    var parts = d.split('-');
+    var label = parts[2]+'/'+parts[1];
+    var idxD = DIAS.indexOf(d);
+    var mD = idxD>=0 ? calcMetaDia(dados,idxD) : MD_BASE;
+    var pD = mD>0 ? Math.round(r.faturado/mD*100) : 0;
+    var ico = !r.fechado?'🔄':pD>=100?'✅':'⚠️';
+    var cor = !r.fechado?'#aaa':pD>=100?'#48bb78':'#fc8181';
+    return '<div class="hist-item"><span>'+ico+' '+label+(r.fechado?'':' (aberto)')+'</span><span class="hist-val" style="color:'+cor+'">'+pD+'%</span></div>';
+  }).join('');
 }
 
 function lancar(){
@@ -230,12 +238,14 @@ function lancar(){
 function fecharDia(){
   var dados = getDados();
   var hj = hoje();
+  var idxHoje = DIAS.indexOf(hj);
   if(!dados[hj]) dados[hj]={faturado:0,fechado:false};
-  var mH = metaHoje(dados);
+  var mH = calcMetaDia(dados, idxHoje);
   var fat = dados[hj].faturado;
-  var msg = fat >= mH
-    ? '✅ Meta batida! Fechar o dia?'
-    : '⚠️ Meta não atingida ('+Math.round(fat/mH*100)+'%). O valor restante será distribuído nos próximos dias. Fechar?';
+  var pct = mH>0?Math.round(fat/mH*100):0;
+  var msg = pct>=100
+    ? '✅ Meta batida ('+pct+'%)! O excesso vai aliviar os próximos dias. Fechar?'
+    : '⚠️ Meta não batida ('+pct+'%). O déficit será distribuído nos dias restantes. Fechar?';
   if(!confirm(msg)) return;
   dados[hj].fechado = true;
   salvar(dados);
