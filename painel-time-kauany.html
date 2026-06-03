@@ -562,10 +562,24 @@ function _chatLoadSB(){
   });
 }
 // Polling de mensagens do gestor
+
+function syncMsgsSB() {
+  sbGet('prd_mensagens', 'para=eq.kauany&order=ts.asc&limit=100').then(function(rows) {
+    if (!Array.isArray(rows) || !rows.length) return;
+    var key = 'prd_msgs_kauany';
+    var local = [];
+    try { local = JSON.parse(localStorage.getItem(key) || '[]'); } catch(e) {}
+    var sbIds = rows.map(function(m) { return m.id; });
+    var only = local.filter(function(m) { return !m.id || sbIds.indexOf(m.id) < 0; });
+    var merged = rows.concat(only);
+    localStorage.setItem(key, JSON.stringify(merged));
+    renderMsgs('kauany');
+  });
+}
 function renderMsgs(cid) {
   var lista = document.getElementById('msgs-colab-lista');
   if (!lista) return;
-  var key = 'prd_msgs_gabriel';
+  var key = 'prd_msgs_kauany';
   var msgs = [];
   try { msgs = JSON.parse(localStorage.getItem(key) || '[]'); } catch(e) {}
   // Filtrar só mensagens do gestor (não chamados)
@@ -884,7 +898,8 @@ function saveChamadoSB(ch) {
 }
 
 
-function syncChamadosSB() {
+function syncChamadosSB();
+  syncMsgsSB(); {
   sbGet('prd_mensagens', 'de=eq.'+COLAB_ID+'&tipo=eq.chamado&order=ts.desc&limit=30')
     .then(function(rows) {
       if (!Array.isArray(rows) || !rows.length) return;
