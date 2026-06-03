@@ -812,6 +812,11 @@ function loadSv(){
 async function submitCL(){
   const dt=new Date().toLocaleDateString('pt-BR');
   if(tks.every(s=>s===null)){alert('Responda pelo menos uma tarefa!');return;}
+  var semFoto=[];
+  tks.forEach(function(s,i){
+    if(s==='sim'){var fs=phUrls[i]||[];if(!fs.some(function(f){return f&&f!==null;}))semFoto.push(i+1);}
+  });
+  if(semFoto.length>0){alert('\u{1F4F7} Obrigatório: foto nas tarefas: '+semFoto.join(', '));return;}
   document.getElementById('sub-btn').disabled=true;document.getElementById('sub-btn').textContent='⏳ Enviando...';
   let msg='*✅ Checklist de Limpeza Semanal*\n*Colaborador:* Kauany\n*Data:* '+dt+'\n\n*Tarefas:*\n';
   let ok=true;

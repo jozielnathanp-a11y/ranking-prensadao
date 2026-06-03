@@ -380,6 +380,7 @@ function autoSave() {
     rating: ratingValue
   };
   localStorage.setItem('checklist_gabriel', JSON.stringify(data));
+  if(typeof sbPost==='function'){sbPost('prd_checklist',{colab:'gabriel',data:(JSON.parse(localStorage.getItem('checklist_gabriel')||'{}').data||new Date().toISOString().split('T')[0]),fotos:JSON.stringify(photoURLs),ts:Date.now()});}
   const ind = document.getElementById('save-indicator');
   ind.style.display = 'block';
   setTimeout(() => ind.style.display = 'none', 2000);
@@ -634,5 +635,9 @@ function switchTab(tab) {
 <div id="tab-ranking" class="tab-content">
   <iframe class="ranking-frame" src="https://jozielnathanp-a11y.github.io/ranking-prensadao/" title="Ranking Prensadão"></iframe>
 </div>
+<script>
+const _SB_URL='https://trbyynbtuzpszdvjivbs.supabase.co',_SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRyYnl5bmJ0dXpwc3pkdmppdmJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTU4NjYyMjYsImV4cCI6MjAzMTQ0MjIyNn0.V7_E4QoBwH-7uR4K8yE-7y7vG2S3V7-8-9A-B-C-D-E';
+function sbPost(t,o){fetch(_SB_URL+'/rest/v1/'+t,{method:'POST',headers:{'apikey':_SB_KEY,'Authorization':'Bearer '+_SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(o)}).catch(function(){});}
+</script>
 </body>
 </html>
