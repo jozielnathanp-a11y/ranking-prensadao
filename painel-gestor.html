@@ -783,6 +783,9 @@ function loadChamadosSB(callback) {
       rows.forEach(function(row) {
         try {
           var ch = JSON.parse(row.texto);
+          // Ignorar mensagens simples (sem campo tipo de solicitacao ou tipo = msg)
+          var TIPOS_CHAMADO = ['vale','adiantamento','folga','troca','duvida','outro','reclamacao'];
+          if (!ch.tipo || TIPOS_CHAMADO.indexOf(ch.tipo) === -1) return;
           ch._sbid = row.id; // id do registro no SB
           if (!_chsCache[ch.colab_id || row.de]) _chsCache[ch.colab_id || row.de] = [];
           _chsCache[ch.colab_id || row.de].push(ch);
