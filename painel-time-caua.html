@@ -775,7 +775,7 @@ async function submitCL(){
   localStorage.removeItem(STORE+'_cl');
   document.getElementById('cl-form-area').style.display='none';
   document.getElementById('ok-scr').style.display='block';
-  setTimeout(()=>window.open('https://wa.me/'+GR+'?text='+encodeURIComponent(msg),'_blank'),1000);
+  /* wpp removido */
 }
 
 function swSub(s){
@@ -840,7 +840,7 @@ function envCh(){
   document.querySelectorAll('.tc').forEach(c=>c.classList.remove('sel'));
   document.querySelectorAll('.ug').forEach(b=>b.classList.remove('s'));
   document.getElementById('av-vale').style.display='none';document.getElementById('grp-vale').style.display='none';
-  setTimeout(()=>window.open('https://wa.me/'+JP+'?text='+encodeURIComponent(wpp),'_blank'),300);
+  /* wpp removido */
   alert('✅ WhatsApp vai abrir para confirmar o envio.');
 }
 
@@ -858,7 +858,7 @@ function envPt(){
   document.getElementById('pt-data').value=new Date().toISOString().split('T')[0];
   document.getElementById('pt-hora').value='';document.getElementById('pt-mot').value='';
   document.getElementById('pv-pt').style.display='none';document.getElementById('st-pt').textContent='';ptAnx=null;
-  setTimeout(()=>window.open('https://wa.me/'+JP+'?text='+encodeURIComponent(wpp),'_blank'),300);
+  /* wpp removido */
   alert('✅ Notificação enviada!');
 }
 
