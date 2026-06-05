@@ -2040,10 +2040,9 @@ document.addEventListener('click', function(e) {
 var _loteProdutos = [];
 
 async function abrirContagemLote() {
-  // Carregar categorias
   try {
-    var prods = await supa('GET', 'produtos?unidade_loja=eq.' + UNIDADE_LOJA + '&select=categoria&order=categoria.asc');
-    var cats = [...new Set((prods||[]).map(p => p.categoria).filter(Boolean))].sort();
+    var prods = await supa('GET', 'produtos', null, 'unidade_loja=eq.' + UNIDADE_LOJA + '&select=categoria&order=categoria.asc');
+    var cats = [...new Set((prods||[]).map(function(p){ return p.categoria; }).filter(Boolean))].sort();
     var sel = document.getElementById('lote-categoria');
     sel.innerHTML = '<option value="">-- Selecione a categoria --</option>';
     cats.forEach(function(c) {
@@ -2051,7 +2050,7 @@ async function abrirContagemLote() {
       opt.value = c; opt.textContent = c;
       sel.appendChild(opt);
     });
-  } catch(e) {}
+  } catch(e) { showToast('Erro ao carregar categorias','error'); return; }
   document.getElementById('lote-passo1').style.display = 'block';
   document.getElementById('lote-passo2').style.display = 'none';
   document.getElementById('modal-lote').style.display = 'block';
@@ -2071,14 +2070,11 @@ async function carregarItenslote() {
   var cat  = document.getElementById('lote-categoria').value;
   if (!nome) { showToast('Digite seu nome!','error'); return; }
   if (!cat)  { showToast('Selecione uma categoria!','error'); return; }
-
   try {
-    var prods = await supa('GET', 'produtos?unidade_loja=eq.' + UNIDADE_LOJA + '&categoria=eq.' + encodeURIComponent(cat) + '&order=nome.asc&select=codigo,nome,estoque,unidade,qtd_por_pct');
+    var prods = await supa('GET', 'produtos', null, 'unidade_loja=eq.' + UNIDADE_LOJA + '&categoria=eq.' + encodeURIComponent(cat) + '&order=nome.asc&select=codigo,nome,estoque,unidade,qtd_por_pct');
     _loteProdutos = prods || [];
   } catch(e) { showToast('Erro ao carregar produtos','error'); return; }
-
   document.getElementById('lote-titulo').textContent = cat + ' (' + _loteProdutos.length + ' itens)';
-
   var container = document.getElementById('lote-itens');
   container.innerHTML = '';
   _loteProdutos.forEach(function(p, i) {
@@ -2089,12 +2085,11 @@ async function carregarItenslote() {
       '<div style="color:#fff;font-weight:700;font-size:0.95rem;margin-bottom:6px;">' + p.nome + '</div>' +
       '<div style="color:#90a4ae;font-size:0.8rem;margin-bottom:8px;">Atual: ' + (p.estoque||0) + ' ' + (p.unidade||'und') + '</div>' +
       '<input type="text" inputmode="numeric" id="lote-qtd-' + i + '" data-idx="' + i + '" data-iskg="' + isKg + '" ' +
-        'placeholder="' + (isKg ? 'Ex: 1234 → 1,234 kg' : 'Quantidade') + '" ' +
+        'placeholder="' + (isKg ? 'Ex: 1234 vai para 1,234 kg' : 'Quantidade') + '" ' +
         'style="width:100%;padding:10px;border-radius:8px;border:1px solid #444;background:#1a1a2e;color:#fff;font-size:1rem;" ' +
         'oninput="formatarKgLote(this)" />';
     container.appendChild(div);
   });
-
   document.getElementById('lote-passo1').style.display = 'none';
   document.getElementById('lote-passo2').style.display = 'block';
 }
@@ -2102,59 +2097,37 @@ async function carregarItenslote() {
 function formatarKgLote(input) {
   var isKg = input.getAttribute('data-iskg') === 'true';
   if (!isKg) return;
-  // Remove tudo exceto dígitos
   var digits = input.value.replace(/\D/g,'');
   if (!digits) { input.value = ''; return; }
-  // Formata como número com 3 casas decimais
   var num = parseInt(digits, 10);
-  var formatted = (num / 1000).toFixed(3).replace('.', ',');
-  input.value = formatted;
+  input.value = (num / 1000).toFixed(3).replace('.', ',');
 }
 
 async function enviarContagemLote() {
   var nome = document.getElementById('lote-nome').value.trim();
-  var enviados = 0;
-  var erros = 0;
-
+  var enviados = 0, erros = 0;
   for (var i = 0; i < _loteProdutos.length; i++) {
     var input = document.getElementById('lote-qtd-' + i);
     var raw = (input.value||'').replace(',','.').trim();
-    if (!raw || raw === '') continue; // pula vazios
-
+    if (!raw) continue;
     var qtd = parseFloat(raw);
     if (isNaN(qtd) || qtd < 0) continue;
-
     var p = _loteProdutos[i];
     var mov = {
-      codigo: p.codigo,
-      nome: p.nome,
-      tipo: 'contagem',
-      qtd: qtd,
-      unidade: p.unidade || 'und',
-      colaborador: nome,
-      obs: 'Contagem em lote',
-      estoque_anterior: p.estoque || 0,
-      novo_estoque: qtd,
-      unidade_loja: UNIDADE_LOJA,
-      status: 'pendente'
+      codigo: p.codigo, nome: p.nome, tipo: 'contagem', qtd: qtd,
+      unidade: p.unidade||'und', colaborador: nome, obs: 'Contagem em lote',
+      estoque_anterior: p.estoque||0, novo_estoque: qtd,
+      unidade_loja: UNIDADE_LOJA, status: 'pendente'
     };
-
     try {
       await supa('POST', 'movimentacoes', mov);
-      // Atualizar estoque
-      await supa('PATCH', 'produtos?codigo=eq.' + encodeURIComponent(p.codigo) + '&unidade_loja=eq.' + UNIDADE_LOJA, { estoque: qtd });
+      await supa('PATCH', 'produtos', {estoque: qtd}, 'codigo=eq.' + encodeURIComponent(p.codigo) + '&unidade_loja=eq.' + UNIDADE_LOJA);
       enviados++;
     } catch(e) { erros++; }
   }
-
-  if (enviados > 0) {
-    showToast('✅ ' + enviados + ' itens contados!', 'success');
-    fecharContagemLote();
-    carregarProdutos();
-  } else {
-    showToast('Nenhum item preenchido', 'error');
-  }
-  if (erros > 0) showToast('⚠️ ' + erros + ' erros', 'error');
+  if (enviados > 0) { showToast('✅ ' + enviados + ' itens contados!','success'); fecharContagemLote(); carregarProdutos(); }
+  else showToast('Nenhum item preenchido','error');
+  if (erros > 0) showToast('⚠️ ' + erros + ' erros','error');
 }
 // ===== /CONTAGEM EM LOTE =====
 
