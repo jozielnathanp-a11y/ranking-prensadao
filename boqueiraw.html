@@ -2460,9 +2460,8 @@ async function enviarContagemLote() {
   for (var i = 0; i < _loteProdutos.length; i++) {
     var input = document.getElementById('lote-qtd-' + i);
     var raw = (input.value||'').replace(',','.').trim();
-    if (!raw) continue;
-    var qtd = parseFloat(raw);
-    if (isNaN(qtd) || qtd < 0) continue;
+    var qtd = (!raw) ? 0 : parseFloat(raw);
+    // qtd já calculado acima
     var p = _loteProdutos[i];
     var mov = {
       codigo: p.codigo, nome: p.nome, tipo: 'contagem', qtd: qtd,
