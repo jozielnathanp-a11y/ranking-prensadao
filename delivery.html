@@ -1910,6 +1910,14 @@ let _todasNotifs = [];
       _detalhe: 'Contagem em Lote · Pedido Automático por Min/Máx · Extrato com tema escuro'
     });
     localStorage.setItem(VER_KEY, '1');
+    // Atualizar badge assim que o DOM estiver pronto
+    if (typeof _atualizarBadge === 'function') {
+      _atualizarBadge();
+    } else {
+      document.addEventListener('DOMContentLoaded', function() {
+        if (typeof _atualizarBadge === 'function') _atualizarBadge();
+      });
+    }
   }
 })();
 
