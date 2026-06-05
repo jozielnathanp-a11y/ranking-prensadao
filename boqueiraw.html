@@ -2485,31 +2485,53 @@ async function enviarContagemLote() {
 // ===== /CONTAGEM EM LOTE =====
 
 
-// ===== PEDIDO VIA RELATÓRIO v2 =====
+
+
+// ===== PEDIDO VIA RELATÓRIO v3 =====
 var _pedidoProdutos = [];
 
 async function abrirPedido() {
-  showToast('Carregando produtos...', 'info');
+  showToast('Verificando estoque...', 'info');
   try {
     var todos = await supa('GET', 'produtos', null,
       'unidade_loja=eq.' + UNIDADE_LOJA +
       '&categoria=in.(Processado,Bruto,Limpeza)' +
-      '&order=categoria.asc,nome.asc&select=codigo,nome,estoque,unidade,categoria');
-    _pedidoProdutos = todos || [];
+      '&order=categoria.asc,nome.asc' +
+      '&select=codigo,nome,estoque,unidade,categoria,estoque_min,estoque_max');
+    // Filtrar só abaixo do mínimo
+    _pedidoProdutos = (todos||[]).filter(function(p) {
+      var min = parseFloat(p.estoque_min) || 0;
+      var est = parseFloat(p.estoque)     || 0;
+      return est < min;
+    });
   } catch(e) { showToast('Erro ao carregar produtos','error'); return; }
 
   var container = document.getElementById('pedido-itens');
   container.innerHTML = '';
+
+  if (!_pedidoProdutos.length) {
+    container.innerHTML = '<div style="color:#81c784;text-align:center;padding:20px;font-size:1rem;">✅ Nenhum item abaixo do mínimo!</div>';
+    window._pedidoCount = 0;
+    document.getElementById('modal-pedido').style.display = 'block';
+    return;
+  }
+
   var catAtual = '';
-
   _pedidoProdutos.forEach(function(p, i) {
-    var isKg = (p.unidade||'').toLowerCase() === 'kg';
+    var isKg  = (p.unidade||'').toLowerCase() === 'kg';
+    var est   = parseFloat(p.estoque)     || 0;
+    var min   = parseFloat(p.estoque_min) || 0;
+    var max   = parseFloat(p.estoque_max) || 0;
+    var sugerido = max > est ? (max - est) : 0;
+    // Formatar valor sugerido
+    var sugeridoFmt = isKg
+      ? (sugerido).toFixed(3).replace('.', ',')
+      : String(Math.ceil(sugerido));
 
-    // Cabeçalho de categoria
     if (p.categoria !== catAtual) {
       catAtual = p.categoria;
       var header = document.createElement('div');
-      header.style.cssText = 'color:#ffb300;font-weight:700;font-size:0.9rem;margin-top:8px;margin-bottom:2px;padding:4px 0;border-bottom:1px solid #333;';
+      header.style.cssText = 'color:#ffb300;font-weight:700;font-size:0.88rem;margin-top:10px;margin-bottom:2px;padding:4px 0;border-bottom:1px solid #333;';
       var emoji = catAtual === 'Processado' ? '🥩' : catAtual === 'Bruto' ? '🌿' : '🧹';
       header.textContent = emoji + ' ' + catAtual;
       container.appendChild(header);
@@ -2518,13 +2540,16 @@ async function abrirPedido() {
     var div = document.createElement('div');
     div.style.cssText = 'background:#252540;border-radius:10px;padding:12px;';
     div.innerHTML =
-      '<div style="color:#fff;font-weight:700;font-size:0.9rem;margin-bottom:3px;">' + p.nome + '</div>' +
-      '<div style="color:#90a4ae;font-size:0.78rem;margin-bottom:7px;">Estoque: ' + (p.estoque||0) + ' ' + (p.unidade||'und') + '</div>' +
+      '<div style="color:#fff;font-weight:700;font-size:0.9rem;margin-bottom:2px;">' + p.nome + '</div>' +
+      '<div style="color:#ef9a9a;font-size:0.78rem;margin-bottom:6px;">' +
+        '⚠️ Estoque: ' + est + ' ' + (p.unidade||'') + ' | Mín: ' + min + ' | Máx: ' + max +
+      '</div>' +
       '<input type="text" inputmode="numeric" id="ped-qtd-' + i + '"' +
         ' data-nome="' + p.nome.replace(/"/g,'') + '"' +
         ' data-unidade="' + (p.unidade||'und') + '"' +
         ' data-iskg="' + isKg + '"' +
-        ' placeholder="' + (isKg ? 'Ex: 5000 → 5,000 kg' : 'Quantidade') + '"' +
+        ' value="' + sugeridoFmt + '"' +
+        ' placeholder="Quantidade"' +
         ' style="width:100%;padding:9px;border-radius:8px;border:1px solid #444;background:#1a1a2e;color:#fff;font-size:0.95rem;"' +
         ' oninput="formatarKgPedido(this)" />';
     container.appendChild(div);
@@ -2563,7 +2588,7 @@ function enviarPedidoWhatsApp() {
   }
 
   var total = Object.values(linhas).reduce(function(a,b){ return a + b.length; }, 0);
-  if (total === 0) { showToast('Nenhum item preenchido!','error'); return; }
+  if (total === 0) { showToast('Nenhum item para enviar!','error'); return; }
 
   var agora = new Date();
   var dataFmt = String(agora.getDate()).padStart(2,'0') + '/' +
@@ -2571,19 +2596,17 @@ function enviarPedidoWhatsApp() {
                 agora.getFullYear();
 
   var texto = '🛒 *Pedido de Compras — Prensadão*\n📅 ' + dataFmt + '\n';
-
   ['Processado','Bruto','Limpeza'].forEach(function(cat) {
     if (!linhas[cat] || !linhas[cat].length) return;
     var emoji = cat === 'Processado' ? '🥩' : cat === 'Bruto' ? '🌿' : '🧹';
-    texto += '\n' + emoji + ' *' + cat + '*\n';
-    texto += linhas[cat].join('\n');
+    texto += '\n' + emoji + ' *' + cat + '*\n' + linhas[cat].join('\n');
   });
-
   texto += '\n\n_Enviado pelo sistema Prensadão_';
+
   window.open('https://wa.me/?text=' + encodeURIComponent(texto), '_blank');
   fecharPedido();
 }
-// ===== /PEDIDO VIA RELATÓRIO v2 =====
+// ===== /PEDIDO VIA RELATÓRIO v3 =====
 </script>
 
   <!-- MODAL: Contagem por Categoria -->
