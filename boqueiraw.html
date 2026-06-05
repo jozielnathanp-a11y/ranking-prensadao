@@ -1643,6 +1643,13 @@ let todasNotifs = [];
       _detalhe: 'Contagem em Lote · Pedido Automático por Min/Máx · Extrato com tema escuro'
     });
     localStorage.setItem(VER_KEY, '1');
+    if (typeof atualizarBadge === 'function') {
+      atualizarBadge();
+    } else {
+      document.addEventListener('DOMContentLoaded', function() {
+        if (typeof atualizarBadge === 'function') atualizarBadge();
+      });
+    }
   }
 })();
 
