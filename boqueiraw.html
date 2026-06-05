@@ -2525,7 +2525,7 @@ async function abrirPedido() {
     var sugerido = max > est ? (max - est) : 0;
     // Formatar valor sugerido
     var sugeridoFmt = isKg
-      ? (sugerido).toFixed(3).replace('.', ',')
+      ? String(Math.ceil(sugerido))
       : String(Math.ceil(sugerido));
 
     if (p.categoria !== catAtual) {
@@ -2567,7 +2567,7 @@ function formatarKgPedido(input) {
   if (input.getAttribute('data-iskg') !== 'true') return;
   var digits = input.value.replace(/\D/g,'');
   if (!digits) { input.value = ''; return; }
-  input.value = (parseInt(digits,10) / 1000).toFixed(3).replace('.', ',');
+  input.value = String(parseInt(digits,10));
 }
 
 function enviarPedidoWhatsApp() {
