@@ -192,6 +192,7 @@
 }
 .notif-item.entrada { border-left-color: #4caf50; }
 .notif-item.saida   { border-left-color: #f44336; }
+.notif-item.update  { border-left-color: #ffd600; }
 .notif-item.contagem{ border-left-color: #2196f3; }
 .notif-item.nao-lida{ background: rgba(255,255,255,0.12); }
 .notif-item .notif-titulo { font-weight: 700; margin-bottom: 2px; }
@@ -1943,6 +1944,25 @@ let _notifUltimoAt = null;
 let _notifInterval = null;
 let _todasNotifs = [];
 
+// ── Notificação de versão ──
+(function() {
+  var VER_KEY = 'prensadao_notif_v2';
+  if (!localStorage.getItem(VER_KEY)) {
+    _todasNotifs.push({
+      id: 'v2.0',
+      tipo: 'update',
+      nome: '🚀 Versão 2.0 disponível!',
+      colaborador: 'Sistema',
+      qtd: null,
+      unidade: '',
+      created_at: new Date().toISOString(),
+      _lida: false,
+      _detalhe: 'Contagem em Lote · Pedido Automático por Min/Máx · Extrato com tema escuro'
+    });
+    localStorage.setItem(VER_KEY, '1');
+  }
+})();
+
 function toggleNotif() {
   const p = document.getElementById('notif-painel');
   if (!p) return;
@@ -1968,7 +1988,7 @@ function _renderNotifs() {
     lista.innerHTML = '<div class="notif-vazia">Nenhuma notificação ainda 🔕</div>';
     return;
   }
-  const emoji = {entrada:'📥', saida:'📤', contagem:'📊'};
+  const emoji = {entrada:'📥', saida:'📤', contagem:'📊', update:'🆕'};
   lista.innerHTML = _todasNotifs.slice().reverse().map(n => {
     const lida = n._lida ? '' : ' nao-lida';
     const e = emoji[n.tipo] || '📋';
