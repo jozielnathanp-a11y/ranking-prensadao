@@ -1627,6 +1627,25 @@ let notifUltimoAt = null;
 let notifInterval = null;
 let todasNotifs = [];
 
+// ── Notificação de versão ──
+(function() {
+  var VER_KEY = 'prensadao_notif_v2';
+  if (!localStorage.getItem(VER_KEY)) {
+    todasNotifs.push({
+      id: 'v2.0',
+      tipo: 'update',
+      nome: '🚀 Versão 2.0 disponível!',
+      colaborador: 'Sistema',
+      qtd: null,
+      unidade: '',
+      created_at: new Date().toISOString(),
+      _lida: false,
+      _detalhe: 'Contagem em Lote · Pedido Automático por Min/Máx · Extrato com tema escuro'
+    });
+    localStorage.setItem(VER_KEY, '1');
+  }
+})();
+
 function tipoEmoji(tipo) {
   return {entrada:'📥', saida:'📤', contagem:'📊'}[tipo] || '📋';
 }
