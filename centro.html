@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <!-- VERSAO-ZAPIA: atualizado em 05/06/2026 — 18x16 adicionado ao almoxarifado, centro e boqueirão -->
+  <!-- VERSAO-ZAPIA: atualizado em 05/06/2026 — contagem em lote adicionada -->
   <meta charset="UTF-8" />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
@@ -271,6 +271,12 @@
       <div style="display:flex;gap:8px;margin:8px 0 16px;">
         <button id="btn-tipo-entrada" onclick="selecionarTipo('entrada')" class="btn btn-red" style="flex:1;margin:0;padding:14px;">📥 Entrada</button>
         <button id="btn-tipo-contagem" onclick="selecionarTipo('contagem')" class="btn btn-gray" style="flex:1;margin:0;padding:14px;">📊 Contagem</button>
+      </div>
+      <!-- CONTAGEM EM LOTE -->
+      <div style="margin-top:10px;">
+        <button class="btn" onclick="abrirContagemLote()" style="width:100%;background:linear-gradient(135deg,#1565c0,#0d47a1);color:#fff;padding:14px;font-size:1rem;font-weight:700;border:none;border-radius:12px;cursor:pointer;">
+          📋 Contagem em Lote
+        </button>
       </div>
       <input type="hidden" id="lanc-tipo" value="entrada" />
 
@@ -2028,6 +2034,130 @@ document.addEventListener('click', function(e) {
   if (p && b && !p.contains(e.target) && !b.contains(e.target)) p.classList.remove('open');
 });
 
+
+
+// ===== CONTAGEM EM LOTE =====
+var _loteProdutos = [];
+
+async function abrirContagemLote() {
+  // Carregar categorias
+  try {
+    var prods = await supa('GET', 'produtos?unidade_loja=eq.' + UNIDADE_LOJA + '&select=categoria&order=categoria.asc');
+    var cats = [...new Set((prods||[]).map(p => p.categoria).filter(Boolean))].sort();
+    var sel = document.getElementById('lote-categoria');
+    sel.innerHTML = '<option value="">-- Selecione a categoria --</option>';
+    cats.forEach(function(c) {
+      var opt = document.createElement('option');
+      opt.value = c; opt.textContent = c;
+      sel.appendChild(opt);
+    });
+  } catch(e) {}
+  document.getElementById('lote-passo1').style.display = 'block';
+  document.getElementById('lote-passo2').style.display = 'none';
+  document.getElementById('modal-lote').style.display = 'block';
+}
+
+function fecharContagemLote() {
+  document.getElementById('modal-lote').style.display = 'none';
+}
+
+function voltarPasso1Lote() {
+  document.getElementById('lote-passo1').style.display = 'block';
+  document.getElementById('lote-passo2').style.display = 'none';
+}
+
+async function carregarItenslote() {
+  var nome = document.getElementById('lote-nome').value.trim();
+  var cat  = document.getElementById('lote-categoria').value;
+  if (!nome) { showToast('Digite seu nome!','error'); return; }
+  if (!cat)  { showToast('Selecione uma categoria!','error'); return; }
+
+  try {
+    var prods = await supa('GET', 'produtos?unidade_loja=eq.' + UNIDADE_LOJA + '&categoria=eq.' + encodeURIComponent(cat) + '&order=nome.asc&select=codigo,nome,estoque,unidade,qtd_por_pct');
+    _loteProdutos = prods || [];
+  } catch(e) { showToast('Erro ao carregar produtos','error'); return; }
+
+  document.getElementById('lote-titulo').textContent = cat + ' (' + _loteProdutos.length + ' itens)';
+
+  var container = document.getElementById('lote-itens');
+  container.innerHTML = '';
+  _loteProdutos.forEach(function(p, i) {
+    var isKg = (p.unidade||'').toLowerCase() === 'kg';
+    var div = document.createElement('div');
+    div.style.cssText = 'background:#252540;border-radius:10px;padding:12px;';
+    div.innerHTML =
+      '<div style="color:#fff;font-weight:700;font-size:0.95rem;margin-bottom:6px;">' + p.nome + '</div>' +
+      '<div style="color:#90a4ae;font-size:0.8rem;margin-bottom:8px;">Atual: ' + (p.estoque||0) + ' ' + (p.unidade||'und') + '</div>' +
+      '<input type="text" inputmode="numeric" id="lote-qtd-' + i + '" data-idx="' + i + '" data-iskg="' + isKg + '" ' +
+        'placeholder="' + (isKg ? 'Ex: 1234 → 1,234 kg' : 'Quantidade') + '" ' +
+        'style="width:100%;padding:10px;border-radius:8px;border:1px solid #444;background:#1a1a2e;color:#fff;font-size:1rem;" ' +
+        'oninput="formatarKgLote(this)" />';
+    container.appendChild(div);
+  });
+
+  document.getElementById('lote-passo1').style.display = 'none';
+  document.getElementById('lote-passo2').style.display = 'block';
+}
+
+function formatarKgLote(input) {
+  var isKg = input.getAttribute('data-iskg') === 'true';
+  if (!isKg) return;
+  // Remove tudo exceto dígitos
+  var digits = input.value.replace(/\D/g,'');
+  if (!digits) { input.value = ''; return; }
+  // Formata como número com 3 casas decimais
+  var num = parseInt(digits, 10);
+  var formatted = (num / 1000).toFixed(3).replace('.', ',');
+  input.value = formatted;
+}
+
+async function enviarContagemLote() {
+  var nome = document.getElementById('lote-nome').value.trim();
+  var enviados = 0;
+  var erros = 0;
+
+  for (var i = 0; i < _loteProdutos.length; i++) {
+    var input = document.getElementById('lote-qtd-' + i);
+    var raw = (input.value||'').replace(',','.').trim();
+    if (!raw || raw === '') continue; // pula vazios
+
+    var qtd = parseFloat(raw);
+    if (isNaN(qtd) || qtd < 0) continue;
+
+    var p = _loteProdutos[i];
+    var mov = {
+      codigo: p.codigo,
+      nome: p.nome,
+      tipo: 'contagem',
+      qtd: qtd,
+      unidade: p.unidade || 'und',
+      colaborador: nome,
+      obs: 'Contagem em lote',
+      estoque_anterior: p.estoque || 0,
+      novo_estoque: qtd,
+      unidade_loja: UNIDADE_LOJA,
+      status: 'pendente'
+    };
+
+    try {
+      await supa('POST', 'movimentacoes', mov);
+      // Atualizar estoque
+      await supa('PATCH', 'produtos?codigo=eq.' + encodeURIComponent(p.codigo) + '&unidade_loja=eq.' + UNIDADE_LOJA, { estoque: qtd });
+      enviados++;
+    } catch(e) { erros++; }
+  }
+
+  if (enviados > 0) {
+    showToast('✅ ' + enviados + ' itens contados!', 'success');
+    fecharContagemLote();
+    carregarProdutos();
+  } else {
+    showToast('Nenhum item preenchido', 'error');
+  }
+  if (erros > 0) showToast('⚠️ ' + erros + ' erros', 'error');
+}
+// ===== /CONTAGEM EM LOTE =====
+
 </script>
 
 <!-- TUTORIAL OVERLAY -->
@@ -2095,6 +2225,43 @@ document.addEventListener('click', function(e) {
   </div>
   <div class="notif-lista" id="notif-lista">
     <div class="notif-vazia">Nenhuma notificação ainda</div>
+  </div>
+</div>
+
+<!-- ══════════ MODAL CONTAGEM EM LOTE ══════════ -->
+<div id="modal-lote" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9998;overflow-y:auto;padding:16px;">
+  <div style="background:#1a1a2e;border-radius:16px;max-width:480px;margin:0 auto;padding:20px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <h3 style="color:#fff;margin:0;">📋 Contagem em Lote</h3>
+      <button onclick="fecharContagemLote()" style="background:rgba(255,255,255,0.15);border:none;color:#fff;padding:6px 12px;border-radius:8px;cursor:pointer;font-size:1rem;">✖</button>
+    </div>
+
+    <!-- Passo 1: Nome e Categoria -->
+    <div id="lote-passo1">
+      <label style="color:#b0bec5;font-size:0.9rem;">👤 Seu nome</label>
+      <input id="lote-nome" type="text" placeholder="Digite seu nome..." style="width:100%;padding:12px;border-radius:10px;border:1px solid #333;background:#252540;color:#fff;margin:6px 0 14px;font-size:1rem;" />
+
+      <label style="color:#b0bec5;font-size:0.9rem;">📂 Categoria</label>
+      <select id="lote-categoria" style="width:100%;padding:12px;border-radius:10px;border:1px solid #333;background:#252540;color:#fff;margin:6px 0 14px;font-size:1rem;">
+        <option value="">-- Selecione a categoria --</option>
+      </select>
+
+      <button onclick="carregarItenslote()" style="width:100%;padding:14px;background:#1565c0;color:#fff;border:none;border-radius:10px;cursor:pointer;font-size:1rem;font-weight:700;">
+        ▶ Avançar
+      </button>
+    </div>
+
+    <!-- Passo 2: Lista de itens -->
+    <div id="lote-passo2" style="display:none;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <button onclick="voltarPasso1Lote()" style="background:rgba(255,255,255,0.15);border:none;color:#fff;padding:8px 14px;border-radius:8px;cursor:pointer;">← Voltar</button>
+        <span id="lote-titulo" style="color:#fff;font-weight:700;font-size:1rem;"></span>
+      </div>
+      <div id="lote-itens" style="display:flex;flex-direction:column;gap:10px;max-height:55vh;overflow-y:auto;padding-right:4px;"></div>
+      <button onclick="enviarContagemLote()" style="width:100%;padding:14px;background:#2e7d32;color:#fff;border:none;border-radius:10px;cursor:pointer;font-size:1rem;font-weight:700;margin-top:16px;">
+        ✅ Enviar Contagem
+      </button>
+    </div>
   </div>
 </div>
 </body>
