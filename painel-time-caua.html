@@ -735,19 +735,19 @@ function buildTks(){
         <div class="pu-slots">
           <div class="pu-slot">
             <label class="ul-btn" for="ph-${i}-0">📁 Foto 1</label>
-            <input type="file" id="ph-${i}-0" accept="image/*" capture="environment" style="display:none" onchange="upTk(${i},0,this)">
+            <input type="file" id="ph-${i}-0" accept="image/*" style="display:none" onchange="upTk(${i},0,this)">
             <div class="ul-st" id="phs-${i}-0"></div>
             <img class="ph-pv" id="phv-${i}-0">
           </div>
           <div class="pu-slot">
             <label class="ul-btn" for="ph-${i}-1">📁 Foto 2</label>
-            <input type="file" id="ph-${i}-1" accept="image/*" capture="environment" style="display:none" onchange="upTk(${i},1,this)">
+            <input type="file" id="ph-${i}-1" accept="image/*" style="display:none" onchange="upTk(${i},1,this)">
             <div class="ul-st" id="phs-${i}-1"></div>
             <img class="ph-pv" id="phv-${i}-1">
           </div>
           <div class="pu-slot">
             <label class="ul-btn" for="ph-${i}-2">📁 Foto 3</label>
-            <input type="file" id="ph-${i}-2" accept="image/*" capture="environment" style="display:none" onchange="upTk(${i},2,this)">
+            <input type="file" id="ph-${i}-2" accept="image/*" style="display:none" onchange="upTk(${i},2,this)">
             <div class="ul-st" id="phs-${i}-2"></div>
             <img class="ph-pv" id="phv-${i}-2">
           </div>
@@ -820,7 +820,7 @@ function loadSv(){
   }catch(e){}
 }
 
-async function submitCL(){
+function submitCL(){
   const dt=new Date().toLocaleDateString('pt-BR');
   if(tks.every(s=>s===null)){alert('Responda pelo menos uma tarefa!');return;}
   var semFoto=[];
@@ -1423,7 +1423,7 @@ function renderTK() {
       addFotoHtml = '<label for="foto-' + i + '" style="display:inline-block;margin:4px;padding:8px 12px;background:#1a3a1a;border:2px dashed #48bb78;border-radius:8px;color:#48bb78;font-size:0.8rem;cursor:pointer">' +
         (fotos.length === 0 ? 'Adicionar foto (obrigatorio)' : 'Adicionar mais (' + fotos.length + '/3)') +
         '</label>' +
-        '<input type="file" id="foto-' + i + '" accept="image/*" capture="environment" style="display:none" onchange="uploadFoto(this,' + i + ')">';
+        '<input type="file" id="foto-' + i + '" accept="image/*" style="display:none" onchange="uploadFoto(this,' + i + ')">';
     }
     var cor = fotos.length === 0 ? '#e74c3c' : '#48bb78';
     var contHtml = done ? '' : '<div style="font-size:0.75rem;color:' + cor + ';margin-top:4px">' +
