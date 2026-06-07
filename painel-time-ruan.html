@@ -622,7 +622,7 @@ const FT='https://res.cloudinary.com/dewulu3tj/image/upload/v1780062694/checklis
 const HIST=[{"data": "2026-05-20", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 3}, {"data": "2026-05-22", "pontos": 3, "motivo": "Trabalho em equipe", "tipo": "Ganho", "saldo": 6}, {"data": "2026-05-22", "pontos": 3, "motivo": "Dia sem erro (Semana Perfeita)", "tipo": "Ganho", "saldo": 9}, {"data": "2026-05-22", "pontos": 5, "motivo": "Checklist semanal feita", "tipo": "Ganho", "saldo": 14}, {"data": "2026-05-23", "pontos": 3, "motivo": "Proatividade — limpeza final da noite", "tipo": "Ganho", "saldo": 17}, {"data": "2026-05-24", "pontos": 3, "motivo": "Dia sem erro (Semana Perfeita)", "tipo": "Ganho", "saldo": 20}, {"data": "2026-05-24", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 23}, {"data": "2026-05-24", "pontos": 3, "motivo": "Proatividade — embalagens", "tipo": "Ganho", "saldo": 26}, {"data": "2026-05-26", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 29}, {"data": "2026-05-27", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 32}, {"data": "2026-05-27", "pontos": 3, "motivo": "Proatividade — maionese", "tipo": "Ganho", "saldo": 35}, {"data": "2026-05-28", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 38}, {"data": "2026-05-28", "pontos": 3, "motivo": "Proatividade — maionese", "tipo": "Ganho", "saldo": 41}, {"data": "2026-05-29", "pontos": 5, "motivo": "Checklist semanal feita", "tipo": "Ganho", "saldo": 46}, {"data": "2026-05-20", "pontos": 40, "motivo": "Início do 2º Ciclo", "tipo": "Ganho", "saldo": 86}, {"data": "2026-06-01", "pontos": 3, "motivo": "Proatividade — ficou na prensa", "tipo": "Ganho", "saldo": 89}, {"data": "2026-06-01", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 92}];
 const TRF=["Realizar a higienização das mesas utilizando esponja e sabão, limpar a escada e organizar o salão superior.", "Realizar a higienização do freezer expositor da coca e organizar os refrigerantes embaixo do balcão, mantendo a área limpa para o atendimento.", "Lembre-se de lavar os potinhos de molho e os porta-guardanapos e preencher para que não faltem durante a semana!", "Limpar as bandejas com água e sabão, e fazer uma contagem semanal das bandejas fundas e rasas.", "Realizar a higienização e a organização dos recipientes contendo etiquetas de identificação dos lanches. Elaborar uma lista dos que se encontram em falta ou com baixa quantidade."];
 const STORE='pg_ruan';
-let tks=[null,null,null,null,null],phs=[null,null,null,null,null],excnt=0,exphs={},rat=0,histOpen=false;
+let tks=[null,null,null,null,null],phs=[[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null]],excnt=0,exphs={},rat=0,histOpen=false;
 let tpSel=null,urgSel=null,chAnx=null,ptAnx=null;
 
 
@@ -754,8 +754,8 @@ async function upTk(i, slotIdx, input) {
     .then(r => r.json())
     .then(data => {
       if (data.secure_url) {
-        if (!phUrls[i]) phUrls[i] = [null, null, null];
-        phUrls[i][slotIdx] = data.secure_url;
+        if (!phs[i]) phs[i] = [null, null, null];
+        phs[i][slotIdx] = data.secure_url;
         if (pv) { pv.src = data.secure_url; pv.style.display = 'block'; }
         if (st) st.textContent = '✅ Enviada!';
         autoSave();
@@ -794,7 +794,7 @@ function setRat(v){rat=v;document.querySelectorAll('.rat span').forEach((s,i)=>s
 
 function autoSave(){
   localStorage.setItem(STORE+'_cl',JSON.stringify({tks,phs,obs:document.getElementById('obs-cl').value,rat}));
-  sbPost('prd_checklist', {colab_id: COLAB_ID, tks: tks, phs: phUrls.map(function(s){return (s||[]).filter(function(f){return f&&f!==null;});}), obs: document.getElementById('obs-cl') ? document.getElementById('obs-cl').value : '', semana: new Date().toISOString().slice(0,10), ts: Date.now()});
+  sbPost('prd_checklist', {colab_id: COLAB_ID, tks: tks, phs: phs.map(function(s){return (s||[]).filter(function(f){return f&&f!==null;});}), obs: document.getElementById('obs-cl') ? document.getElementById('obs-cl').value : '', semana: new Date().toISOString().slice(0,10), ts: Date.now()});
   saveChecklistSB(tks, phs, document.getElementById('obs-cl')?.value, rat);
   const i=document.getElementById('sv-ind');i.style.display='block';setTimeout(()=>i.style.display='none',1500);
 }
@@ -814,7 +814,7 @@ async function submitCL(){
   if(tks.every(s=>s===null)){alert('Responda pelo menos uma tarefa!');return;}
   var semFoto=[];
   tks.forEach(function(s,i){
-    if(s==='sim'){var fs=phUrls[i]||[];if(!fs.some(function(f){return f&&f!==null;}))semFoto.push(i+1);}
+    if(s==='sim'){var fs=phs[i]||[];if(!fs.some(function(f){return f&&f!==null;}))semFoto.push(i+1);}
   });
   if(semFoto.length>0){alert('\u{1F4F7} Obrigatório: foto nas tarefas: '+semFoto.join(', '));return;}
   document.getElementById('sub-btn').disabled=true;document.getElementById('sub-btn').textContent='⏳ Enviando...';
@@ -822,7 +822,7 @@ async function submitCL(){
   let ok=true;
   tks.forEach((s,i)=>{
     const n=TRF[i].substring(0,50)+'...';
-    if(s==='sim'){msg+='✅ '+n;(phUrls[i]||[]).filter(function(f){return f;}).forEach(function(f,fi){msg+='\n📷'+(fi+1)+' '+f;});msg+='\n';}
+    if(s==='sim'){msg+='✅ '+n;(phs[i]||[]).filter(function(f){return f;}).forEach(function(f,fi){msg+='\n📷'+(fi+1)+' '+f;});msg+='\n';}
     else{ok=false;msg+='❌ '+n+'\n';}
   });
   const exs=document.querySelectorAll('.ex-item');

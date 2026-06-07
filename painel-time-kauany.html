@@ -622,7 +622,7 @@ const FT='data:image/jpeg;base64,/9j/4QPhRXhpZgAATU0AKgAAAAgACAEAAAQAAAABAAABzQE
 const HIST=[{"data": "2026-05-20", "pontos": 40, "motivo": "Início do 2º Ciclo", "tipo": "Ganho", "saldo": 40}, {"data": "2026-05-30", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 43}, {"data": "2026-05-30", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 46}, {"data": "2026-05-30", "pontos": 3, "motivo": "Proatividade na prensa", "tipo": "Ganho", "saldo": 49}, {"data": "2026-06-01", "pontos": 3, "motivo": "Proatividade — fez maionese", "tipo": "Ganho", "saldo": 52}, {"data": "2026-06-01", "pontos": 3, "motivo": "Feedback positivo de cliente", "tipo": "Ganho", "saldo": 55}, {"data": "2026-06-01", "pontos": 3, "motivo": "Proatividade — bandeiras no salão", "tipo": "Ganho", "saldo": 58}, {"data": "2026-06-01", "pontos": -7, "motivo": "Erro — cliente pagou mas esqueceu de lançar pagamento (Cobrança errada)", "tipo": "Perda", "saldo": 51}];
 const TRF=["Efetuar a organização e higienização do balcão da mesa térmica e prateleira de molhos.", "Efetuar a higienização das mesas e a organização das garrafas que serão retornadas.", "Limpar as mesas amarelas e vermelhas do lado de fora, bem como as mesas de madeira no salão, com uma esponja e sabão.", "Higienizar o freezer e fazer a contagem das canecas.", "Limpar e organizar área kids salão, lavar piso área kids externa."];
 const STORE='pg_kauany';
-let tks=[null,null,null,null,null],phs=[null,null,null,null,null],excnt=0,exphs={},rat=0,histOpen=false;
+let tks=[null,null,null,null,null],phs=[[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null]],excnt=0,exphs={},rat=0,histOpen=false;
 let tpSel=null,urgSel=null,chAnx=null,ptAnx=null;
 
 
@@ -754,8 +754,8 @@ async function upTk(i, slotIdx, input) {
     .then(r => r.json())
     .then(data => {
       if (data.secure_url) {
-        if (!phUrls[i]) phUrls[i] = [null, null, null];
-        phUrls[i][slotIdx] = data.secure_url;
+        if (!phs[i]) phs[i] = [null, null, null];
+        phs[i][slotIdx] = data.secure_url;
         if (pv) { pv.src = data.secure_url; pv.style.display = 'block'; }
         if (st) st.textContent = '✅ Enviada!';
         autoSave();
@@ -794,7 +794,7 @@ function setRat(v){rat=v;document.querySelectorAll('.rat span').forEach((s,i)=>s
 
 function autoSave(){
   localStorage.setItem(STORE+'_cl',JSON.stringify({tks,phs,obs:document.getElementById('obs-cl').value,rat}));
-  sbPost('prd_checklist', {colab_id: COLAB_ID, tks: tks, phs: phUrls.map(function(s){return (s||[]).filter(function(f){return f&&f!==null;});}), obs: document.getElementById('obs-cl') ? document.getElementById('obs-cl').value : '', semana: new Date().toISOString().slice(0,10), ts: Date.now()});
+  sbPost('prd_checklist', {colab_id: COLAB_ID, tks: tks, phs: phs.map(function(s){return (s||[]).filter(function(f){return f&&f!==null;});}), obs: document.getElementById('obs-cl') ? document.getElementById('obs-cl').value : '', semana: new Date().toISOString().slice(0,10), ts: Date.now()});
   saveChecklistSB(tks, phs, document.getElementById('obs-cl')?.value, rat);
   const i=document.getElementById('sv-ind');i.style.display='block';setTimeout(()=>i.style.display='none',1500);
 }
@@ -814,7 +814,7 @@ async function submitCL(){
   if(tks.every(s=>s===null)){alert('Responda pelo menos uma tarefa!');return;}
   var semFoto=[];
   tks.forEach(function(s,i){
-    if(s==='sim'){var fs=phUrls[i]||[];if(!fs.some(function(f){return f&&f!==null;}))semFoto.push(i+1);}
+    if(s==='sim'){var fs=phs[i]||[];if(!fs.some(function(f){return f&&f!==null;}))semFoto.push(i+1);}
   });
   if(semFoto.length>0){alert('\u{1F4F7} Obrigatório: foto nas tarefas: '+semFoto.join(', '));return;}
   document.getElementById('sub-btn').disabled=true;document.getElementById('sub-btn').textContent='⏳ Enviando...';
@@ -822,7 +822,7 @@ async function submitCL(){
   let ok=true;
   tks.forEach((s,i)=>{
     const n=TRF[i].substring(0,50)+'...';
-    if(s==='sim'){msg+='✅ '+n;(phUrls[i]||[]).filter(function(f){return f;}).forEach(function(f,fi){msg+='\n📷'+(fi+1)+' '+f;});msg+='\n';}
+    if(s==='sim'){msg+='✅ '+n;(phs[i]||[]).filter(function(f){return f;}).forEach(function(f,fi){msg+='\n📷'+(fi+1)+' '+f;});msg+='\n';}
     else{ok=false;msg+='❌ '+n+'\n';}
   });
   const exs=document.querySelectorAll('.ex-item');
