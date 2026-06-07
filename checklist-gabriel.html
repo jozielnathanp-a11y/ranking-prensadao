@@ -422,31 +422,7 @@ function updateProgress() {
   document.getElementById('progress-text').textContent = done + ' de 5 tarefas concluídas';
 }
 
-async function uploadPhoto(taskIdx, slotIdx, input) {
-  const file = input.files[0];
-  if (!file) return;
-  const status = document.getElementById('status-' + taskIdx + '-' + slotIdx);
-  const preview = document.getElementById('preview-' + taskIdx + '-' + slotIdx);
-  status.textContent = '⏳ Enviando...';
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('upload_preset', CLOUDINARY_PRESET);
-  fetch('https://api.cloudinary.com/v1_1/' + CLOUDINARY_CLOUD + '/image/upload', { method: 'POST', body: formData })
-    .then(r => r.json())
-    .then(data => {
-      if (data.secure_url) {
-        if (!photoURLs[taskIdx]) photoURLs[taskIdx] = [null, null, null];
-        photoURLs[taskIdx][slotIdx] = data.secure_url;
-        preview.src = data.secure_url;
-        preview.style.display = 'block';
-        status.textContent = '✅ Enviada!';
-        autoSave();
-      } else {
-        status.textContent = '❌ Erro. Tente novamente.';
-      }
-    })
-    .catch(() => { status.textContent = '❌ Erro de conexão.'; });
-}
+
 function addExtra() {
   const id = extraCount++;
   const div = document.createElement('div');
@@ -523,7 +499,19 @@ async function submitForm() {
 
   const btn = document.getElementById('submit-btn');
   btn.disabled = true;
-  btn.textContent = '⏳ Enviando...';
+  
+  // Salvar no Supabase para o gestor ver
+  if (typeof sbPost === 'function') {
+    sbPost('prd_checklist', {
+      colab_id: 'gabriel',
+      tks: taskStatus,
+      phs: photoURLs.map(function(s){ return (s||[]).filter(function(f){ return f && f !== null; }); }),
+      obs: document.getElementById('observacoes') ? document.getElementById('observacoes').value : '',
+      semana: new Date().toISOString().slice(0,10),
+      ts: Date.now()
+    });
+  }
+btn.textContent = '⏳ Enviando...';
 
   let resumo = '*✅ Checklist de Limpeza Semanal*\n';
   resumo += '*Colaborador:* ' + nome + '\n';
