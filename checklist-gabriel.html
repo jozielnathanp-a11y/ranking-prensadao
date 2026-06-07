@@ -380,7 +380,7 @@ function autoSave() {
     rating: ratingValue
   };
   localStorage.setItem('checklist_gabriel', JSON.stringify(data));
-  if(typeof sbPost==='function'){sbPost('prd_checklist',{colab:'gabriel',data:(JSON.parse(localStorage.getItem('checklist_gabriel')||'{}').data||new Date().toISOString().split('T')[0]),fotos:JSON.stringify(photoURLs),ts:Date.now()});}
+  
   const ind = document.getElementById('save-indicator');
   ind.style.display = 'block';
   setTimeout(() => ind.style.display = 'none', 2000);
@@ -445,29 +445,57 @@ function removeExtra(id) {
   delete extraPhotoURLs[id];
 }
 
-async function uploadExtraPhoto(id, input) {
-  const file = input.files[0];
+
+function uploadPhoto(taskIdx, slotIdx, input) {
+  var file = input.files[0];
   if (!file) return;
-  const status = document.getElementById('extra-status-' + id);
-  const preview = document.getElementById('extra-preview-' + id);
-  status.textContent = '⏳ Enviando foto...';
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('upload_preset', CLOUDINARY_PRESET);
-  try {
-    const res = await fetch('https://api.cloudinary.com/v1_1/' + CLOUDINARY_CLOUD + '/image/upload', { method: 'POST', body: formData });
-    const data = await res.json();
-    if (data.secure_url) {
-      extraPhotoURLs[id] = data.secure_url;
-      preview.src = data.secure_url;
-      preview.style.display = 'block';
-      status.textContent = '✅ Foto enviada!';
-    } else {
-      status.textContent = '❌ Erro no envio.';
-    }
-  } catch(e) {
-    status.textContent = '❌ Erro no envio.';
-  }
+  var status  = document.getElementById('status-'  + taskIdx + '-' + slotIdx);
+  var preview = document.getElementById('preview-' + taskIdx + '-' + slotIdx);
+  if (status) status.textContent = '⏳ Enviando...';
+  var fd = new FormData();
+  fd.append('file', file);
+  fd.append('upload_preset', CLOUDINARY_PRESET);
+  fetch('https://api.cloudinary.com/v1_1/' + CLOUDINARY_CLOUD + '/image/upload', { method: 'POST', body: fd })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      if (data.secure_url) {
+        if (!photoURLs[taskIdx] || !Array.isArray(photoURLs[taskIdx])) photoURLs[taskIdx] = [null, null, null];
+        photoURLs[taskIdx][slotIdx] = data.secure_url;
+        if (preview) { preview.src = data.secure_url; preview.style.display = 'block'; }
+        if (status)  status.textContent = '✅ Enviada!';
+        autoSave();
+      } else {
+        if (status) status.textContent = '❌ Erro. Tente novamente.';
+        console.error('Cloudinary erro:', data);
+      }
+    })
+    .catch(function(e) {
+      if (status) status.textContent = '❌ Erro de conexão.';
+      console.error('uploadPhoto erro:', e);
+    });
+}
+
+function uploadExtraPhoto(id, input) {
+  var file = input.files[0];
+  if (!file) return;
+  var status = document.getElementById('extra-status-' + id);
+  var preview = document.getElementById('extra-preview-' + id);
+  if (status) status.textContent = '⏳ Enviando foto...';
+  var fd = new FormData();
+  fd.append('file', file);
+  fd.append('upload_preset', CLOUDINARY_PRESET);
+  fetch('https://api.cloudinary.com/v1_1/' + CLOUDINARY_CLOUD + '/image/upload', { method: 'POST', body: fd })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      if (data.secure_url) {
+        extraPhotoURLs[id] = data.secure_url;
+        if (preview) { preview.src = data.secure_url; preview.style.display = 'block'; }
+        if (status) status.textContent = '✅ Foto enviada!';
+      } else {
+        if (status) status.textContent = '❌ Erro no envio.';
+      }
+    })
+    .catch(function() { if (status) status.textContent = '❌ Erro de conexão.'; });
 }
 
 function setRating(val) {
