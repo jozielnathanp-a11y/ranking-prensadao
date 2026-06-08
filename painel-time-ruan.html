@@ -455,49 +455,7 @@ input[type="date"], input[type="time"] {
     <input type="password" id="cfg-cf" placeholder="Confirmar nova senha">
     <button class="cfg-save-btn" onclick="alterarSenha()">🔒 Alterar Senha</button>
 
-    <button class="cfg-sv" localStorage.removeItem('pg_sn_gabriel');
-
-// ===== NOTIFICAÇÕES PUSH =====
-function solicitarNotificacao() {
-  if (!('Notification' in window)) return;
-  if (Notification.permission === 'default') {
-    Notification.requestPermission();
-  }
-}
-
-function updateNotifBtn() {
-  var btn = document.getElementById('notif-btn');
-  if (!btn) return;
-  if (!('Notification' in window)) {
-    btn.textContent = '🔕 Notif. indisponível';
-    btn.classList.add('bloq');
-    return;
-  }
-  if (Notification.permission === 'granted') {
-    btn.innerHTML = '🔔 Notificações ativas';
-    btn.classList.add('ativo');
-    btn.classList.remove('bloq');
-  } else if (Notification.permission === 'denied') {
-    btn.innerHTML = '🔕 Notif. bloqueada';
-    btn.classList.add('bloq');
-    btn.classList.remove('ativo');
-  } else {
-    btn.innerHTML = '🔔 Ativar notificações';
-    btn.classList.remove('ativo','bloq');
-  }
-}
-
-function ativarNotificacao() {
-  if (!('Notification' in window)) {
-    alert('Seu navegador não suporta notificações.');
-    return;
-  }
-  if (Notification.permission === 'granted') {
-    alert('Notificações já estão ativas! ✅');
-    return;
-  }
-  if (Notification.permission === 'denied') {
-    alert('Notificações estão bloqueadas.\nVá em Configurações do navegador > Notificações e permita este site.');
+    <button class="cfg-sv" onclick="localStorage.removeItem('pg_sn_ruan'); location.reload();">🚪 Sair</button> Notificações e permita este site.');
     return;
   }
   Notification.requestPermission().then(function(p) {

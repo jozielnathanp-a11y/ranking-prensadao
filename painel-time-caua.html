@@ -455,7 +455,7 @@ input[type="date"], input[type="time"] {
     <input type="password" id="cfg-cf" placeholder="Confirmar nova senha">
     <button class="cfg-save-btn" onclick="alterarSenha()">🔒 Alterar Senha</button>
 
-    <button class="cfg-sv" localStorage.removeItem('pg_sn_caua');
+    <button class="cfg-sv" onclick="localStorage.removeItem('pg_sn_caua'); location.reload();">🚪 Sair</button>
 
 // ===== NOTIFICAÇÕES PUSH =====
 function solicitarNotificacao() {
