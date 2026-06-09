@@ -36,7 +36,6 @@
     .msg{text-align:center;margin-top:16px;font-size:0.9rem;padding:12px;border-radius:8px;display:none}
     .msg.ok{background:#1a4a1a;color:#4caf50;display:block}
     .msg.err{background:#4a1a1a;color:#f44336;display:block}
-    .tag-salvo{display:inline-block;background:#1a3a1a;color:#4caf50;font-size:0.7rem;padding:2px 8px;border-radius:10px;margin-left:8px;vertical-align:middle}
   </style>
 </head>
 <body>
@@ -45,13 +44,13 @@
   <div class="salvo-info" id="salvo-info">Carregando rascunho...</div>
   <div class="prog"><div class="prog-fill" id="prog-fill"></div></div>
   <div id="tarefas-container"></div>
-  <textarea class="obs-area" id="obs-geral" placeholder="Observações gerais (opcional)..." oninput="salvarLocal()"></textarea>
+  <textarea class="obs-area" id="obs-geral" placeholder="Observacoes gerais (opcional)..." oninput="salvarLocal()"></textarea>
   <button class="btn-enviar" id="btn-enviar">Enviar Checklist</button>
   <button class="btn-limpar" id="btn-limpar">Limpar rascunho e recomecar</button>
   <div class="msg" id="msg"></div>
 
 <script>
-var TAREFAS = ["Lavar o balcão onde as embalagens e batata palha são armazenadas com água e sabão, e organizá-lo.", "Realizar a limpeza do freezer branco com água e sabão, seguida da higienização de bandejas e potes de maionese.", "Realizar a higienização da estufa e do fogão com água e sabão, mantendo o balcão organizado e limpo.", "Higienizar a mesa de fritura e recipientes de porção, organizando embalagens e efetuando contagem dos potes.", "Limpar o armário dos funcionários removendo a gordura e sujeira externa."];
+var TAREFAS = ["Efetuar a organização e higienização do balcão da mesa térmica e prateleira de molhos.", "Efetuar a higienização das mesas e a organização das garrafas que serão retornadas.", "Limpar as mesas amarelas e vermelhas do lado de fora, bem como as mesas de madeira no salão, com uma esponja e sabão.", "Higienizar o freezer e fazer a contagem das canecas.", "Limpar e organizar área kids salão, lavar piso área kids externa."];
 var COLAB_ID = 'cl-kauany';
 var CL_CLOUD = 'dewulu3tj';
 var CL_PRESET = 'checklist_prensadao';
@@ -86,19 +85,15 @@ function salvarLocal() {
   try {
     localStorage.setItem(STORE_KEY, JSON.stringify(estado));
     var agora = new Date().toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
-    document.getElementById('salvo-info').textContent = 'Rascunho salvo automaticamente as ' + agora;
+    document.getElementById('salvo-info').textContent = 'Salvo automaticamente as ' + agora;
   } catch(e) {}
 }
 
 function carregarLocal() {
   try {
     var raw = localStorage.getItem(STORE_KEY);
-    if (!raw) {
-      document.getElementById('salvo-info').textContent = 'Nenhum rascunho salvo ainda';
-      return false;
-    }
+    if (!raw) { document.getElementById('salvo-info').textContent = 'Nenhum rascunho salvo ainda'; return false; }
     var estado = JSON.parse(raw);
-    // Checar se e da semana atual
     if (estado.semana !== semanaAtual()) {
       document.getElementById('salvo-info').textContent = 'Rascunho da semana passada descartado';
       localStorage.removeItem(STORE_KEY);
@@ -110,10 +105,7 @@ function carregarLocal() {
     var agora = new Date(estado.ts).toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
     document.getElementById('salvo-info').textContent = 'Rascunho recuperado (salvo as ' + agora + ')';
     return true;
-  } catch(e) {
-    document.getElementById('salvo-info').textContent = '';
-    return false;
-  }
+  } catch(e) { document.getElementById('salvo-info').textContent = ''; return false; }
 }
 
 function render() {
@@ -122,29 +114,21 @@ function render() {
   TAREFAS.forEach(function(t, i) {
     var div = document.createElement('div');
     div.className = 'tarefa';
-    div.id = 'tarefa-' + i;
-
     var respSalva = respostas[i] || respostas[String(i)];
     var fotosSalvas = fotos[i] || fotos[String(i)] || [];
-
     var simAtivo = respSalva === 'sim' ? ' ativo-sim' : '';
     var naoAtivo = respSalva === 'nao' ? ' ativo-nao' : '';
     var fotosVis = respSalva === 'sim' ? ' vis' : '';
-
     var fotoSlots = '';
     for (var s = 0; s < 3; s++) {
       var urlSalva = fotosSalvas[s] || '';
-      var imgDisplay = urlSalva ? 'style="display:block"' : '';
-      var imgSrc = urlSalva ? 'src="' + urlSalva + '"' : '';
-      var stTxt = urlSalva ? 'Enviada!' : '';
       fotoSlots += '<div class="slot">' +
         '<label for="foto-' + i + '-' + s + '">Foto ' + (s+1) + '</label>' +
         '<input type="file" id="foto-' + i + '-' + s + '" accept="image/*">' +
-        '<div class="st" id="st-' + i + '-' + s + '">' + stTxt + '</div>' +
-        '<img id="pv-' + i + '-' + s + '" ' + imgSrc + ' ' + imgDisplay + '>' +
+        '<div class="st" id="st-' + i + '-' + s + '">' + (urlSalva ? 'Enviada!' : '') + '</div>' +
+        '<img id="pv-' + i + '-' + s + '"' + (urlSalva ? ' src="'+urlSalva+'" style="display:block"' : '') + '>' +
         '</div>';
     }
-
     div.innerHTML =
       '<div class="tdesc">' + (i+1) + '. ' + t + '</div>' +
       '<div class="tbotoes">' +
@@ -155,23 +139,17 @@ function render() {
         '<div class="foto-label">Foto da limpeza (obrigatorio ao menos 1):</div>' +
         '<div class="slots">' + fotoSlots + '</div>' +
       '</div>';
-
     c.appendChild(div);
-
-    // Bind botoes
     (function(idx) {
       document.getElementById('btn-sim-' + idx).onclick = function() { selecionar(idx, 'sim'); };
       document.getElementById('btn-nao-' + idx).onclick = function() { selecionar(idx, 'nao'); };
       for (var s = 0; s < 3; s++) {
         (function(slot) {
-          document.getElementById('foto-' + idx + '-' + slot).onchange = function() {
-            uploadFoto(idx, slot, this);
-          };
+          document.getElementById('foto-' + idx + '-' + slot).onchange = function() { uploadFoto(idx, slot, this); };
         })(s);
       }
     })(i);
   });
-
   atualizarProg();
 }
 
@@ -180,11 +158,7 @@ function selecionar(i, v) {
   document.getElementById('btn-sim-' + i).className = 'tbtn' + (v === 'sim' ? ' ativo-sim' : '');
   document.getElementById('btn-nao-' + i).className = 'tbtn' + (v === 'nao' ? ' ativo-nao' : '');
   var fotosDiv = document.getElementById('fotos-' + i);
-  if (v === 'sim') {
-    fotosDiv.classList.add('vis');
-  } else {
-    fotosDiv.classList.remove('vis');
-  }
+  if (v === 'sim') { fotosDiv.classList.add('vis'); } else { fotosDiv.classList.remove('vis'); }
   atualizarProg();
   salvarLocal();
 }
@@ -208,9 +182,7 @@ function uploadFoto(i, slot, input) {
         pv.style.display = 'block';
         st.textContent = 'Enviada!';
         salvarLocal();
-      } else {
-        st.textContent = 'Erro. Tente novamente.';
-      }
+      } else { st.textContent = 'Erro. Tente novamente.'; }
     })
     .catch(function() { st.textContent = 'Erro de conexao.'; });
 }
@@ -218,50 +190,25 @@ function uploadFoto(i, slot, input) {
 document.getElementById('btn-enviar').onclick = function() {
   for (var i = 0; i < TAREFAS.length; i++) {
     if (!respostas[i] && !respostas[String(i)]) {
-      mostrarMsg('Responda todas as tarefas antes de enviar!', 'err');
-      return;
+      mostrarMsg('Responda todas as tarefas antes de enviar!', 'err'); return;
     }
     var resp = respostas[i] || respostas[String(i)];
     if (resp === 'sim') {
       var ft = fotos[i] || fotos[String(i)] || [];
-      var temFoto = ft.filter(function(f) { return f; }).length > 0;
-      if (!temFoto) {
-        mostrarMsg('Tarefa ' + (i+1) + ': envie ao menos 1 foto para as tarefas feitas.', 'err');
-        return;
+      if (ft.filter(function(f){return f;}).length === 0) {
+        mostrarMsg('Tarefa ' + (i+1) + ': envie ao menos 1 foto para as tarefas feitas.', 'err'); return;
       }
     }
   }
-
   var btn = document.getElementById('btn-enviar');
   btn.disabled = true;
   btn.textContent = 'Enviando...';
-
-  var tks = {};
-  for (var k in respostas) tks[k] = respostas[k];
-  var phs = {};
-  for (var k in fotos) {
-    var ft2 = fotos[k].filter(function(f) { return f; });
-    if (ft2.length > 0) phs[k] = ft2;
-  }
-
-  var payload = {
-    colab_id: COLAB_ID,
-    tks: tks,
-    phs: phs,
-    obs: document.getElementById('obs-geral').value,
-    semana: semanaAtual(),
-    ts: Date.now()
-  };
-
+  var tks = {}; for (var k in respostas) tks[k] = respostas[k];
+  var phs = {}; for (var k in fotos) { var ft2 = fotos[k].filter(function(f){return f;}); if (ft2.length > 0) phs[k] = ft2; }
   fetch(SB_URL + '/rest/v1/prd_checklist', {
     method: 'POST',
-    headers: {
-      'apikey': SB_KEY,
-      'Authorization': 'Bearer ' + SB_KEY,
-      'Content-Type': 'application/json',
-      'Prefer': 'return=minimal'
-    },
-    body: JSON.stringify(payload)
+    headers: {'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal'},
+    body: JSON.stringify({colab_id: COLAB_ID, tks: tks, phs: phs, obs: document.getElementById('obs-geral').value, semana: semanaAtual(), ts: Date.now()})
   })
   .then(function(r) {
     if (r.ok || r.status === 201) {
@@ -269,11 +216,9 @@ document.getElementById('btn-enviar').onclick = function() {
       mostrarMsg('Checklist enviado com sucesso!', 'ok');
       btn.textContent = 'Enviado!';
       document.getElementById('salvo-info').textContent = 'Enviado com sucesso!';
-    } else {
-      return r.text().then(function(t) { throw new Error(t); });
-    }
+    } else { return r.text().then(function(t) { throw new Error(t); }); }
   })
-  .catch(function(e) {
+  .catch(function() {
     mostrarMsg('Erro ao enviar. Tente novamente.', 'err');
     btn.disabled = false;
     btn.textContent = 'Enviar Checklist';
@@ -283,8 +228,7 @@ document.getElementById('btn-enviar').onclick = function() {
 document.getElementById('btn-limpar').onclick = function() {
   if (confirm('Tem certeza? O rascunho sera apagado.')) {
     localStorage.removeItem(STORE_KEY);
-    respostas = {};
-    fotos = {};
+    respostas = {}; fotos = {};
     document.getElementById('obs-geral').value = '';
     document.getElementById('salvo-info').textContent = 'Rascunho apagado';
     document.getElementById('msg').className = 'msg';
@@ -299,7 +243,6 @@ function mostrarMsg(txt, tipo) {
   el.scrollIntoView({behavior:'smooth'});
 }
 
-// Iniciar
 carregarLocal();
 render();
 </script>
