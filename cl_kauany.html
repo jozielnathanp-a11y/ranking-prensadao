@@ -3,14 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
-  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Cache-Control" content="no-store, no-cache">
   <title>Checklist — Kauany</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:sans-serif;background:#0d0d0d;color:#fff;padding:16px;max-width:480px;margin:0 auto}
     h1{font-size:1.2rem;text-align:center;margin-bottom:4px;color:#ff6a00}
-    .sub{text-align:center;font-size:0.8rem;color:#666;margin-bottom:20px}
+    .sub{text-align:center;font-size:0.8rem;color:#666;margin-bottom:6px}
+    .salvo-info{text-align:center;font-size:0.72rem;color:#555;margin-bottom:16px;min-height:16px}
+    .prog{background:#1a1a1a;border-radius:8px;height:8px;margin-bottom:20px;overflow:hidden}
+    .prog-fill{height:100%;background:#ff6a00;transition:width 0.3s;width:0%}
     .tarefa{background:#1a1a1a;border-radius:12px;padding:14px;margin-bottom:14px}
     .tdesc{font-size:0.9rem;color:#ccc;margin-bottom:10px;line-height:1.4}
     .tbotoes{display:flex;gap:8px;margin-bottom:10px}
@@ -30,20 +32,22 @@
     .obs-area{width:100%;background:#111;border:1px solid #333;border-radius:8px;color:#fff;padding:10px;font-size:0.85rem;margin-top:6px;resize:vertical;min-height:60px}
     .btn-enviar{width:100%;padding:16px;background:#ff6a00;color:#fff;border:none;border-radius:12px;font-size:1rem;font-weight:bold;cursor:pointer;margin-top:20px}
     .btn-enviar:disabled{background:#555;cursor:not-allowed}
+    .btn-limpar{width:100%;padding:10px;background:#222;color:#888;border:none;border-radius:8px;font-size:0.82rem;cursor:pointer;margin-top:8px}
     .msg{text-align:center;margin-top:16px;font-size:0.9rem;padding:12px;border-radius:8px;display:none}
     .msg.ok{background:#1a4a1a;color:#4caf50;display:block}
     .msg.err{background:#4a1a1a;color:#f44336;display:block}
-    .prog{background:#1a1a1a;border-radius:8px;height:8px;margin-bottom:20px;overflow:hidden}
-    .prog-fill{height:100%;background:#ff6a00;transition:width 0.3s;width:0%}
+    .tag-salvo{display:inline-block;background:#1a3a1a;color:#4caf50;font-size:0.7rem;padding:2px 8px;border-radius:10px;margin-left:8px;vertical-align:middle}
   </style>
 </head>
 <body>
-  <h1>🔥 PRENSADÃO</h1>
+  <h1>PRENSADAO</h1>
   <p class="sub">Checklist de Limpeza — Kauany</p>
+  <div class="salvo-info" id="salvo-info">Carregando rascunho...</div>
   <div class="prog"><div class="prog-fill" id="prog-fill"></div></div>
   <div id="tarefas-container"></div>
-  <textarea class="obs-area" id="obs-geral" placeholder="Observações gerais (opcional)..."></textarea>
-  <button class="btn-enviar" id="btn-enviar" onclick="enviar()">📤 ENVIAR CHECKLIST</button>
+  <textarea class="obs-area" id="obs-geral" placeholder="Observações gerais (opcional)..." oninput="salvarLocal()"></textarea>
+  <button class="btn-enviar" id="btn-enviar">Enviar Checklist</button>
+  <button class="btn-limpar" id="btn-limpar">Limpar rascunho e recomecar</button>
   <div class="msg" id="msg"></div>
 
 <script>
@@ -53,6 +57,7 @@ var CL_CLOUD = 'dewulu3tj';
 var CL_PRESET = 'checklist_prensadao';
 var SB_URL = 'https://trbyynbtuzpszdvjivbs.supabase.co';
 var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRyYnl5bmJ0dXpwc3pkdmppdmJzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3ODIyODAxOCwiZXhwIjoyMDkzODA0MDE4fQ.OZq8bycNQWEpdbxPiSuB9gt7A0fPKNkawcrtE5XpGFg';
+var STORE_KEY = 'cl_rascunho_cl-kauany';
 
 var respostas = {};
 var fotos = {};
@@ -70,6 +75,47 @@ function atualizarProg() {
   document.getElementById('prog-fill').style.width = Math.round((feitos/total)*100) + '%';
 }
 
+function salvarLocal() {
+  var estado = {
+    respostas: respostas,
+    fotos: fotos,
+    obs: document.getElementById('obs-geral').value,
+    semana: semanaAtual(),
+    ts: Date.now()
+  };
+  try {
+    localStorage.setItem(STORE_KEY, JSON.stringify(estado));
+    var agora = new Date().toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
+    document.getElementById('salvo-info').textContent = 'Rascunho salvo automaticamente as ' + agora;
+  } catch(e) {}
+}
+
+function carregarLocal() {
+  try {
+    var raw = localStorage.getItem(STORE_KEY);
+    if (!raw) {
+      document.getElementById('salvo-info').textContent = 'Nenhum rascunho salvo ainda';
+      return false;
+    }
+    var estado = JSON.parse(raw);
+    // Checar se e da semana atual
+    if (estado.semana !== semanaAtual()) {
+      document.getElementById('salvo-info').textContent = 'Rascunho da semana passada descartado';
+      localStorage.removeItem(STORE_KEY);
+      return false;
+    }
+    respostas = estado.respostas || {};
+    fotos = estado.fotos || {};
+    document.getElementById('obs-geral').value = estado.obs || '';
+    var agora = new Date(estado.ts).toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
+    document.getElementById('salvo-info').textContent = 'Rascunho recuperado (salvo as ' + agora + ')';
+    return true;
+  } catch(e) {
+    document.getElementById('salvo-info').textContent = '';
+    return false;
+  }
+}
+
 function render() {
   var c = document.getElementById('tarefas-container');
   c.innerHTML = '';
@@ -77,27 +123,62 @@ function render() {
     var div = document.createElement('div');
     div.className = 'tarefa';
     div.id = 'tarefa-' + i;
-    div.innerHTML = '<div class="tdesc">' + (i+1) + '. ' + t + '</div>' +
+
+    var respSalva = respostas[i] || respostas[String(i)];
+    var fotosSalvas = fotos[i] || fotos[String(i)] || [];
+
+    var simAtivo = respSalva === 'sim' ? ' ativo-sim' : '';
+    var naoAtivo = respSalva === 'nao' ? ' ativo-nao' : '';
+    var fotosVis = respSalva === 'sim' ? ' vis' : '';
+
+    var fotoSlots = '';
+    for (var s = 0; s < 3; s++) {
+      var urlSalva = fotosSalvas[s] || '';
+      var imgDisplay = urlSalva ? 'style="display:block"' : '';
+      var imgSrc = urlSalva ? 'src="' + urlSalva + '"' : '';
+      var stTxt = urlSalva ? 'Enviada!' : '';
+      fotoSlots += '<div class="slot">' +
+        '<label for="foto-' + i + '-' + s + '">Foto ' + (s+1) + '</label>' +
+        '<input type="file" id="foto-' + i + '-' + s + '" accept="image/*">' +
+        '<div class="st" id="st-' + i + '-' + s + '">' + stTxt + '</div>' +
+        '<img id="pv-' + i + '-' + s + '" ' + imgSrc + ' ' + imgDisplay + '>' +
+        '</div>';
+    }
+
+    div.innerHTML =
+      '<div class="tdesc">' + (i+1) + '. ' + t + '</div>' +
       '<div class="tbotoes">' +
-        '<button class="tbtn" id="btn-sim-' + i + '" onclick="selecionar(' + i + ',\'sim\')">✅ Sim, fiz</button>' +
-        '<button class="tbtn" id="btn-nao-' + i + '" onclick="selecionar(' + i + ',\'nao\')">❌ Não fiz</button>' +
+        '<button class="tbtn' + simAtivo + '" id="btn-sim-' + i + '">Sim, fiz</button>' +
+        '<button class="tbtn' + naoAtivo + '" id="btn-nao-' + i + '">Nao fiz</button>' +
       '</div>' +
-      '<div class="fotos" id="fotos-' + i + '">' +
-        '<div class="foto-label">📷 Foto da limpeza (obrigatória):</div>' +
-        '<div class="slots">' +
-          '<div class="slot"><label for="foto-' + i + '-0">📁 Foto 1</label><input type="file" id="foto-' + i + '-0" accept="image/*" onchange="uploadFoto(' + i + ',0,this)"><div class="st" id="st-' + i + '-0"></div><img id="pv-' + i + '-0"></div>' +
-          '<div class="slot"><label for="foto-' + i + '-1">📁 Foto 2</label><input type="file" id="foto-' + i + '-1" accept="image/*" onchange="uploadFoto(' + i + ',1,this)"><div class="st" id="st-' + i + '-1"></div><img id="pv-' + i + '-1"></div>' +
-          '<div class="slot"><label for="foto-' + i + '-2">📁 Foto 3</label><input type="file" id="foto-' + i + '-2" accept="image/*" onchange="uploadFoto(' + i + ',2,this)"><div class="st" id="st-' + i + '-2"></div><img id="pv-' + i + '-2"></div>' +
-        '</div>' +
+      '<div class="fotos' + fotosVis + '" id="fotos-' + i + '">' +
+        '<div class="foto-label">Foto da limpeza (obrigatorio ao menos 1):</div>' +
+        '<div class="slots">' + fotoSlots + '</div>' +
       '</div>';
+
     c.appendChild(div);
+
+    // Bind botoes
+    (function(idx) {
+      document.getElementById('btn-sim-' + idx).onclick = function() { selecionar(idx, 'sim'); };
+      document.getElementById('btn-nao-' + idx).onclick = function() { selecionar(idx, 'nao'); };
+      for (var s = 0; s < 3; s++) {
+        (function(slot) {
+          document.getElementById('foto-' + idx + '-' + slot).onchange = function() {
+            uploadFoto(idx, slot, this);
+          };
+        })(s);
+      }
+    })(i);
   });
+
+  atualizarProg();
 }
 
 function selecionar(i, v) {
   respostas[i] = v;
-  document.getElementById('btn-sim-' + i).className = 'tbtn' + (v==='sim' ? ' ativo-sim' : '');
-  document.getElementById('btn-nao-' + i).className = 'tbtn' + (v==='nao' ? ' ativo-nao' : '');
+  document.getElementById('btn-sim-' + i).className = 'tbtn' + (v === 'sim' ? ' ativo-sim' : '');
+  document.getElementById('btn-nao-' + i).className = 'tbtn' + (v === 'nao' ? ' ativo-nao' : '');
   var fotosDiv = document.getElementById('fotos-' + i);
   if (v === 'sim') {
     fotosDiv.classList.add('vis');
@@ -105,6 +186,7 @@ function selecionar(i, v) {
     fotosDiv.classList.remove('vis');
   }
   atualizarProg();
+  salvarLocal();
 }
 
 function uploadFoto(i, slot, input) {
@@ -112,7 +194,7 @@ function uploadFoto(i, slot, input) {
   if (!file) return;
   var st = document.getElementById('st-' + i + '-' + slot);
   var pv = document.getElementById('pv-' + i + '-' + slot);
-  st.textContent = '⏳ Enviando...';
+  st.textContent = 'Enviando...';
   var fd = new FormData();
   fd.append('file', file);
   fd.append('upload_preset', CL_PRESET);
@@ -124,25 +206,27 @@ function uploadFoto(i, slot, input) {
         fotos[i][slot] = d.secure_url;
         pv.src = d.secure_url;
         pv.style.display = 'block';
-        st.textContent = '✅ Enviada!';
+        st.textContent = 'Enviada!';
+        salvarLocal();
       } else {
-        st.textContent = '❌ Erro. Tente novamente.';
+        st.textContent = 'Erro. Tente novamente.';
       }
     })
-    .catch(function() { st.textContent = '❌ Erro de conexão.'; });
+    .catch(function() { st.textContent = 'Erro de conexao.'; });
 }
 
-function enviar() {
-  // Validar que todos responderam
+document.getElementById('btn-enviar').onclick = function() {
   for (var i = 0; i < TAREFAS.length; i++) {
-    if (!respostas[i]) {
+    if (!respostas[i] && !respostas[String(i)]) {
       mostrarMsg('Responda todas as tarefas antes de enviar!', 'err');
       return;
     }
-    if (respostas[i] === 'sim') {
-      var temFoto = fotos[i] && fotos[i].filter(function(f){return f;}).length > 0;
+    var resp = respostas[i] || respostas[String(i)];
+    if (resp === 'sim') {
+      var ft = fotos[i] || fotos[String(i)] || [];
+      var temFoto = ft.filter(function(f) { return f; }).length > 0;
       if (!temFoto) {
-        mostrarMsg('Tarefa ' + (i+1) + ': envie ao menos 1 foto para as tarefas marcadas como feitas.', 'err');
+        mostrarMsg('Tarefa ' + (i+1) + ': envie ao menos 1 foto para as tarefas feitas.', 'err');
         return;
       }
     }
@@ -150,13 +234,15 @@ function enviar() {
 
   var btn = document.getElementById('btn-enviar');
   btn.disabled = true;
-  btn.textContent = '⏳ Enviando...';
+  btn.textContent = 'Enviando...';
 
   var tks = {};
   for (var k in respostas) tks[k] = respostas[k];
-
   var phs = {};
-  for (var k in fotos) phs[k] = fotos[k].filter(function(f){return f;});
+  for (var k in fotos) {
+    var ft2 = fotos[k].filter(function(f) { return f; });
+    if (ft2.length > 0) phs[k] = ft2;
+  }
 
   var payload = {
     colab_id: COLAB_ID,
@@ -179,19 +265,32 @@ function enviar() {
   })
   .then(function(r) {
     if (r.ok || r.status === 201) {
-      mostrarMsg('✅ Checklist enviado com sucesso!', 'ok');
-      btn.textContent = '✅ Enviado!';
+      localStorage.removeItem(STORE_KEY);
+      mostrarMsg('Checklist enviado com sucesso!', 'ok');
+      btn.textContent = 'Enviado!';
+      document.getElementById('salvo-info').textContent = 'Enviado com sucesso!';
     } else {
       return r.text().then(function(t) { throw new Error(t); });
     }
   })
   .catch(function(e) {
-    mostrarMsg('❌ Erro ao enviar. Tente novamente.', 'err');
+    mostrarMsg('Erro ao enviar. Tente novamente.', 'err');
     btn.disabled = false;
-    btn.textContent = '📤 ENVIAR CHECKLIST';
-    console.error(e);
+    btn.textContent = 'Enviar Checklist';
   });
-}
+};
+
+document.getElementById('btn-limpar').onclick = function() {
+  if (confirm('Tem certeza? O rascunho sera apagado.')) {
+    localStorage.removeItem(STORE_KEY);
+    respostas = {};
+    fotos = {};
+    document.getElementById('obs-geral').value = '';
+    document.getElementById('salvo-info').textContent = 'Rascunho apagado';
+    document.getElementById('msg').className = 'msg';
+    render();
+  }
+};
 
 function mostrarMsg(txt, tipo) {
   var el = document.getElementById('msg');
@@ -200,6 +299,8 @@ function mostrarMsg(txt, tipo) {
   el.scrollIntoView({behavior:'smooth'});
 }
 
+// Iniciar
+carregarLocal();
 render();
 </script>
 </body>
