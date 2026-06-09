@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+  <meta http-equiv="Pragma" content="no-cache">
+  <title>Checklist — Cauã</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:sans-serif;background:#0d0d0d;color:#fff;padding:16px;max-width:480px;margin:0 auto}
+    h1{font-size:1.2rem;text-align:center;margin-bottom:4px;color:#ff6a00}
+    .sub{text-align:center;font-size:0.8rem;color:#666;margin-bottom:20px}
+    .tarefa{background:#1a1a1a;border-radius:12px;padding:14px;margin-bottom:14px}
+    .tdesc{font-size:0.9rem;color:#ccc;margin-bottom:10px;line-height:1.4}
+    .tbotoes{display:flex;gap:8px;margin-bottom:10px}
+    .tbtn{flex:1;padding:10px;border:none;border-radius:8px;font-size:0.85rem;cursor:pointer;background:#222;color:#888;transition:all 0.2s}
+    .tbtn.ativo-sim{background:#1a4a1a;color:#4caf50;font-weight:bold}
+    .tbtn.ativo-nao{background:#4a1a1a;color:#f44336;font-weight:bold}
+    .fotos{display:none;margin-top:8px}
+    .fotos.vis{display:block}
+    .foto-label{font-size:0.78rem;color:#888;margin-bottom:6px}
+    .slots{display:flex;gap:8px;flex-wrap:wrap}
+    .slot{flex:1;min-width:90px}
+    .slot label{display:block;background:#252525;border:1px dashed #444;border-radius:8px;text-align:center;padding:10px 6px;font-size:0.78rem;color:#aaa;cursor:pointer}
+    .slot label:hover{border-color:#ff6a00;color:#ff6a00}
+    .slot input{display:none}
+    .slot .st{font-size:0.72rem;color:#888;margin-top:4px;text-align:center;min-height:16px}
+    .slot img{width:100%;border-radius:6px;margin-top:4px;display:none}
+    .obs-area{width:100%;background:#111;border:1px solid #333;border-radius:8px;color:#fff;padding:10px;font-size:0.85rem;margin-top:6px;resize:vertical;min-height:60px}
+    .btn-enviar{width:100%;padding:16px;background:#ff6a00;color:#fff;border:none;border-radius:12px;font-size:1rem;font-weight:bold;cursor:pointer;margin-top:20px}
+    .btn-enviar:disabled{background:#555;cursor:not-allowed}
+    .msg{text-align:center;margin-top:16px;font-size:0.9rem;padding:12px;border-radius:8px;display:none}
+    .msg.ok{background:#1a4a1a;color:#4caf50;display:block}
+    .msg.err{background:#4a1a1a;color:#f44336;display:block}
+    .prog{background:#1a1a1a;border-radius:8px;height:8px;margin-bottom:20px;overflow:hidden}
+    .prog-fill{height:100%;background:#ff6a00;transition:width 0.3s;width:0%}
+  </style>
+</head>
+<body>
+  <h1>🔥 PRENSADÃO</h1>
+  <p class="sub">Checklist de Limpeza — Cauã</p>
+  <div class="prog"><div class="prog-fill" id="prog-fill"></div></div>
+  <div id="tarefas-container"></div>
+  <textarea class="obs-area" id="obs-geral" placeholder="Observações gerais (opcional)..."></textarea>
+  <button class="btn-enviar" id="btn-enviar" onclick="enviar()">📤 ENVIAR CHECKLIST</button>
+  <div class="msg" id="msg"></div>
+
+<script>
+var TAREFAS = ["Lavar o balcão onde as embalagens e batata palha são armazenadas com água e sabão, e organizá-lo.", "Realizar a limpeza do freezer branco com água e sabão, seguida da higienização de bandejas e potes de maionese.", "Realizar a higienização da estufa e do fogão com água e sabão, mantendo o balcão organizado e limpo.", "Higienizar a mesa de fritura e recipientes de porção, organizando embalagens e efetuando contagem dos potes.", "Limpar o armário dos funcionários removendo a gordura e sujeira externa."];
+var COLAB_ID = 'cl-caua';
+var CL_CLOUD = 'dewulu3tj';
+var CL_PRESET = 'checklist_prensadao';
+var SB_URL = 'https://trbyynbtuzpszdvjivbs.supabase.co';
+var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRyYnl5bmJ0dXpwc3pkdmppdmJzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3ODIyODAxOCwiZXhwIjoyMDkzODA0MDE4fQ.OZq8bycNQWEpdbxPiSuB9gt7A0fPKNkawcrtE5XpGFg';
+
+var respostas = {};
+var fotos = {};
+
+function semanaAtual() {
+  var d = new Date();
+  var jan1 = new Date(d.getFullYear(), 0, 1);
+  var sem = Math.ceil(((d - jan1) / 86400000 + jan1.getDay() + 1) / 7);
+  return d.getFullYear() + '-W' + String(sem).padStart(2, '0');
+}
+
+function atualizarProg() {
+  var total = TAREFAS.length;
+  var feitos = Object.keys(respostas).length;
+  document.getElementById('prog-fill').style.width = Math.round((feitos/total)*100) + '%';
+}
+
+function render() {
+  var c = document.getElementById('tarefas-container');
+  c.innerHTML = '';
+  TAREFAS.forEach(function(t, i) {
+    var div = document.createElement('div');
+    div.className = 'tarefa';
+    div.id = 'tarefa-' + i;
+    div.innerHTML = '<div class="tdesc">' + (i+1) + '. ' + t + '</div>' +
+      '<div class="tbotoes">' +
+        '<button class="tbtn" id="btn-sim-' + i + '" onclick="selecionar(' + i + ',\'sim\')">✅ Sim, fiz</button>' +
+        '<button class="tbtn" id="btn-nao-' + i + '" onclick="selecionar(' + i + ',\'nao\')">❌ Não fiz</button>' +
+      '</div>' +
+      '<div class="fotos" id="fotos-' + i + '">' +
+        '<div class="foto-label">📷 Foto da limpeza (obrigatória):</div>' +
+        '<div class="slots">' +
+          '<div class="slot"><label for="foto-' + i + '-0">📁 Foto 1</label><input type="file" id="foto-' + i + '-0" accept="image/*" onchange="uploadFoto(' + i + ',0,this)"><div class="st" id="st-' + i + '-0"></div><img id="pv-' + i + '-0"></div>' +
+          '<div class="slot"><label for="foto-' + i + '-1">📁 Foto 2</label><input type="file" id="foto-' + i + '-1" accept="image/*" onchange="uploadFoto(' + i + ',1,this)"><div class="st" id="st-' + i + '-1"></div><img id="pv-' + i + '-1"></div>' +
+          '<div class="slot"><label for="foto-' + i + '-2">📁 Foto 3</label><input type="file" id="foto-' + i + '-2" accept="image/*" onchange="uploadFoto(' + i + ',2,this)"><div class="st" id="st-' + i + '-2"></div><img id="pv-' + i + '-2"></div>' +
+        '</div>' +
+      '</div>';
+    c.appendChild(div);
+  });
+}
+
+function selecionar(i, v) {
+  respostas[i] = v;
+  document.getElementById('btn-sim-' + i).className = 'tbtn' + (v==='sim' ? ' ativo-sim' : '');
+  document.getElementById('btn-nao-' + i).className = 'tbtn' + (v==='nao' ? ' ativo-nao' : '');
+  var fotosDiv = document.getElementById('fotos-' + i);
+  if (v === 'sim') {
+    fotosDiv.classList.add('vis');
+  } else {
+    fotosDiv.classList.remove('vis');
+  }
+  atualizarProg();
+}
+
+function uploadFoto(i, slot, input) {
+  var file = input.files[0];
+  if (!file) return;
+  var st = document.getElementById('st-' + i + '-' + slot);
+  var pv = document.getElementById('pv-' + i + '-' + slot);
+  st.textContent = '⏳ Enviando...';
+  var fd = new FormData();
+  fd.append('file', file);
+  fd.append('upload_preset', CL_PRESET);
+  fetch('https://api.cloudinary.com/v1_1/' + CL_CLOUD + '/image/upload', {method:'POST', body:fd})
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.secure_url) {
+        if (!fotos[i]) fotos[i] = [];
+        fotos[i][slot] = d.secure_url;
+        pv.src = d.secure_url;
+        pv.style.display = 'block';
+        st.textContent = '✅ Enviada!';
+      } else {
+        st.textContent = '❌ Erro. Tente novamente.';
+      }
+    })
+    .catch(function() { st.textContent = '❌ Erro de conexão.'; });
+}
+
+function enviar() {
+  // Validar que todos responderam
+  for (var i = 0; i < TAREFAS.length; i++) {
+    if (!respostas[i]) {
+      mostrarMsg('Responda todas as tarefas antes de enviar!', 'err');
+      return;
+    }
+    if (respostas[i] === 'sim') {
+      var temFoto = fotos[i] && fotos[i].filter(function(f){return f;}).length > 0;
+      if (!temFoto) {
+        mostrarMsg('Tarefa ' + (i+1) + ': envie ao menos 1 foto para as tarefas marcadas como feitas.', 'err');
+        return;
+      }
+    }
+  }
+
+  var btn = document.getElementById('btn-enviar');
+  btn.disabled = true;
+  btn.textContent = '⏳ Enviando...';
+
+  var tks = {};
+  for (var k in respostas) tks[k] = respostas[k];
+
+  var phs = {};
+  for (var k in fotos) phs[k] = fotos[k].filter(function(f){return f;});
+
+  var payload = {
+    colab_id: COLAB_ID,
+    tks: tks,
+    phs: phs,
+    obs: document.getElementById('obs-geral').value,
+    semana: semanaAtual(),
+    ts: Date.now()
+  };
+
+  fetch(SB_URL + '/rest/v1/prd_checklist', {
+    method: 'POST',
+    headers: {
+      'apikey': SB_KEY,
+      'Authorization': 'Bearer ' + SB_KEY,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=minimal'
+    },
+    body: JSON.stringify(payload)
+  })
+  .then(function(r) {
+    if (r.ok || r.status === 201) {
+      mostrarMsg('✅ Checklist enviado com sucesso!', 'ok');
+      btn.textContent = '✅ Enviado!';
+    } else {
+      return r.text().then(function(t) { throw new Error(t); });
+    }
+  })
+  .catch(function(e) {
+    mostrarMsg('❌ Erro ao enviar. Tente novamente.', 'err');
+    btn.disabled = false;
+    btn.textContent = '📤 ENVIAR CHECKLIST';
+    console.error(e);
+  });
+}
+
+function mostrarMsg(txt, tipo) {
+  var el = document.getElementById('msg');
+  el.textContent = txt;
+  el.className = 'msg ' + tipo;
+  el.scrollIntoView({behavior:'smooth'});
+}
+
+render();
+</script>
+</body>
+</html>
