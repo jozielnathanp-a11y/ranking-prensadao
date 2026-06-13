@@ -127,16 +127,9 @@ function tocarAudio(ehBr, teamName){
   try{
     const tn=(teamName||'').toLowerCase();
     if(!tn.match(/brazil|brasil/)) return;
-    // Toca trilha GETV
-    const a1=new Audio("https://www.myinstants.com/media/sounds/gol-brasil-getv.mp3");
-    a1.volume=1.0;
-    a1.play().catch(e=>console.warn(e));
-    // Brasil Sil Sil limpíssimo no final (12s depois)
-    setTimeout(()=>{
-      const a2=new Audio("https://www.myinstants.com/media/sounds/globo-vinheta-do-brasil-limpissima-versao-rj-1.mp3");
-      a2.volume=1.0;
-      a2.play().catch(e=>console.warn(e));
-    }, 12000);
+    const a=new Audio("https://www.myinstants.com/media/sounds/globo-vinheta-do-brasil-limpissima-versao-rj-1.mp3");
+    a.volume=1.0;
+    a.play().catch(e=>console.warn(e));
   }catch(e){console.warn(e);}
 }
 
