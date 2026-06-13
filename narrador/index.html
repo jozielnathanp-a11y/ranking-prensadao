@@ -98,7 +98,7 @@
 </div>
 <script>
 const HINOS_MAP={"sao paulo": "https://www.myinstants.com/media/sounds/hino-do-sao-paulo.mp3", "são paulo": "https://www.myinstants.com/media/sounds/hino-do-sao-paulo.mp3", "palmeiras": "https://www.myinstants.com/media/sounds/hino-palmeiras.mp3", "flamengo": "https://www.myinstants.com/media/sounds/hino-flamengo.mp3", "santos": "https://www.myinstants.com/media/sounds/hino-santos.mp3", "corinthians": "https://www.myinstants.com/media/sounds/bota-o-hino-do-corinthians.mp3", "athletico": "https://www.myinstants.com/media/sounds/hino-atletico-paranaense.mp3", "atletico": "https://www.myinstants.com/media/sounds/hino-atletico-paranaense.mp3", "atlético": "https://www.myinstants.com/media/sounds/hino-atletico-paranaense.mp3", "coritiba": "https://www.myinstants.com/media/sounds/hino-coritiba.mp3", "fluminense": "https://www.myinstants.com/media/sounds/hino-fluminense-cantado.mp3", "botafogo": "https://www.myinstants.com/media/sounds/botafogo-hino-instrumento-mp3-1_BK8ykaQ.mp3", "internacional": "https://www.myinstants.com/media/sounds/hino-internacional.mp3", "grêmio": "https://www.myinstants.com/media/sounds/hino-gremio_Nv6o6nm.mp3", "gremio": "https://www.myinstants.com/media/sounds/hino-gremio_Nv6o6nm.mp3"};
-const BRASIL_SRCS=["https://www.myinstants.com/media/sounds/brasil-sil-sil.mp3"];
+const BRASIL_SRCS=["https://www.myinstants.com/media/sounds/y2mate_nu1Dq3Z.mp3"];
 const FOX_SRC="https://www.myinstants.com/media/sounds/fox_7PpoGaZ.mp3";
 const TIMES_BR=["brazil", "brasil", "flamengo", "palmeiras", "corinthians", "são paulo", "sao paulo", "santos", "cruzeiro", "atletico", "atlético", "grêmio", "gremio", "fluminense", "vasco", "botafogo", "internacional", "fortaleza", "bahia", "athletico", "coritiba", "goias", "goiás", "sport", "ceara", "ceará", "cuiaba", "cuiabá", "bragantino", "america", "chapecoense", "guarani", "vitoria", "vitória", "nautico", "avai", "juventude", "criciuma", "cricíuma", "ponte preta", "bragantino", "atletico mineiro"];
 
@@ -126,10 +126,25 @@ function desbloquearSom(){
 function tocarAudio(ehBr, teamName){
   try{
     const tn=(teamName||'').toLowerCase();
-    if(!tn.match(/brazil|brasil/)) return; // silêncio para outros times
-    const a=new Audio(BRASIL_SRCS[0]);
-    a.volume=1.0; a.play().catch(e=>console.warn(e));
-  }catch(e){console.warn(e);}
+    if(!tn.match(/brazil|brasil/)) return;
+    const url=BRASIL_SRCS[0];
+    // Web Audio API com boost de volume
+    const ctx=new (window.AudioContext||window.webkitAudioContext)();
+    fetch(url).then(r=>r.arrayBuffer()).then(buf=>ctx.decodeAudioData(buf)).then(decoded=>{
+      const src=ctx.createBufferSource();
+      const gain=ctx.createGain();
+      gain.gain.value=3.0; // boost 3x mais alto
+      src.buffer=decoded;
+      src.connect(gain);
+      gain.connect(ctx.destination);
+      src.start(0);
+    }).catch(e=>{
+      // fallback simples
+      const a=new Audio(url); a.volume=1.0; a.play().catch(()=>{});
+    });
+  }catch(e){
+    const a=new Audio(BRASIL_SRCS[0]); a.volume=1.0; a.play().catch(()=>{});
+  }
 }
 
 let ovTimer=null;
