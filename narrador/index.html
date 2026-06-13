@@ -98,7 +98,7 @@
 </div>
 <script>
 const HINOS_MAP={"sao paulo": "https://www.myinstants.com/media/sounds/hino-do-sao-paulo.mp3", "são paulo": "https://www.myinstants.com/media/sounds/hino-do-sao-paulo.mp3", "palmeiras": "https://www.myinstants.com/media/sounds/hino-palmeiras.mp3", "flamengo": "https://www.myinstants.com/media/sounds/hino-flamengo.mp3", "santos": "https://www.myinstants.com/media/sounds/hino-santos.mp3", "corinthians": "https://www.myinstants.com/media/sounds/bota-o-hino-do-corinthians.mp3", "athletico": "https://www.myinstants.com/media/sounds/hino-atletico-paranaense.mp3", "atletico": "https://www.myinstants.com/media/sounds/hino-atletico-paranaense.mp3", "atlético": "https://www.myinstants.com/media/sounds/hino-atletico-paranaense.mp3", "coritiba": "https://www.myinstants.com/media/sounds/hino-coritiba.mp3", "fluminense": "https://www.myinstants.com/media/sounds/hino-fluminense-cantado.mp3", "botafogo": "https://www.myinstants.com/media/sounds/botafogo-hino-instrumento-mp3-1_BK8ykaQ.mp3", "internacional": "https://www.myinstants.com/media/sounds/hino-internacional.mp3", "grêmio": "https://www.myinstants.com/media/sounds/hino-gremio_Nv6o6nm.mp3", "gremio": "https://www.myinstants.com/media/sounds/hino-gremio_Nv6o6nm.mp3"};
-const BRASIL_SRCS=["https://www.myinstants.com/media/sounds/y2mate_nu1Dq3Z.mp3"];
+const BRASIL_SRCS=["https://www.myinstants.com/media/sounds/globo-vinheta-do-brasil-limpissima-versao-rj-1.mp3"];
 const FOX_SRC="https://www.myinstants.com/media/sounds/fox_7PpoGaZ.mp3";
 const TIMES_BR=["brazil", "brasil", "flamengo", "palmeiras", "corinthians", "são paulo", "sao paulo", "santos", "cruzeiro", "atletico", "atlético", "grêmio", "gremio", "fluminense", "vasco", "botafogo", "internacional", "fortaleza", "bahia", "athletico", "coritiba", "goias", "goiás", "sport", "ceara", "ceará", "cuiaba", "cuiabá", "bragantino", "america", "chapecoense", "guarani", "vitoria", "vitória", "nautico", "avai", "juventude", "criciuma", "cricíuma", "ponte preta", "bragantino", "atletico mineiro"];
 
@@ -130,21 +130,12 @@ function tocarAudio(ehBr, teamName){
     // Toca trilha GETV
     const a1=new Audio("https://www.myinstants.com/media/sounds/gol-brasil-getv.mp3");
     a1.volume=1.0;
-    a1.play().catch(e=>console.warn('GETV erro:',e));
-    // Brasil Sil Sil bem alto no final (12s depois)
+    a1.play().catch(e=>console.warn(e));
+    // Brasil Sil Sil limpíssimo no final (12s depois)
     setTimeout(()=>{
-      const a2=new Audio("https://www.myinstants.com/media/sounds/y2mate_nu1Dq3Z.mp3");
+      const a2=new Audio("https://www.myinstants.com/media/sounds/globo-vinheta-do-brasil-limpissima-versao-rj-1.mp3");
       a2.volume=1.0;
-      // Boost via Web Audio API
-      try{
-        const ctx=new (window.AudioContext||window.webkitAudioContext)();
-        const src=ctx.createMediaElementSource(a2);
-        const gain=ctx.createGain();
-        gain.gain.value=4.0;
-        src.connect(gain);
-        gain.connect(ctx.destination);
-      }catch(e){}
-      a2.play().catch(e=>console.warn('SilSil erro:',e));
+      a2.play().catch(e=>console.warn(e));
     }, 12000);
   }catch(e){console.warn(e);}
 }
