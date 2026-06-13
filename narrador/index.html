@@ -127,32 +127,26 @@ function tocarAudio(ehBr, teamName){
   try{
     const tn=(teamName||'').toLowerCase();
     if(!tn.match(/brazil|brasil/)) return;
-    // 1) Toca a trilha GETV
-    const ctx=new (window.AudioContext||window.webkitAudioContext)();
-    function playWithBoost(url, boost){
-      return fetch(url)
-        .then(r=>r.arrayBuffer())
-        .then(buf=>ctx.decodeAudioData(buf))
-        .then(decoded=>{
-          const src=ctx.createBufferSource();
-          const gain=ctx.createGain();
-          gain.gain.value=boost;
-          src.buffer=decoded;
-          src.connect(gain);
-          gain.connect(ctx.destination);
-          src.start(0);
-          return decoded.duration;
-        });
-    }
-    // Toca GETV e quando terminar toca Brasil Sil Sil alto
-    playWithBoost("https://www.myinstants.com/media/sounds/gol-brasil-getv.mp3", 2.0).then(dur=>{
-      setTimeout(()=>playWithBoost("https://www.myinstants.com/media/sounds/y2mate_nu1Dq3Z.mp3", 4.0), (dur-0.2)*1000);
-    }).catch(()=>{
-      const a=new Audio("https://www.myinstants.com/media/sounds/gol-brasil-getv.mp3"); a.volume=1.0; a.play().catch(()=>{});
-    });
-  }catch(e){
-    const a=new Audio("https://www.myinstants.com/media/sounds/gol-brasil-getv.mp3"); a.volume=1.0; a.play().catch(()=>{});
-  }
+    // Toca trilha GETV
+    const a1=new Audio("https://www.myinstants.com/media/sounds/gol-brasil-getv.mp3");
+    a1.volume=1.0;
+    a1.play().catch(e=>console.warn('GETV erro:',e));
+    // Brasil Sil Sil bem alto no final (12s depois)
+    setTimeout(()=>{
+      const a2=new Audio("https://www.myinstants.com/media/sounds/y2mate_nu1Dq3Z.mp3");
+      a2.volume=1.0;
+      // Boost via Web Audio API
+      try{
+        const ctx=new (window.AudioContext||window.webkitAudioContext)();
+        const src=ctx.createMediaElementSource(a2);
+        const gain=ctx.createGain();
+        gain.gain.value=4.0;
+        src.connect(gain);
+        gain.connect(ctx.destination);
+      }catch(e){}
+      a2.play().catch(e=>console.warn('SilSil erro:',e));
+    }, 12000);
+  }catch(e){console.warn(e);}
 }
 
 let ovTimer=null;
