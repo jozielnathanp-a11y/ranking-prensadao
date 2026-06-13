@@ -300,8 +300,8 @@ function hora(){return new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',min
 function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
 
 carregarTodos();
-setInterval(verificarGols,30000);
-setInterval(carregarTodos,120000);
+setInterval(verificarGols,8000);
+setInterval(carregarTodos,30000);
 </script>
 </body>
 </html>
