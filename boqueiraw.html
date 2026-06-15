@@ -521,12 +521,15 @@ async function supa(metodo, tabela, dados=null, params='') {
 async function fazerLogin() {
   const usuario = document.getElementById('login-usuario').value.trim();
   const senha = document.getElementById('login-senha').value.trim();
+  console.log('LOGIN tentativa:', usuario, senha ? '****' : '(vazio)');
   if (!usuario || !senha) { document.getElementById('login-erro').style.display='block'; return; }
 
   try {
     const res = await supa('GET', 'usuario', null, `usuario=eq.${encodeURIComponent(usuario)}&senha=eq.${encodeURIComponent(senha)}&unidade=eq.boqueiraw&select=*`);
+    console.log('LOGIN resultado:', res);
     if (res && res.length > 0) {
       usuarioLogado = res[0];
+      console.log('LOGIN ok, chamando iniciarApp');
       iniciarApp();
     } else {
       document.getElementById('login-erro').style.display = 'block';
