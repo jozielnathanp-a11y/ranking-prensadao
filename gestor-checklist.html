@@ -4,18 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Cache-Control" content="no-store, no-cache">
-  <title>Painel Gestor — Checklists</title>
+  <title>Gestor - Checklists Prensadao</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:sans-serif;background:#0d0d0d;color:#fff;padding:16px;max-width:600px;margin:0 auto}
+    body{font-family:sans-serif;background:#0d0d0d;color:#fff;padding:16px;max-width:620px;margin:0 auto}
     h1{font-size:1.2rem;text-align:center;color:#ff6a00;margin-bottom:4px}
-    .sub{text-align:center;font-size:0.78rem;color:#666;margin-bottom:20px}
-    .semana-sel{display:flex;gap:8px;margin-bottom:20px;align-items:center}
-    .semana-sel label{font-size:0.8rem;color:#888}
-    .semana-sel input{background:#1a1a1a;border:1px solid #333;color:#fff;padding:8px 10px;border-radius:8px;font-size:0.85rem;flex:1}
-    .btn-buscar{background:#ff6a00;color:#fff;border:none;border-radius:8px;padding:8px 16px;cursor:pointer;font-size:0.85rem;font-weight:bold}
-    .card{background:#1a1a1a;border-radius:12px;padding:16px;margin-bottom:16px}
-    .card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+    .sub{text-align:center;font-size:0.78rem;color:#555;margin-bottom:20px}
+    .semana-sel{display:flex;gap:8px;margin-bottom:20px;align-items:center;flex-wrap:wrap}
+    .semana-sel label{font-size:0.8rem;color:#888;white-space:nowrap}
+    .semana-sel input{background:#1a1a1a;border:1px solid #333;color:#fff;padding:8px 10px;border-radius:8px;font-size:0.85rem;flex:1;min-width:140px}
+    .btn-buscar{background:#ff6a00;color:#fff;border:none;border-radius:8px;padding:8px 16px;cursor:pointer;font-size:0.85rem;font-weight:bold;white-space:nowrap}
+    .secao-titulo{font-size:0.82rem;color:#ff6a00;font-weight:bold;margin:16px 0 10px;padding-left:4px;border-left:3px solid #ff6a00}
+    .card{background:#1a1a1a;border-radius:12px;padding:16px;margin-bottom:14px}
+    .card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
     .card-nome{font-size:1rem;font-weight:bold;color:#ff6a00}
     .card-data{font-size:0.72rem;color:#555;margin-bottom:12px}
     .badge-ok{background:#1a4a1a;color:#4caf50;padding:3px 10px;border-radius:20px;font-size:0.75rem}
@@ -28,14 +29,14 @@
     .fotos-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
     .fotos-row img{width:80px;height:80px;object-fit:cover;border-radius:6px;cursor:pointer;border:1px solid #333}
     .obs{font-size:0.78rem;color:#888;margin-top:10px;padding:8px;background:#111;border-radius:6px}
-    .sem-envio{text-align:center;padding:20px;color:#555;font-size:0.85rem}
-    .pending-list{background:#1a1a1a;border-radius:12px;padding:14px;margin-bottom:16px;border-left:3px solid #ff9800}
-    .pending-list h3{font-size:0.85rem;color:#ff9800;margin-bottom:8px}
+    .sem-envio{text-align:center;padding:16px;color:#555;font-size:0.85rem;background:#1a1a1a;border-radius:8px;margin-bottom:10px}
+    .pending-list{background:#1a1a1a;border-radius:12px;padding:14px;margin-bottom:12px;border-left:3px solid #ff9800}
+    .pending-list h3{font-size:0.82rem;color:#ff9800;margin-bottom:8px}
     .pending-item{font-size:0.82rem;color:#888;padding:3px 0}
-    .lb{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.92);z-index:999;justify-content:center;align-items:center}
+    .lb{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.93);z-index:999;justify-content:center;align-items:center}
     .lb.vis{display:flex}
     .lb img{max-width:95%;max-height:90vh;border-radius:8px}
-    .lb-close{position:absolute;top:16px;right:16px;background:#ff6a00;border:none;color:#fff;width:36px;height:36px;border-radius:50%;font-size:1.2rem;cursor:pointer}
+    .lb-close{position:absolute;top:16px;right:16px;background:#ff6a00;border:none;color:#fff;width:36px;height:36px;border-radius:50%;font-size:1.1rem;cursor:pointer;font-weight:bold}
     .loading{text-align:center;padding:30px;color:#666}
     .senha-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh}
     .senha-card{background:#1a1a1a;padding:24px;border-radius:12px;width:100%;max-width:320px}
@@ -57,7 +58,7 @@
   <p class="sub">Painel do Gestor</p>
   <div class="senha-card">
     <label>Senha do gestor</label>
-    <input type="password" id="inp-senha" placeholder="...">
+    <input type="password" id="inp-senha" placeholder="......">
     <button id="btn-entrar">ENTRAR</button>
     <div class="senha-err" id="senha-err">Senha incorreta!</div>
   </div>
@@ -77,20 +78,33 @@
 <script>
 var SB_URL = 'https://trbyynbtuzpszdvjivbs.supabase.co';
 var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRyYnl5bmJ0dXpwc3pkdmppdmJzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3ODIyODAxOCwiZXhwIjoyMDkzODA0MDE4fQ.OZq8bycNQWEpdbxPiSuB9gt7A0fPKNkawcrtE5XpGFg';
-var TAREFAS = ["Lavar o balcão onde as embalagens e batata palha são armazenadas com água e sabão, e organizá-lo.", "Realizar a limpeza do freezer branco com água e sabão, seguida da higienização de bandejas e potes de maionese.", "Realizar a higienização da estufa e do fogão com água e sabão, mantendo o balcão organizado e limpo.", "Higienizar a mesa de fritura e recipientes de porção, organizando embalagens e efetuando contagem dos potes.", "Limpar o armário dos funcionários removendo a gordura e sujeira externa."];
-var NOMES = {"cl-caua": "Cauã", "cl-kauany": "Kauany", "cl-ruan": "Ruan", "cl-gabriel": "Gabriel"};
-var TODOS = ['cl-caua','cl-kauany','cl-ruan','cl-gabriel'];
+var TAREFAS_POR_COLAB = {"cl-ruan": ["Realizar a higienizacao das mesas utilizando esponja e sabao, limpar a escada e organizar o salao superior.", "Realizar a higienizacao do freezer expositor da coca e organizar os refrigerantes embaixo do balcao.", "Lavar os potinhos de molho e os porta-guardanapos e preencher para que nao faltem.", "Limpar as bandejas com agua e sabao, e fazer uma contagem semanal das bandejas fundas e rasas.", "Higienizar e organizar os recipientes com etiquetas de identificacao dos lanches."], "cl-gabriel": ["Limpar as prateleiras de paes que ficam em cima das prensas e a de estoque com agua e sabao.", "Limpar o freezer da porta amarela por dentro e por fora. Limpar as bandejas e potes de maionese.", "Limpar a prateleira onde a louca e armazenada, incluindo a parte abaixo da pia.", "Limpar o freezer de batatas e o recipiente onde as batatas sao armazenadas.", "Higienizar e organizar o armario preto e o armario de embalagens."], "cl-caua": ["Lavar o balcao onde as embalagens e batata palha sao armazenadas com agua e sabao.", "Realizar a limpeza do freezer branco com agua e sabao, higienizar bandejas e potes de maionese.", "Realizar a higienizacao da estufa e do fogao com agua e sabao.", "Higienizar a mesa de fritura e recipientes de porcao, organizar embalagens e contar potes.", "Limpar o armario dos funcionarios removendo a gordura e sujeira externa."], "cl-kauany": ["Organizar e higienizar o balcao da mesa termica e prateleira de molhos.", "Higienizar as mesas e organizar as garrafas que serao retornadas.", "Limpar as mesas amarelas e vermelhas do lado de fora e as mesas de madeira no salao.", "Higienizar o freezer e fazer a contagem das canecas.", "Limpar e organizar area kids salao, lavar piso area kids externa."]};
+var NOMES = {"cl-caua": "Caua", "cl-kauany": "Kauany", "cl-ruan": "Ruan", "cl-gabriel": "Gabriel"};
+var TODOS = ["cl-caua", "cl-kauany", "cl-ruan", "cl-gabriel"];
+
+function semAtual() {
+  var d = new Date();
+  var jan1 = new Date(d.getFullYear(), 0, 1);
+  var sem = Math.ceil(((d - jan1) / 86400000 + jan1.getDay() + 1) / 7);
+  return d.getFullYear() + '-W' + String(sem).padStart(2, '0');
+}
+
+function semAnterior(semStr) {
+  var parts = semStr.split('-W');
+  var ano = parseInt(parts[0]);
+  var sem = parseInt(parts[1]);
+  if (sem <= 1) { return (ano - 1) + '-W52'; }
+  return ano + '-W' + String(sem - 1).padStart(2, '0');
+}
 
 document.getElementById('btn-entrar').onclick = function() {
   var v = document.getElementById('inp-senha').value;
   if (v === 'josiel123') {
     document.getElementById('senha-screen').style.display = 'none';
     document.getElementById('app').style.display = 'block';
-    var hoje = new Date();
-    var jan1 = new Date(hoje.getFullYear(), 0, 1);
-    var sem = Math.ceil(((hoje - jan1) / 86400000 + jan1.getDay() + 1) / 7);
-    document.getElementById('inp-semana').value = hoje.getFullYear() + '-W' + String(sem).padStart(2,'0');
-    buscar();
+    var sa = semAtual();
+    document.getElementById('inp-semana').value = sa;
+    buscar(sa);
   } else {
     document.getElementById('senha-err').style.display = 'block';
   }
@@ -100,98 +114,80 @@ document.getElementById('inp-senha').onkeydown = function(e) {
   if (e.key === 'Enter') document.getElementById('btn-entrar').onclick();
 };
 
-document.getElementById('btn-buscar').onclick = buscar;
-
-document.getElementById('lb-close').onclick = function() {
-  document.getElementById('lb').classList.remove('vis');
-  document.getElementById('lb-img').src = '';
+document.getElementById('btn-buscar').onclick = function() {
+  var s = document.getElementById('inp-semana').value;
+  if (s) buscar(s);
 };
 
-document.getElementById('lb').onclick = function(e) {
-  if (e.target === this) {
-    this.classList.remove('vis');
-    document.getElementById('lb-img').src = '';
-  }
-};
-
-function buscar() {
-  var semana = document.getElementById('inp-semana').value;
-  if (!semana) return;
+function buscar(semana) {
+  var semPass = semAnterior(semana);
   var res = document.getElementById('resultado');
   res.innerHTML = '<div class="loading">Buscando...</div>';
-  fetch(SB_URL + '/rest/v1/prd_checklist?semana=eq.' + semana + '&order=ts.desc', {
+  fetch(SB_URL + '/rest/v1/prd_checklist?semana=in.(' + semana + ',' + semPass + ')&order=ts.desc', {
     headers: {'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY}
   })
   .then(function(r) { return r.json(); })
-  .then(function(data) { renderResultado(data, semana); })
-  .catch(function() { res.innerHTML = '<div class="sem-envio">Erro ao buscar dados.</div>'; });
+  .then(function(data) {
+    var atual  = data.filter(function(d) { return d.semana === semana; });
+    var pass   = data.filter(function(d) { return d.semana === semPass; });
+    var html = '';
+    html += '<div class="secao-titulo">Semana passada (' + semPass + ')</div>';
+    html += gerarHtml(pass, semPass);
+    html += '<div class="secao-titulo" style="margin-top:20px">Semana atual (' + semana + ')</div>';
+    html += gerarHtml(atual, semana);
+    res.innerHTML = html;
+    bindFotos(res);
+  })
+  .catch(function() { res.innerHTML = '<div class="sem-envio">Erro ao buscar. Tente novamente.</div>'; });
 }
 
-function renderResultado(data, semana) {
-  var res = document.getElementById('resultado');
+function gerarHtml(data, semana) {
   var html = '';
-
   var enviaram = data.map(function(d) { return d.colab_id; });
   var pendentes = TODOS.filter(function(id) { return enviaram.indexOf(id) === -1; });
   if (pendentes.length > 0) {
-    html += '<div class="pending-list"><h3>Ainda nao enviaram esta semana:</h3>';
-    pendentes.forEach(function(id) {
-      html += '<div class="pending-item">- ' + (NOMES[id] || id) + '</div>';
-    });
+    html += '<div class="pending-list"><h3>Ainda nao enviaram:</h3>';
+    pendentes.forEach(function(id) { html += '<div class="pending-item">- ' + (NOMES[id] || id) + '</div>'; });
     html += '</div>';
   }
-
   if (data.length === 0) {
-    html += '<div class="sem-envio">Nenhum checklist enviado para ' + semana + '</div>';
-    res.innerHTML = html;
-    return;
+    html += '<div class="sem-envio">Nenhum checklist enviado.</div>';
+    return html;
   }
-
   data.forEach(function(item) {
     var nome = NOMES[item.colab_id] || item.colab_id;
-    var data_fmt = new Date(item.ts).toLocaleString('pt-BR');
     var tks = item.tks || {};
     var phs = item.phs || {};
-    var todos_sim = TAREFAS.every(function(t, i) { return tks[i] === 'sim' || tks[String(i)] === 'sim'; });
-
+    var tarefas = TAREFAS_POR_COLAB[item.colab_id] || [];
+    var todos_sim = tarefas.every(function(t, i) { return tks[i] === 'sim' || tks[String(i)] === 'sim'; });
+    var data_fmt = item.ts ? new Date(item.ts).toLocaleString('pt-BR') : '';
     html += '<div class="card">';
-    html += '<div class="card-header">';
-    html += '<span class="card-nome">' + nome + '</span>';
-    html += '<span class="' + (todos_sim ? 'badge-ok' : 'badge-pend') + '">' + (todos_sim ? 'Completo' : 'Incompleto') + '</span>';
-    html += '</div>';
+    html += '<div class="card-header"><span class="card-nome">' + nome + '</span>';
+    html += '<span class="' + (todos_sim ? 'badge-ok' : 'badge-pend') + '">' + (todos_sim ? 'Completo' : 'Incompleto') + '</span></div>';
     html += '<div class="card-data">Enviado em ' + data_fmt + '</div>';
-
-    TAREFAS.forEach(function(t, i) {
+    tarefas.forEach(function(t, i) {
       var resp = tks[i] || tks[String(i)];
       var ft = phs[i] || phs[String(i)] || [];
       if (!Array.isArray(ft)) ft = Object.values(ft);
       ft = ft.filter(function(f) { return f; });
-
       html += '<div class="tarefa-row">';
       html += '<div class="tarefa-desc">' + (i+1) + '. ' + t + '</div>';
-      html += '<div class="' + (resp === 'sim' ? 'status-sim' : 'status-nao') + '">';
-      html += resp === 'sim' ? 'Feito' : 'Nao feito';
-      html += '</div>';
+      html += '<div class="' + (resp === 'sim' ? 'status-sim' : 'status-nao') + '">' + (resp === 'sim' ? 'Feito' : 'Nao feito') + '</div>';
       if (ft.length > 0) {
         html += '<div class="fotos-row">';
-        ft.forEach(function(url) {
-          html += '<img src="' + url + '" data-url="' + url + '" loading="lazy">';
-        });
+        ft.forEach(function(url) { html += '<img src="' + url + '" data-url="' + url + '" loading="lazy">'; });
         html += '</div>';
       }
       html += '</div>';
     });
-
-    if (item.obs) {
-      html += '<div class="obs">Obs: ' + item.obs + '</div>';
-    }
+    if (item.obs) html += '<div class="obs">Obs: ' + item.obs + '</div>';
     html += '</div>';
   });
+  return html;
+}
 
-  res.innerHTML = html;
-
-  // Bind foto clicks
-  var imgs = res.querySelectorAll('.fotos-row img');
+function bindFotos(container) {
+  var imgs = container.querySelectorAll('.fotos-row img');
   for (var i = 0; i < imgs.length; i++) {
     imgs[i].onclick = (function(url) {
       return function() {
@@ -201,6 +197,17 @@ function renderResultado(data, semana) {
     })(imgs[i].getAttribute('data-url'));
   }
 }
+
+document.getElementById('lb-close').onclick = function() {
+  document.getElementById('lb').classList.remove('vis');
+  document.getElementById('lb-img').src = '';
+};
+document.getElementById('lb').onclick = function(e) {
+  if (e.target === this) {
+    this.classList.remove('vis');
+    document.getElementById('lb-img').src = '';
+  }
+};
 </script>
 </body>
 </html>
