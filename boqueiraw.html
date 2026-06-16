@@ -812,7 +812,7 @@ function iniciarNomeOperador() {
   }
 }
 
-function confirmarNomeOperador() {
+async function confirmarNomeOperador() {
   const nome = document.getElementById('input-nome-operador').value.trim();
   if (!nome) {
     showToast('EI! Coloca seu nome aí mano, não sou adivinho não! 😤', 'error');
