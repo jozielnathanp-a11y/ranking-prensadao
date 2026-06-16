@@ -2020,7 +2020,7 @@ document.addEventListener('click', function(e) {
 // ===== CONTAGEM EM LOTE =====
 var _loteProdutos = [];
 
-async function abrirContagemLote() {
+async async function abrirContagemLote() {
   try {
     var prods = await supa('GET', 'produtos', null, 'unidade_loja=eq.' + UNIDADE_LOJA + '&select=categoria&order=categoria.asc');
     var cats = [...new Set((prods||[]).map(function(p){ return p.categoria; }).filter(Boolean))].sort();
