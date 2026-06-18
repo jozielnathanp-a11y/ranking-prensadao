@@ -1531,17 +1531,21 @@ function atualizarLabelAberto() {
 async // ===== PEDIDOS =====
 var _pedidoExtras = {};
 
-function cardPedido(codigo, nomeHtml, unidade, qtd, removivel) {
-  return '<div class="card" id="card-ped-'+codigo+'" style="margin:0 0 8px;padding:12px;border-left:4px solid '+(removivel?'#2e7d32':'#b71c1c')+';">'
+function cardPedido(codigo, nomeHtml, nomeLimpo, unidade, qtd, removivel) {
+  var corBorda = removivel ? '#2e7d32' : '#b71c1c';
+  var btnRemover = removivel
+    ? '<button onclick="removerExtraPedido(\"'+codigo+'\")" style="background:#b71c1c;border:none;border-radius:6px;color:#fff;padding:3px 8px;font-size:0.75rem;cursor:pointer;">✕</button>'
+    : '';
+  return '<div class="card" id="card-ped-'+codigo+'" style="margin:0 0 8px;padding:12px;border-left:4px solid '+corBorda+';">'
     +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">'
     +'<div style="font-weight:700;font-size:0.9rem;flex:1;">'+nomeHtml+'</div>'
-    +(removivel?'<button onclick="removerExtraPedido(''+codigo+'')" style="background:#b71c1c;border:none;border-radius:6px;color:#fff;padding:3px 8px;font-size:0.75rem;cursor:pointer;">✕</button>':'')
+    +btnRemover
     +'</div>'
     +'<div style="display:flex;align-items:center;gap:8px;">'
     +'<span style="font-size:0.82rem;color:#ccc;white-space:nowrap;">Qtd:</span>'
     +'<input type="number" min="0" step="0.1" value="'+qtd+'" id="ped-'+codigo+'" '
     +'style="flex:1;background:#263238;border:1px solid #455a64;color:#fff;border-radius:8px;padding:6px 10px;font-size:0.9rem;text-align:center;" '
-    +'data-nome="'+nomeHtml.replace(/<[^>]+>/g,'')+'" data-unidade="'+unidade+'">'
+    +'data-nome="'+nomeLimpo+'" data-unidade="'+unidade+'">'
     +'<span style="font-size:0.82rem;color:#aaa;">'+unidade+'</span>'
     +'</div></div>';
 }
@@ -1551,7 +1555,6 @@ function gerarPedidos(){
   var indicados = prods.filter(function(p){
     return (parseFloat(p.estoque_min)||0) > 0 && (parseFloat(p.estoque)||0) < (parseFloat(p.estoque_min)||0);
   });
-
   var elSis = document.getElementById('lista-sistema');
   var secSis = document.getElementById('sec-sistema');
   if(indicados.length){
@@ -1560,7 +1563,7 @@ function gerarPedidos(){
       var est=parseFloat(p.estoque)||0, min=parseFloat(p.estoque_min)||0, max=parseFloat(p.estoque_max)||0;
       var sug=Math.max(0,(max>0?max:min)-est);
       var nomeHtml=p.nome+'<span style="background:#b71c1c;color:#fff;padding:1px 7px;border-radius:6px;font-size:0.7rem;font-weight:700;margin-left:6px;">⚠️ FALTA</span>';
-      htmlSis+=cardPedido(p.codigo, nomeHtml, p.unidade, sug, false);
+      htmlSis+=cardPedido(p.codigo, nomeHtml, p.nome, p.unidade, sug, false);
     });
     elSis.innerHTML=htmlSis;
     document.getElementById('badge-sistema').textContent=indicados.length+' produto'+(indicados.length>1?'s':'');
@@ -1569,7 +1572,6 @@ function gerarPedidos(){
     document.getElementById('badge-sistema').textContent='';
   }
   secSis.style.display='';
-
   _pedidoExtras={};
   document.getElementById('lista-gerente').innerHTML='';
   document.getElementById('sec-gerente').style.display='';
@@ -1584,11 +1586,13 @@ function buscarProdutoPedido(){
   var el=document.getElementById('busca-pedido-result');
   if(!termo){el.innerHTML='';return;}
   var prods=Object.values(produtosCache).filter(function(p){
-    return p.nome.toLowerCase().includes(termo)&&!_pedidoExtras[p.codigo]&&!document.getElementById('ped-'+p.codigo);
+    return p.nome.toLowerCase().indexOf(termo)>=0 && !_pedidoExtras[p.codigo] && !document.getElementById('ped-'+p.codigo);
   }).slice(0,8);
   if(!prods.length){el.innerHTML='<p style="color:#888;font-size:0.82rem;padding:4px 8px;">Nenhum produto encontrado.</p>';return;}
   el.innerHTML=prods.map(function(p){
-    return '<div onclick="adicionarExtraPedido(''+p.codigo+'',''+p.nome.replace(/'/g,"\'")+'',''+p.unidade+'')" '
+    var nomeEsc=p.nome.replace(/"/g,'&quot;');
+    var unEsc=p.unidade.replace(/"/g,'&quot;');
+    return '<div onclick="adicionarExtraPedido(\"'+p.codigo+'\",\"'+nomeEsc+'\",\"'+unEsc+'\")" '
       +'style="padding:8px 10px;cursor:pointer;border-radius:8px;margin-bottom:4px;background:#263238;font-size:0.88rem;color:#fff;">'
       +'➕ '+p.nome+' <span style="color:#888;font-size:0.75rem;">('+p.unidade+')</span></div>';
   }).join('');
@@ -1597,7 +1601,7 @@ function buscarProdutoPedido(){
 function adicionarExtraPedido(codigo, nome, unidade){
   if(_pedidoExtras[codigo]||document.getElementById('ped-'+codigo))return;
   _pedidoExtras[codigo]={nome:nome,unidade:unidade};
-  document.getElementById('lista-gerente').insertAdjacentHTML('beforeend', cardPedido(codigo, nome, unidade, 0, true));
+  document.getElementById('lista-gerente').insertAdjacentHTML('beforeend', cardPedido(codigo, nome, nome, unidade, 0, true));
   document.getElementById('busca-pedido-input').value='';
   document.getElementById('busca-pedido-result').innerHTML='';
   showToast(nome+' adicionado!','success');
@@ -1621,20 +1625,9 @@ function enviarPedidoWhatsApp(){
   });
   if(!sistema.length&&!gerente.length){showToast('Nenhum produto com quantidade > 0!','error');return;}
   var hoje=dataHoje(), partes=hoje.split('-');
-  var texto='🛒 *Pedido de Compras — Prensadão CD*
-📅 '+partes[2]+'/'+partes[1]+'/'+partes[0]+'
-
-';
-  if(sistema.length) texto+='⚠️ *Indicados pelo sistema:*
-'+sistema.join('
-')+'
-
-';
-  if(gerente.length) texto+='➕ *Adicionados pelo gerente:*
-'+gerente.join('
-')+'
-
-';
+  var texto='🛒 *Pedido de Compras — Prensadão CD*\n📅 '+partes[2]+'/'+partes[1]+'/'+partes[0]+'\n\n';
+  if(sistema.length) texto+='⚠️ *Indicados pelo sistema:*\n'+sistema.join('\n')+'\n\n';
+  if(gerente.length) texto+='➕ *Adicionados pelo gerente:*\n'+gerente.join('\n')+'\n\n';
   texto+='_Gerado por Estoques Prensadão CD_';
   window.open('https://wa.me/?text='+encodeURIComponent(texto),'_blank');
 }
