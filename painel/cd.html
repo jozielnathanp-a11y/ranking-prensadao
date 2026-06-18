@@ -422,8 +422,11 @@
   <div class="screen adm-only" id="tab-pedidos">
     <div class="card">
       <h3>🛒 Lista de Pedidos</h3>
-      <p style="font-size:0.82rem;color:#888;margin-bottom:10px;">Produtos abaixo do estoque mínimo — o que precisa pedir.</p>
-      <button class="btn btn-red" onclick="gerarPedidos()">🔄 Calcular Pedidos</button>
+      <p style="font-size:0.82rem;color:#888;margin-bottom:10px;">Todos os produtos — ajuste as quantidades e envie pro WhatsApp.</p>
+      <div style="display:flex;gap:8px;margin-bottom:8px;">
+        <button class="btn btn-red" style="flex:1;" onclick="gerarPedidos()">🔄 Calcular</button>
+        <button class="btn btn-green" style="flex:1;" id="btn-enviar-pedido" onclick="enviarPedidoWhatsApp()" style="display:none;">📱 Enviar WhatsApp</button>
+      </div>
     </div>
     <div id="lista-pedidos"></div>
   </div>
@@ -1494,24 +1497,56 @@ async function gerarPedidos(){
   var el=document.getElementById('lista-pedidos');
   if(!el)return;
   el.innerHTML='<p style="color:#888;text-align:center;padding:20px;">Calculando...</p>';
-  var prods=Object.values(produtosCache);
-  var precisam=prods.filter(function(p){
-    var min=parseFloat(p.estoque_min)||0;
-    var est=parseFloat(p.estoque)||0;
-    return min>0&&est<min;
-  });
-  if(!precisam.length){el.innerHTML='<p style="color:#4caf50;text-align:center;padding:20px;">Tudo OK!</p>';return;}
-  el.innerHTML=precisam.map(function(p){
+  var prods=Object.values(produtosCache).sort(function(a,b){return a.nome.localeCompare(b.nome);});
+  if(!prods.length){el.innerHTML='<p style="color:#888;text-align:center;padding:20px;">Nenhum produto cadastrado.</p>';return;}
+
+  var html='';
+  prods.forEach(function(p){
     var est=parseFloat(p.estoque)||0;
     var min=parseFloat(p.estoque_min)||0;
     var max=parseFloat(p.estoque_max)||0;
-    var falta=Math.max(0,(max>0?max:min)-est);
-    return '<div class="card" style="margin:0 0 8px;padding:12px;"><div style="display:flex;justify-content:space-between;align-items:center;">'
-      +'<div><div style="font-weight:700;font-size:0.9rem;">'+p.nome+'</div>'
-      +'<div style="font-size:0.75rem;color:#888;">Est: '+est+' '+p.unidade+' | Min: '+min+' | Max: '+(max>0?max:'—')+'</div></div>'
-      +'<div style="background:#fde8e8;color:#b71c1c;padding:4px 10px;border-radius:8px;font-weight:700;font-size:0.85rem;">Falta: '+falta+' '+p.unidade+'</div>'
-      +'</div></div>';
-  }).join('');
+    var sugerido=0;
+    var abaixo=min>0&&est<min;
+    if(abaixo){sugerido=Math.max(0,(max>0?max:min)-est);}
+    var corBorda=abaixo?'#b71c1c':'#37474f';
+    var tagFalta=abaixo?'<span style="background:#b71c1c;color:#fff;padding:2px 8px;border-radius:6px;font-size:0.72rem;font-weight:700;margin-left:6px;">⚠️ FALTA</span>':'';
+    html+='<div class="card" style="margin:0 0 8px;padding:12px;border-left:4px solid '+corBorda+';">'
+      +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">'
+      +'<div><div style="font-weight:700;font-size:0.9rem;">'+p.nome+tagFalta+'</div>'
+      +'<div style="font-size:0.75rem;color:#888;margin-top:2px;">Est: '+est+' '+p.unidade+' | Min: '+min+' | Max: '+(max>0?max:'—')+'</div></div>'
+      +'</div>'
+      +'<div style="display:flex;align-items:center;gap:8px;">'
+      +'<span style="font-size:0.82rem;color:#ccc;white-space:nowrap;">Qtd a pedir:</span>'
+      +'<input type="number" min="0" step="0.1" value="'+sugerido+'" id="ped-'+p.codigo+'" '
+      +'style="flex:1;background:#263238;border:1px solid #455a64;color:#fff;border-radius:8px;padding:6px 10px;font-size:0.9rem;text-align:center;" '
+      +'placeholder="0" data-nome="'+p.nome+'" data-unidade="'+p.unidade+'">'
+      +'<span style="font-size:0.82rem;color:#aaa;">'+p.unidade+'</span>'
+      +'</div>'
+      +'</div>';
+  });
+  el.innerHTML=html;
+  var btnEnviar=document.getElementById('btn-enviar-pedido');
+  if(btnEnviar)btnEnviar.style.display='';
+}
+
+function enviarPedidoWhatsApp(){
+  var inputs=document.querySelectorAll('#lista-pedidos input[id^="ped-"]');
+  if(!inputs.length){showToast('Calcule os pedidos primeiro!','error');return;}
+  var itens=[];
+  inputs.forEach(function(inp){
+    var qtd=parseFloat(inp.value)||0;
+    if(qtd>0){
+      itens.push('▪️ *'+inp.dataset.nome+'*: '+qtd+' '+inp.dataset.unidade);
+    }
+  });
+  if(!itens.length){showToast('Nenhum produto com quantidade > 0!','error');return;}
+  var hoje=dataHoje();
+  var partes=hoje.split('-');
+  var texto='🛒 *Pedido de Compras — Prensadão CD*\n📅 '+partes[2]+'/'+partes[1]+'/'+partes[0]+'\n\n';
+  texto+=itens.join('\n');
+  texto+='\n\n_Gerado por Estoques Prensadão CD_';
+  var url='https://wa.me/?text='+encodeURIComponent(texto);
+  window.open(url,'_blank');
 }
 
 // ── LISTA DE LANÇAMENTOS ──
