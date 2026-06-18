@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <!-- VERSAO-ZAPIA: atualizado em 05/06/2026 — contagem em lote adicionada -->
   <meta charset="UTF-8" />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
@@ -20,26 +19,26 @@
     }
     .login-box {
       background: #111; border-radius: 4px; padding: 40px 32px; width: 90%; max-width: 380px;
-      box-shadow: 0 0 40px #ff174444; border: 1px solid #ff174433;
+      box-shadow: 0 0 40px #2979ff44; border: 1px solid #2979ff33;
     }
-    .login-box h1 { font-size: 1.4rem; color: #b71c1c; text-align: center; margin-bottom: 6px; }
+    .login-box h1 { font-size: 1.4rem; color: #1565c0; text-align: center; margin-bottom: 6px; }
     .login-box p { font-size: 0.82rem; color: #888; text-align: center; margin-bottom: 28px; }
     .login-box input {
       width: 100%; padding: 12px 16px; border: 2px solid #333; border-radius: 4px; background: #1a1a1a; color: #f0f0f0;
       font-size: 1rem; margin-bottom: 14px; outline: none; transition: border 0.2s;
     }
-    .login-box input:focus { border-color: #b71c1c; }
+    .login-box input:focus { border-color: #1565c0; }
     .login-box button {
-      width: 100%; padding: 14px; background: #ff1744; color: #000; border: none;
+      width: 100%; padding: 14px; background: #616161; color: #000; border: none;
       border-radius: 4px; font-size: 1.2rem; font-weight: 700; cursor: pointer; font-family: 'Bebas Neue', sans-serif; letter-spacing: 3px;
     }
-    .login-box button:hover { background: #7f0000; }
+    .login-box button:hover { background: #0d47a1; }
     #login-erro { color: #b71c1c; font-size: 0.85rem; text-align: center; margin-top: 10px; display: none; }
 
     /* APP */
     #app { display: none; }
     .topbar {
-      background: #111; color: #ff1744; padding: 12px 16px; border-bottom: 2px solid #ff174444;
+      background: #111; color: #9e9e9e; padding: 12px 16px; border-bottom: 2px solid #2979ff44;
       display: flex; align-items: center; justify-content: space-between;
       position: sticky; top: 0; z-index: 100;
     }
@@ -49,23 +48,23 @@
 
     .tabs { display: flex; background: #111; border-bottom: 2px solid #222; overflow-x: auto; }
     .tab { padding: 12px 16px; font-size: 0.82rem; font-weight: 700; color: #555; cursor: pointer; white-space: nowrap; border-bottom: 3px solid transparent; letter-spacing: 1px; }
-    .tab.active { color: #ff1744; border-bottom-color: #ff1744; }
+    .tab.active { color: #9e9e9e; border-bottom-color: #9e9e9e; }
 
     .screen { display: none; padding: 16px; max-width: 700px; margin: 0 auto; background: #0a0a0a; }
     .screen.active { display: block; }
 
     .card { background: #111; border-radius: 4px; padding: 16px; margin-bottom: 12px; border: 1px solid #222; box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
-    .card h3 { font-size: 1rem; color: #ff1744; margin-bottom: 12px; font-family: 'Bebas Neue', sans-serif; letter-spacing: 2px; }
+    .card h3 { font-size: 1rem; color: #9e9e9e; margin-bottom: 12px; font-family: 'Bebas Neue', sans-serif; letter-spacing: 2px; }
 
     .btn { display: block; width: 100%; padding: 12px; border: none; border-radius: 10px; font-size: 0.95rem; font-weight: 600; cursor: pointer; margin-bottom: 8px; }
-    .btn-red { background: #ff1744; color: #000; font-family: 'Bebas Neue', sans-serif; letter-spacing: 2px; font-size: 1.1rem; }
+    .btn-red { background: #616161; color: #000; font-family: 'Bebas Neue', sans-serif; letter-spacing: 2px; font-size: 1.1rem; }
     .btn-green { background: #2e7d32; color: #fff; }
     .btn-blue { background: #1a237e; color: #fff; }
     .btn-gray { background: #1a1a1a; color: #888; border: 1px solid #333; }
 
     input, select { width: 100%; padding: 10px 12px; border: 2px solid #333; border-radius: 4px; font-size: 0.95rem; margin-bottom: 10px; outline: none; background: #1a1a1a; color: #f0f0f0; }
-    input:focus, select:focus { border-color: #ff1744; }
-    label { font-size: 0.82rem; font-weight: 700; color: #ff1744; display: block; margin-bottom: 4px; letter-spacing: 1px; }
+    input:focus, select:focus { border-color: #9e9e9e; }
+    label { font-size: 0.82rem; font-weight: 700; color: #9e9e9e; display: block; margin-bottom: 4px; letter-spacing: 1px; }
 
     .produto-item {
       background: #161616; border-radius: 4px; padding: 12px 14px; margin-bottom: 8px;
@@ -77,7 +76,7 @@
     .produto-item.zerado { border-left-color: #b71c1c; }
     .produto-nome { font-weight: 700; font-size: 0.9rem; color: #f0f0f0; }
     .produto-cod { font-size: 0.72rem; color: #555; }
-    .produto-qty { font-size: 1.1rem; font-weight: 700; color: #ff1744; }
+    .produto-qty { font-size: 1.1rem; font-weight: 700; color: #9e9e9e; }
     .produto-qty small { font-size: 0.7rem; color: #888; }
 
     #toast {
@@ -96,14 +95,14 @@
 
     .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
     .stat-card { background: #161616; border-radius: 4px; padding: 14px; text-align: center; border: 1px solid #222; }
-    .stat-num { font-size: 1.6rem; font-weight: 700; color: #ff1744; font-family: 'Bebas Neue', sans-serif; }
+    .stat-num { font-size: 1.6rem; font-weight: 700; color: #9e9e9e; font-family: 'Bebas Neue', sans-serif; }
     .stat-label { font-size: 0.72rem; color: #555; margin-top: 2px; letter-spacing: 1px; }
 
-    .hist-item { padding: 10px 0; border-bottom: 1px solid #1a1a1a; }
+    .hist-item { padding: 10px 6px; border-bottom: 1px solid #333; background: #1e1e1e; border-radius: 6px; margin-bottom: 6px; }
     .hist-item:last-child { border-bottom: none; }
     .hist-tipo { display: inline-block; padding: 2px 8px; border-radius: 8px; font-size: 0.72rem; font-weight: 700; }
-    .hist-contagem { background: #e3f2fd; color: #1a237e; }
-    .hist-entrada { background: #e8f5e9; color: #2e7d32; }
+    .hist-contagem { background: #e3f2fd; color: #0d47a1; }
+    .hist-entrada { background: #e8f5e9; color: #1b5e20; }
     .hist-saida { background: #fde8e8; color: #b71c1c; }
 
     /* Modal movimentação */
@@ -113,9 +112,9 @@
     }
     .modal-box {
       background: #111; border-radius: 4px 4px 0 0; padding: 24px 20px 36px;
-      width: 100%; max-width: 480px; border-top: 2px solid #ff1744;
+      width: 100%; max-width: 480px; border-top: 2px solid #2979ff;
     }
-    .modal-box h2 { font-size: 1.3rem; color: #ff1744; margin-bottom: 4px; font-family: 'Bebas Neue', sans-serif; letter-spacing: 2px; }
+    .modal-box h2 { font-size: 1.3rem; color: #9e9e9e; margin-bottom: 4px; font-family: 'Bebas Neue', sans-serif; letter-spacing: 2px; }
     .modal-box p { font-size: 0.8rem; color: #555; margin-bottom: 12px; }
 
     @media (min-width: 600px) {
@@ -192,7 +191,6 @@
 }
 .notif-item.entrada { border-left-color: #4caf50; }
 .notif-item.saida   { border-left-color: #f44336; }
-.notif-item.update  { border-left-color: #ffd600; }
 .notif-item.contagem{ border-left-color: #2196f3; }
 .notif-item.nao-lida{ background: rgba(255,255,255,0.12); }
 .notif-item .notif-titulo { font-weight: 700; margin-bottom: 2px; }
@@ -222,7 +220,7 @@
 <div id="app" style="display:none;">
   <div class="topbar">
     <div>
-      <h1>🏪 Prensadão DELIVERY</h1>
+      <h1>🏪 Prensadão Delivery</h1>
       <span id="topbar-usuario"></span>
     </div>
     <button onclick="abrirTutorial()" style="background:rgba(255,255,255,0.15);border:none;color:#fff;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:1rem;" title="Ajuda">❓</button>
@@ -231,14 +229,16 @@
   </div>
 
   <div class="tabs" id="tabs-bar">
-    <div class="tab active" onclick="showTab('estoque')">📦 TRAMPO</div>
-    <div class="tab" onclick="showTab('lancar')">➕ LANÇAR</div>
+    <div class="tab active" onclick="showTab('estoque',this)">📦 TRAMPO</div>
+    <div class="tab" onclick="showTab('lancar',this)">➕ LANÇAR</div>
     
-    <div class="tab adm-only" onclick="showTab('pedidos')">🛒 PEDIDOS</div>
+    
+    <div class="tab adm-only" onclick="showTab('historico',this)">📋 HISTÓRICO</div>
+
+<div class="tab adm-only" onclick="showTab('pedidos',this)">🛒 PEDIDOS</div>
     <div class="tab adm-only" onclick="showTab('relatorio')">📊 EXTRATO</div>
-    <div class="tab adm-only" onclick="showTab('produtos')">⚙️ BASE</div>
-    <div class="tab adm-only" onclick="showTab('embalagens')">📦 EMB.</div>
-    <div class="tab adm-only" onclick="showTab('bebidas')">🍺 BEB.</div>
+    <div class="tab adm-only" onclick="showTab('produtos',this)">⚙️ BASE</div>
+    <div class="tab" onclick="showTab('almoxarifado',this)">🏬 Almoxarifado</div>
   </div>
 
   <!-- ESTOQUE -->
@@ -272,19 +272,16 @@
         <button id="btn-tipo-entrada" onclick="selecionarTipo('entrada')" class="btn btn-red" style="flex:1;margin:0;padding:14px;">📥 Entrada</button>
         <button id="btn-tipo-contagem" onclick="selecionarTipo('contagem')" class="btn btn-gray" style="flex:1;margin:0;padding:14px;">📊 Contagem</button>
       </div>
-      <!-- CONTAGEM EM LOTE -->
-      <div style="margin-top:10px;">
-        <button class="btn" onclick="abrirContagemLote()" style="width:100%;background:linear-gradient(135deg,#1565c0,#0d47a1);color:#fff;padding:14px;font-size:1rem;font-weight:700;border:none;border-radius:12px;cursor:pointer;">
-          📋 Contagem em Lote
-        </button>
-      </div>
       <input type="hidden" id="lanc-tipo" value="entrada" />
 
       <!-- PASSO 2: Produto -->
       <label style="font-size:0.95rem;font-weight:700;color:#37474f;">2️⃣ Produto</label>
       <div style="display:flex;gap:8px;margin-top:6px;margin-bottom:8px;">
         <input type="text" id="scan-input" placeholder="Bora! Digita ou escaneia o código, mano..." style="margin:0;flex:1;" onkeydown="if(event.key==='Enter'){buscarPorCodigo();}" />
-        <button onclick="abrirCamera()" style="background:#b71c1c;border:none;border-radius:10px;padding:0 14px;font-size:1.2rem;cursor:pointer;color:#fff;">📷</button>
+        <button onclick="abrirCamera()" style="background:#1565c0;border:none;border-radius:10px;padding:0 14px;font-size:1.2rem;cursor:pointer;color:#fff;">📷</button>
+      <button class="btn" onclick="abrirContagemLote()" style="width:100%;background:linear-gradient(135deg,#1565c0,#0d47a1);color:#fff;padding:14px;font-size:1rem;font-weight:700;border:none;border-radius:12px;cursor:pointer;">
+          📋 Contagem em Lote
+        </button>
       </div>
       <div id="camera-area" style="display:none;margin-bottom:10px;">
         <video id="camera-video" style="width:100%;border-radius:10px;max-height:220px;" autoplay playsinline></video>
@@ -318,7 +315,7 @@
       <!-- Total calculado -->
       <div style="display:flex;align-items:center;gap:10px;margin:4px 0 8px;">
         <label style="font-size:0.95rem;font-weight:700;color:#37474f;margin:0;">Total:</label>
-        <input type="number" id="lanc-qtd" placeholder="Ex: 5 (ou 0 pra zerar)" step="0.001" min="0" style="margin:0;flex:1;" oninput="calcTotal()" />
+        <input type="number" id="lanc-qtd" placeholder="Ex: 5" step="0.001" min="0.001" style="margin:0;flex:1;" oninput="calcTotal()" />
         <span id="lanc-total" style="font-weight:700;color:#1a237e;min-width:50px;text-align:right;"></span>
       </div>
       <button class="btn btn-red" onclick="adicionarAoLote()">✅ Confirmar</button>
@@ -346,44 +343,6 @@
   
 
   <!-- HISTÓRICO -->
-  
-  <!-- PEDIDOS (ADM) -->
-  <div class="screen adm-only" id="tab-pedidos">
-    <div class="card">
-      <h3>🛒 Lista de Pedidos</h3>
-      <p style="font-size:0.82rem;color:#888;margin-bottom:10px;">Indicados pelo sistema + o que quiser adicionar.</p>
-      <button class="btn btn-red" style="width:100%;margin-bottom:8px;" onclick="gerarPedidos()">🔄 Calcular Pedido</button>
-    </div>
-    <div id="sec-sistema" style="display:none;">
-      <div style="background:#1a1a2e;border-radius:10px;padding:10px 14px;margin-bottom:8px;display:flex;align-items:center;gap:8px;">
-        <span>⚠️</span>
-        <span style="font-weight:700;color:#ef9a9a;font-size:0.92rem;">Indicados pelo sistema</span>
-        <span id="badge-sistema" style="background:#b71c1c;color:#fff;border-radius:12px;padding:1px 8px;font-size:0.75rem;font-weight:700;margin-left:auto;"></span>
-      </div>
-      <div id="lista-sistema"></div>
-    </div>
-    <div id="sec-gerente" style="display:none;">
-      <div style="background:#1a2e1a;border-radius:10px;padding:10px 14px;margin:12px 0 8px;display:flex;align-items:center;gap:8px;">
-        <span>➕</span>
-        <span style="font-weight:700;color:#a5d6a7;font-size:0.92rem;">Adicionados por mim</span>
-      </div>
-      <div id="lista-gerente"></div>
-    </div>
-    <div id="sec-busca-pedido" style="display:none;margin-top:8px;">
-      <div class="card" style="padding:12px;">
-        <div style="font-weight:700;font-size:0.85rem;color:#90caf9;margin-bottom:8px;">🔍 Adicionar produto</div>
-        <input type="text" id="busca-pedido-input" oninput="buscarProdutoPedido()" placeholder="Digite o nome..."
-          style="width:100%;background:#263238;border:1px solid #455a64;color:#fff;border-radius:8px;padding:8px 12px;font-size:0.9rem;box-sizing:border-box;">
-        <div id="busca-pedido-result" style="margin-top:6px;max-height:200px;overflow-y:auto;"></div>
-      </div>
-    </div>
-    <div id="sec-btn-enviar" style="display:none;margin-top:12px;padding-bottom:16px;">
-      <button class="btn btn-green" style="width:100%;padding:14px;font-size:1rem;font-weight:700;" onclick="enviarPedidoWhatsApp()">
-        📱 Enviar pelo WhatsApp
-      </button>
-    </div>
-  </div>
-
   <div class="screen" id="tab-historico">
     <div class="card">
       <h3>📋 Histórico de Movimentações</h3>
@@ -402,7 +361,7 @@
       <div style="display:flex;gap:8px;margin-bottom:10px;">
         <button id="btn-cat-proc" onclick="selecionarCat('Processado')" class="btn btn-red" style="flex:1;margin:0;">🥩 Processado</button>
         <button id="btn-cat-bruto" onclick="selecionarCat('Bruto')" class="btn btn-gray" style="flex:1;margin:0;">🌿 Bruto</button>
-        <button id="btn-cat-limpeza" onclick="selecionarCat('Limpeza')" class="btn btn-gray" style="flex:1;margin:0;">🧹 Limpeza</button>
+        <button id="btn-cat-todos" onclick="selecionarCat('Todos')" class="btn btn-gray" style="flex:1;margin:0;">📦 Todos</button>
       </div>
       <input type="hidden" id="rel-cat-sel" value="Processado" />
       <button class="btn btn-red" onclick="gerarRelatorio()">📊 Gerar Relatório</button>
@@ -410,9 +369,6 @@
         <button class="btn btn-green" onclick="compartilharWhatsApp()" style="flex:1;">📱 WhatsApp</button>
         <button class="btn btn-blue" onclick="exportarCSV()" style="flex:1;">📊 Planilha CSV</button>
       </div>
-      <button class="btn" onclick="abrirPedido()" id="btn-fazer-pedido" style="width:100%;background:linear-gradient(135deg,#e65100,#bf360c);color:#fff;padding:14px;font-size:1rem;font-weight:700;border:none;border-radius:12px;cursor:pointer;margin-top:4px;">
-        🛒 Fazer Pedido
-      </button>
     </div>
     <div id="relatorio-resultado"></div>
   </div>
@@ -430,7 +386,7 @@
         <input type="text" id="prod-nome" placeholder="Ex: Bacon" />
         <label>Categoria</label>
         <select id="prod-cat">
-          <option>Bebidas</option><option>Alimentos</option><option>Carnes</option><option>Frios</option><option>Hortifruti</option><option>Outros</option><option>Embalagens</option><option>Temperos</option><option>Limpeza</option>
+          <option>Bruto</option><option>Embalagem</option><option>Processado</option><option>Temperos</option>
         </select>
         <label>Unidade</label>
         <select id="prod-unidade">
@@ -460,6 +416,126 @@
       </div>
     </div>
   </div>
+
+  
+  <!-- PEDIDOS (ADM) -->
+  <div class="screen adm-only" id="tab-pedidos">
+    <div class="card">
+      <h3>🛒 Lista de Pedidos</h3>
+      <p style="font-size:0.82rem;color:#888;margin-bottom:10px;">Produtos indicados pelo sistema + o que você quiser adicionar.</p>
+      <button class="btn btn-red" style="width:100%;margin-bottom:8px;" onclick="gerarPedidos()">🔄 Calcular Pedido</button>
+    </div>
+
+    <!-- Seção 1: Indicados pelo sistema -->
+    <div id="sec-sistema" style="display:none;">
+      <div style="background:#1a1a2e;border-radius:10px;padding:10px 14px;margin-bottom:8px;display:flex;align-items:center;gap:8px;">
+        <span style="font-size:1rem;">⚠️</span>
+        <span style="font-weight:700;color:#ef9a9a;font-size:0.92rem;">Indicados pelo sistema</span>
+        <span id="badge-sistema" style="background:#b71c1c;color:#fff;border-radius:12px;padding:1px 8px;font-size:0.75rem;font-weight:700;margin-left:auto;"></span>
+      </div>
+      <div id="lista-sistema"></div>
+    </div>
+
+    <!-- Seção 2: Adicionados pelo gerente -->
+    <div id="sec-gerente" style="display:none;">
+      <div style="background:#1a2e1a;border-radius:10px;padding:10px 14px;margin:12px 0 8px;display:flex;align-items:center;gap:8px;">
+        <span style="font-size:1rem;">➕</span>
+        <span style="font-weight:700;color:#a5d6a7;font-size:0.92rem;">Adicionados por mim</span>
+      </div>
+      <div id="lista-gerente"></div>
+      <div style="margin-top:6px;display:none;" id="bloco-sem-extras">
+        <p style="color:#888;font-size:0.82rem;text-align:center;padding:8px;">Nenhum produto adicionado ainda.</p>
+      </div>
+    </div>
+
+    <!-- Busca para adicionar produto -->
+    <div id="sec-busca-pedido" style="display:none;margin-top:8px;">
+      <div class="card" style="padding:12px;">
+        <div style="font-weight:700;font-size:0.85rem;color:#90caf9;margin-bottom:8px;">🔍 Adicionar produto ao pedido</div>
+        <input type="text" id="busca-pedido-input" oninput="buscarProdutoPedido()" placeholder="Digite o nome do produto..."
+          style="width:100%;background:#263238;border:1px solid #455a64;color:#fff;border-radius:8px;padding:8px 12px;font-size:0.9rem;box-sizing:border-box;">
+        <div id="busca-pedido-result" style="margin-top:6px;max-height:200px;overflow-y:auto;"></div>
+      </div>
+    </div>
+
+    <!-- Botão enviar -->
+    <div id="sec-btn-enviar" style="display:none;margin-top:12px;padding-bottom:16px;">
+      <button class="btn btn-green" style="width:100%;padding:14px;font-size:1rem;font-weight:700;" onclick="enviarPedidoWhatsApp()">
+        📱 Enviar pelo WhatsApp
+      </button>
+    </div>
+  </div>
+
+  
+<div class="screen" id="tab-almoxarifado">
+    <!-- ESTOQUE ALMOXARIFADO -->
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <h3 style="margin:0;">📦 Almoxarifado</h3>
+        <button onclick="carregarAlmox()" style="background:#424242;border:none;border-radius:8px;color:#fff;padding:6px 12px;cursor:pointer;font-size:0.8rem;">🔄 Atualizar</button> <button onclick="abrirRelAlmox()" style="background:#c62828;border:none;border-radius:8px;color:#fff;padding:6px 12px;cursor:pointer;font-size:0.8rem;">📊 Relatório</button>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+        <button onclick="almoxFiltrar('todos')" id="abtn-todos" class="btn btn-gray" style="flex:1;margin:0;font-size:0.78rem;background:#757575;">📦 Todos</button>
+        <button onclick="almoxFiltrar('ok')"    id="abtn-ok"    class="btn btn-gray" style="flex:1;margin:0;font-size:0.78rem;">✅ OK</button>
+        <button onclick="almoxFiltrar('comprar')" id="abtn-comprar" class="btn btn-gray" style="flex:1;margin:0;font-size:0.78rem;">🛒 Comprar</button>
+        <button onclick="almoxFiltrar('zerado')"  id="abtn-zerado"  class="btn btn-gray" style="flex:1;margin:0;font-size:0.78rem;">🔴 Zerado</button>
+      </div>
+      <input type="text" id="almox-busca" placeholder="🔍 Buscar produto..." oninput="almoxRender()" style="margin:0;" />
+      <div id="almox-stats" style="margin:8px 0;font-size:0.82rem;color:#9e9e9e;"></div>
+      <div id="almox-lista" style="margin-top:8px;"></div>
+    </div>
+    <div id="almox-chefao-stats" style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0;"></div>
+    <div id="almox-chefao-lista"></div>
+
+    <!-- LANÇAR NO ALMOXARIFADO (todos) -->
+    <div class="card" style="margin-top:12px;">
+      <h3>➕ Lançar / Contagem</h3>
+
+      <!-- Tipo -->
+      <div style="display:flex;gap:8px;margin-bottom:10px;">
+        <button onclick="selecionarTipoAlmox('entrada')"  id="almox-btn-entrada"  class="btn btn-green" style="flex:1;margin:0;">📥 Entrada</button>
+        <button onclick="selecionarTipoAlmox('contagem')" id="almox-btn-contagem" class="btn btn-gray"  style="flex:1;margin:0;">📊 Contagem</button>
+      </div>
+      <input type="hidden" id="almox-tipo" value="entrada" />
+
+      <!-- Scanner -->
+      <label style="font-size:0.85rem;font-weight:700;">Código de Barras</label>
+      <div style="display:flex;gap:8px;margin-bottom:8px;">
+        <input type="text" id="almox-scan" placeholder="Digita ou escaneia..." style="flex:1;margin:0;padding:10px;border-radius:8px;border:1px solid #333;background:#1a1a1a;color:#fff;" onkeydown="if(event.key==='Enter'){buscarAlmoxPorCodigo();}" />
+        <button onclick="abrirCameraAlmox()" style="background:#424242;border:none;border-radius:10px;padding:0 14px;font-size:1.2rem;cursor:pointer;color:#fff;">📷</button>
+      </div>
+      <div id="almox-camera-area" style="display:none;margin-bottom:10px;">
+        <video id="almox-camera-video" style="width:100%;border-radius:10px;max-height:200px;" autoplay playsinline></video>
+        <button onclick="fecharCameraAlmox()" style="margin-top:6px;width:100%;padding:8px;background:#333;border:none;border-radius:8px;color:#fff;cursor:pointer;">✖ Fechar câmera</button>
+      </div>
+
+      <label style="font-size:0.85rem;font-weight:700;">Produto</label>
+      <select id="almox-produto" style="width:100%;padding:10px;border-radius:8px;border:1px solid #333;background:#1a1a1a;color:#fff;margin-bottom:8px;" onchange="selecionarAlmoxProduto()">
+        <option value="">-- Selecione --</option>
+      </select>
+
+      <label style="font-size:0.85rem;font-weight:700;">Quantidade</label>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input type="number" id="almox-qtd" placeholder="Ex: 10" step="1" min="0" style="flex:1;margin:0;" />
+        <span id="almox-unidade" style="font-size:0.9rem;color:#aaa;min-width:40px;">und</span>
+      </div>
+
+      <!-- PENDENTES ALMOX -->
+      <div class="card" style="margin-top:10px;padding:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <h4 style="margin:0;font-size:0.88rem;">⏳ Pendentes (<span id="almox-lanc-count">0</span>/15)</h4>
+          <button onclick="limparAlmoxLote()" style="background:none;border:none;color:#888;font-size:0.75rem;cursor:pointer;">✖ Limpar</button>
+        </div>
+        <div id="almox-lista-pendentes" style="min-height:36px;">
+          <p style="color:#555;text-align:center;font-size:0.78rem;padding:8px;">Confirme um item acima.</p>
+        </div>
+        <button class="btn btn-green" id="almox-btn-salvar" onclick="salvarAlmoxLote()" style="margin-top:8px;width:100%;display:none;">💾 SALVAR NO ALMOXARIFADO</button>
+      </div>
+
+      <button class="btn btn-gray" onclick="adicionarAlmoxAoLote()" style="width:100%;margin-top:8px;">✅ Confirmar</button>
+    </div>
+  </div>
+
 </div>
 
 <!-- MODAL MOVIMENTAÇÃO -->
@@ -468,26 +544,20 @@
     <h2 id="modal-nome"></h2>
     <p id="modal-info"></p>
     <label>Quanto tem, parceiro?</label>
-    <input type="number" id="modal-qtd" placeholder="Ex: 5 (ou 0 pra zerar)" step="0.001" min="0" style="font-size:1.4rem;text-align:center;" />
+    <input type="number" id="modal-qtd" placeholder="Ex: 5" step="0.001" min="0.001" style="font-size:1.4rem;text-align:center;" />
     <div id="modal-unidade" style="font-size:0.8rem;color:#888;margin:-4px 0 10px;"></div>
     <button class="btn btn-green" onclick="confirmarModal()">✅ Confirmar</button>
     <button class="btn btn-gray" onclick="fecharModal()">Cancelar</button>
   </div>
 </div>
 
-  <div id="toast"></div>
+<div id="toast"></div>
 
 <script>
 const SUPA_URL = 'https://trbyynbtuzpszdvjivbs.supabase.co';
 const SUPA_ANON = 'sb_publishable_lA_OIFoNVpmh5fmxNwu_1w_f9waqXfj';
 const UNIDADE_LOJA = 'delivery';
 
-
-var _notifInterval = null;
-var _notifUltimoAt = null;
-var _todasNotifs = [];
-var _toastTimer = null;
-var _lancamentos = [];
 let usuarioLogado = null;
 let produtosCache = {};
 let modalCodigo = null;
@@ -542,7 +612,7 @@ async function fazerLogin() {
     const res = await supa('GET', 'usuario', null, `usuario=eq.${encodeURIComponent(usuario)}&senha=eq.${encodeURIComponent(senha)}&unidade=eq.delivery&select=*`);
     if (res && res.length > 0) {
       usuarioLogado = res[0];
-      try { iniciarApp(); } catch(err) { console.error('iniciarApp err:', err); }
+      iniciarApp();
     } else {
       document.getElementById('login-erro').style.display = 'block';
     }
@@ -551,78 +621,7 @@ async function fazerLogin() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', function() { var el = document.getElementById('login-senha'); if(el) el.addEventListener('keydown', function(e){ if(e.key==='Enter') fazerLogin(); }); });
-
-
-async function _verificarNotifs() {
-  if (!usuarioLogado || usuarioLogado.perfil !== 'adm') return;
-  try {
-    let url = 'movimentacoes?order=created_at.desc&limit=30&select=id,nome,tipo,qtd,unidade,colaborador,created_at,unidade_loja';
-    if (_notifUltimoAt) url += '&created_at=gt.' + encodeURIComponent(_notifUltimoAt);
-    const res = await supa('GET', url);
-    if (!res || !Array.isArray(res) || res.length === 0) return;
-    const novas = res.filter(r => !_todasNotifs.find(n => n.id === r.id));
-    novas.forEach(n => { n._lida = false; _todasNotifs.push(n); });
-    if (res[0] && res[0].created_at) _notifUltimoAt = res[0].created_at;
-    if (_todasNotifs.length > 100) _todasNotifs = _todasNotifs.slice(-100);
-    if (novas.length > 0) {
-      _atualizarBadge();
-      const p = document.getElementById('notif-painel');
-      if (p && p.classList.contains('open')) _renderNotifs();
-    }
-  } catch(e) {}
-}
-
-function iniciarNotificacoes() {
-  if (!usuarioLogado || usuarioLogado.perfil !== 'adm') return;
-  const btn = document.getElementById('notif-btn');
-  if (btn) btn.classList.add('adm-visible');
-  _verificarNotifs();
-  if (_notifInterval) clearInterval(_notifInterval);
-  _notifInterval = setInterval(_verificarNotifs, 30000);
-}
-
-function toggleNotif() {
-  const p = document.getElementById('notif-painel');
-  if (!p) return;
-  p.classList.toggle('open');
-  if (p.classList.contains('open')) _renderNotifs();
-}
-
-function marcarTodasLidas() {
-  _todasNotifs.forEach(n => n._lida = true);
-  _atualizarBadge();
-  _renderNotifs();
-}
-
-function _atualizarBadge() {
-  const badge = document.getElementById('notif-badge');
-  if (!badge) return;
-  const nao = _todasNotifs.filter(n => !n._lida).length;
-  badge.textContent = nao > 99 ? '99+' : nao;
-  badge.classList.toggle('show', nao > 0);
-}
-
-function _renderNotifs() {
-  const lista = document.getElementById('notif-lista');
-  if (!lista) return;
-  if (_todasNotifs.length === 0) {
-    lista.innerHTML = '<div class="notif-vazia">Nenhuma notificação ainda 🔕</div>';
-    return;
-  }
-  const emoji = {entrada:'📥', saida:'📤', contagem:'📊'};
-  lista.innerHTML = _todasNotifs.slice().reverse().map(n => {
-    const lida = n._lida ? '' : ' nao-lida';
-    const e = emoji[n.tipo] || '📋';
-    let hora = '';
-    try { hora = new Date(n.created_at).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}); } catch(e2){}
-    return `<div class="notif-item ${n.tipo||''}${lida}">
-      <div class="notif-titulo">${e} ${n.nome||''}</div>
-      <div class="notif-detalhe">${(n.tipo||'').charAt(0).toUpperCase()+(n.tipo||'').slice(1)} · ${n.qtd||0} ${n.unidade||''} · <strong>${n.colaborador||''}</strong></div>
-      <div class="notif-hora">${hora}</div>
-    </div>`;
-  }).join('');
-}
+document.getElementById('login-senha').addEventListener('keydown', e => { if (e.key === 'Enter') fazerLogin(); });
 
 function iniciarApp() {
   document.getElementById('login-screen').style.display = 'none';
@@ -650,14 +649,16 @@ function sair() {
 }
 
 // ── TABS ──
-function showTab(name) {
+function showTab(name, el) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('tab-' + name).classList.add('active');
-  event.currentTarget.classList.add('active');
+  var tabEl = document.getElementById('tab-' + name);
+  if (tabEl) tabEl.classList.add('active');
+  try { if (el) el.classList.add('active'); else if (event && event.currentTarget) event.currentTarget.classList.add('active'); } catch(e) {}
 
   if (name === 'historico') carregarHistorico();
   if (name === 'lancar') popularSelectProdutos();
+  if (name === 'almoxarifado') { setTimeout(carregarAlmox, 50); }
 }
 
 // ── PRODUTOS ──
@@ -846,83 +847,29 @@ async function confirmarLancamento() {
   const tipo = document.getElementById('lanc-tipo').value;
   const qtd = parseFloat(document.getElementById('lanc-qtd').value);
 
-  if (!cod) { showToast('Selecione um produto!', 'error'); return; }
-  if (!qtd || qtd <= 0) { showToast('Informe a quantidade!', 'error'); return; }
+  if (!cod) { showToast('Eita! Seleciona o produto primeiro, mano!', 'error'); return; }
+  if (!qtd || qtd <= 0) { showToast('Coloca a quantidade aí, irmão!', 'error'); return; }
 
   const p = getProduto(cod);
   const est = parseFloat(p.estoque) || 0;
-  const novoEst = tipo === 'contagem' ? qtd : est + qtd;
-
-  // Salvar no Supabase com return=representation para confirmar
-  const opts = {
-    method: 'PATCH',
-    headers: {
-      'apikey': SUPA_ANON,
-      'Authorization': 'Bearer ' + SUPA_ANON,
-      'Content-Type': 'application/json',
-      'Prefer': 'return=representation'
-    },
-    body: JSON.stringify({ estoque: novoEst })
-  };
-  const r = await fetch(`${SUPA_URL}/rest/v1/produtos?codigo=eq.${cod}&unidade_loja=eq.delivery`, opts);
-  const res = await r.json();
-
-  if (!Array.isArray(res) || !res.length) {
-    showToast('Erro ao salvar! Tente novamente.', 'error');
-    return;
-  }
 
   await supa('POST', 'movimentacoes', {
     codigo: cod, nome: p.nome, tipo,
     qtd, unidade: p.unidade,
     colaborador: usuarioLogado.usuario,
     obs: tipo === 'contagem' ? 'Contagem' : 'Entrada',
-    unidade_loja: 'delivery',
     estoque_anterior: est,
-    novo_estoque: novoEst
+    novo_estoque: tipo === 'contagem' ? qtd : est + qtd,
+    status: 'pendente',
+    unidade_loja: UNIDADE_LOJA
   });
 
-
-// ── SMART CD: descontar do CD pelo código base ──
-  try {
-    const movRow = await fetch(`${SUPA_URL}/rest/v1/movimentacoes?id=eq.${id}&select=tipo,qtd,codigo`, {
-      headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + SUPA_ANON }
-    }).then(r => r.json());
-    const tipoMov  = movRow && movRow[0] ? movRow[0].tipo : '';
-    const qtdMov   = movRow && movRow[0] ? parseFloat(movRow[0].qtd) : 0;
-    const codMov   = movRow && movRow[0] ? movRow[0].codigo : '';
-
-    if (tipoMov === 'entrada' && qtdMov > 0 && codMov) {
-      // Extrair código base (remover sufixo _unidade)
-      const codBase = codMov.replace(/_centro$|_delivery$|_boqueiraw$/, '');
-      const codCD   = codBase + '_cd';
-
-      const cdRes = await fetch(
-        `${SUPA_URL}/rest/v1/produtos?codigo=eq.${codCD}&unidade_loja=eq.cd&select=codigo,estoque`,
-        { headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + SUPA_ANON } }
-      ).then(r => r.json());
-
-      if (cdRes && cdRes.length > 0) {
-        const novoCD = Math.max(0, parseFloat(cdRes[0].estoque || 0) - qtdMov);
-        await fetch(`${SUPA_URL}/rest/v1/produtos?codigo=eq.${codCD}&unidade_loja=eq.cd`, {
-          method: 'PATCH',
-          headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + SUPA_ANON, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ estoque: novoCD })
-        });
-        console.log('Smart CD: descontou ' + qtdMov + ' do CD (' + codCD + ') → novo estoque: ' + novoCD);
-      }
-    }
-  } catch(e) { console.warn('Smart CD erro:', e); }
-  // ── FIM SMART CD ──
-  // Atualizar cache local com o valor confirmado pelo servidor
-  produtosCache[cod].estoque = res[0].estoque;
-  renderEstoque();
-  popularSelectProdutos();
   document.getElementById('lanc-qtd').value = '';
   document.getElementById('lanc-pct').value = '';
   document.getElementById('lanc-total').textContent = '—';
   beep();
-  showToast('✅ ' + p.nome + ' — ' + fmtQ(res[0].estoque, p.unidade), 'success');
+  showToast('📋 Lançado! Aguardando confirmação...', 'success');
+  carregarPendentes();
 }
 
 // ── HISTÓRICO ──
@@ -932,31 +879,51 @@ async function carregarHistorico() {
   const el = document.getElementById('lista-historico');
   el.innerHTML = '<p style="color:#888;text-align:center;padding:20px;">Carregando...</p>';
 
-  const inicio = data + 'T00:00:00';
-  const fim = data + 'T23:59:59';
+  // Ajustar para UTC (banco em UTC, app em UTC-3)
+  const dtInicio = new Date(data + 'T00:00:00-03:00');
+  const dtFim    = new Date(data + 'T23:59:59-03:00');
+  const inicio   = dtInicio.toISOString().replace('Z', '');
+  const fim      = dtFim.toISOString().replace('Z', '');
   const movs = await supa('GET', 'movimentacoes', null,
-    `created_at=gte.${inicio}&created_at=lte.${fim}&order=created_at.desc&select=*`);
+    `unidade_loja=in.(cd,almoxarifado_cd)&created_at=gte.${inicio}&created_at=lte.${fim}&status=eq.confirmado&order=created_at.desc&select=*`);
 
   if (!movs || !movs.length) {
-    el.innerHTML = '<p style="color:#888;text-align:center;padding:20px;">Nenhum lançamento nesta data</p>';
+    el.innerHTML = '<p style="color:#888;text-align:center;padding:20px;">Nada confirmado nessa data, mano. Dia tranquilo 😎</p>';
     return;
   }
 
+  const DEST_MAP = {centro:'🏬 Centro', delivery:'🚚 Delivery', boqueiraw:'🥤 Boqueirão'};
+
   el.innerHTML = movs.map(m => {
     const hora = new Date(m.created_at).toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
-    const tipoCls = m.tipo === 'contagem' ? 'hist-contagem' : 'hist-entrada';
-    const tipoLabel = m.tipo === 'contagem' ? '📊 Contagem' : '📥 Entrada';
-    return `<div class="hist-item">
-      <div style="display:flex;justify-content:space-between;align-items:center;">
-        <div>
-          <span class="hist-tipo ${tipoCls}">${tipoLabel}</span>
-          <span style="font-size:0.72rem;color:#aaa;margin-left:6px;">${hora}</span>
-        </div>
-        <div style="font-weight:700;color:#1a237e;">${fmtQ(m.qtd, m.unidade)}</div>
-      </div>
-      <div style="font-size:0.85rem;font-weight:600;margin-top:3px;">${m.nome}</div>
-      <div style="font-size:0.75rem;color:#888;">por ${m.colaborador}</div>
-    </div>`;
+    let tipoCls, tipoLabel, corQtd = '#00e5ff', sinal = '+';
+    if (m.tipo === 'contagem') {
+      tipoCls = 'hist-contagem'; tipoLabel = '📊 Contagem'; sinal = '';
+    } else if (m.tipo === 'saida') {
+      tipoCls = 'hist-saida'; tipoLabel = '📤 Saída'; corQtd = '#ff5252'; sinal = '-';
+    } else {
+      tipoCls = 'hist-entrada'; tipoLabel = '📥 Entrada';
+    }
+    // Destino: extrair unidade da obs (SYNC_CD:<mov_id>) não tem direto,
+    // mas o colaborador tem o nome da unidade quando é auto
+    let destinoTag = '';
+    if (m.tipo === 'saida' && m.obs && m.obs.startsWith('SYNC_CD:')) {
+      // Buscar a mov de origem para saber a unidade
+      // Por enquanto mostrar tag genérica de enviado para unidade
+      destinoTag = '<span style="font-size:0.7rem;background:#1a2a1a;color:#ff9800;border-radius:4px;padding:1px 6px;margin-left:4px;">⬆️ p/ unidade</span>';
+    }
+    return '<div class="hist-item">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;">' +
+        '<div>' +
+          '<span class="hist-tipo ' + tipoCls + '">' + tipoLabel + '</span>' +
+          '<span style="font-size:0.72rem;color:#aaa;margin-left:6px;">' + hora + '</span>' +
+          destinoTag +
+        '</div>' +
+        '<div style="font-weight:700;color:' + corQtd + ';">' + sinal + fmtQ(m.qtd, m.unidade) + '</div>' +
+      '</div>' +
+      '<div style="font-size:0.85rem;font-weight:600;margin-top:3px;color:#f0f0f0;">' + m.nome + '</div>' +
+      '<div style="font-size:0.75rem;color:#aaa;">' + (m.tipo === 'saida' ? m.colaborador : 'por ' + m.colaborador + (m.confirmado_por ? ' · confirmado por ' + m.confirmado_por : '')) + '</div>' +
+    '</div>';
   }).join('');
 }
 
@@ -1078,7 +1045,7 @@ async function gerarRelatorio() {
   if (!itens.length) { el.innerHTML = '<p style="color:#888;text-align:center;padding:20px;">Nenhum produto</p>'; return; }
 
   const [ano, mes, dia] = data.split('-');
-  let html = `<div style="background:#607d8b;color:#fff;border-radius:10px;padding:10px 14px;margin-bottom:12px;font-weight:700;">
+  let html = `<div style="background:#263238;color:#fff;border-radius:10px;padding:10px 14px;margin-bottom:12px;font-weight:700;border:1px solid #37474f;">
     📅 ${dia}/${mes}/${ano} · ${cat === 'Todos' ? 'Todas categorias' : cat}
   </div>`;
 
@@ -1088,23 +1055,18 @@ async function gerarRelatorio() {
     const estAtual = p.estoque_atual !== null ? p.estoque_atual : p.contagem;
     const cor = semCont ? '#bbb' : estAtual === 0 ? '#b71c1c' : '#2e7d32';
 
-    html += `<div style="background:#252540;border-left:4px solid ${cor};border-radius:8px;padding:10px 14px;margin-bottom:8px;">
-      <div style="font-weight:700;font-size:0.92rem;color:#fff;">${p.nome} <span style="font-size:0.72rem;color:#90a4ae;font-weight:400;">${p.categoria}</span></div>
+    html += `<div style="background:#1e1e1e;border-left:4px solid ${cor};border-radius:8px;padding:10px 14px;margin-bottom:8px;box-shadow:0 1px 4px rgba(0,0,0,0.4);">
+      <div style="font-weight:700;font-size:0.92rem;color:#f0f0f0;">${p.nome} <span style="font-size:0.72rem;color:#888;font-weight:400;">${p.categoria}</span></div>
       <div style="font-size:0.8rem;margin-top:6px;display:flex;flex-wrap:wrap;gap:8px;">`;
 
-    if (isProc) {
-      // PROCESSADO: Entrada anterior | Contagem | Entrada atual | Consumo
-      html += `<span style="background:#1a2a3a;color:#90caf9;padding:3px 8px;border-radius:6px;">📦 Ent. anterior: <b>${p.entrada_anterior > 0 ? fmtQ(p.entrada_anterior, p.unidade) : '—'}</b></span>`;
-      html += `<span style="background:#2a1a3a;color:#ce93d8;padding:3px 8px;border-radius:6px;">📊 Contagem: <b style="color:${cor}">${semCont ? '—' : fmtQ(p.contagem, p.unidade)}</b></span>`;
-      html += `<span style="background:#1a2a1a;color:#a5d6a7;padding:3px 8px;border-radius:6px;">📥 Ent. atual: <b style="color:#2e7d32">${p.entrada_atual > 0 ? fmtQ(p.entrada_atual, p.unidade) : '—'}</b></span>`;
-      if (p.consumo !== null && p.consumo > 0) html += `<span style="background:#2a1a00;color:#ffcc80;padding:3px 8px;border-radius:6px;">🍳 Consumo: <b style="color:#e65100">${fmtQ(p.consumo, p.unidade)}</b></span>`;
-    } else {
-      // BRUTO: Entrada anterior | Contagem | Pedido sugerido
-      html += `<span style="background:#1a2a3a;color:#90caf9;padding:3px 8px;border-radius:6px;">📦 Ent. anterior: <b>${p.entrada_anterior > 0 ? fmtQ(p.entrada_anterior, p.unidade) : '—'}</b></span>`;
-      html += `<span style="background:#2a1a3a;color:#ce93d8;padding:3px 8px;border-radius:6px;">📊 Contagem: <b style="color:${cor}">${semCont ? '—' : fmtQ(p.contagem ?? estAtual, p.unidade)}</b></span>`;
-      const pedido = p.estoque_min > 0 && estAtual !== null ? Math.max(0, p.estoque_min - (estAtual || 0)) : null;
-      if (pedido !== null && pedido > 0) html += `<span style="background:#fde8e8;padding:3px 8px;border-radius:6px;">🛒 Pedir: <b style="color:#b71c1c">${fmtQ(pedido, p.unidade)}</b></span>`;
-    }
+    // Ordem: Ent. anterior | Entrada | Contagem | Estoque atual
+    const contLabel = semCont ? '**' : fmtQ(p.contagem !== null ? p.contagem : estAtual, p.unidade);
+    const estLabel  = estAtual !== null ? fmtQ(estAtual, p.unidade) : (p.contagem !== null ? fmtQ(p.contagem, p.unidade) : '—');
+
+    html += `<span style="background:#0d2a3a;padding:3px 8px;border-radius:6px;color:#90caf9;">📦 Ent. ant.: <b>${p.entrada_anterior > 0 ? fmtQ(p.entrada_anterior, p.unidade) : '—'}</b></span>`;
+    html += `<span style="background:#0d2a0d;padding:3px 8px;border-radius:6px;color:#a5d6a7;">📥 Entrada: <b>${p.entrada_atual > 0 ? fmtQ(p.entrada_atual, p.unidade) : '—'}</b></span>`;
+    html += `<span style="background:#2a0d3a;padding:3px 8px;border-radius:6px;color:#ce93d8;">📊 Contagem: <b style="color:${cor}">${contLabel}</b></span>`;
+    html += `<span style="background:#1a1a2a;padding:3px 8px;border-radius:6px;color:#90caf9;">📦 Estoque: <b style="color:#fff">${estLabel}</b></span>`;
 
     html += `</div></div>`;
   });
@@ -1124,7 +1086,7 @@ function compartilharWhatsApp() {
   if (!itens || !itens.length) { showToast('Gere o relatório primeiro!', 'error'); return; }
 
   const [ano, mes, dia] = data.split('-');
-  let texto = `📦 *Relatório de Estoque — Prensadão CD*\n📅 ${dia}/${mes}/${ano}\n\n`;
+  let texto = `📦 *Relatório de Estoque — Prensadão Delivery*\n📅 ${dia}/${mes}/${ano}\n\n`;
 
   itens.forEach(p => {
     const semCont = p.contagem === null;
@@ -1161,6 +1123,107 @@ function exportarCSV() {
   link.download = `estoque_prensadao_${dia}-${mes}-${ano}.csv`;
   link.click();
   showToast('✅ Planilha baixada!', 'success');
+}
+
+
+// -- REL ALMOX --
+function abrirRelAlmox() {
+  var m = document.getElementById("mra");
+  m.style.display = "block";
+  var inp = document.getElementById("mra-data");
+  inp.value = dataHoje();
+  gerarRelAlmox();
+}
+
+async function gerarRelAlmox() {
+  var data = document.getElementById("mra-data").value;
+  var el = document.getElementById("mra-resultado");
+  if (!data) return;
+  el.innerHTML = "<p style='color:#888;text-align:center;padding:20px;'>Carregando...</p>";
+
+  var prods = await supa("GET", "produtos", null, "unidade_loja=eq.almoxarifado_cd&select=*&order=nome.asc");
+  if (!prods || !prods.length) { el.innerHTML = "<p style='color:#888;text-align:center;'>Nenhum produto</p>"; return; }
+
+  var dtI = new Date(data + "T00:00:00-03:00");
+  var dtF = new Date(data + "T23:59:59-03:00");
+  var ini = dtI.toISOString().replace("Z","");
+  var fim = dtF.toISOString().replace("Z","");
+
+  var dtAI = new Date(data + "T00:00:00-03:00");
+  dtAI.setDate(dtAI.getDate()-1);
+  var dtAF = new Date(data + "T00:00:00-03:00");
+  dtAF.setMilliseconds(dtAF.getMilliseconds()-1);
+  var iniA = dtAI.toISOString().replace("Z","");
+  var fimA = dtAF.toISOString().replace("Z","");
+
+  var movsH = await supa("GET","movimentacoes",null,"unidade_loja=eq.almoxarifado_cd&created_at=gte."+ini+"&created_at=lte."+fim+"&status=eq.confirmado&order=created_at.asc&select=*");
+  var movsA = await supa("GET","movimentacoes",null,"unidade_loja=eq.almoxarifado_cd&created_at=gte."+iniA+"&created_at=lte."+fimA+"&status=eq.confirmado&order=created_at.asc&select=*");
+
+  var res = {};
+  prods.forEach(function(p){
+    res[p.codigo] = { nome:p.nome, unidade:p.unidade, categoria:p.categoria,
+      est: parseFloat(p.estoque)||0, entA:0, ent:0, sai:0, cont:null };
+  });
+  if (Array.isArray(movsA)) movsA.forEach(function(m){ if(res[m.codigo]&&m.tipo==="entrada") res[m.codigo].entA+=parseFloat(m.qtd)||0; });
+  if (Array.isArray(movsH)) movsH.forEach(function(m){
+    if(!res[m.codigo]) return;
+    if(m.tipo==="entrada") res[m.codigo].ent+=parseFloat(m.qtd)||0;
+    else if(m.tipo==="saida") res[m.codigo].sai+=parseFloat(m.qtd)||0;
+    else if(m.tipo==="contagem") res[m.codigo].cont=parseFloat(m.novo_estoque);
+  });
+
+  var itens = Object.values(res).sort(function(a,b){return a.nome.localeCompare(b.nome);});
+  window._rla = itens; window._rlaData = data;
+
+  var parts = data.split("-");
+  var out = "<div style='background:#263238;color:#fff;border-radius:10px;padding:10px 14px;margin-bottom:12px;font-weight:700;border:1px solid #37474f;'>"+
+    "&#128197; "+parts[2]+"/"+parts[1]+"/"+parts[0]+" &middot; Almoxarifado CD</div>";
+
+  itens.forEach(function(p){
+    var cor = p.est===0?"#f44336":"#4caf50";
+    var contLabel = p.cont===null ? "**" : fmtQ(p.cont, p.unidade);
+    out += "<div style='background:#1e1e1e;border-left:4px solid "+cor+";border-radius:8px;padding:10px 14px;margin-bottom:8px;'>";
+    out += "<div style='font-weight:700;font-size:0.92rem;color:#f0f0f0;'>"+p.nome+" <span style='font-size:0.72rem;color:#888;'>"+p.categoria+"</span></div>";
+    out += "<div style='font-size:0.8rem;margin-top:6px;display:flex;flex-wrap:wrap;gap:8px;'>";
+    out += "<span style='background:#0d2a3a;padding:3px 8px;border-radius:6px;color:#90caf9;'>&#128230; Ent.ant.: <b>"+(p.entA>0?fmtQ(p.entA,p.unidade):"&mdash;")+"</b></span>";
+    out += "<span style='background:#0d2a0d;padding:3px 8px;border-radius:6px;color:#a5d6a7;'>&#128229; Entrada: <b>"+(p.ent>0?fmtQ(p.ent,p.unidade):"&mdash;")+"</b></span>";
+    if(p.sai>0) out += "<span style='background:#2a0d0d;padding:3px 8px;border-radius:6px;color:#ef9a9a;'>&#128228; Sa&iacute;da: <b>"+fmtQ(p.sai,p.unidade)+"</b></span>";
+    out += "<span style='background:#2a0d3a;padding:3px 8px;border-radius:6px;color:#ce93d8;'>&#128202; Contagem: <b style='color:"+cor+"'>"+contLabel+"</b></span>";
+    out += "<span style='background:#1a1a2a;padding:3px 8px;border-radius:6px;color:#90caf9;'>&#128230; Estoque: <b style='color:#fff'>"+fmtQ(p.est,p.unidade)+"</b></span>";
+    out += "</div></div>";
+  });
+  el.innerHTML = out;
+}
+
+function compartilharRelAlmox() {
+  var itens = window._rla; var data = window._rlaData;
+  if (!itens||!itens.length) { showToast("Gere o relatorio primeiro!","error"); return; }
+  var p2 = data.split("-");
+  var txt = "&#128230; *Relatorio Almoxarifado CD*\n&#128197; "+p2[2]+"/"+p2[1]+"/"+p2[0]+"\n\n";
+  itens.forEach(function(p){
+    if(p.ent===0&&p.sai===0&&p.est===0) return;
+    txt += "▪️ *"+p.nome+"*\n";
+    if(p.entA>0) txt+="   Ent.ant.: "+fmtQ(p.entA,p.unidade)+"\n";
+    if(p.ent>0)  txt+="   Entrada: +"+fmtQ(p.ent,p.unidade)+"\n";
+    if(p.sai>0)  txt+="   Saida: -"+fmtQ(p.sai,p.unidade)+"\n";
+    txt+="   Estoque: "+fmtQ(p.est,p.unidade)+"\n";
+  });
+  txt+="\n_Gerado por Estoques Prensadao CD_";
+  window.open("https://wa.me/?text="+encodeURIComponent(txt),"_blank");
+}
+
+function exportarRelAlmoxCSV() {
+  var itens = window._rla; var data = window._rlaData;
+  if (!itens||!itens.length) { showToast("Gere o relatorio primeiro!","error"); return; }
+  var p2 = data.split("-");
+  var csv = "Produto;Unidade;Ent.Ant;Entrada;Saida;Estoque\n";
+  itens.forEach(function(p){ csv+='"'+p.nome+'";'+p.unidade+";"+p.entA+";"+p.ent+";"+p.sai+";"+p.est+"\n"; });
+  var blob = new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8;"});
+  var link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "almox_cd_"+p2[2]+"-"+p2[1]+"-"+p2[0]+".csv";
+  link.click();
+  showToast("Planilha baixada!","success");
 }
 
 // ── BEEP ──
@@ -1204,7 +1267,7 @@ function buscarPorCodigo() {
     const prefixoProduto = rawCod.substring(1, 7);
     p = Object.values(produtosCache).find(function(prod) {
       const base = prod.codigo.replace(/_[a-z]+$/, '');
-      return base === prefixoProduto || base.startsWith(prefixoProduto);
+      return base === prefixoProduto || prod.codigo.includes(prefixoProduto);
     });
   }
 
@@ -1251,7 +1314,7 @@ function buscarPorCodigo() {
   if (dup) {
     dup.qtd = Math.round((dup.qtd + qtd) * 1000) / 1000;
   } else {
-    _lancamentos.push({ cod: p.codigo, tipo: tipo, qtd: qtd, nome: p.nome, unidade: p.unidade, categoria: p.categoria || '' });
+    bipSom(); _lancamentos.push({ cod: p.codigo, tipo: tipo, qtd: qtd, nome: p.nome, unidade: p.unidade, categoria: p.categoria || '' });
   }
 
   // Limpar campos
@@ -1314,46 +1377,202 @@ function fecharCamera() {
 // Init
 document.getElementById('login-usuario').focus();
 
-// ── PEDIDOS ──
+// ── PENDENTES ──
+async function carregarPendentes() {
+  const el = document.getElementById('lista-pendentes');
+  if (!el) return;
+  el.innerHTML = '<p style="color:#888;text-align:center;padding:16px;">Carregando...</p>';
+  const movs = await supa('GET', 'movimentacoes', null,
+    `status=eq.pendente&unidade_loja=eq.${UNIDADE_LOJA}&order=created_at.asc&select=*`);
+
+  const badge = document.getElementById('badge-pendentes');
+  if (badge) badge.textContent = movs && movs.length ? movs.length : '';
+
+  if (!movs || !movs.length) {
+    el.innerHTML = '<p style="color:#888;text-align:center;padding:20px;">Tudo confirmado, mano! Nada pendente 🤙</p>';
+    return;
+  }
+
+  el.innerHTML = movs.map(m => {
+    const hora = new Date(m.created_at).toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
+    const tipoLabel = m.tipo === 'contagem' ? '📊 Contagem' : '📥 Entrada';
+    return `<div class="hist-item" style="border-left:4px solid #ff9800;padding:12px;background:#1a1400;border-radius:4px;margin-bottom:8px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <span style="font-size:0.78rem;font-weight:700;color:#ff9800;">${tipoLabel}</span>
+          <span style="font-size:0.72rem;color:#555;margin-left:6px;">${hora} · por ${m.colaborador}</span>
+        </div>
+        <div style="font-weight:700;color:#ff9800;">${fmtQ(m.qtd, m.unidade)}</div>
+      </div>
+      <div style="font-size:0.9rem;font-weight:700;margin:4px 0;color:#f0f0f0;">${m.nome}</div>
+      <div style="font-size:0.75rem;color:#555;">Est. anterior: ${fmtQ(m.estoque_anterior, m.unidade)} → Novo: ${fmtQ(m.novo_estoque, m.unidade)}</div>
+      <div style="display:flex;gap:8px;margin-top:10px;">
+        <button onclick="confirmarPendente('${m.id}','${m.codigo}',${m.novo_estoque},'${m.nome}')" style="flex:1;padding:10px;background:#00e5ff;color:#000;border:none;border-radius:4px;font-weight:700;cursor:pointer;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;">✅ CONFIRMAR</button>
+        <button onclick="rejeitarPendente('${m.id}','${m.nome}')" style="flex:1;padding:10px;background:#1a1a1a;color:#ff1744;border:1px solid #ff1744;border-radius:4px;font-weight:700;cursor:pointer;">❌ Rejeitar</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function confirmarPendente(id, codigo, novoEst, nome) {
+  const isOperador = usuarioLogado.perfil === 'operador';
+  if (isOperador) {
+    if (!confirm('Ei, irmão! Já deu uma boa olhada nisso aí? Tem certeza que tá certo esse bagulho? 👀')) return;
+  }
+  // Atualiza estoque
+  await fetch(`${SUPA_URL}/rest/v1/produtos?codigo=eq.${codigo}`, {
+    method: 'PATCH',
+    headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + SUPA_ANON, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ estoque: novoEst })
+  });
+  // Marca como confirmado
+  await fetch(`${SUPA_URL}/rest/v1/movimentacoes?id=eq.${id}`, {
+    method: 'PATCH',
+    headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + SUPA_ANON, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status: 'confirmado', confirmado_por: usuarioLogado.usuario, confirmado_em: new Date().toISOString() })
+  });
+
+// ── SMART CD: descontar do CD pelo código base ──
+  try {
+    const movRow = await fetch(`${SUPA_URL}/rest/v1/movimentacoes?id=eq.${id}&select=tipo,qtd,codigo`, {
+      headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + SUPA_ANON }
+    }).then(r => r.json());
+    const tipoMov  = movRow && movRow[0] ? movRow[0].tipo : '';
+    const qtdMov   = movRow && movRow[0] ? parseFloat(movRow[0].qtd) : 0;
+    const codMov   = movRow && movRow[0] ? movRow[0].codigo : '';
+
+    if (tipoMov === 'entrada' && qtdMov > 0 && codMov) {
+      // Extrair código base (remover sufixo _unidade)
+      const codBase = codMov.replace(/_centro$|_delivery$|_boqueiraw$/, '');
+      const codCD   = codBase + '_cd';
+
+      const cdRes = await fetch(
+        `${SUPA_URL}/rest/v1/produtos?codigo=eq.${codCD}&unidade_loja=eq.cd&select=codigo,estoque`,
+        { headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + SUPA_ANON } }
+      ).then(r => r.json());
+
+      if (cdRes && cdRes.length > 0) {
+        const novoCD = Math.max(0, parseFloat(cdRes[0].estoque || 0) - qtdMov);
+        await fetch(`${SUPA_URL}/rest/v1/produtos?codigo=eq.${codCD}&unidade_loja=eq.cd`, {
+          method: 'PATCH',
+          headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + SUPA_ANON, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ estoque: novoCD })
+        });
+        console.log('Smart CD: descontou ' + qtdMov + ' do CD (' + codCD + ') → novo estoque: ' + novoCD);
+      }
+    }
+  } catch(e) { console.warn('Smart CD erro:', e); }
+  // ── FIM SMART CD ──
+  // Atualiza cache
+  const chave = Object.keys(produtosCache).find(k => k === codigo || k.startsWith(codigo.split('_')[0]));
+  if (chave) produtosCache[chave].estoque = novoEst;
+  renderEstoque();
+  beep();
+  showToast('✅ ' + nome + ' confirmado no estoque!', 'success');
+  carregarPendentes();
+}
+
+async function rejeitarPendente(id, nome) {
+  if (!confirm('Vai rejeitar "' + nome + '"? Isso some do histórico.')) return;
+  await fetch(`${SUPA_URL}/rest/v1/movimentacoes?id=eq.${id}`, {
+    method: 'DELETE',
+    headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + SUPA_ANON }
+  });
+  showToast('🗑️ Lançamento rejeitado!', 'error');
+  carregarPendentes();
+}
+
+// ── CALC TOTAL (fechados + aberto) ──
+function calcTotal() {
+  const pct    = parseFloat(document.getElementById('lanc-pct').value)    || 0;
+  const fator  = parseFloat(document.getElementById('lanc-fator').value)  || 0;
+  const aberto = parseFloat(document.getElementById('lanc-aberto') ? document.getElementById('lanc-aberto').value : 0) || 0;
+
+  const subtotalFechados = pct > 0 && fator > 0 ? pct * fator : 0;
+  const total = subtotalFechados + aberto;
+
+  if (total > 0) {
+    document.getElementById('lanc-qtd').value = parseFloat(total.toFixed(3));
+    document.getElementById('lanc-total').textContent = total.toFixed(3);
+  } else if (pct > 0 || fator > 0 || aberto > 0) {
+    document.getElementById('lanc-total').textContent = '—';
+  }
+}
+
+// Alias para compatibilidade
+
+
+// Mostrar/ocultar campo aberto conforme tipo
+
+
+function atualizarLabelAberto() {
+  const cod = document.getElementById('lanc-produto') ? document.getElementById('lanc-produto').value : '';
+  const p = cod ? getProduto(cod) : null;
+  const isKg = p && (p.unidade === 'kg' || p.unidade === 'Kg' || p.unidade === 'KG');
+  const label = document.getElementById('label-aberto');
+  const unitEl = document.getElementById('lanc-aberto-unit');
+  const input = document.getElementById('lanc-aberto');
+  if (label) {
+    if (isKg) {
+      label.textContent = '⚖️ Kg de pacote aberto';
+      if (input) { input.step = '0.001'; input.placeholder = 'Ex: 0.350'; }
+      if (unitEl) unitEl.textContent = 'kg restantes no pacote aberto';
+    } else {
+      label.textContent = '🔓 Unidades de pacote aberto';
+      if (input) { input.step = '1'; input.placeholder = 'Ex: 3'; }
+      if (unitEl) unitEl.textContent = (p ? p.unidade + ' ' : '') + 'restantes no pacote aberto';
+    }
+  }
+}
+// ── FIM CALC TOTAL ──
+
+
+
 async // ===== PEDIDOS =====
 var _pedidoExtras = {};
-function cardPedido(cod, nomeH, nomeLimpo, und, qtd, removivel) {
-  var cor = removivel ? '#2e7d32' : '#b71c1c';
-  var btn = removivel ? '<button onclick="removerExtraPedido(this)" data-cod="'+cod+'" style="background:#b71c1c;border:none;border-radius:6px;color:#fff;padding:3px 8px;font-size:0.75rem;cursor:pointer;">X</button>' : '';
-  return '<div class="card" id="card-ped-'+cod+'" style="margin:0 0 8px;padding:12px;border-left:4px solid '+cor+';">'
-    +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><div style="font-weight:700;font-size:0.9rem;flex:1;">'+nomeH+'</div>'+btn+'</div>'
+
+function cardPedido(codigo, nomeHtml, nomeLimpo, unidade, qtd, removivel) {
+  var corBorda = removivel ? '#2e7d32' : '#b71c1c';
+  var btnRemover = removivel
+    ? '<button onclick="removerExtraPedido(\"'+codigo+'\")" style="background:#b71c1c;border:none;border-radius:6px;color:#fff;padding:3px 8px;font-size:0.75rem;cursor:pointer;">✕</button>'
+    : '';
+  return '<div class="card" id="card-ped-'+codigo+'" style="margin:0 0 8px;padding:12px;border-left:4px solid '+corBorda+';">'
+    +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">'
+    +'<div style="font-weight:700;font-size:0.9rem;flex:1;">'+nomeHtml+'</div>'
+    +btnRemover
+    +'</div>'
     +'<div style="display:flex;align-items:center;gap:8px;">'
-    +'<span style="font-size:0.82rem;color:#ccc;">Qtd:</span>'
-    +'<input type="number" min="0" step="0.1" value="'+qtd+'" id="ped-'+cod+'" style="flex:1;background:#263238;border:1px solid #455a64;color:#fff;border-radius:8px;padding:6px 10px;font-size:0.9rem;text-align:center;" data-nome="'+nomeLimpo+'" data-unidade="'+und+'">'
-    +'<span style="font-size:0.82rem;color:#aaa;">'+und+'</span>'
+    +'<span style="font-size:0.82rem;color:#ccc;white-space:nowrap;">Qtd:</span>'
+    +'<input type="number" min="0" step="0.1" value="'+qtd+'" id="ped-'+codigo+'" '
+    +'style="flex:1;background:#263238;border:1px solid #455a64;color:#fff;border-radius:8px;padding:6px 10px;font-size:0.9rem;text-align:center;" '
+    +'data-nome="'+nomeLimpo+'" data-unidade="'+unidade+'">'
+    +'<span style="font-size:0.82rem;color:#aaa;">'+unidade+'</span>'
     +'</div></div>';
 }
-function removerExtraPedido(btn) {
-  var cod = btn.getAttribute('data-cod');
-  delete _pedidoExtras[cod];
-  var c = document.getElementById('card-ped-'+cod);
-  if(c) c.remove();
-}
-function gerarPedidos() {
+
+function gerarPedidos(){
   var prods = Object.values(produtosCache).sort(function(a,b){return a.nome.localeCompare(b.nome);});
-  var ind = prods.filter(function(p){return (parseFloat(p.estoque_min)||0)>0&&(parseFloat(p.estoque)||0)<(parseFloat(p.estoque_min)||0);});
+  var indicados = prods.filter(function(p){
+    return (parseFloat(p.estoque_min)||0) > 0 && (parseFloat(p.estoque)||0) < (parseFloat(p.estoque_min)||0);
+  });
   var elSis = document.getElementById('lista-sistema');
-  if(ind.length){
-    var h='';
-    ind.forEach(function(p){
-      var est=parseFloat(p.estoque)||0,min=parseFloat(p.estoque_min)||0,max=parseFloat(p.estoque_max)||0;
+  var secSis = document.getElementById('sec-sistema');
+  if(indicados.length){
+    var htmlSis = '';
+    indicados.forEach(function(p){
+      var est=parseFloat(p.estoque)||0, min=parseFloat(p.estoque_min)||0, max=parseFloat(p.estoque_max)||0;
       var sug=Math.max(0,(max>0?max:min)-est);
-      var nH=p.nome+'<span style="background:#b71c1c;color:#fff;padding:1px 6px;border-radius:5px;font-size:0.7rem;margin-left:6px;">FALTA</span>';
-      h+=cardPedido(p.codigo,nH,p.nome,p.unidade,sug,false);
+      var nomeHtml=p.nome+'<span style="background:#b71c1c;color:#fff;padding:1px 7px;border-radius:6px;font-size:0.7rem;font-weight:700;margin-left:6px;">⚠️ FALTA</span>';
+      htmlSis+=cardPedido(p.codigo, nomeHtml, p.nome, p.unidade, sug, false);
     });
-    elSis.innerHTML=h;
-    document.getElementById('badge-sistema').textContent=ind.length+' produto'+(ind.length>1?'s':'');
+    elSis.innerHTML=htmlSis;
+    document.getElementById('badge-sistema').textContent=indicados.length+' produto'+(indicados.length>1?'s':'');
   } else {
-    elSis.innerHTML='<p style="color:#4caf50;text-align:center;padding:10px;">Tudo OK!</p>';
+    elSis.innerHTML='<p style="color:#4caf50;text-align:center;padding:10px;font-size:0.85rem;">✅ Tudo acima do mínimo!</p>';
     document.getElementById('badge-sistema').textContent='';
   }
+  secSis.style.display='';
   _pedidoExtras={};
-  document.getElementById('sec-sistema').style.display='';
   document.getElementById('lista-gerente').innerHTML='';
   document.getElementById('sec-gerente').style.display='';
   document.getElementById('sec-busca-pedido').style.display='';
@@ -1361,37 +1580,512 @@ function gerarPedidos() {
   document.getElementById('busca-pedido-input').value='';
   document.getElementById('busca-pedido-result').innerHTML='';
 }
-function buscarProdutoPedido() {
-  var t=(document.getElementById('busca-pedido-input').value||'').toLowerCase().trim();
+
+function buscarProdutoPedido(){
+  var termo=(document.getElementById('busca-pedido-input').value||'').toLowerCase().trim();
   var el=document.getElementById('busca-pedido-result');
-  if(!t){el.innerHTML='';return;}
-  var prods=Object.values(produtosCache).filter(function(p){return p.nome.toLowerCase().indexOf(t)>=0&&!_pedidoExtras[p.codigo]&&!document.getElementById('ped-'+p.codigo);}).slice(0,8);
-  if(!prods.length){el.innerHTML='<p style="color:#888;font-size:0.82rem;padding:4px;">Nenhum encontrado.</p>';return;}
-  var h='';
-  prods.forEach(function(p){h+='<div data-cod="'+p.codigo+'" data-nome="'+p.nome.replace(/"/g,'&quot;')+'" data-und="'+p.unidade+'" onclick="adicionarExtraPedido(this)" style="padding:8px;cursor:pointer;border-radius:8px;margin-bottom:4px;background:#263238;color:#fff;font-size:0.88rem;">+ '+p.nome+' ('+p.unidade+')</div>';});
-  el.innerHTML=h;
+  if(!termo){el.innerHTML='';return;}
+  var prods=Object.values(produtosCache).filter(function(p){
+    return p.nome.toLowerCase().indexOf(termo)>=0 && !_pedidoExtras[p.codigo] && !document.getElementById('ped-'+p.codigo);
+  }).slice(0,8);
+  if(!prods.length){el.innerHTML='<p style="color:#888;font-size:0.82rem;padding:4px 8px;">Nenhum produto encontrado.</p>';return;}
+  el.innerHTML=prods.map(function(p){
+    var nomeEsc=p.nome.replace(/"/g,'&quot;');
+    var unEsc=p.unidade.replace(/"/g,'&quot;');
+    return '<div onclick="adicionarExtraPedido(\"'+p.codigo+'\",\"'+nomeEsc+'\",\"'+unEsc+'\")" '
+      +'style="padding:8px 10px;cursor:pointer;border-radius:8px;margin-bottom:4px;background:#263238;font-size:0.88rem;color:#fff;">'
+      +'➕ '+p.nome+' <span style="color:#888;font-size:0.75rem;">('+p.unidade+')</span></div>';
+  }).join('');
 }
-function adicionarExtraPedido(el) {
-  var cod=el.getAttribute('data-cod'),nome=el.getAttribute('data-nome'),und=el.getAttribute('data-und');
-  if(_pedidoExtras[cod]||document.getElementById('ped-'+cod))return;
-  _pedidoExtras[cod]={nome:nome,unidade:und};
-  document.getElementById('lista-gerente').insertAdjacentHTML('beforeend',cardPedido(cod,nome,nome,und,0,true));
+
+function adicionarExtraPedido(codigo, nome, unidade){
+  if(_pedidoExtras[codigo]||document.getElementById('ped-'+codigo))return;
+  _pedidoExtras[codigo]={nome:nome,unidade:unidade};
+  document.getElementById('lista-gerente').insertAdjacentHTML('beforeend', cardPedido(codigo, nome, nome, unidade, 0, true));
   document.getElementById('busca-pedido-input').value='';
   document.getElementById('busca-pedido-result').innerHTML='';
   showToast(nome+' adicionado!','success');
 }
-function enviarPedidoWhatsApp() {
-  var sis=[],ger=[];
-  document.querySelectorAll('#lista-sistema input[id^="ped-"]').forEach(function(i){var q=parseFloat(i.value)||0;if(q>0)sis.push('- '+i.dataset.nome+': '+q+' '+i.dataset.unidade);});
-  document.querySelectorAll('#lista-gerente input[id^="ped-"]').forEach(function(i){var q=parseFloat(i.value)||0;if(q>0)ger.push('- '+i.dataset.nome+': '+q+' '+i.dataset.unidade);});
-  if(!sis.length&&!ger.length){showToast('Nenhum produto com quantidade!','error');return;}
-  var h=dataHoje(),pts=h.split('-');
-  var t='Pedido Prensadao - '+pts[2]+'/'+pts[1]+'/'+pts[0]+'\n\n';
-  if(sis.length)t+='Indicados pelo sistema:\n'+sis.join('\n')+'\n\n';
-  if(ger.length)t+='Adicionados pelo gerente:\n'+ger.join('\n')+'\n\n';
-  window.open('https://wa.me/?text='+encodeURIComponent(t),'_blank');
+
+function removerExtraPedido(codigo){
+  delete _pedidoExtras[codigo];
+  var card=document.getElementById('card-ped-'+codigo);
+  if(card)card.remove();
 }
-// ===== /PEDIDO VIA RELATÓRIO v3 =====
+
+function enviarPedidoWhatsApp(){
+  var sistema=[], gerente=[];
+  document.querySelectorAll('#lista-sistema input[id^="ped-"]').forEach(function(inp){
+    var qtd=parseFloat(inp.value)||0;
+    if(qtd>0) sistema.push('▪️ *'+inp.dataset.nome+'*: '+qtd+' '+inp.dataset.unidade);
+  });
+  document.querySelectorAll('#lista-gerente input[id^="ped-"]').forEach(function(inp){
+    var qtd=parseFloat(inp.value)||0;
+    if(qtd>0) gerente.push('▪️ *'+inp.dataset.nome+'*: '+qtd+' '+inp.dataset.unidade);
+  });
+  if(!sistema.length&&!gerente.length){showToast('Nenhum produto com quantidade > 0!','error');return;}
+  var hoje=dataHoje(), partes=hoje.split('-');
+  var texto='🛒 *Pedido de Compras — Prensadão Delivery*\n📅 '+partes[2]+'/'+partes[1]+'/'+partes[0]+'\n\n';
+  if(sistema.length) texto+='⚠️ *Indicados pelo sistema:*\n'+sistema.join('\n')+'\n\n';
+  if(gerente.length) texto+='➕ *Adicionados pelo gerente:*\n'+gerente.join('\n')+'\n\n';
+  texto+='_Gerado por Estoques Prensadão Delivery_';
+  window.open('https://wa.me/?text='+encodeURIComponent(texto),'_blank');
+}
+
+// ── LISTA DE LANÇAMENTOS ──
+var _lancamentos = [];
+
+function adicionarAoLote() {
+  var cod  = document.getElementById('lanc-produto').value;
+  var tipo = document.getElementById('lanc-tipo').value;
+  var qtd  = parseFloat(document.getElementById('lanc-qtd').value);
+  if (!cod)             { showToast('Seleciona o produto!', 'error'); return; }
+  if (!qtd || qtd <= 0) { showToast('Coloca a quantidade!', 'error'); return; }
+  if (_lancamentos.length >= 15) { showToast('Limite de 15 itens!', 'error'); return; }
+  var p = getProduto(cod);
+  // Multiplicar pela quantidade por pacote (se não for contagem)
+  if (tipo !== 'contagem' && p && p.qtd_por_pct && parseFloat(p.qtd_por_pct) > 1) {
+    qtd = qtd * parseFloat(p.qtd_por_pct);
+  }
+  var dup = null;
+  for (var i=0;i<_lancamentos.length;i++){
+    if(_lancamentos[i].cod===cod&&_lancamentos[i].tipo===tipo){dup=_lancamentos[i];break;}
+  }
+  if (dup) { dup.qtd += qtd; } else {
+    _lancamentos.push({cod:cod, tipo:tipo, qtd:qtd, nome:p.nome, unidade:p.unidade, categoria:p.categoria||''});
+  }
+  document.getElementById('lanc-qtd').value='';
+  var elp=document.getElementById('lanc-pct'); if(elp) elp.value='';
+  var ela=document.getElementById('lanc-aberto'); if(ela) ela.value='';
+  document.getElementById('lanc-total').textContent='';
+  beep();
+  renderLancamentos();
+}
+
+function renderLancamentos() {
+  var el  = document.getElementById('lista-lancamentos-itens');
+  var cnt = document.getElementById('lanc-count');
+  var btn = document.getElementById('btn-salvar-estoque');
+  if (!el) return;
+  if (cnt) cnt.textContent = _lancamentos.length;
+  if (!_lancamentos.length) {
+    el.innerHTML = '<p style="color:#555;text-align:center;font-size:0.78rem;padding:10px;">Nenhum item ainda. Confirme um lançamento acima.</p>';
+    if (btn) btn.style.display = 'none';
+    return;
+  }
+  if (btn) btn.style.display = 'block';
+  el.innerHTML = _lancamentos.map(function(l, i) {
+    var tl  = l.tipo === 'contagem' ? '📊' : '📥';
+    var cat = (l.categoria || '').toLowerCase();
+    var isEmb = cat === 'embalagem' || cat === 'embalagens';
+    var dest = l.tipo === 'entrada'
+      ? '<span style="font-size:0.65rem;margin-left:4px;color:' + (isEmb ? '#f9a825' : '#64b5f6') + ';">→ ' + (isEmb ? 'Almox' : 'CD') + '</span>'
+      : '';
+    return '<div style="padding:8px 0;border-bottom:1px solid #1e1e1e;">'
+      + '<div style="display:flex;justify-content:space-between;align-items:center;">'
+      + '<div style="flex:1;">'
+      + '<span style="font-size:0.88rem;font-weight:700;">' + tl + ' ' + l.nome + '</span>'
+      + dest
+      + '</div>'
+      + '<button onclick="_lancamentos.splice(' + i + ',1);renderLancamentos();" style="background:none;border:none;color:#f44336;font-size:1rem;cursor:pointer;padding:0 4px;">&#10006;</button>'
+      + '</div>'
+      + '<div style="display:flex;align-items:center;gap:8px;margin-top:5px;">'
+      + '<input type="number" value="' + l.qtd + '" min="0.001" step="0.001"'
+      + ' onchange="_lancamentos[' + i + '].qtd=parseFloat(this.value)||0;renderLancamentos();"'
+      + ' style="width:80px;padding:5px 8px;border-radius:8px;border:1px solid #444;background:#1a1a1a;color:#fff;font-size:0.9rem;font-weight:700;" />'
+      + '<span style="font-size:0.82rem;color:#888;">' + l.unidade + '</span>'
+      + '</div>'
+      + '</div>';
+  }).join('');
+}
+
+function limparLancamentos(){_lancamentos=[];renderLancamentos();}
+
+async function salvarLancamentos() {
+  var nomeLancEl = document.getElementById('nome-lancador');
+  var nomeLanc   = nomeLancEl ? nomeLancEl.value.trim() : '';
+  if (!nomeLanc) {
+    showToast('Coloca teu nome antes de salvar, parceiro!', 'error');
+    if (nomeLancEl) nomeLancEl.focus();
+    return;
+  }
+  if (!_lancamentos.length) { showToast('Nenhum lançamento!', 'error'); return; }
+  const btn = document.querySelector('#lista-lancamentos-wrap .btn-green');
+  if (btn) btn.disabled = true;
+  let ok = 0;
+  for (const l of _lancamentos) {
+    const p = getProduto(l.cod);
+    if (!p) continue;
+    const est = parseFloat(p.estoque) || 0;
+    // ENTRADA soma, CONTAGEM substitui
+    const novoEst = l.tipo === 'contagem' ? l.qtd : est + l.qtd;
+    const opts = {
+      method: 'PATCH',
+      headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + SUPA_ANON, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
+      body: JSON.stringify({ estoque: novoEst })
+    };
+    const r = await fetch(`${SUPA_URL}/rest/v1/produtos?codigo=eq.${l.cod}&unidade_loja=eq.${UNIDADE_LOJA}`, opts);
+    const res = await r.json();
+    if (Array.isArray(res) && res.length) {
+      await fetch(`${SUPA_URL}/rest/v1/movimentacoes`, {
+        method: 'POST',
+        headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + SUPA_ANON, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ codigo: l.cod, nome: l.nome, tipo: l.tipo, qtd: l.qtd, unidade: l.unidade, colaborador: nomeLanc || usuarioLogado.usuario, obs: l.tipo === 'contagem' ? 'Contagem' : 'Entrada', unidade_loja: UNIDADE_LOJA, estoque_anterior: est, novo_estoque: novoEst, status: 'confirmado' })
+      });
+
+      // Smart Desconto: SOMENTE em ENTRADA
+      if (l.tipo === 'entrada') {
+        try {
+          const codBase = l.cod.replace(/_centro$|_delivery$|_boqueiraw$/, '');
+          const cat = (l.categoria || p.categoria || '').toLowerCase();
+          const isEmbalagem = cat === 'embalagem' || cat === 'embalagens' || cat === 'limpeza';
+
+          if (isEmbalagem) {
+            // Embalagem → desconta do Almoxarifado pelo código base
+            const codAlmox = codBase + '_almoxarifado';
+            const almoxRes = await fetch(
+              `${SUPA_URL}/rest/v1/produtos?codigo=eq.${codAlmox}&unidade_loja=eq.almoxarifado&select=codigo,estoque`,
+              { headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + SUPA_ANON } }
+            ).then(function(r){ return r.json(); });
+            if (almoxRes && almoxRes.length > 0) {
+              const novoAlmox = Math.max(0, parseFloat(almoxRes[0].estoque || 0) - l.qtd);
+              await fetch(`${SUPA_URL}/rest/v1/produtos?codigo=eq.${codAlmox}&unidade_loja=eq.almoxarifado`, {
+                method: 'PATCH',
+                headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + SUPA_ANON, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ estoque: novoAlmox })
+              });
+            }
+          } else {
+            // Processado / Bruto / outros → desconta do CD pelo código base
+            const codCD = codBase + '_cd';
+            const cdRes = await fetch(
+              `${SUPA_URL}/rest/v1/produtos?codigo=eq.${codCD}&unidade_loja=eq.cd&select=codigo,estoque`,
+              { headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + SUPA_ANON } }
+            ).then(function(r){ return r.json(); });
+            if (cdRes && cdRes.length > 0) {
+              const novoCD = Math.max(0, parseFloat(cdRes[0].estoque || 0) - l.qtd);
+              await fetch(`${SUPA_URL}/rest/v1/produtos?codigo=eq.${codCD}&unidade_loja=eq.cd`, {
+                method: 'PATCH',
+                headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + SUPA_ANON, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ estoque: novoCD })
+              });
+            }
+          }
+        } catch(e) { console.warn('Smart Desconto:', e); }
+      }
+
+      produtosCache[l.cod].estoque = res[0].estoque;
+      ok++;
+    }
+  }
+  renderEstoque();
+  var nl = document.getElementById('nome-lancador'); if (nl) nl.value = '';
+  limparLancamentos();
+  showToast('✅ ' + ok + ' lançamento(s) salvos!', 'success');
+  
+  if (btn) btn.disabled = false;
+}
+
+// ── FIM LISTA DE LANÇAMENTOS ──
+
+</script>
+
+
+
+<!-- CHATBOT -->
+<div id="chat-btn" onclick="toggleChat()" style="position:fixed;bottom:20px;right:20px;width:54px;height:54px;border-radius:50%;background:#25d366;display:flex;align-items:center;justify-content:center;font-size:1.5rem;cursor:pointer;z-index:8000;box-shadow:0 4px 16px rgba(0,0,0,0.4);">💬</div>
+
+<div id="chat-box" style="display:none;position:fixed;bottom:84px;right:16px;width:calc(100% - 32px);max-width:360px;background:#111;border:1px solid #333;border-radius:16px;z-index:8000;box-shadow:0 8px 32px rgba(0,0,0,0.6);overflow:hidden;">
+  <!-- Header -->
+  <div style="background:#1a1a1a;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #222;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="width:36px;height:36px;border-radius:50%;background:#25d366;display:flex;align-items:center;justify-content:center;font-size:1.1rem;">🤖</div>
+      <div>
+        <div style="font-weight:700;font-size:0.88rem;color:#fff;">Assistente Prensadão</div>
+        <div style="font-size:0.7rem;color:#4caf50;">● Online</div>
+      </div>
+    </div>
+    <button onclick="toggleChat()" style="background:none;border:none;color:#555;font-size:1.3rem;cursor:pointer;">✕</button>
+  </div>
+  <!-- Mensagens -->
+  <div id="chat-msgs" style="padding:12px;height:280px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;">
+    <div class="chat-bot-msg">Salve! 👋 Tô aqui pra tirar suas dúvidas sobre o sistema.<br><br>Digita o que você precisa ou escolhe uma opção abaixo 👇</div>
+    <div id="chat-sugestoes" style="display:flex;flex-direction:column;gap:6px;"></div>
+  </div>
+  <!-- Input -->
+  <div style="padding:10px 12px;border-top:1px solid #222;display:flex;gap:8px;">
+    <input id="chat-input" type="text" placeholder="Digita sua dúvida..." style="flex:1;background:#1a1a1a;border:1px solid #333;color:#fff;border-radius:10px;padding:8px 12px;font-size:0.85rem;" onkeydown="if(event.key==='Enter') enviarChat()" />
+    <button onclick="enviarChat()" style="background:#25d366;border:none;color:#fff;border-radius:10px;padding:8px 12px;cursor:pointer;font-size:1rem;">➤</button>
+  </div>
+</div>
+
+<style>
+.chat-bot-msg { background:#1a1a1a;border:1px solid #2a2a2a;color:#ccc;padding:10px 12px;border-radius:12px 12px 12px 4px;font-size:0.83rem;line-height:1.6;max-width:92%;align-self:flex-start; }
+.chat-user-msg { background:#1565c0;color:#fff;padding:10px 12px;border-radius:12px 12px 4px 12px;font-size:0.83rem;line-height:1.6;max-width:80%;align-self:flex-end; }
+.chat-sug { background:#1a1a1a;border:1px solid #333;color:#aaa;padding:8px 12px;border-radius:10px;font-size:0.8rem;cursor:pointer;text-align:left;transition:all 0.15s; }
+.chat-sug:hover { background:#252525;color:#fff; }
+</style>
+
+<script>
+var _RESPOSTAS = [{"q": "Como faço uma entrada?", "tags": ["entrada", "entrar", "chegou", "produto chegou", "como lancar", "lançar entrada"], "r": "📥 <b>Como fazer uma ENTRADA:</b><br><br>1️⃣ Vai na aba <b>➕ LANÇAR</b><br>2️⃣ Seleciona <b>ENTRADA</b><br>3️⃣ Escaneia o código de barras ou digita o nome<br>4️⃣ Digita a quantidade em <b>PCT (pacotes)</b><br>5️⃣ Clica <b>ADICIONAR</b><br>6️⃣ Confere a lista de pendentes e clica <b>CONFIRMAR TUDO</b><br><br>⚠️ Não feche o app antes de confirmar!"}, {"q": "O que é contagem?", "tags": ["contagem", "contar", "o que é contagem", "diferença entrada contagem"], "r": "📊 <b>O que é CONTAGEM:</b><br><br>Contagem é quando você <b>confere o que tem fisicamente</b> no estoque e registra no sistema.<br><br>• <b>ENTRADA</b> = chegou produto novo do CD<br>• <b>CONTAGEM</b> = você tá verificando o que tem agora<br><br>Na contagem você digita o total real que existe — não o que chegou. Ex: tem 3kg de frango no freezer → digita 3."}, {"q": "O que é PCT?", "tags": ["pct", "pacote", "o que é pct", "quantidade pct", "o que significa pct"], "r": "📦 <b>O que é PCT (Pacote):</b><br><br>PCT é a unidade de compra do produto.<br><br>Exemplos:<br>• Coca Cola vem em caixa de <b>6 und</b> → 1 PCT = 6<br>• Frango vem em pacote de <b>3kg</b> → 1 PCT = 3kg<br>• Pão vem em pacote de <b>4 und</b> → 1 PCT = 4<br><br>Na entrada você digita <b>quantos pacotes chegaram</b> — o sistema multiplica automaticamente! 😊"}, {"q": "Como funciona a multiplicação?", "tags": ["multiplicação", "multiplicar", "calculo", "cálculo", "conta", "como calcula"], "r": "✖️ <b>Como funciona a multiplicação:</b><br><br>Quando você digita a quantidade na entrada, o sistema multiplica automaticamente pelo PCT do produto.<br><br>Exemplo:<br>• Chegaram <b>2 caixas</b> de Coca Cola (PCT = 6)<br>• Você digita: <b>2</b><br>• O sistema lança: <b>12 unidades</b> no estoque<br><br>Você só precisa contar os pacotes — o sistema faz o resto! 🧮"}, {"q": "Por que preciso colocar quantidade?", "tags": ["porque quantidade", "por que quantidade", "pra que quantidade", "quantidade obrigatorio"], "r": "🔢 <b>Por que informar a quantidade:</b><br><br>A quantidade é essencial pra o sistema saber quanto tem em estoque.<br><br>Sem ela, não dá pra:<br>• Saber quando tá acabando 🔴<br>• Gerar pedido automático 🛒<br>• Controlar o que saiu do CD 📤<br><br>É o coração do sistema — cada lançamento conta!"}, {"q": "Como tiro um relatório?", "tags": ["relatorio", "relatório", "extrato", "historico", "histórico", "como ver", "ver lançamentos"], "r": "📊 <b>Como tirar relatório:</b><br><br><b>Operador:</b><br>→ Aba <b>📋 ROLO</b> — vê tudo que foi lançado no dia. Muda a data pra ver outros dias.<br><br><b>ADM:</b><br>→ Aba <b>📊 EXTRATO</b> — relatório completo com totais por produto. Dá pra exportar pro WhatsApp.<br><br>Filtra por data e tipo (entrada ou contagem)."}, {"q": "O que significa o mínimo e máximo?", "tags": ["minimo", "mínimo", "maximo", "máximo", "min", "max", "limite", "o que é min", "o que é max"], "r": "📏 <b>O que são Mínimo e Máximo:</b><br><br>• <b>Mínimo</b> = quantidade mínima que deve ter em estoque. Abaixo disso fica amarelo ⚠️ no sistema.<br>• <b>Máximo</b> = capacidade máxima de armazenamento.<br><br>Quem define esses valores é o <b>ADM ou o Chefão</b> no sistema.<br><br>Se estiver vermelho 🔴 = zerou. Se estiver amarelo 🟡 = tá no limite e precisa pedir mais!"}, {"q": "Como sei meu mínimo e máximo?", "tags": ["como ver min", "como ver max", "ver minimo", "ver maximo", "onde fica minimo"], "r": "📏 <b>Como ver o Mínimo e Máximo:</b><br><br>Na aba <b>📦 TRAMPO GERAL</b>, cada produto mostra:<br>• O estoque atual<br>• A cor indica se está OK, no limite ou zerado<br><br>Os valores de mín/máx são configurados pelo ADM.<br><br>Se quiser saber os valores exatos, <b>chama o Josiel</b> pelo botão abaixo! 👇"}, {"q": "Produto não aparece ou código errado", "tags": ["produto não aparece", "nao aparece", "código errado", "codigo errado", "produto errado", "não acha", "nao acha", "produto sumiu"], "r": "🔍 <b>Produto não aparece / código errado:</b><br><br>Isso pode acontecer quando:<br>• O produto ainda não foi cadastrado no sistema<br>• O código de barras foi alterado pelo fornecedor<br>• O produto foi cadastrado com nome diferente<br><br>✅ Tenta buscar pelo <b>nome</b> em vez do código.<br><br>Se não achar mesmo assim, <b>chama o Josiel</b> pelo botão abaixo pra cadastrar! 👇"}, {"q": "Esqueci a senha", "tags": ["senha", "esqueci senha", "nao lembro senha", "não lembro senha", "senha errada", "não consigo entrar"], "r": "🔑 <b>Esqueceu a senha:</b><br><br>Senhas são gerenciadas pelo Josiel.<br><br>Manda mensagem pra ele pelo botão abaixo que ele resolve rapidinho! 👇"}, {"q": "O que significa vermelho ou amarelo?", "tags": ["vermelho", "amarelo", "verde", "cor", "cores", "o que significa cor", "por que vermelho", "por que amarelo"], "r": "🎨 <b>O que significam as cores:</b><br><br>🔴 <b>Vermelho</b> = estoque ZERADO. Precisa fazer entrada urgente!<br>🟡 <b>Amarelo</b> = estoque abaixo do mínimo. Tá acabando, faz o pedido!<br>🟢 <b>Verde</b> = tá suave, estoque OK.<br><br>Essas cores aparecem na aba <b>📦 TRAMPO GERAL</b>."}, {"q": "Como escanear o código?", "tags": ["escanear", "scanner", "câmera", "camera", "como escanear", "codigo barras", "código de barras"], "r": "📷 <b>Como escanear o código de barras:</b><br><br>1️⃣ Na aba <b>➕ LANÇAR</b>, clica no campo de código<br>2️⃣ Se o celular tiver câmera disponível, aparece opção de escanear<br>3️⃣ Aponta pro código de barras do produto<br>4️⃣ O sistema preenche automaticamente!<br><br>💡 Dica: deixa o código bem iluminado pra leitura ser mais rápida."}, {"q": "Como sei o que vai chegar de produto?", "tags": ["vai chegar", "o que vai chegar", "produto vai chegar", "pedido", "precisao", "precisão", "o que pedir", "o que precisa", "falta produto", "o que falta"], "r": "🛒 <b>Como saber o que vai chegar:</b><br><br>O sistema tem a aba <b>🛒 PRECISÃO</b> (só no Chefão e ADM) que mostra automaticamente o que precisa ser pedido.<br><br>Ela calcula com base no estoque mínimo de cada produto:<br>• Se tiver abaixo do mínimo → aparece na lista de pedido<br>• Mostra a quantidade sugerida pra pedir<br><br>Pra operadores: quando um produto ficar <b>🔴 vermelho ou 🟡 amarelo</b> na aba TRAMPO GERAL, é sinal que tá chegando pedido em breve — fala com o Josiel ou ADM!"}];
+var _chatAberto = false;
+
+var _SUGESTOES = [
+  "O que é entrada?",
+  "O que é contagem?",
+  "O que é PCT?",
+  "Como funciona a multiplicação?",
+  "Como tiro um relatório?",
+  "O que significa mínimo e máximo?",
+  "Como sei o que vai chegar de produto?",
+  "Produto não aparece",
+  "O que significa vermelho ou amarelo?",
+];
+
+function toggleChat() {
+  _chatAberto = !_chatAberto;
+  document.getElementById('chat-box').style.display = _chatAberto ? 'flex' : 'none';
+  document.getElementById('chat-box').style.flexDirection = 'column';
+  if (_chatAberto) {
+    renderSugestoes();
+    setTimeout(function() { document.getElementById('chat-input').focus(); }, 200);
+  }
+}
+
+function renderSugestoes() {
+  var el = document.getElementById('chat-sugestoes');
+  el.innerHTML = _SUGESTOES.map(function(s) {
+    return '<button class="chat-sug" onclick="responderSugestao(' + JSON.stringify(s) + ')">' + s + '</button>';
+  }).join('');
+}
+
+function adicionarMsg(texto, tipo) {
+  var msgs = document.getElementById('chat-msgs');
+  var div = document.createElement('div');
+  div.className = tipo === 'user' ? 'chat-user-msg' : 'chat-bot-msg';
+  div.innerHTML = texto;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function responderSugestao(pergunta) {
+  document.getElementById('chat-sugestoes').innerHTML = '';
+  adicionarMsg(pergunta, 'user');
+  setTimeout(function() { buscarResposta(pergunta); }, 300);
+}
+
+function enviarChat() {
+  var input = document.getElementById('chat-input');
+  var texto = input.value.trim();
+  if (!texto) return;
+  input.value = '';
+  document.getElementById('chat-sugestoes').innerHTML = '';
+  adicionarMsg(texto, 'user');
+  setTimeout(function() { buscarResposta(texto); }, 300);
+}
+
+function buscarResposta(pergunta) {
+  var p = pergunta.toLowerCase();
+  var melhor = null;
+  var melhorScore = 0;
+
+  for (var i = 0; i < _RESPOSTAS.length; i++) {
+    var r = _RESPOSTAS[i];
+    var score = 0;
+    for (var j = 0; j < r.tags.length; j++) {
+      if (p.includes(r.tags[j])) {
+        score += r.tags[j].length; // prioriza tags mais longas/específicas
+      }
+    }
+    if (score > melhorScore) {
+      melhorScore = score;
+      melhor = r;
+    }
+  }
+
+  if (melhor && melhorScore > 0) {
+    adicionarMsg(melhor.r, 'bot');
+    // Oferecer mais opções
+    setTimeout(function() {
+      adicionarMsg('Isso ajudou? Tem mais alguma dúvida? 😊<br><br><button class="chat-sug" onclick="mostrarTodasOpcoes()" style="margin-top:4px;">Ver outras dúvidas</button>', 'bot');
+    }, 600);
+  } else {
+    // Não encontrou resposta
+    var msgWpp = '#sistema DÚVIDA: ' + pergunta;
+    var wppUrl = 'https://wa.me/5542988819420?text=' + encodeURIComponent(msgWpp);
+    adicionarMsg(
+      'Hmm, essa eu não sei responder não, mano! 🤔<br><br>Mas o Josiel resolve — clica aí pra chamar ele diretamente:<br><br><a href="' + wppUrl + '" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:#0a1f0a;border:1px solid #2e7d32;color:#4caf50;border-radius:8px;padding:8px 12px;text-decoration:none;font-size:0.82rem;font-weight:700;margin-top:4px;">💬 Chamar Josiel no WhatsApp</a>',
+      'bot'
+    );
+  }
+}
+
+function mostrarTodasOpcoes() {
+  adicionarMsg('Escolhe aí o que você quer saber:', 'bot');
+  var msgs = document.getElementById('chat-msgs');
+  var div = document.createElement('div');
+  div.style.cssText = 'display:flex;flex-direction:column;gap:6px;align-self:stretch;';
+  div.innerHTML = _SUGESTOES.map(function(s) {
+    return '<button class="chat-sug" onclick="responderSugestao(' + JSON.stringify(s) + ')">' + s + '</button>';
+  }).join('');
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+</script>
+
+<!-- FEEDBACK BTN -->
+<div id="feedback-btn" onclick="toggleFeedback()" style="position:fixed;bottom:84px;right:20px;width:44px;height:44px;border-radius:50%;background:#1a1a2e;border:2px solid #7c4dff;display:flex;align-items:center;justify-content:center;font-size:1.1rem;cursor:pointer;z-index:7999;box-shadow:0 4px 16px rgba(0,0,0,0.4);" title="Feedback">💡</div>
+
+<!-- FEEDBACK PANEL -->
+<div id="feedback-panel" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:8500;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:#0d0d0d;border:2px solid #7c4dff;border-radius:18px;width:100%;max-width:400px;padding:24px 20px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+      <span style="font-family:Bebas Neue,sans-serif;font-size:1.2rem;color:#7c4dff;letter-spacing:2px;">💡 FEEDBACK</span>
+      <button onclick="toggleFeedback()" style="background:none;border:none;color:#555;font-size:1.4rem;cursor:pointer;">✕</button>
+    </div>
+    <p style="font-size:0.78rem;color:#555;margin-bottom:16px;">Encontrou um erro ou tem uma sugestão? Manda aqui — vai direto pro Josiel!</p>
+
+    <!-- Tipo -->
+    <label style="font-size:0.78rem;color:#888;font-weight:700;letter-spacing:1px;">TIPO</label>
+    <div style="display:flex;gap:8px;margin:8px 0 16px;">
+      <button id="fb-tipo-erro" onclick="setFbTipo('erro')" style="flex:1;background:#2a0a0a;border:2px solid #b71c1c;color:#ef5350;border-radius:10px;padding:9px;cursor:pointer;font-weight:700;font-size:0.82rem;">🐛 Erro</button>
+      <button id="fb-tipo-sugestao" onclick="setFbTipo('sugestao')" style="flex:1;background:#0a2a0a;border:1px solid #333;color:#888;border-radius:10px;padding:9px;cursor:pointer;font-weight:700;font-size:0.82rem;">💡 Sugestão</button>
+      <button id="fb-tipo-elogio" onclick="setFbTipo('elogio')" style="flex:1;background:#1a1200;border:1px solid #333;color:#888;border-radius:10px;padding:9px;cursor:pointer;font-weight:700;font-size:0.82rem;">⭐ Elogio</button>
+    </div>
+
+    <!-- Mensagem -->
+    <label style="font-size:0.78rem;color:#888;font-weight:700;letter-spacing:1px;">MENSAGEM</label>
+    <textarea id="fb-texto" placeholder="Descreve aqui o que aconteceu ou a sua ideia..." style="width:100%;background:#1a1a1a;border:1px solid #333;color:#fff;border-radius:10px;padding:12px;font-size:0.88rem;line-height:1.5;resize:none;height:110px;margin-top:8px;box-sizing:border-box;"></textarea>
+
+    <!-- Quem é -->
+    <label style="font-size:0.78rem;color:#888;font-weight:700;letter-spacing:1px;margin-top:12px;display:block;">SEU NOME <span style="color:#444;font-weight:400;">(opcional)</span></label>
+    <input id="fb-nome" type="text" placeholder="Ex: Gabriel, Ruan..." style="width:100%;background:#1a1a1a;border:1px solid #333;color:#fff;border-radius:10px;padding:10px 12px;font-size:0.85rem;margin-top:8px;box-sizing:border-box;" />
+
+    <button onclick="enviarFeedback()" style="width:100%;margin-top:16px;background:#7c4dff;border:none;color:#fff;border-radius:12px;padding:13px;font-weight:700;font-size:0.95rem;cursor:pointer;letter-spacing:1px;">📤 ENVIAR FEEDBACK</button>
+    <div id="fb-status" style="text-align:center;font-size:0.8rem;color:#4caf50;margin-top:8px;min-height:18px;"></div>
+  </div>
+</div>
+
+<script>
+var _fbTipo = 'erro';
+
+function toggleFeedback() {
+  var p = document.getElementById('feedback-panel');
+  p.style.display = p.style.display === 'flex' ? 'none' : 'flex';
+  p.style.alignItems = 'center';
+  p.style.justifyContent = 'center';
+  if (p.style.display === 'flex') setFbTipo('erro');
+}
+
+function setFbTipo(tipo) {
+  _fbTipo = tipo;
+  var estilos = {
+    'erro':     { bg: '#2a0a0a', border: '2px solid #b71c1c', color: '#ef5350' },
+    'sugestao': { bg: '#0a1a2a', border: '2px solid #1565c0', color: '#42a5f5' },
+    'elogio':   { bg: '#1a1200', border: '2px solid #f9a825', color: '#f9a825' },
+  };
+  ['erro','sugestao','elogio'].forEach(function(t) {
+    var btn = document.getElementById('fb-tipo-' + t);
+    var s = estilos[t];
+    if (t === tipo) {
+      btn.style.background = s.bg;
+      btn.style.border = s.border;
+      btn.style.color = s.color;
+    } else {
+      btn.style.background = '#111';
+      btn.style.border = '1px solid #333';
+      btn.style.color = '#555';
+    }
+  });
+}
+
+function enviarFeedback() {
+  var texto = document.getElementById('fb-texto').value.trim();
+  var nome = document.getElementById('fb-nome').value.trim() || 'Anônimo';
+  var status = document.getElementById('fb-status');
+
+  if (!texto) {
+    status.style.color = '#ef5350';
+    status.textContent = '⚠️ Escreve a mensagem primeiro!';
+    return;
+  }
+
+  var tipoLabel = _fbTipo === 'erro' ? '#sistema 🐛 ERRO' : _fbTipo === 'sugestao' ? '#sistema 💡 SUGESTÃO' : '#sistema ⭐ ELOGIO';
+  var msg = tipoLabel + ' — Sistema Centro\n\nDe: ' + nome + '\n\n' + texto;
+  var url = 'https://wa.me/5542988819420?text=' + encodeURIComponent(msg);
+
+  window.open(url, '_blank');
+
+  status.style.color = '#4caf50';
+  status.textContent = '✅ Abrindo WhatsApp...';
+  document.getElementById('fb-texto').value = '';
+  document.getElementById('fb-nome').value = '';
+
+  setTimeout(function() {
+    toggleFeedback();
+    status.textContent = '';
+  }, 2000);
+}
+
+// TUTORIAL
+var _tutPassos = [
+    ['📦 Estoque', 'Aqui você vê todos os produtos da unidade. Use os filtros por categoria ou busca para encontrar rápido. Vermelho = zerado, amarelo = abaixo do mínimo.'],
+    ['➕ Lançar', 'Escaneie o código de barras ou selecione o produto manualmente. Escolha Entrada (chegou produto) ou Contagem (ajuste de estoque). Adicione à lista de pendentes e salve tudo de uma vez.'],
+    ['📋 Histórico', 'Veja todas as movimentações do dia ou de datas anteriores. Filtre por tipo (entrada, contagem) para conferir o que foi lançado.'],
+  ];
+var _tutAtual  = 0;
+
+function abrirTutorial() {
+  _tutAtual = 0;
+  document.getElementById('tutorial-overlay').style.display = 'flex';
+  tutRender();
+}
+
+function fecharTutorial() {
+  document.getElementById('tutorial-overlay').style.display = 'none';
+}
+
+function tutProximo() {
+  if (_tutAtual < _tutPassos.length - 1) {
+    _tutAtual++;
+    tutRender();
+  } else {
+    fecharTutorial();
+  }
+}
+
+function tutAnterior() {
+  if (_tutAtual > 0) {
+    _tutAtual--;
+    tutRender();
+  }
+}
+
+function tutRender() {
+  var p = _tutPassos[_tutAtual];
+  var total = _tutPassos.length;
+  // Icone e titulo
+  var partes = p[0].split(' ');
+  var icone  = partes[0];
+  var titulo = partes.slice(1).join(' ');
+  document.getElementById('tut-icone').textContent  = icone;
+  document.getElementById('tut-titulo').textContent = titulo;
+  document.getElementById('tut-desc').textContent   = p[1];
+  document.getElementById('tut-passo-label').textContent = 'Passo ' + (_tutAtual+1) + ' de ' + total;
+  // Dots
+  var dots = '';
+  for (var i=0; i<total; i++) {
+    dots += '<div style="width:'+(i===_tutAtual?'20':'8')+'px;height:8px;border-radius:4px;background:'+(i===_tutAtual?'#e53935':'#444')+';transition:width 0.2s;"></div>';
+  }
+  document.getElementById('tut-dots').innerHTML = dots;
+  // Botoes
+  var btnAnt  = document.getElementById('tut-btn-ant');
+  var btnProx = document.getElementById('tut-btn-prox');
+  if (btnAnt)  btnAnt.style.display  = _tutAtual === 0 ? 'none' : 'block';
+  if (btnProx) btnProx.textContent   = _tutAtual === total-1 ? '✅ Concluir' : 'Próximo →';
+}
+// FIM TUTORIAL
+
 </script>
 
 <!-- TUTORIAL OVERLAY -->
@@ -1418,37 +2112,468 @@ function enviarPedidoWhatsApp() {
 <!-- FIM TUTORIAL -->
 
 
-  <div class="screen adm-only" id="tab-embalagens">
-    <div class="card">
-      <h3>📦 Relatório de Embalagens</h3>
-      <input type="date" id="emb-data" style="width:100%;margin-bottom:10px;" onchange="gerarRelEmb()" />
-      <div style="display:flex;gap:8px;margin-bottom:10px;">
-        <button class="btn btn-red" onclick="gerarRelEmb()" style="flex:1;margin:0;">📊 Gerar</button>
-        <button class="btn btn-green" onclick="compartilharRelEmb()" style="flex:1;margin:0;">📱 WhatsApp</button>
-        <button class="btn btn-gray" onclick="exportarRelEmbCSV()" style="flex:1;margin:0;">📄 Planilha</button>
-      </div>
-      <div style="display:flex;gap:8px;margin-bottom:12px;">
-        <button onclick="filtrarRelEmb('todos')" style="flex:1;background:#333;border:none;border-radius:8px;color:#fff;padding:8px;cursor:pointer;font-size:0.8rem;">Todos</button>
-        <button onclick="filtrarRelEmb('pedido')" style="flex:1;background:#b71c1c;border:none;border-radius:8px;color:#fff;padding:8px;cursor:pointer;font-size:0.8rem;">🛒 Só Pedido</button>
-      </div>
-      <div id="emb-resultado"><p style="color:#888;text-align:center;padding:20px;">Selecione uma data acima.</p></div>
-    </div>
-  </div>
 
-  <div class="screen adm-only" id="tab-bebidas">
-    <div class="card">
-      <h3>🍺 Relatório de Bebidas</h3>
-      <input type="date" id="beb-data" style="width:100%;margin-bottom:10px;" onchange="gerarRelBeb()" />
-      <div style="display:flex;gap:8px;margin-bottom:10px;">
-        <button class="btn btn-red" onclick="gerarRelBeb()" style="flex:1;margin:0;">📊 Gerar</button>
-        <button class="btn btn-green" onclick="compartilharRelBeb()" style="flex:1;margin:0;">📱 WhatsApp</button>
-        <button class="btn btn-gray" onclick="exportarRelBebCSV()" style="flex:1;margin:0;">📄 Planilha</button>
+<script>
+/* ALMOX CD STANDALONE */
+
+function bipSom() {
+  try {
+    var ctx = new (window.AudioContext || window.webkitAudioContext)();
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.frequency.value = 1200;
+    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.1);
+  } catch(e) {}
+}
+
+// ── FUNÇÕES DE LANÇAMENTO ALMOX CD ──
+
+function selecionarTipoAlmox(tipo) {
+  document.getElementById('almox-tipo').value = tipo;
+  var btnE = document.getElementById('almox-btn-entrada');
+  var btnC = document.getElementById('almox-btn-contagem');
+  if (btnE) { btnE.className = tipo === 'entrada' ? 'btn btn-green' : 'btn btn-gray'; btnE.style.flex='1'; btnE.style.margin='0'; }
+  if (btnC) { btnC.className = tipo === 'contagem' ? 'btn btn-red' : 'btn btn-gray'; btnC.style.flex='1'; btnC.style.margin='0'; }
+}
+
+function buscarAlmoxPorCodigo() {
+  var scanEl = document.getElementById('almox-scan');
+  var cod = scanEl ? scanEl.value.trim() : '';
+  if (!cod) return;
+  // Buscar por código de barras ou código base
+  var found = null;
+  for (var i = 0; i < _acd.length; i++) {
+    var base = _acd[i].codigo.replace('_almoxarifado_cd', '');
+    if (_acd[i].codigo === cod || base === cod || _acd[i].codigo.indexOf(cod) !== -1) {
+      found = _acd[i]; break;
+    }
+  }
+  if (!found) {
+    alert('Produto não encontrado: ' + cod);
+    return;
+  }
+  // Selecionar no select
+  var sel = document.getElementById('almox-produto');
+  if (sel) {
+    sel.value = found.codigo;
+    // Atualizar unidade
+    var unEl = document.getElementById('almox-unidade');
+    if (unEl) unEl.textContent = found.unidade;
+    // Preencher qtd com qtd_por_pct se disponível
+    var qtdEl = document.getElementById('almox-qtd');
+    if (qtdEl && found.qtd_por_pct && parseFloat(found.qtd_por_pct) > 0) {
+      qtdEl.value = parseFloat(found.qtd_por_pct);
+    } else if (qtdEl) {
+      qtdEl.value = '';
+      qtdEl.focus();
+    }
+  }
+  if (scanEl) scanEl.value = '';
+}
+
+function selecionarAlmoxProduto() {
+  var sel = document.getElementById('almox-produto');
+  var cod = sel ? sel.value : '';
+  if (!cod) return;
+  var prod = _acd.find(function(p){ return p.codigo === cod; });
+  if (!prod) return;
+  var unEl = document.getElementById('almox-unidade');
+  if (unEl) unEl.textContent = prod.unidade;
+}
+
+var _almoxLoteCD = [];
+
+function adicionarAlmoxAoLote() {
+  var sel = document.getElementById('almox-produto');
+  var qtdEl = document.getElementById('almox-qtd');
+  var tipoEl = document.getElementById('almox-tipo');
+  var cod = sel ? sel.value : '';
+  var qtd = qtdEl ? parseFloat(qtdEl.value) : 0;
+  var tipo = tipoEl ? tipoEl.value : 'entrada';
+  if (!cod) { alert('Selecione um produto!'); return; }
+  if (!qtd || qtd <= 0) { alert('Digite uma quantidade!'); return; }
+  var prod = _acd.find(function(p){ return p.codigo === cod; });
+  if (!prod) return;
+  // Multiplicar pela quantidade por pacote (se não for contagem)
+  if (tipo !== 'contagem' && prod.qtd_por_pct && parseFloat(prod.qtd_por_pct) > 1) {
+    qtd = qtd * parseFloat(prod.qtd_por_pct);
+  }
+  // Verificar se já está no lote
+  var idx = _almoxLoteCD.findIndex(function(i){ return i.codigo === cod; });
+  if (idx !== -1) { _almoxLoteCD[idx].qtd = qtd; }
+  else { _almoxLoteCD.push({ codigo: cod, nome: prod.nome, unidade: prod.unidade, qtd: qtd, tipo: tipo, estoque: parseFloat(prod.estoque)||0 }); }
+  // Limpar campos
+  if (qtdEl) qtdEl.value = '';
+  if (sel) sel.value = '';
+  _renderAlmoxLoteCD();
+  bipSom();
+}
+
+function _renderAlmoxLoteCD() {
+  var lista = document.getElementById('almox-lista-pendentes');
+  var count = document.getElementById('almox-lanc-count');
+  var btnSalvar = document.getElementById('almox-btn-salvar');
+  if (count) count.textContent = _almoxLoteCD.length;
+  if (btnSalvar) btnSalvar.style.display = _almoxLoteCD.length ? 'block' : 'none';
+  if (!lista) return;
+  if (!_almoxLoteCD.length) {
+    lista.innerHTML = '<p style="color:#555;text-align:center;font-size:0.78rem;padding:8px;">Confirme um item acima.</p>';
+    return;
+  }
+  var out = '';
+  for (var i = 0; i < _almoxLoteCD.length; i++) {
+    var item = _almoxLoteCD[i];
+    var ico = item.tipo === 'entrada' ? '📥' : '📊';
+    out += '<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 4px;border-bottom:1px solid #333;font-size:0.82rem;">';
+    out += '<span>' + ico + ' ' + item.nome + '</span>';
+    out += '<span style="color:#aaa;">' + item.qtd + ' ' + item.unidade + '</span>';
+    out += '</div>';
+  }
+  lista.innerHTML = out;
+}
+
+function limparAlmoxLote() {
+  _almoxLoteCD = [];
+  _renderAlmoxLoteCD();
+}
+
+async function salvarAlmoxLote() {
+  if (!_almoxLoteCD.length) return;
+  var btnSalvar = document.getElementById('almox-btn-salvar');
+  if (btnSalvar) { btnSalvar.disabled = true; btnSalvar.textContent = '⏳ Salvando...'; }
+  var erros = 0;
+  for (var i = 0; i < _almoxLoteCD.length; i++) {
+    var item = _almoxLoteCD[i];
+    try {
+      // Calcular novo estoque
+      var novoEst = item.tipo === 'contagem' ? item.qtd : item.estoque + item.qtd;
+      // Atualizar produto
+      await fetch(
+        'https://trbyynbtuzpszdvjivbs.supabase.co/rest/v1/produtos?codigo=eq.' + encodeURIComponent(item.codigo),
+        { method: 'PATCH', headers: { 'apikey': 'sb_publishable_lA_OIFoNVpmh5fmxNwu_1w_f9waqXfj', 'Authorization': 'Bearer sb_publishable_lA_OIFoNVpmh5fmxNwu_1w_f9waqXfj', 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+          body: JSON.stringify({ estoque: novoEst }) }
+      );
+      // Registrar movimentação
+      await fetch(
+        'https://trbyynbtuzpszdvjivbs.supabase.co/rest/v1/movimentacoes',
+        { method: 'POST', headers: { 'apikey': 'sb_publishable_lA_OIFoNVpmh5fmxNwu_1w_f9waqXfj', 'Authorization': 'Bearer sb_publishable_lA_OIFoNVpmh5fmxNwu_1w_f9waqXfj', 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+          body: JSON.stringify({ codigo: item.codigo, nome: item.nome, tipo: item.tipo === 'contagem' ? 'contagem' : 'entrada', qtd: item.qtd, unidade: item.unidade, colaborador: 'Cozinha CD', obs: item.tipo === 'contagem' ? 'Contagem' : 'Entrada', estoque_anterior: item.estoque, novo_estoque: novoEst, unidade_loja: 'almoxarifado_cd', status: 'confirmado' }) }
+      );
+    } catch(e) { erros++; }
+  }
+  if (erros === 0) {
+    alert('✅ Salvo com sucesso! ' + _almoxLoteCD.length + ' item(s) lançado(s).');
+  } else {
+    alert('⚠️ Salvo com ' + erros + ' erro(s).');
+  }
+  limparAlmoxLote();
+  if (btnSalvar) { btnSalvar.disabled = false; btnSalvar.textContent = '💾 SALVAR NO ALMOXARIFADO'; }
+  carregarAlmox();
+}
+
+function abrirCameraAlmox() {
+  var area = document.getElementById('almox-camera-area');
+  var video = document.getElementById('almox-camera-video');
+  if (!area || !video) return;
+  area.style.display = 'block';
+  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+      .then(function(stream){ video.srcObject = stream; })
+      .catch(function(){ alert('Câmera não disponível.'); area.style.display = 'none'; });
+  }
+}
+
+function fecharCameraAlmox() {
+  var area = document.getElementById('almox-camera-area');
+  var video = document.getElementById('almox-camera-video');
+  if (area) area.style.display = 'none';
+  if (video && video.srcObject) { video.srcObject.getTracks().forEach(function(t){ t.stop(); }); video.srcObject = null; }
+}
+
+var _acd = [];
+var _acdFiltro = 'todos';
+
+async function carregarAlmox() {
+  var lista = document.getElementById('almox-lista');
+  var stats = document.getElementById('almox-stats');
+  if (lista) lista.innerHTML = '<p style="text-align:center;color:#aaa;padding:20px;">Carregando...</p>';
+  try {
+    var r = await fetch(
+      'https://trbyynbtuzpszdvjivbs.supabase.co/rest/v1/produtos?unidade_loja=eq.almoxarifado_cd&select=codigo,nome,categoria,unidade,estoque,estoque_min&order=categoria.asc,nome.asc',
+      { headers: { 'apikey': 'sb_publishable_lA_OIFoNVpmh5fmxNwu_1w_f9waqXfj', 'Authorization': 'Bearer sb_publishable_lA_OIFoNVpmh5fmxNwu_1w_f9waqXfj' } }
+    );
+    _acd = await r.json();
+    if (!Array.isArray(_acd)) _acd = [];
+  } catch(e) {
+    _acd = [];
+    if (lista) lista.innerHTML = '<p style="color:#e57373;text-align:center;padding:20px;">Erro ao carregar.</p>';
+    return;
+  }
+  var zerados = _acd.filter(function(p){ return !parseFloat(p.estoque); }).length;
+  if (stats) stats.textContent = _acd.length + ' itens | ' + zerados + ' zerados';
+  _renderAlmoxCD();
+  _popularSelectAlmoxCD();
+}
+
+function almoxFiltrar(f) {
+  _acdFiltro = f;
+  ['todos','ok','comprar','zerado'].forEach(function(k) {
+    var b = document.getElementById('abtn-' + k);
+    if (b) b.style.background = '';
+  });
+  var cores = { todos: '#757575', ok: '#388e3c', comprar: '#f57f17', zerado: '#c62828' };
+  var bid = document.getElementById('abtn-' + f);
+  if (bid) bid.style.background = cores[f] || '#757575';
+  _renderAlmoxCD();
+}
+
+function _renderAlmoxCD() {
+  var lista = document.getElementById('almox-lista');
+  if (!lista) return;
+  var buscaEl = document.getElementById('almox-busca');
+  var busca = buscaEl ? buscaEl.value.toLowerCase() : '';
+  var filtrados = _acd.filter(function(p) {
+    var est = parseFloat(p.estoque) || 0;
+    var min = parseFloat(p.estoque_min) || 0;
+    var okB = busca ? p.nome.toLowerCase().indexOf(busca) !== -1 : true;
+    if (_acdFiltro === 'ok')      return okB && est > min;
+    if (_acdFiltro === 'comprar') return okB && est <= min && est > 0;
+    if (_acdFiltro === 'zerado')  return okB && est <= 0;
+    return okB;
+  });
+  if (!filtrados.length) {
+    lista.innerHTML = '<p style="text-align:center;color:#888;padding:20px;">Nenhum item encontrado.</p>';
+    return;
+  }
+  var out = '';
+  var catAtual = '';
+  for (var i = 0; i < filtrados.length; i++) {
+    var p = filtrados[i];
+    var est = parseFloat(p.estoque) || 0;
+    var min = parseFloat(p.estoque_min) || 0;
+    var cor = est <= 0 ? '#c62828' : est <= min ? '#f57f17' : '#388e3c';
+    var ico = est <= 0 ? '🔴' : est <= min ? '🟡' : '✅';
+    if (p.categoria !== catAtual) {
+      catAtual = p.categoria;
+      out += '<div style="font-size:0.75rem;font-weight:bold;color:#9e9e9e;padding:8px 4px 4px;">' + catAtual.toUpperCase() + '</div>';
+    }
+    out += '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 4px;border-bottom:1px solid #333;">';
+    out += '<span style="font-size:0.9rem;">' + ico + ' ' + p.nome + '</span>';
+    out += '<span style="font-weight:bold;color:' + cor + ';font-size:0.9rem;">' + est + ' ' + p.unidade + '</span>';
+    out += '</div>';
+  }
+  lista.innerHTML = out;
+}
+
+function almoxRender() { _renderAlmoxCD(); }
+function almoxRenderStats() {
+  var zerados = _acd.filter(function(p){ return !parseFloat(p.estoque); }).length;
+  var stats = document.getElementById('almox-stats');
+  if (stats) stats.textContent = _acd.length + ' itens | ' + zerados + ' zerados';
+}
+
+function _popularSelectAlmoxCD() {
+  var sel = document.getElementById('almox-produto');
+  if (!sel) return;
+  sel.innerHTML = '<option value="">Selecione...</option>';
+  for (var i = 0; i < _acd.length; i++) {
+    var opt = document.createElement('option');
+    opt.value = _acd[i].codigo;
+    opt.textContent = _acd[i].nome + ' (' + _acd[i].unidade + ')';
+    sel.appendChild(opt);
+  }
+}
+function almoxPopularSelect() { _popularSelectAlmoxCD(); }
+
+// ── SINO DE NOTIFICAÇÕES ──
+let _notifUltimoAt = null;
+let _notifInterval = null;
+let _todasNotifs = [];
+
+function toggleNotif() {
+  const p = document.getElementById('notif-painel');
+  if (!p) return;
+  p.classList.toggle('open');
+  if (p.classList.contains('open')) _renderNotifs();
+}
+function marcarTodasLidas() {
+  _todasNotifs.forEach(n => n._lida = true);
+  _atualizarBadge();
+  _renderNotifs();
+}
+function _atualizarBadge() {
+  const badge = document.getElementById('notif-badge');
+  if (!badge) return;
+  const nao = _todasNotifs.filter(n => !n._lida).length;
+  badge.textContent = nao > 99 ? '99+' : nao;
+  badge.classList.toggle('show', nao > 0);
+}
+function _renderNotifs() {
+  const lista = document.getElementById('notif-lista');
+  if (!lista) return;
+  if (_todasNotifs.length === 0) {
+    lista.innerHTML = '<div class="notif-vazia">Nenhuma notificação ainda 🔕</div>';
+    return;
+  }
+  const emoji = {entrada:'📥', saida:'📤', contagem:'📊'};
+  lista.innerHTML = _todasNotifs.slice().reverse().map(n => {
+    const lida = n._lida ? '' : ' nao-lida';
+    const e = emoji[n.tipo] || '📋';
+    let hora = '';
+    try { hora = new Date(n.created_at).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}); } catch(e2){}
+    return `<div class="notif-item ${n.tipo||''}${lida}">
+      <div class="notif-titulo">${e} ${n.nome||''}</div>
+      <div class="notif-detalhe">${(n.tipo||'').charAt(0).toUpperCase()+(n.tipo||'').slice(1)} · ${n.qtd||0} ${n.unidade||''} · <strong>${n.colaborador||''}</strong></div>
+      <div class="notif-hora">${hora}</div>
+    </div>`;
+  }).join('');
+}
+async function _verificarNotifs() {
+  if (!usuarioLogado || usuarioLogado.perfil !== 'adm') return;
+  try {
+    let url = 'movimentacoes?order=created_at.desc&limit=30&select=id,nome,tipo,qtd,unidade,colaborador,created_at,unidade_loja';
+    if (_notifUltimoAt) url += '&created_at=gt.' + encodeURIComponent(_notifUltimoAt);
+    const res = await supa('GET', url);
+    if (!res || !Array.isArray(res) || res.length === 0) return;
+    const novas = res.filter(r => !_todasNotifs.find(n => n.id === r.id));
+    novas.forEach(n => { n._lida = false; _todasNotifs.push(n); });
+    if (res[0] && res[0].created_at) _notifUltimoAt = res[0].created_at;
+    if (_todasNotifs.length > 100) _todasNotifs = _todasNotifs.slice(-100);
+    if (novas.length > 0) {
+      _atualizarBadge();
+      const p = document.getElementById('notif-painel');
+      if (p && p.classList.contains('open')) _renderNotifs();
+    }
+  } catch(e) {}
+}
+function iniciarNotificacoes() {
+  if (!usuarioLogado || usuarioLogado.perfil !== 'adm') return;
+  const btn = document.getElementById('notif-btn');
+  if (btn) btn.classList.add('adm-visible');
+  _verificarNotifs();
+  if (_notifInterval) clearInterval(_notifInterval);
+  _notifInterval = setInterval(_verificarNotifs, 30000);
+}
+document.addEventListener('click', function(e) {
+  const p = document.getElementById('notif-painel');
+  const b = document.getElementById('notif-btn');
+  if (p && b && !p.contains(e.target) && !b.contains(e.target)) p.classList.remove('open');
+});
+
+
+// ===== CONTAGEM EM LOTE =====
+var _loteProdutos = [];
+
+async function abrirContagemLote() {
+  try {
+    var prods = await supa('GET', 'produtos', null, 'unidade_loja=eq.' + UNIDADE_LOJA + '&select=categoria&order=categoria.asc');
+    var cats = [...new Set((prods||[]).map(function(p){ return p.categoria; }).filter(Boolean))].sort();
+    var sel = document.getElementById('lote-categoria');
+    sel.innerHTML = '<option value="">-- Selecione a categoria --</option>';
+    cats.forEach(function(c) {
+      var opt = document.createElement('option');
+      opt.value = c; opt.textContent = c;
+      sel.appendChild(opt);
+    });
+  } catch(e) { showToast('Erro ao carregar categorias','error'); return; }
+  document.getElementById('lote-passo1').style.display = 'block';
+  document.getElementById('lote-passo2').style.display = 'none';
+  document.getElementById('modal-lote').style.display = 'block';
+}
+
+function fecharContagemLote() {
+  document.getElementById('modal-lote').style.display = 'none';
+}
+
+function voltarPasso1Lote() {
+  document.getElementById('lote-passo1').style.display = 'block';
+  document.getElementById('lote-passo2').style.display = 'none';
+}
+
+async function carregarItenslote() {
+  var nome = document.getElementById('lote-nome').value.trim();
+  var cat  = document.getElementById('lote-categoria').value;
+  if (!nome) { showToast('Digite seu nome!','error'); return; }
+  if (!cat)  { showToast('Selecione uma categoria!','error'); return; }
+  try {
+    var prods = await supa('GET', 'produtos', null, 'unidade_loja=eq.' + UNIDADE_LOJA + '&categoria=eq.' + encodeURIComponent(cat) + '&order=nome.asc&select=codigo,nome,estoque,unidade,qtd_por_pct');
+    _loteProdutos = prods || [];
+  } catch(e) { showToast('Erro ao carregar produtos','error'); return; }
+  document.getElementById('lote-titulo').textContent = cat + ' (' + _loteProdutos.length + ' itens)';
+  var container = document.getElementById('lote-itens');
+  container.innerHTML = '';
+  _loteProdutos.forEach(function(p, i) {
+    var isKg = (p.unidade||'').toLowerCase() === 'kg';
+    var div = document.createElement('div');
+    div.style.cssText = 'background:#252540;border-radius:10px;padding:12px;';
+    div.innerHTML =
+      '<div style="color:#fff;font-weight:700;font-size:0.95rem;margin-bottom:6px;">' + p.nome + '</div>' +
+      '<div style="color:#90a4ae;font-size:0.8rem;margin-bottom:8px;">Atual: ' + (p.estoque||0) + ' ' + (p.unidade||'und') + '</div>' +
+      '<input type="text" inputmode="numeric" id="lote-qtd-' + i + '" data-idx="' + i + '" data-iskg="' + isKg + '" ' +
+        'placeholder="' + (isKg ? 'Ex: 1234 vai para 1,234 kg' : 'Quantidade') + '" ' +
+        'style="width:100%;padding:10px;border-radius:8px;border:1px solid #444;background:#1a1a2e;color:#fff;font-size:1rem;" ' +
+        'oninput="formatarKgLote(this)" />';
+    container.appendChild(div);
+  });
+  document.getElementById('lote-passo1').style.display = 'none';
+  document.getElementById('lote-passo2').style.display = 'block';
+}
+
+function formatarKgLote(input) {
+  var isKg = input.getAttribute('data-iskg') === 'true';
+  if (!isKg) return;
+  var digits = input.value.replace(/\D/g,'');
+  if (!digits) { input.value = ''; return; }
+  var num = parseInt(digits, 10);
+  input.value = (num / 1000).toFixed(3).replace('.', ',');
+}
+
+async function enviarContagemLote() {
+  var nome = document.getElementById('lote-nome').value.trim();
+  var enviados = 0, erros = 0;
+  for (var i = 0; i < _loteProdutos.length; i++) {
+    var input = document.getElementById('lote-qtd-' + i);
+    var raw = (input.value||'').replace(',','.').trim();
+    var qtd = (!raw) ? 0 : parseFloat(raw);
+    // qtd já calculado acima
+    var p = _loteProdutos[i];
+    var mov = {
+      codigo: p.codigo, nome: p.nome, tipo: 'contagem', qtd: qtd,
+      unidade: p.unidade||'und', colaborador: nome, obs: 'Contagem em lote',
+      estoque_anterior: p.estoque||0, novo_estoque: qtd,
+      unidade_loja: UNIDADE_LOJA, status: 'pendente'
+    };
+    try {
+      await supa('POST', 'movimentacoes', mov);
+      await supa('PATCH', 'produtos', {estoque: qtd}, 'codigo=eq.' + encodeURIComponent(p.codigo) + '&unidade_loja=eq.' + UNIDADE_LOJA);
+      enviados++;
+    } catch(e) { erros++; }
+  }
+  if (enviados > 0) { showToast('✅ ' + enviados + ' itens contados!','success'); fecharContagemLote(); carregarProdutos(); }
+  else showToast('Nenhum item preenchido','error');
+  if (erros > 0) showToast('⚠️ ' + erros + ' erros','error');
+}
+</script>
+
+
+  <div id="mra" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:9999;overflow-y:auto;padding:16px;box-sizing:border-box;">
+    <div style="background:#111;border-radius:14px;max-width:600px;margin:0 auto;padding:20px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <h3 style="margin:0;color:#fff;">&#128202; Relatório Almoxarifado</h3>
+        <button onclick="document.getElementById('mra').style.display='none'" style="background:none;border:none;color:#aaa;font-size:1.4rem;cursor:pointer;">&#x2716;</button>
       </div>
+      <input type="date" id="mra-data" style="width:100%;margin-bottom:10px;" onchange="gerarRelAlmox()" />
       <div style="display:flex;gap:8px;margin-bottom:12px;">
-        <button onclick="filtrarRelBeb('todos')" style="flex:1;background:#333;border:none;border-radius:8px;color:#fff;padding:8px;cursor:pointer;font-size:0.8rem;">Todos</button>
-        <button onclick="filtrarRelBeb('pedido')" style="flex:1;background:#b71c1c;border:none;border-radius:8px;color:#fff;padding:8px;cursor:pointer;font-size:0.8rem;">🛒 Só Pedido</button>
+        <button class="btn btn-red" onclick="gerarRelAlmox()" style="flex:1;margin:0;">&#128202; Gerar</button>
+        <button class="btn btn-green" onclick="compartilharRelAlmox()" style="flex:1;margin:0;">&#128241; WhatsApp</button>
+        <button class="btn btn-gray" onclick="exportarRelAlmoxCSV()" style="flex:1;margin:0;">&#128196; Planilha</button>
       </div>
-      <div id="beb-resultado"><p style="color:#888;text-align:center;padding:20px;">Selecione uma data acima.</p></div>
+      <div id="mra-resultado"><p style="color:#888;text-align:center;padding:20px;">Selecione uma data.</p></div>
     </div>
   </div>
 <!-- PAINEL DE NOTIFICAÇÕES -->
@@ -1461,8 +2586,6 @@ function enviarPedidoWhatsApp() {
     <div class="notif-vazia">Nenhuma notificação ainda</div>
   </div>
 </div>
-
-<!-- ══════════ MODAL CONTAGEM EM LOTE ══════════ -->
 <div id="modal-lote" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9998;overflow-y:auto;padding:16px;">
   <div style="background:#1a1a2e;border-radius:16px;max-width:480px;margin:0 auto;padding:20px;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
@@ -1496,21 +2619,6 @@ function enviarPedidoWhatsApp() {
         ✅ Enviar Contagem
       </button>
     </div>
-  </div>
-</div>
-
-<!-- ══════════ MODAL PEDIDO ══════════ -->
-<div id="modal-pedido" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.78);z-index:9997;overflow-y:auto;padding:16px;">
-  <div style="background:#1a1a2e;border-radius:16px;max-width:480px;margin:0 auto;padding:20px;">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-      <h3 style="color:#fff;margin:0;">🛒 Fazer Pedido</h3>
-      <button onclick="fecharPedido()" style="background:rgba(255,255,255,0.15);border:none;color:#fff;padding:6px 12px;border-radius:8px;cursor:pointer;font-size:1rem;">✖</button>
-    </div>
-    <p style="color:#b0bec5;font-size:0.85rem;margin-bottom:14px;">Preencha a quantidade dos itens que precisa pedir. Deixe em branco para não pedir.</p>
-    <div id="pedido-itens" style="display:flex;flex-direction:column;gap:10px;max-height:55vh;overflow-y:auto;padding-right:4px;"></div>
-    <button onclick="enviarPedidoWhatsApp()" style="width:100%;padding:14px;background:#25D366;color:#fff;border:none;border-radius:10px;cursor:pointer;font-size:1rem;font-weight:700;margin-top:16px;">
-      📱 Enviar pelo WhatsApp
-    </button>
   </div>
 </div>
 </body>
