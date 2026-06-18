@@ -550,6 +550,77 @@ async function fazerLogin() {
 
 document.getElementById('login-senha').addEventListener('keydown', e => { if (e.key === 'Enter') fazerLogin(); });
 
+
+async function _verificarNotifs() {
+  if (!usuarioLogado || usuarioLogado.perfil !== 'adm') return;
+  try {
+    let url = 'movimentacoes?order=created_at.desc&limit=30&select=id,nome,tipo,qtd,unidade,colaborador,created_at,unidade_loja';
+    if (_notifUltimoAt) url += '&created_at=gt.' + encodeURIComponent(_notifUltimoAt);
+    const res = await supa('GET', url);
+    if (!res || !Array.isArray(res) || res.length === 0) return;
+    const novas = res.filter(r => !_todasNotifs.find(n => n.id === r.id));
+    novas.forEach(n => { n._lida = false; _todasNotifs.push(n); });
+    if (res[0] && res[0].created_at) _notifUltimoAt = res[0].created_at;
+    if (_todasNotifs.length > 100) _todasNotifs = _todasNotifs.slice(-100);
+    if (novas.length > 0) {
+      _atualizarBadge();
+      const p = document.getElementById('notif-painel');
+      if (p && p.classList.contains('open')) _renderNotifs();
+    }
+  } catch(e) {}
+}
+
+function iniciarNotificacoes() {
+  if (!usuarioLogado || usuarioLogado.perfil !== 'adm') return;
+  const btn = document.getElementById('notif-btn');
+  if (btn) btn.classList.add('adm-visible');
+  _verificarNotifs();
+  if (_notifInterval) clearInterval(_notifInterval);
+  _notifInterval = setInterval(_verificarNotifs, 30000);
+}
+
+function toggleNotif() {
+  const p = document.getElementById('notif-painel');
+  if (!p) return;
+  p.classList.toggle('open');
+  if (p.classList.contains('open')) _renderNotifs();
+}
+
+function marcarTodasLidas() {
+  _todasNotifs.forEach(n => n._lida = true);
+  _atualizarBadge();
+  _renderNotifs();
+}
+
+function _atualizarBadge() {
+  const badge = document.getElementById('notif-badge');
+  if (!badge) return;
+  const nao = _todasNotifs.filter(n => !n._lida).length;
+  badge.textContent = nao > 99 ? '99+' : nao;
+  badge.classList.toggle('show', nao > 0);
+}
+
+function _renderNotifs() {
+  const lista = document.getElementById('notif-lista');
+  if (!lista) return;
+  if (_todasNotifs.length === 0) {
+    lista.innerHTML = '<div class="notif-vazia">Nenhuma notificação ainda 🔕</div>';
+    return;
+  }
+  const emoji = {entrada:'📥', saida:'📤', contagem:'📊'};
+  lista.innerHTML = _todasNotifs.slice().reverse().map(n => {
+    const lida = n._lida ? '' : ' nao-lida';
+    const e = emoji[n.tipo] || '📋';
+    let hora = '';
+    try { hora = new Date(n.created_at).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}); } catch(e2){}
+    return `<div class="notif-item ${n.tipo||''}${lida}">
+      <div class="notif-titulo">${e} ${n.nome||''}</div>
+      <div class="notif-detalhe">${(n.tipo||'').charAt(0).toUpperCase()+(n.tipo||'').slice(1)} · ${n.qtd||0} ${n.unidade||''} · <strong>${n.colaborador||''}</strong></div>
+      <div class="notif-hora">${hora}</div>
+    </div>`;
+  }).join('');
+}
+
 function iniciarApp() {
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app').style.display = 'block';
