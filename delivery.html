@@ -555,6 +555,15 @@ async function fazerLogin() {
 
 document.getElementById('login-senha').addEventListener('keydown', e => { if (e.key === 'Enter') fazerLogin(); });
 
+function iniciarNotificacoes() {
+  if (!usuarioLogado || usuarioLogado.perfil !== 'adm') return;
+  const btn = document.getElementById('notif-btn');
+  if (btn) btn.classList.add('adm-visible');
+  _verificarNotifs();
+  if (_notifInterval) clearInterval(_notifInterval);
+  _notifInterval = setInterval(_verificarNotifs, 30000);
+}
+
 function iniciarApp() {
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app').style.display = 'block';
