@@ -554,7 +554,7 @@ async function fazerLogin() {
   }
 }
 
-document.getElementById('login-senha').addEventListener('keydown', e => { if (e.key === 'Enter') fazerLogin(); });
+document.addEventListener('DOMContentLoaded', function() { var el = document.getElementById('login-senha'); if(el) el.addEventListener('keydown', function(e){ if(e.key==='Enter') fazerLogin(); }); });
 
 
 async function _verificarNotifs() {
