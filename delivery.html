@@ -2759,5 +2759,33 @@ function enviarPedidoCat() {
     </div>
   </div>
 </div>
+
+  <!-- CATEGORIAS (ADM) -->
+  <div class="screen adm-only" id="tab-categorias">
+    <div class="card">
+      <h3>📊 Relatório por Categoria</h3>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+        <button class="btn" id="cat-btn-bebidas" onclick="filtrarCategoria('Bebidas')" style="flex:1;min-width:100px;">🥤 Bebidas</button>
+        <button class="btn" id="cat-btn-embalagens" onclick="filtrarCategoria('Embalagens')" style="flex:1;min-width:100px;">📦 Embalagens</button>
+        <button class="btn btn-red" id="cat-btn-todas" onclick="filtrarCategoria('')" style="flex:1;min-width:100px;">📋 Todas</button>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;">
+        <label style="font-size:0.82rem;color:#aaa;">Data:</label>
+        <input type="date" id="cat-data" style="flex:1;background:#263238;border:1px solid #455a64;color:#fff;border-radius:8px;padding:6px 10px;font-size:0.85rem;">
+        <button class="btn" onclick="carregarRelCat()" style="padding:7px 14px;">🔄 Gerar</button>
+      </div>
+    </div>
+    <div id="cat-resultado" style="margin-top:4px;"></div>
+    <div id="cat-sec-pedido" style="display:none;margin-top:12px;padding-bottom:16px;">
+      <div class="card" style="padding:14px;">
+        <h3 style="margin-bottom:10px;">🛒 Pedido pela Categoria</h3>
+        <p style="font-size:0.8rem;color:#888;margin-bottom:10px;">Ajuste as quantidades e envie.</p>
+        <div id="cat-lista-pedido"></div>
+        <button class="btn btn-green" style="width:100%;margin-top:12px;padding:13px;font-size:1rem;font-weight:700;" onclick="enviarPedidoCat()">
+          📱 Enviar Pedido pelo WhatsApp
+        </button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
