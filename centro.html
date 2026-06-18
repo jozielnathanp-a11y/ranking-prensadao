@@ -453,7 +453,9 @@
     <div id="sec-busca-pedido" style="display:none;margin-top:8px;">
       <div class="card" style="padding:12px;">
         <div style="font-weight:700;font-size:0.85rem;color:#90caf9;margin-bottom:8px;">🔍 Adicionar produto ao pedido</div>
-        <input type="text" id="busca-pedido-input" oninput="buscarProdutoPedido()" placeholder="Digite o nome do produto..."
+        <!-- Filtros de categoria (multi-select) -->
+        <div id="ped-filtros-cat" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;"></div>
+        <input type="text" id="busca-pedido-input" oninput="buscarProdutoPedido()" placeholder="Digite o nome ou deixe vazio para ver por categoria..."
           style="width:100%;background:#263238;border:1px solid #455a64;color:#fff;border-radius:8px;padding:8px 12px;font-size:0.9rem;box-sizing:border-box;">
         <div id="busca-pedido-result" style="margin-top:6px;max-height:200px;overflow-y:auto;"></div>
       </div>
@@ -1580,24 +1582,90 @@ function gerarPedidos(){
   document.getElementById('sec-btn-enviar').style.display='';
   document.getElementById('busca-pedido-input').value='';
   document.getElementById('busca-pedido-result').innerHTML='';
+  _pedCatsFiltro = {};
+  renderFiltrosCatPedido();
 }
 
-function buscarProdutoPedido(){
-  var termo=(document.getElementById('busca-pedido-input').value||'').toLowerCase().trim();
-  var el=document.getElementById('busca-pedido-result');
-  if(!termo){el.innerHTML='';return;}
-  var prods=Object.values(produtosCache).filter(function(p){
-    return p.nome.toLowerCase().indexOf(termo)>=0 && !_pedidoExtras[p.codigo] && !document.getElementById('ped-'+p.codigo);
-  }).slice(0,8);
-  if(!prods.length){el.innerHTML='<p style="color:#888;font-size:0.82rem;padding:4px 8px;">Nenhum produto encontrado.</p>';return;}
-  el.innerHTML=prods.map(function(p){
-    var nomeEsc=p.nome.replace(/"/g,'&quot;');
-    var unEsc=p.unidade.replace(/"/g,'&quot;');
-    return '<div onclick="adicionarExtraPedido(\"'+p.codigo+'\",\"'+nomeEsc+'\",\"'+unEsc+'\")" '
-      +'style="padding:8px 10px;cursor:pointer;border-radius:8px;margin-bottom:4px;background:#263238;font-size:0.88rem;color:#fff;">'
-      +'➕ '+p.nome+' <span style="color:#888;font-size:0.75rem;">('+p.unidade+')</span></div>';
+// ─── PEDIDO: filtros de categoria multi-select ───────────────────────────────
+var _pedCatsFiltro = {}; // { nome: true/false }
+
+function renderFiltrosCatPedido() {
+  var cats = {};
+  Object.values(produtosCache).forEach(function(p) {
+    if (p.categoria) cats[p.categoria] = (cats[p.categoria]||0) + 1;
+  });
+  var el = document.getElementById('ped-filtros-cat');
+  if (!el) return;
+  el.innerHTML = Object.keys(cats).sort().map(function(cat) {
+    var ativo = _pedCatsFiltro[cat];
+    return '<button onclick="toggleCatPedido('' + cat.replace(/'/g,"\'") + '')" '
+      + 'id="ped-cat-btn-' + cat.replace(/[^a-z0-9]/gi,'_') + '" '
+      + 'style="padding:4px 10px;border:none;border-radius:16px;cursor:pointer;font-size:0.75rem;font-weight:700;'
+      + (ativo ? 'background:#1565c0;color:#fff;' : 'background:#263238;color:#90caf9;border:1px solid #455a64;')
+      + '">' + cat + ' <span style="opacity:0.7;">(' + cats[cat] + ')</span></button>';
   }).join('');
 }
+
+function toggleCatPedido(cat) {
+  _pedCatsFiltro[cat] = !_pedCatsFiltro[cat];
+  renderFiltrosCatPedido();
+  buscarProdutoPedido();
+}
+
+function buscarProdutoPedido() {
+  var termo = (document.getElementById('busca-pedido-input').value||'').toLowerCase().trim();
+  var el = document.getElementById('busca-pedido-result');
+  var catsSel = Object.keys(_pedCatsFiltro).filter(function(c){ return _pedCatsFiltro[c]; });
+  
+  // Se nem texto nem categoria selecionada
+  if (!termo && !catsSel.length) { el.innerHTML = ''; return; }
+  
+  var prods = Object.values(produtosCache).filter(function(p) {
+    var jaAdicionado = _pedidoExtras[p.codigo] || document.getElementById('ped-' + p.codigo);
+    if (jaAdicionado) return false;
+    var matchTermo = !termo || p.nome.toLowerCase().indexOf(termo) >= 0;
+    var matchCat = !catsSel.length || catsSel.indexOf(p.categoria) >= 0;
+    return matchTermo && matchCat;
+  }).sort(function(a,b){ return a.nome.localeCompare(b.nome); }).slice(0, 20);
+  
+  if (!prods.length) {
+    el.innerHTML = '<p style="color:#888;font-size:0.82rem;padding:4px 8px;">Nenhum produto encontrado.</p>';
+    return;
+  }
+  
+  // Agrupar por categoria se tiver categorias selecionadas
+  if (catsSel.length > 0) {
+    var grupos = {};
+    prods.forEach(function(p) {
+      var cat = p.categoria || 'Outros';
+      if (!grupos[cat]) grupos[cat] = [];
+      grupos[cat].push(p);
+    });
+    var html = '';
+    Object.keys(grupos).sort().forEach(function(cat) {
+      html += '<div style="font-size:0.72rem;color:#78909c;font-weight:700;padding:4px 8px 2px;letter-spacing:1px;">' + cat.toUpperCase() + '</div>';
+      grupos[cat].forEach(function(p) {
+        var nomeEsc = p.nome.replace(/"/g,'&quot;');
+        var unEsc = p.unidade.replace(/"/g,'&quot;');
+        html += '<div onclick="adicionarExtraPedido(\"'+p.codigo+'\",\"'+nomeEsc+'\",\"'+unEsc+'\")" '
+          + 'style="padding:8px 10px;cursor:pointer;border-radius:8px;margin-bottom:4px;background:#263238;font-size:0.88rem;color:#fff;display:flex;justify-content:space-between;align-items:center;">'
+          + '<span>➕ ' + p.nome + '</span>'
+          + '<span style="color:#888;font-size:0.75rem;">' + p.unidade + '</span></div>';
+      });
+    });
+    el.innerHTML = html;
+  } else {
+    el.innerHTML = prods.map(function(p) {
+      var nomeEsc = p.nome.replace(/"/g,'&quot;');
+      var unEsc = p.unidade.replace(/"/g,'&quot;');
+      return '<div onclick="adicionarExtraPedido(\"'+p.codigo+'\",\"'+nomeEsc+'\",\"'+unEsc+'\")" '
+        + 'style="padding:8px 10px;cursor:pointer;border-radius:8px;margin-bottom:4px;background:#263238;font-size:0.88rem;color:#fff;display:flex;justify-content:space-between;align-items:center;">'
+        + '<span>➕ ' + p.nome + '</span>'
+        + '<span style="color:#888;font-size:0.75rem;">' + p.unidade + '</span></div>';
+    }).join('');
+  }
+}
+// ─── /PEDIDO filtros categoria ────────────────────────────────────────────────
 
 function adicionarExtraPedido(codigo, nome, unidade){
   if(_pedidoExtras[codigo]||document.getElementById('ped-'+codigo))return;
