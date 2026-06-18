@@ -485,6 +485,12 @@ const SUPA_URL = 'https://trbyynbtuzpszdvjivbs.supabase.co';
 const SUPA_ANON = 'sb_publishable_lA_OIFoNVpmh5fmxNwu_1w_f9waqXfj';
 const UNIDADE_LOJA = 'centro';
 
+
+var _notifInterval = null;
+var _notifUltimoAt = null;
+var _todasNotifs = [];
+var _toastTimer = null;
+var _lancamentos = [];
 let usuarioLogado = null;
 let produtosCache = {};
 let modalCodigo = null;
@@ -539,7 +545,7 @@ async function fazerLogin() {
     const res = await supa('GET', 'usuario', null, `usuario=eq.${encodeURIComponent(usuario)}&senha=eq.${encodeURIComponent(senha)}&unidade=eq.centro&select=*`);
     if (res && res.length > 0) {
       usuarioLogado = res[0];
-      iniciarApp();
+      try { iniciarApp(); } catch(err) { console.error('iniciarApp err:', err); }
     } else {
       document.getElementById('login-erro').style.display = 'block';
     }
