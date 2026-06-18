@@ -478,6 +478,10 @@ let usuarioLogado = null;
 let produtosCache = {};
 let modalCodigo = null;
 let modalTipo = null;
+var _notifInterval = null;
+var _notifUltimoAt = null;
+var _todasNotifs = [];
+var _toastTimer = null;
 
 // ── UTILS ──
 function showToast(msg, tipo='') {
@@ -528,7 +532,7 @@ async function fazerLogin() {
     const res = await supa('GET', 'usuario', null, `usuario=eq.${encodeURIComponent(usuario)}&senha=eq.${encodeURIComponent(senha)}&unidade=eq.boqueiraw&select=*`);
     if (res && res.length > 0) {
       usuarioLogado = res[0];
-      iniciarApp();
+      try { iniciarApp(); } catch(err) { console.error('iniciarApp err:', err); }
     } else {
       document.getElementById('login-erro').style.display = 'block';
     }
@@ -537,7 +541,7 @@ async function fazerLogin() {
   }
 }
 
-document.getElementById('login-senha').addEventListener('keydown', e => { if (e.key === 'Enter') fazerLogin(); });
+document.addEventListener('DOMContentLoaded', function() { var el = document.getElementById('login-senha'); if(el) el.addEventListener('keydown', function(e){ if(e.key==='Enter') fazerLogin(); }); });
 
 function iniciarApp() {
   document.getElementById('login-screen').style.display = 'none';
