@@ -2635,6 +2635,110 @@ function enviarPedidoWhatsApp() {
   fecharPedido();
 }
 // ===== /PEDIDO VIA RELATÓRIO v3 =====
+
+// ===== PEDIDOS =====
+var _pedidoExtras = {};
+
+function cardPedido(codigo, nomeHtml, nomeLimpo, unidade, qtd, removivel) {
+  var corBorda = removivel ? '#2e7d32' : '#b71c1c';
+  var btnRemover = removivel
+    ? '<button onclick="removerExtraPedido(\"'+codigo+'\")" style="background:#b71c1c;border:none;border-radius:6px;color:#fff;padding:3px 8px;font-size:0.75rem;cursor:pointer;">✕</button>'
+    : '';
+  return '<div class="card" id="card-ped-'+codigo+'" style="margin:0 0 8px;padding:12px;border-left:4px solid '+corBorda+';">'
+    +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">'
+    +'<div style="font-weight:700;font-size:0.9rem;flex:1;">'+nomeHtml+'</div>'
+    +btnRemover
+    +'</div>'
+    +'<div style="display:flex;align-items:center;gap:8px;">'
+    +'<span style="font-size:0.82rem;color:#ccc;white-space:nowrap;">Qtd:</span>'
+    +'<input type="number" min="0" step="0.1" value="'+qtd+'" id="ped-'+codigo+'" '
+    +'style="flex:1;background:#263238;border:1px solid #455a64;color:#fff;border-radius:8px;padding:6px 10px;font-size:0.9rem;text-align:center;" '
+    +'data-nome="'+nomeLimpo+'" data-unidade="'+unidade+'">'
+    +'<span style="font-size:0.82rem;color:#aaa;">'+unidade+'</span>'
+    +'</div></div>';
+}
+
+function gerarPedidos(){
+  var prods = Object.values(produtosCache).sort(function(a,b){return a.nome.localeCompare(b.nome);});
+  var indicados = prods.filter(function(p){
+    return (parseFloat(p.estoque_min)||0) > 0 && (parseFloat(p.estoque)||0) < (parseFloat(p.estoque_min)||0);
+  });
+  var elSis = document.getElementById('lista-sistema');
+  var secSis = document.getElementById('sec-sistema');
+  if(indicados.length){
+    var htmlSis = '';
+    indicados.forEach(function(p){
+      var est=parseFloat(p.estoque)||0, min=parseFloat(p.estoque_min)||0, max=parseFloat(p.estoque_max)||0;
+      var sug=Math.max(0,(max>0?max:min)-est);
+      var nomeHtml=p.nome+'<span style="background:#b71c1c;color:#fff;padding:1px 7px;border-radius:6px;font-size:0.7rem;font-weight:700;margin-left:6px;">⚠️ FALTA</span>';
+      htmlSis+=cardPedido(p.codigo, nomeHtml, p.nome, p.unidade, sug, false);
+    });
+    elSis.innerHTML=htmlSis;
+    document.getElementById('badge-sistema').textContent=indicados.length+' produto'+(indicados.length>1?'s':'');
+  } else {
+    elSis.innerHTML='<p style="color:#4caf50;text-align:center;padding:10px;font-size:0.85rem;">✅ Tudo acima do mínimo!</p>';
+    document.getElementById('badge-sistema').textContent='';
+  }
+  secSis.style.display='';
+  _pedidoExtras={};
+  document.getElementById('lista-gerente').innerHTML='';
+  document.getElementById('sec-gerente').style.display='';
+  document.getElementById('sec-busca-pedido').style.display='';
+  document.getElementById('sec-btn-enviar').style.display='';
+  document.getElementById('busca-pedido-input').value='';
+  document.getElementById('busca-pedido-result').innerHTML='';
+}
+
+function buscarProdutoPedido(){
+  var termo=(document.getElementById('busca-pedido-input').value||'').toLowerCase().trim();
+  var el=document.getElementById('busca-pedido-result');
+  if(!termo){el.innerHTML='';return;}
+  var prods=Object.values(produtosCache).filter(function(p){
+    return p.nome.toLowerCase().indexOf(termo)>=0 && !_pedidoExtras[p.codigo] && !document.getElementById('ped-'+p.codigo);
+  }).slice(0,8);
+  if(!prods.length){el.innerHTML='<p style="color:#888;font-size:0.82rem;padding:4px 8px;">Nenhum produto encontrado.</p>';return;}
+  el.innerHTML=prods.map(function(p){
+    var nomeEsc=p.nome.replace(/"/g,'&quot;');
+    var unEsc=p.unidade.replace(/"/g,'&quot;');
+    return '<div onclick="adicionarExtraPedido(\"'+p.codigo+'\",\"'+nomeEsc+'\",\"'+unEsc+'\")" '
+      +'style="padding:8px 10px;cursor:pointer;border-radius:8px;margin-bottom:4px;background:#263238;font-size:0.88rem;color:#fff;">'
+      +'➕ '+p.nome+' <span style="color:#888;font-size:0.75rem;">('+p.unidade+')</span></div>';
+  }).join('');
+}
+
+function adicionarExtraPedido(codigo, nome, unidade){
+  if(_pedidoExtras[codigo]||document.getElementById('ped-'+codigo))return;
+  _pedidoExtras[codigo]={nome:nome,unidade:unidade};
+  document.getElementById('lista-gerente').insertAdjacentHTML('beforeend', cardPedido(codigo, nome, nome, unidade, 0, true));
+  document.getElementById('busca-pedido-input').value='';
+  document.getElementById('busca-pedido-result').innerHTML='';
+  showToast(nome+' adicionado!','success');
+}
+
+function removerExtraPedido(codigo){
+  delete _pedidoExtras[codigo];
+  var card=document.getElementById('card-ped-'+codigo);
+  if(card)card.remove();
+}
+
+function enviarPedidoWhatsApp(){
+  var sistema=[], gerente=[];
+  document.querySelectorAll('#lista-sistema input[id^="ped-"]').forEach(function(inp){
+    var qtd=parseFloat(inp.value)||0;
+    if(qtd>0) sistema.push('▪️ *'+inp.dataset.nome+'*: '+qtd+' '+inp.dataset.unidade);
+  });
+  document.querySelectorAll('#lista-gerente input[id^="ped-"]').forEach(function(inp){
+    var qtd=parseFloat(inp.value)||0;
+    if(qtd>0) gerente.push('▪️ *'+inp.dataset.nome+'*: '+qtd+' '+inp.dataset.unidade);
+  });
+  if(!sistema.length&&!gerente.length){showToast('Nenhum produto com quantidade > 0!','error');return;}
+  var hoje=dataHoje(), partes=hoje.split('-');
+  var texto='🛒 *Pedido de Compras — Prensadão*\n📅 '+partes[2]+'/'+partes[1]+'/'+partes[0]+'\n\n';
+  if(sistema.length) texto+='⚠️ *Indicados pelo sistema:*\n'+sistema.join('\n')+'\n\n';
+  if(gerente.length) texto+='➕ *Adicionados pelo gerente:*\n'+gerente.join('\n')+'\n\n';
+  texto+='_Gerado por Estoques Prensadão_';
+  window.open('https://wa.me/?text='+encodeURIComponent(texto),'_blank');
+}
 </script>
 
   <!-- MODAL: Contagem por Categoria -->
@@ -2742,6 +2846,52 @@ function enviarPedidoWhatsApp() {
     <button onclick="enviarPedidoWhatsApp()" style="width:100%;padding:14px;background:#25D366;color:#fff;border:none;border-radius:10px;cursor:pointer;font-size:1rem;font-weight:700;margin-top:16px;">
       📱 Enviar pelo WhatsApp
     </button>
+  </div>
+
+
+  <!-- PEDIDOS (ADM) -->
+  <div class="screen adm-only" id="tab-pedidos">
+    <div class="card">
+      <h3>🛒 Lista de Pedidos</h3>
+      <p style="font-size:0.82rem;color:#888;margin-bottom:10px;">Produtos indicados pelo sistema + o que você quiser adicionar.</p>
+      <button class="btn btn-red" style="width:100%;margin-bottom:8px;" onclick="gerarPedidos()">🔄 Calcular Pedido</button>
+    </div>
+
+    <!-- Seção 1: Indicados pelo sistema -->
+    <div id="sec-sistema" style="display:none;">
+      <div style="background:#1a1a2e;border-radius:10px;padding:10px 14px;margin-bottom:8px;display:flex;align-items:center;gap:8px;">
+        <span style="font-size:1rem;">⚠️</span>
+        <span style="font-weight:700;color:#ef9a9a;font-size:0.92rem;">Indicados pelo sistema</span>
+        <span id="badge-sistema" style="background:#b71c1c;color:#fff;border-radius:12px;padding:1px 8px;font-size:0.75rem;font-weight:700;margin-left:auto;"></span>
+      </div>
+      <div id="lista-sistema"></div>
+    </div>
+
+    <!-- Seção 2: Adicionados pelo gerente -->
+    <div id="sec-gerente" style="display:none;">
+      <div style="background:#1a2e1a;border-radius:10px;padding:10px 14px;margin:12px 0 8px;display:flex;align-items:center;gap:8px;">
+        <span style="font-size:1rem;">➕</span>
+        <span style="font-weight:700;color:#a5d6a7;font-size:0.92rem;">Adicionados por mim</span>
+      </div>
+      <div id="lista-gerente"></div>
+    </div>
+
+    <!-- Busca para adicionar produto -->
+    <div id="sec-busca-pedido" style="display:none;margin-top:8px;">
+      <div class="card" style="padding:12px;">
+        <div style="font-weight:700;font-size:0.85rem;color:#90caf9;margin-bottom:8px;">🔍 Adicionar produto ao pedido</div>
+        <input type="text" id="busca-pedido-input" oninput="buscarProdutoPedido()" placeholder="Digite o nome do produto..."
+          style="width:100%;background:#263238;border:1px solid #455a64;color:#fff;border-radius:8px;padding:8px 12px;font-size:0.9rem;box-sizing:border-box;">
+        <div id="busca-pedido-result" style="margin-top:6px;max-height:200px;overflow-y:auto;"></div>
+      </div>
+    </div>
+
+    <!-- Botão enviar -->
+    <div id="sec-btn-enviar" style="display:none;margin-top:12px;padding-bottom:16px;">
+      <button class="btn btn-green" style="width:100%;padding:14px;font-size:1rem;font-weight:700;" onclick="enviarPedidoWhatsApp()">
+        📱 Enviar pelo WhatsApp
+      </button>
+    </div>
   </div>
 </div>
 </body>
