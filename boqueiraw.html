@@ -637,7 +637,10 @@ async function supa(metodo, tabela, dados=null, params='') {
 }
 
 // ── LOGIN ──
+let _loginProcessando = false;
 async function fazerLogin() {
+  if (_loginProcessando) return;
+  _loginProcessando = true;
   const usuario = document.getElementById('login-usuario').value.trim();
   const senha = document.getElementById('login-senha').value.trim();
   if (!usuario || !senha) { document.getElementById('login-erro').style.display='block'; return; }
@@ -651,7 +654,10 @@ async function fazerLogin() {
       document.getElementById('login-erro').style.display = 'block';
     }
   } catch(e) {
-    showToast('Erro de conexão', 'error');
+    console.error('LOGIN ERRO:', e);
+    showToast('Erro de conexão. Verifique a internet.', 'error');
+  } finally {
+    _loginProcessando = false;
   }
 }
 
@@ -695,6 +701,7 @@ async function carregarProdutos() {
     renderProdutos();
     atualizarStats();
   } catch(e) {
+    console.error('PRODUTOS ERRO:', e);
     showToast('Erro ao carregar produtos', 'error');
   }
 }
