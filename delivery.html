@@ -592,13 +592,8 @@ const SUPA_URL = 'https://trbyynbtuzpszdvjivbs.supabase.co';
 const SUPA_ANON = 'sb_publishable_lA_OIFoNVpmh5fmxNwu_1w_f9waqXfj';
 const UNIDADE_LOJA = 'delivery';
 
-let _notifInterval = null;    // _notifInterval_HOISTED
-let _notifUltimoAt = null;    // _notifInterval_HOISTED
-let _todasNotifs = [];         // _notifInterval_HOISTED
 let usuarioLogado = null;
-let _notifInterval = null; // HOISTED
-let _notifUltimoAt = null; // HOISTED
-_todasNotifs = []; // redecl removida // HOISTED
+let _todasNotifs = []; // HOISTED
 let produtosCache = {};
 let modalCodigo = null;
 let modalTipo = null;
@@ -2296,8 +2291,9 @@ function almoxRenderStats() {
 function almoxPopularSelect() { _popularSelectAlmoxCD(); }
 
 // ── SINO DE NOTIFICAÇÕES ──
-// _notifUltimoAt e _notifInterval já declarados no script1
-// _todasNotifs já declarado no script1
+var _notifUltimoAt = null;
+var _notifInterval = null;
+var _todasNotifs = [];
 
 function toggleNotif() {
   const p = document.getElementById('notif-painel');
