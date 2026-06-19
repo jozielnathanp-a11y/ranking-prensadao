@@ -717,6 +717,7 @@ async function carregarProdutos() {
     atualizarStats();
   } catch(e) {
     console.error('PRODUTOS ERRO:', e);
+    document.getElementById('stats-produtos').textContent = e.message || String(e);
     showToast('Erro ao carregar produtos. Verifique a conexão.', 'error');
   }
 }
