@@ -494,7 +494,6 @@ function showToast(msg, tipo='') {
   const duracao = tipo === 'error' ? 999999 : 3000;
   _toastTimer = setTimeout(() => t.className = '', duracao);
 }
-let _toastTimer = null;
 
 function fmtQ(v, u) {
   if (!v && v !== 0) return '—';
