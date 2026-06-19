@@ -639,7 +639,7 @@ async function supa(metodo, tabela, dados=null, params='') {
 // ── LOGIN ──
 let _loginProcessando = false;
 async function fazerLogin() {
-  if (_loginProcessando) return;
+  if (usuarioLogado || _loginProcessando) return;
   _loginProcessando = true;
   const usuario = document.getElementById('login-usuario').value.trim();
   const senha = document.getElementById('login-senha').value.trim();
@@ -697,6 +697,7 @@ async function carregarProdutos() {
     const lista = await supa('GET', 'produtos', null, `select=*&order=nome.asc&unidade_loja=eq.${UNIDADE_LOJA}`);
     produtosCache = {};
     if (Array.isArray(lista)) lista.forEach(p => produtosCache[p.codigo] = p);
+    console.log('Produtos carregados:', Object.keys(produtosCache).length);
     renderEstoque();
     renderProdutos();
     atualizarStats();
