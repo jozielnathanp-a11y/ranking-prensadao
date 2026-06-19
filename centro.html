@@ -200,8 +200,6 @@
 
 </style>
 <script>
-// DEBUG TEMPORÁRIO
-window._debugErros = [];
 window.onerror = function(msg, src, line, col, err) {
   window._debugErros.push('ONERROR: ' + msg + ' (linha ' + line + ')');
   var el = document.getElementById('_debug_box');
@@ -608,6 +606,9 @@ const SUPA_ANON = 'sb_publishable_lA_OIFoNVpmh5fmxNwu_1w_f9waqXfj';
 const UNIDADE_LOJA = 'centro';
 
 let usuarioLogado = null;
+let _notifInterval = null; // HOISTED
+let _notifUltimoAt = null; // HOISTED
+let _todasNotifs = []; // HOISTED
 let produtosCache = {};
 let modalCodigo = null;
 let modalTipo = null;
@@ -670,9 +671,7 @@ async function fazerLogin() {
     }
   } catch(e) {
     console.error('LOGIN ERRO:', e);
-    var dbx = document.getElementById('_debug_box');
-    if (dbx) { dbx.style.display='block'; dbx.innerHTML += '<div>LOGIN ERR: ' + (e.message||String(e)) + '</div>'; }
-    showToast('Erro de conexão. Verifique a internet.', 'error');
+    showToast('Erro ao conectar. Tente de novo.', 'error');
   } finally {
     _loginProcessando = false;
   }
@@ -720,9 +719,7 @@ async function carregarProdutos() {
     atualizarStats();
   } catch(e) {
     console.error('PRODUTOS ERRO:', e);
-    var dbx = document.getElementById('_debug_box');
-    if (dbx) { dbx.style.display='block'; dbx.innerHTML += '<div>PROD ERR: ' + (e.message||String(e)) + '</div>'; }
-    showToast('Erro ao carregar produtos', 'error');
+    showToast('Erro ao carregar produtos. Verifique a conexão.', 'error');
   }
 }
 
@@ -2309,9 +2306,8 @@ function almoxRenderStats() {
 function almoxPopularSelect() { _popularSelectAlmoxCD(); }
 
 // ── SINO DE NOTIFICAÇÕES ──
-let _notifUltimoAt = null;
-let _notifInterval = null;
-let _todasNotifs = [];
+// _notifUltimoAt e _notifInterval já declarados no script1
+// _todasNotifs já declarado no script1
 
 function toggleNotif() {
   const p = document.getElementById('notif-painel');
@@ -2793,6 +2789,6 @@ function showTab(id, el) {
     </div>
   </div>
 </div>
-<div id="_debug_box" style="position:fixed;bottom:60px;left:10px;right:10px;background:#1a1a2e;border:1px solid #ff5252;border-radius:8px;padding:8px;font-size:0.75rem;color:#fff;z-index:99999;max-height:120px;overflow-y:auto;display:none;"></div>
+
 </body>
 </html>
