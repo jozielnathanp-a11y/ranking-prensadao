@@ -687,7 +687,7 @@ function iniciarApp() {
     document.querySelectorAll('.adm-only').forEach(el => el.style.display = 'none');
   }
 
-  iniciarNotificacoes();
+  try { iniciarNotificacoes(); } catch(e) { console.warn("notif:", e); }
   carregarProdutos();
   const hoje = dataHoje();
   document.getElementById('hist-data').value = hoje;
