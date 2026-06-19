@@ -15,11 +15,11 @@
     /* LOGIN */
     #login-screen {
       min-height: 100vh; display: flex; align-items: center; justify-content: center;
-      background: linear-gradient(135deg, #c62828 0%, #7f0000 100%);
+      background: linear-gradient(135deg, #1b5e20 0%, #33691e 100%);
     }
     .login-box {
       background: #111; border-radius: 4px; padding: 40px 32px; width: 90%; max-width: 380px;
-      box-shadow: 0 0 40px #c6282844; border: 1px solid #c6282833;
+      box-shadow: 0 0 40px #2e7d3244; border: 1px solid #2e7d3233;
     }
     .login-box h1 { font-size: 1.4rem; color: #1565c0; text-align: center; margin-bottom: 6px; }
     .login-box p { font-size: 0.82rem; color: #888; text-align: center; margin-bottom: 28px; }
@@ -38,7 +38,7 @@
     /* APP */
     #app { display: none; }
     .topbar {
-      background: #111; color: #ef5350; padding: 12px 16px; border-bottom: 2px solid #c6282844;
+      background: #33691e; color: #a5d6a7; padding: 12px 16px; border-bottom: 2px solid #2e7d3244;
       display: flex; align-items: center; justify-content: space-between;
       position: sticky; top: 0; z-index: 100;
     }
@@ -48,7 +48,7 @@
 
     .tabs { display: flex; background: #111; border-bottom: 2px solid #222; overflow-x: auto; }
     .tab { padding: 12px 16px; font-size: 0.82rem; font-weight: 700; color: #555; cursor: pointer; white-space: nowrap; border-bottom: 3px solid transparent; letter-spacing: 1px; }
-    .tab.active { color: #ef5350; border-bottom-color: #ef5350; }
+    .tab.active { color: #a5d6a7; border-bottom-color: #a5d6a7; }
 
     .screen { display: none; padding: 16px; max-width: 700px; margin: 0 auto; background: #0a0a0a; }
     .screen.active { display: block; }
@@ -57,7 +57,7 @@
     .card h3 { font-size: 1rem; color: #9e9e9e; margin-bottom: 12px; font-family: 'Bebas Neue', sans-serif; letter-spacing: 2px; }
 
     .btn { display: block; width: 100%; padding: 12px; border: none; border-radius: 10px; font-size: 0.95rem; font-weight: 600; cursor: pointer; margin-bottom: 8px; }
-    .btn-red { background: #c62828; color: #fff; font-family: 'Bebas Neue', sans-serif; letter-spacing: 2px; font-size: 1.1rem; }
+    .btn-red { background: #2e7d32; color: #fff; font-family: 'Bebas Neue', sans-serif; letter-spacing: 2px; font-size: 1.1rem; }
     .btn-green { background: #2e7d32; color: #fff; }
     .btn-blue { background: #1a237e; color: #fff; }
     .btn-gray { background: #1a1a1a; color: #888; border: 1px solid #333; }
@@ -112,7 +112,7 @@
     }
     .modal-box {
       background: #111; border-radius: 4px 4px 0 0; padding: 24px 20px 36px;
-      width: 100%; max-width: 480px; border-top: 2px solid #c62828;
+      width: 100%; max-width: 480px; border-top: 2px solid #2e7d32;
     }
     .modal-box h2 { font-size: 1.3rem; color: #9e9e9e; margin-bottom: 4px; font-family: 'Bebas Neue', sans-serif; letter-spacing: 2px; }
     .modal-box p { font-size: 0.8rem; color: #555; margin-bottom: 12px; }
@@ -236,10 +236,9 @@
     <div class="tab adm-only" onclick="showTab('historico',this)">📋 HISTÓRICO</div>
 
 <div class="tab adm-only" onclick="showTab('pedidos',this)">🛒 PEDIDOS</div>
-        <div class="tab adm-only" onclick="showTab('categorias', this)">📊 CATEGORIAS</div>
     <div class="tab adm-only" onclick="showTab('relatorio')">📊 EXTRATO</div>
     <div class="tab adm-only" onclick="showTab('produtos',this)">⚙️ BASE</div>
-    
+    <div class="tab" onclick="showTab('almoxarifado',this)">🏬 Almoxarifado</div>
   </div>
 
   <!-- ESTOQUE -->
@@ -453,9 +452,7 @@
     <div id="sec-busca-pedido" style="display:none;margin-top:8px;">
       <div class="card" style="padding:12px;">
         <div style="font-weight:700;font-size:0.85rem;color:#90caf9;margin-bottom:8px;">🔍 Adicionar produto ao pedido</div>
-        <!-- Filtros de categoria (multi-select) -->
-        <div id="ped-filtros-cat" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;"></div>
-        <input type="text" id="busca-pedido-input" oninput="buscarProdutoPedido()" placeholder="Digite o nome ou deixe vazio para ver por categoria..."
+        <input type="text" id="busca-pedido-input" oninput="buscarProdutoPedido()" placeholder="Digite o nome do produto..."
           style="width:100%;background:#263238;border:1px solid #455a64;color:#fff;border-radius:8px;padding:8px 12px;font-size:0.9rem;box-sizing:border-box;">
         <div id="busca-pedido-result" style="margin-top:6px;max-height:200px;overflow-y:auto;"></div>
       </div>
@@ -665,9 +662,9 @@ function showTab(name, el) {
 }
 
 // ── PRODUTOS ──
-async async function carregarProdutos() {
+async function carregarProdutos() {
   try {
-    const lista = await supa('GET', 'produtos', null, `select=*&order=nome.asc&unidade_loja=eq.${UNIDADE_LOJA}`);
+    const lista = await supa('GET', 'produtos', null, 'select=*&order=nome.asc&unidade_loja=eq.${UNIDADE_LOJA}');
     produtosCache = {};
     if (Array.isArray(lista)) lista.forEach(p => produtosCache[p.codigo] = p);
     renderEstoque();
@@ -1144,7 +1141,7 @@ async function gerarRelAlmox() {
   if (!data) return;
   el.innerHTML = "<p style='color:#888;text-align:center;padding:20px;'>Carregando...</p>";
 
-  var prods = await supa("GET", "produtos", null, "unidade_loja=eq.almoxarifado_cd&select=*&order=nome.asc");
+  var prods = await supa("GET", "produtos", null, "unidade_loja=eq.${UNIDADE_LOJA}&select=*&order=nome.asc");
   if (!prods || !prods.length) { el.innerHTML = "<p style='color:#888;text-align:center;'>Nenhum produto</p>"; return; }
 
   var dtI = new Date(data + "T00:00:00-03:00");
@@ -1159,8 +1156,8 @@ async function gerarRelAlmox() {
   var iniA = dtAI.toISOString().replace("Z","");
   var fimA = dtAF.toISOString().replace("Z","");
 
-  var movsH = await supa("GET","movimentacoes",null,"unidade_loja=eq.almoxarifado_cd&created_at=gte."+ini+"&created_at=lte."+fim+"&status=eq.confirmado&order=created_at.asc&select=*");
-  var movsA = await supa("GET","movimentacoes",null,"unidade_loja=eq.almoxarifado_cd&created_at=gte."+iniA+"&created_at=lte."+fimA+"&status=eq.confirmado&order=created_at.asc&select=*");
+  var movsH = await supa("GET","movimentacoes",null,"unidade_loja=eq.${UNIDADE_LOJA}&created_at=gte."+ini+"&created_at=lte."+fim+"&status=eq.confirmado&order=created_at.asc&select=*");
+  var movsA = await supa("GET","movimentacoes",null,"unidade_loja=eq.${UNIDADE_LOJA}&created_at=gte."+iniA+"&created_at=lte."+fimA+"&status=eq.confirmado&order=created_at.asc&select=*");
 
   var res = {};
   prods.forEach(function(p){
@@ -1450,13 +1447,13 @@ async function confirmarPendente(id, codigo, novoEst, nome) {
       const codCD   = codBase + '_cd';
 
       const cdRes = await fetch(
-        `${SUPA_URL}/rest/v1/produtos?codigo=eq.${codCD}&unidade_loja=eq.cd&select=codigo,estoque`,
+        `${SUPA_URL}/rest/v1/produtos?codigo=eq.${codCD}&unidade_loja=eq.${UNIDADE_LOJA}&select=codigo,estoque`,
         { headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + SUPA_ANON } }
       ).then(r => r.json());
 
       if (cdRes && cdRes.length > 0) {
         const novoCD = Math.max(0, parseFloat(cdRes[0].estoque || 0) - qtdMov);
-        await fetch(`${SUPA_URL}/rest/v1/produtos?codigo=eq.${codCD}&unidade_loja=eq.cd`, {
+        await fetch(`${SUPA_URL}/rest/v1/produtos?codigo=eq.${codCD}&unidade_loja=eq.${UNIDADE_LOJA}`, {
           method: 'PATCH',
           headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + SUPA_ANON, 'Content-Type': 'application/json' },
           body: JSON.stringify({ estoque: novoCD })
@@ -1531,7 +1528,7 @@ function atualizarLabelAberto() {
 
 
 
-// ===== PEDIDOS =====
+async // ===== PEDIDOS =====
 var _pedidoExtras = {};
 
 function cardPedido(codigo, nomeHtml, nomeLimpo, unidade, qtd, removivel) {
@@ -1582,90 +1579,24 @@ function gerarPedidos(){
   document.getElementById('sec-btn-enviar').style.display='';
   document.getElementById('busca-pedido-input').value='';
   document.getElementById('busca-pedido-result').innerHTML='';
-  _pedCatsFiltro = {};
-  renderFiltrosCatPedido();
 }
 
-// ─── PEDIDO: filtros de categoria multi-select ───────────────────────────────
-var _pedCatsFiltro = {}; // { nome: true/false }
-
-function renderFiltrosCatPedido() {
-  var cats = {};
-  Object.values(produtosCache).forEach(function(p) {
-    if (p.categoria) cats[p.categoria] = (cats[p.categoria]||0) + 1;
-  });
-  var el = document.getElementById('ped-filtros-cat');
-  if (!el) return;
-  el.innerHTML = Object.keys(cats).sort().map(function(cat) {
-    var ativo = _pedCatsFiltro[cat];
-    return '<button onclick="toggleCatPedido('' + cat.replace(/'/g,"\'") + '')" '
-      + 'id="ped-cat-btn-' + cat.replace(/[^a-z0-9]/gi,'_') + '" '
-      + 'style="padding:4px 10px;border:none;border-radius:16px;cursor:pointer;font-size:0.75rem;font-weight:700;'
-      + (ativo ? 'background:#1565c0;color:#fff;' : 'background:#263238;color:#90caf9;border:1px solid #455a64;')
-      + '">' + cat + ' <span style="opacity:0.7;">(' + cats[cat] + ')</span></button>';
+function buscarProdutoPedido(){
+  var termo=(document.getElementById('busca-pedido-input').value||'').toLowerCase().trim();
+  var el=document.getElementById('busca-pedido-result');
+  if(!termo){el.innerHTML='';return;}
+  var prods=Object.values(produtosCache).filter(function(p){
+    return p.nome.toLowerCase().indexOf(termo)>=0 && !_pedidoExtras[p.codigo] && !document.getElementById('ped-'+p.codigo);
+  }).slice(0,8);
+  if(!prods.length){el.innerHTML='<p style="color:#888;font-size:0.82rem;padding:4px 8px;">Nenhum produto encontrado.</p>';return;}
+  el.innerHTML=prods.map(function(p){
+    var nomeEsc=p.nome.replace(/"/g,'&quot;');
+    var unEsc=p.unidade.replace(/"/g,'&quot;');
+    return '<div onclick="adicionarExtraPedido(\"'+p.codigo+'\",\"'+nomeEsc+'\",\"'+unEsc+'\")" '
+      +'style="padding:8px 10px;cursor:pointer;border-radius:8px;margin-bottom:4px;background:#263238;font-size:0.88rem;color:#fff;">'
+      +'➕ '+p.nome+' <span style="color:#888;font-size:0.75rem;">('+p.unidade+')</span></div>';
   }).join('');
 }
-
-function toggleCatPedido(cat) {
-  _pedCatsFiltro[cat] = !_pedCatsFiltro[cat];
-  renderFiltrosCatPedido();
-  buscarProdutoPedido();
-}
-
-function buscarProdutoPedido() {
-  var termo = (document.getElementById('busca-pedido-input').value||'').toLowerCase().trim();
-  var el = document.getElementById('busca-pedido-result');
-  var catsSel = Object.keys(_pedCatsFiltro).filter(function(c){ return _pedCatsFiltro[c]; });
-  
-  // Se nem texto nem categoria selecionada
-  if (!termo && !catsSel.length) { el.innerHTML = ''; return; }
-  
-  var prods = Object.values(produtosCache).filter(function(p) {
-    var jaAdicionado = _pedidoExtras[p.codigo] || document.getElementById('ped-' + p.codigo);
-    if (jaAdicionado) return false;
-    var matchTermo = !termo || p.nome.toLowerCase().indexOf(termo) >= 0;
-    var matchCat = !catsSel.length || catsSel.indexOf(p.categoria) >= 0;
-    return matchTermo && matchCat;
-  }).sort(function(a,b){ return a.nome.localeCompare(b.nome); }).slice(0, 20);
-  
-  if (!prods.length) {
-    el.innerHTML = '<p style="color:#888;font-size:0.82rem;padding:4px 8px;">Nenhum produto encontrado.</p>';
-    return;
-  }
-  
-  // Agrupar por categoria se tiver categorias selecionadas
-  if (catsSel.length > 0) {
-    var grupos = {};
-    prods.forEach(function(p) {
-      var cat = p.categoria || 'Outros';
-      if (!grupos[cat]) grupos[cat] = [];
-      grupos[cat].push(p);
-    });
-    var html = '';
-    Object.keys(grupos).sort().forEach(function(cat) {
-      html += '<div style="font-size:0.72rem;color:#78909c;font-weight:700;padding:4px 8px 2px;letter-spacing:1px;">' + cat.toUpperCase() + '</div>';
-      grupos[cat].forEach(function(p) {
-        var nomeEsc = p.nome.replace(/"/g,'&quot;');
-        var unEsc = p.unidade.replace(/"/g,'&quot;');
-        html += '<div onclick="adicionarExtraPedido(\"'+p.codigo+'\",\"'+nomeEsc+'\",\"'+unEsc+'\")" '
-          + 'style="padding:8px 10px;cursor:pointer;border-radius:8px;margin-bottom:4px;background:#263238;font-size:0.88rem;color:#fff;display:flex;justify-content:space-between;align-items:center;">'
-          + '<span>➕ ' + p.nome + '</span>'
-          + '<span style="color:#888;font-size:0.75rem;">' + p.unidade + '</span></div>';
-      });
-    });
-    el.innerHTML = html;
-  } else {
-    el.innerHTML = prods.map(function(p) {
-      var nomeEsc = p.nome.replace(/"/g,'&quot;');
-      var unEsc = p.unidade.replace(/"/g,'&quot;');
-      return '<div onclick="adicionarExtraPedido(\"'+p.codigo+'\",\"'+nomeEsc+'\",\"'+unEsc+'\")" '
-        + 'style="padding:8px 10px;cursor:pointer;border-radius:8px;margin-bottom:4px;background:#263238;font-size:0.88rem;color:#fff;display:flex;justify-content:space-between;align-items:center;">'
-        + '<span>➕ ' + p.nome + '</span>'
-        + '<span style="color:#888;font-size:0.75rem;">' + p.unidade + '</span></div>';
-    }).join('');
-  }
-}
-// ─── /PEDIDO filtros categoria ────────────────────────────────────────────────
 
 function adicionarExtraPedido(codigo, nome, unidade){
   if(_pedidoExtras[codigo]||document.getElementById('ped-'+codigo))return;
@@ -1813,12 +1744,12 @@ async function salvarLancamentos() {
             // Embalagem → desconta do Almoxarifado pelo código base
             const codAlmox = codBase + '_almoxarifado';
             const almoxRes = await fetch(
-              `${SUPA_URL}/rest/v1/produtos?codigo=eq.${codAlmox}&unidade_loja=eq.almoxarifado&select=codigo,estoque`,
+              `${SUPA_URL}/rest/v1/produtos?codigo=eq.${codAlmox}&unidade_loja=eq.${UNIDADE_LOJA}&select=codigo,estoque`,
               { headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + SUPA_ANON } }
             ).then(function(r){ return r.json(); });
             if (almoxRes && almoxRes.length > 0) {
               const novoAlmox = Math.max(0, parseFloat(almoxRes[0].estoque || 0) - l.qtd);
-              await fetch(`${SUPA_URL}/rest/v1/produtos?codigo=eq.${codAlmox}&unidade_loja=eq.almoxarifado`, {
+              await fetch(`${SUPA_URL}/rest/v1/produtos?codigo=eq.${codAlmox}&unidade_loja=eq.${UNIDADE_LOJA}`, {
                 method: 'PATCH',
                 headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + SUPA_ANON, 'Content-Type': 'application/json' },
                 body: JSON.stringify({ estoque: novoAlmox })
@@ -1828,12 +1759,12 @@ async function salvarLancamentos() {
             // Processado / Bruto / outros → desconta do CD pelo código base
             const codCD = codBase + '_cd';
             const cdRes = await fetch(
-              `${SUPA_URL}/rest/v1/produtos?codigo=eq.${codCD}&unidade_loja=eq.cd&select=codigo,estoque`,
+              `${SUPA_URL}/rest/v1/produtos?codigo=eq.${codCD}&unidade_loja=eq.${UNIDADE_LOJA}&select=codigo,estoque`,
               { headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + SUPA_ANON } }
             ).then(function(r){ return r.json(); });
             if (cdRes && cdRes.length > 0) {
               const novoCD = Math.max(0, parseFloat(cdRes[0].estoque || 0) - l.qtd);
-              await fetch(`${SUPA_URL}/rest/v1/produtos?codigo=eq.${codCD}&unidade_loja=eq.cd`, {
+              await fetch(`${SUPA_URL}/rest/v1/produtos?codigo=eq.${codCD}&unidade_loja=eq.${UNIDADE_LOJA}`, {
                 method: 'PATCH',
                 headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + SUPA_ANON, 'Content-Type': 'application/json' },
                 body: JSON.stringify({ estoque: novoCD })
@@ -2373,7 +2304,7 @@ async function carregarAlmox() {
   if (lista) lista.innerHTML = '<p style="text-align:center;color:#aaa;padding:20px;">Carregando...</p>';
   try {
     var r = await fetch(
-      'https://trbyynbtuzpszdvjivbs.supabase.co/rest/v1/produtos?unidade_loja=eq.almoxarifado_cd&select=codigo,nome,categoria,unidade,estoque,estoque_min&order=categoria.asc,nome.asc',
+      'https://trbyynbtuzpszdvjivbs.supabase.co/rest/v1/produtos?unidade_loja=eq.${UNIDADE_LOJA}&select=codigo,nome,categoria,unidade,estoque,estoque_min&order=categoria.asc,nome.asc',
       { headers: { 'apikey': 'sb_publishable_lA_OIFoNVpmh5fmxNwu_1w_f9waqXfj', 'Authorization': 'Bearer sb_publishable_lA_OIFoNVpmh5fmxNwu_1w_f9waqXfj' } }
     );
     _acd = await r.json();
@@ -2627,143 +2558,6 @@ async function enviarContagemLote() {
   else showToast('Nenhum item preenchido','error');
   if (erros > 0) showToast('⚠️ ' + erros + ' erros','error');
 }
-
-// ===== CATEGORIAS =====
-var _catAtiva = '';
-
-function filtrarCategoria(cat) {
-  _catAtiva = cat;
-  // Destacar botão ativo
-  ['bebidas','embalagens','todas'].forEach(function(b) {
-    var el = document.getElementById('cat-btn-'+b);
-    if (el) el.style.opacity = '0.5';
-  });
-  var btnId = cat === 'Bebidas' ? 'cat-btn-bebidas' : cat === 'Embalagens' ? 'cat-btn-embalagens' : 'cat-btn-todas';
-  var btnEl = document.getElementById(btnId);
-  if (btnEl) btnEl.style.opacity = '1';
-  carregarRelCat();
-}
-
-async function carregarRelCat() {
-  var data = document.getElementById('cat-data').value;
-  if (!data) {
-    var hoje = dataHoje();
-    document.getElementById('cat-data').value = hoje;
-    data = hoje;
-  }
-  var el = document.getElementById('cat-resultado');
-  el.innerHTML = '<p style="text-align:center;color:#aaa;padding:16px;">Carregando...</p>';
-  document.getElementById('cat-sec-pedido').style.display = 'none';
-
-  try {
-    // Buscar histórico do dia (entradas e saídas)
-    var params = 'select=codigo,nome,tipo,qtd,unidade_loja&data=eq.' + data;
-    if (_catAtiva) params += '&categoria=eq.' + encodeURIComponent(_catAtiva);
-    var hist = await supa('GET', 'movimentacoes', null, params + '&order=nome.asc');
-    if (!Array.isArray(hist)) hist = [];
-
-    // Montar por produto: entradas e saídas
-    var porProd = {};
-    hist.forEach(function(m) {
-      if (!porProd[m.codigo]) porProd[m.codigo] = { nome: m.nome, entradas: 0, saidas: 0 };
-      var qtd = parseFloat(m.qtd) || 0;
-      if (m.tipo === 'entrada') porProd[m.codigo].entradas += qtd;
-      else porProd[m.codigo].saidas += qtd;
-    });
-
-    // Filtrar produtos da categoria
-    var prods = Object.values(produtosCache).filter(function(p) {
-      return !_catAtiva || p.categoria === _catAtiva;
-    }).sort(function(a, b) { return a.nome.localeCompare(b.nome); });
-
-    if (!prods.length) {
-      el.innerHTML = '<p style="color:#888;text-align:center;padding:20px;">Nenhum produto encontrado nesta categoria.</p>';
-      return;
-    }
-
-    // Calcular contagem anterior (estoque atual - entradas + saídas)
-    var h = '';
-    h += '<div style="overflow-x:auto;">';
-    h += '<table style="width:100%;border-collapse:collapse;font-size:0.78rem;">';
-    h += '<thead><tr style="background:#1e2a38;color:#90caf9;">';
-    h += '<th style="padding:8px 6px;text-align:left;">Produto</th>';
-    h += '<th style="padding:8px 4px;text-align:center;">Ant.</th>';
-    h += '<th style="padding:8px 4px;text-align:center;">Entrada</th>';
-    h += '<th style="padding:8px 4px;text-align:center;">Atual</th>';
-    h += '<th style="padding:8px 4px;text-align:center;">Pedido?</th>';
-    h += '</tr></thead><tbody>';
-
-    prods.forEach(function(p) {
-      var atual = parseFloat(p.estoque) || 0;
-      var mov = porProd[p.codigo] || { entradas: 0, saidas: 0 };
-      var anterior = atual - mov.entradas + mov.saidas;
-      var min = parseFloat(p.estoque_min) || 0;
-      var max = parseFloat(p.estoque_max) || 0;
-      var precisa = min > 0 && atual < min;
-      var sug = precisa ? Math.max(0, (max > 0 ? max : min) - atual) : 0;
-      var und = p.unidade;
-      var corLinha = precisa ? 'background:#2c1a1a;' : '';
-      var sinal = precisa ? '<span style="color:#ef9a9a;font-weight:700;">⚠️ ' + sug.toFixed(1) + ' ' + und + '</span>' : '<span style="color:#4caf50;">OK</span>';
-
-      h += '<tr style="border-bottom:1px solid #263238;' + corLinha + '">';
-      h += '<td style="padding:7px 6px;font-weight:600;">' + p.nome + '<br><span style="color:#78909c;font-size:0.7rem;">' + (p.categoria||'') + '</span></td>';
-      h += '<td style="padding:7px 4px;text-align:center;color:#b0bec5;">' + anterior.toFixed(1) + '</td>';
-      h += '<td style="padding:7px 4px;text-align:center;color:#81c784;">' + (mov.entradas > 0 ? '+' + mov.entradas.toFixed(1) : '—') + '</td>';
-      h += '<td style="padding:7px 4px;text-align:center;font-weight:700;color:#fff;">' + atual.toFixed(1) + ' <small style="color:#78909c;">' + und + '</small></td>';
-      h += '<td style="padding:7px 4px;text-align:center;">' + sinal + '</td>';
-      h += '</tr>';
-    });
-
-    h += '</tbody></table></div>';
-
-    // Resumo
-    var precisam = prods.filter(function(p) { return (parseFloat(p.estoque_min)||0) > 0 && (parseFloat(p.estoque)||0) < (parseFloat(p.estoque_min)||0); });
-    h = '<div class="card" style="padding:10px 14px;margin-bottom:8px;display:flex;gap:12px;">'
-      + '<div style="text-align:center;flex:1;"><div style="font-size:1.4rem;font-weight:700;">' + prods.length + '</div><div style="font-size:0.72rem;color:#aaa;">produtos</div></div>'
-      + '<div style="text-align:center;flex:1;"><div style="font-size:1.4rem;font-weight:700;color:#ef9a9a;">' + precisam.length + '</div><div style="font-size:0.72rem;color:#aaa;">precisam</div></div>'
-      + '</div>' + h;
-
-    el.innerHTML = h;
-
-    // Montar seção de pedido se houver produtos faltando
-    if (precisam.length > 0) {
-      var hPed = '';
-      precisam.forEach(function(p) {
-        var atual = parseFloat(p.estoque) || 0;
-        var min = parseFloat(p.estoque_min) || 0;
-        var max = parseFloat(p.estoque_max) || 0;
-        var sug = Math.max(0, (max > 0 ? max : min) - atual);
-        hPed += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding:8px;background:#1a1a2e;border-radius:8px;border-left:3px solid #b71c1c;">';
-        hPed += '<div style="flex:1;font-size:0.85rem;font-weight:600;">' + p.nome + '</div>';
-        hPed += '<input type="number" min="0" step="0.1" value="' + sug.toFixed(1) + '" id="catped-' + p.codigo + '" data-nome="' + p.nome.replace(/"/g,'&quot;') + '" data-und="' + p.unidade + '" style="width:70px;background:#263238;border:1px solid #455a64;color:#fff;border-radius:8px;padding:5px 8px;font-size:0.9rem;text-align:center;">';
-        hPed += '<span style="font-size:0.78rem;color:#aaa;">' + p.unidade + '</span>';
-        hPed += '</div>';
-      });
-      document.getElementById('cat-lista-pedido').innerHTML = hPed;
-      document.getElementById('cat-sec-pedido').style.display = '';
-    }
-
-  } catch(e) {
-    el.innerHTML = '<p style="color:#ef9a9a;text-align:center;padding:20px;">Erro ao carregar dados.</p>';
-    console.error('carregarRelCat:', e);
-  }
-}
-
-function enviarPedidoCat() {
-  var itens = [];
-  document.querySelectorAll('#cat-lista-pedido input[id^="catped-"]').forEach(function(inp) {
-    var q = parseFloat(inp.value) || 0;
-    if (q > 0) itens.push('- ' + inp.dataset.nome + ': ' + q + ' ' + inp.dataset.und);
-  });
-  if (!itens.length) { showToast('Nenhum produto com quantidade!', 'error'); return; }
-  var h = dataHoje(), pts = h.split('-');
-  var cat = _catAtiva ? ' (' + _catAtiva + ')' : '';
-  var t = 'Pedido Prensadao' + cat + ' - ' + pts[2] + '/' + pts[1] + '/' + pts[0] + '\n\n';
-  t += itens.join('\n') + '\n';
-  window.open('https://wa.me/?text=' + encodeURIComponent(t), '_blank');
-}
-// ===== /CATEGORIAS =====
-
 </script>
 
 
@@ -2827,33 +2621,5 @@ function enviarPedidoCat() {
     </div>
   </div>
 </div>
-
-  <!-- CATEGORIAS (ADM) -->
-  <div class="screen adm-only" id="tab-categorias">
-    <div class="card">
-      <h3>📊 Relatório por Categoria</h3>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
-        <button class="btn" id="cat-btn-bebidas" onclick="filtrarCategoria('Bebidas')" style="flex:1;min-width:100px;">🥤 Bebidas</button>
-        <button class="btn" id="cat-btn-embalagens" onclick="filtrarCategoria('Embalagens')" style="flex:1;min-width:100px;">📦 Embalagens</button>
-        <button class="btn btn-red" id="cat-btn-todas" onclick="filtrarCategoria('')" style="flex:1;min-width:100px;">📋 Todas</button>
-      </div>
-      <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;">
-        <label style="font-size:0.82rem;color:#aaa;">Data:</label>
-        <input type="date" id="cat-data" style="flex:1;background:#263238;border:1px solid #455a64;color:#fff;border-radius:8px;padding:6px 10px;font-size:0.85rem;">
-        <button class="btn" onclick="carregarRelCat()" style="padding:7px 14px;">🔄 Gerar</button>
-      </div>
-    </div>
-    <div id="cat-resultado" style="margin-top:4px;"></div>
-    <div id="cat-sec-pedido" style="display:none;margin-top:12px;padding-bottom:16px;">
-      <div class="card" style="padding:14px;">
-        <h3 style="margin-bottom:10px;">🛒 Pedido pela Categoria</h3>
-        <p style="font-size:0.8rem;color:#888;margin-bottom:10px;">Ajuste as quantidades e envie.</p>
-        <div id="cat-lista-pedido"></div>
-        <button class="btn btn-green" style="width:100%;margin-top:12px;padding:13px;font-size:1rem;font-weight:700;" onclick="enviarPedidoCat()">
-          📱 Enviar Pedido pelo WhatsApp
-        </button>
-      </div>
-    </div>
-  </div>
 </body>
 </html>
