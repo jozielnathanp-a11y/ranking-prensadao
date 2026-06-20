@@ -2676,12 +2676,12 @@ async function salvarMinMax(cod, pfx) {
       // atualizar cache
       var idx = (_catCache[pfx]||[]).findIndex(function(p){ return p.codigo === cod; });
       if (idx >= 0) { _catCache[pfx][idx].estoque_min = min; _catCache[pfx][idx].estoque_max = max; }
-      mostrarToast('✅ Min/Máx salvo!');
+      showToast('✅ Min/Máx salvo!');
       renderCatAba(pfx);
     } else {
-      mostrarToast('❌ Erro ao salvar');
+      showToast('❌ Erro ao salvar');
     }
-  } catch(e) { mostrarToast('❌ Erro: ' + e.message); }
+  } catch(e) { showToast('❌ Erro: ' + e.message); }
 }
 
 function filtrarCatAba(pfx, filtro) {
