@@ -40,13 +40,13 @@
     .topbar {
       background: #7f0000; color: #ef9a9a; padding: 12px 16px; border-bottom: 2px solid #c6282844;
       display: flex; align-items: center; justify-content: space-between;
-      position: sticky; top: 0; z-index: 100;
+      
     }
     .topbar h1 { font-size: 1rem; font-weight: 700; }
     .topbar span { font-size: 0.78rem; opacity: 0.85; }
     .topbar button { background: rgba(255,255,255,0.2); border: none; color: #fff; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 0.82rem; }
 
-    .tabs { display: flex; background: #111; border-bottom: 2px solid #222; overflow-x: auto; position: sticky; top: 56px; z-index: 99; }
+    .tabs { display: flex; background: #111; border-bottom: 2px solid #222; overflow-x: auto; }
     .tab { padding: 12px 16px; font-size: 0.82rem; font-weight: 700; color: #555; cursor: pointer; white-space: nowrap; border-bottom: 3px solid transparent; letter-spacing: 1px; pointer-events: all; }
     .tab.active { color: #ef9a9a; border-bottom-color: #ef9a9a; }
 
@@ -198,7 +198,16 @@
 .notif-item .notif-hora { color: #888; font-size: 0.75rem; margin-top: 4px; }
 .notif-vazia { text-align: center; color: #666; padding: 32px 16px; font-size: 0.9rem; }
 
-</style>
+
+    /* Header sticky: topbar + tabs juntos */
+    .header-sticky {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #0d47a1;
+    }
+
+  </style>
 </head>
 <body>
 
@@ -218,6 +227,7 @@
 
 <!-- APP -->
 <div id="app" style="display:none;">
+  <div class="header-sticky">
   <div class="topbar">
     <div>
       <h1>🏪 Prensadão Delivery</h1>
@@ -241,6 +251,7 @@
     <div class="tab" onclick="showTab('embalagens',this)">📦 Embalagens</div>
     <div class="tab" onclick="showTab('bebidas',this)">🍺 Bebidas</div>
   </div>
+  </div><!-- /header-sticky -->
 
   <!-- ESTOQUE -->
   <div class="screen active" id="tab-estoque">
