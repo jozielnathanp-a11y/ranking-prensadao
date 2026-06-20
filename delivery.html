@@ -218,6 +218,24 @@
     }
 
   </style>
+<script>
+/* SHOWTAB INLINE - garantia de funcionamento */
+function showTab(id, el) {
+  try {
+    document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
+    document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+    var screen = document.getElementById('tab-' + id);
+    if (screen) screen.classList.add('active');
+    if (el) el.classList.add('active');
+    if (id === 'embalagens' && typeof carregarCatAba === 'function') {
+      if (window._catCarregado && !_catCarregado.emb) carregarCatAba('Embalagens', 'emb');
+    }
+    if (id === 'bebidas' && typeof carregarCatAba === 'function') {
+      if (window._catCarregado && !_catCarregado.beb) carregarCatAba('Bebidas', 'beb');
+    }
+  } catch(e) { console.error('showTab error:', e); }
+}
+</script>
 </head>
 <body>
 
