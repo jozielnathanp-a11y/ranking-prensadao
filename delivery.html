@@ -476,7 +476,7 @@
         <h3 style="margin:0;">📦 Embalagens</h3>
         <div style="display:flex;gap:6px;">
           <button onclick="carregarCatAba('Embalagens','emb')" style="background:#424242;border:none;border-radius:8px;color:#fff;padding:6px 12px;cursor:pointer;font-size:0.8rem;">🔄</button>
-          <button onclick="pedirWhats('Embalagens')" style="background:#25d366;border:none;border-radius:8px;color:#fff;padding:6px 14px;cursor:pointer;font-size:0.8rem;font-weight:700;">📲 Pedir</button>
+          <button onclick="togglePedidoCat('emb')" style="background:#25d366;border:none;border-radius:8px;color:#fff;padding:6px 14px;cursor:pointer;font-size:0.8rem;font-weight:700;">📲 Pedir</button>
           <button onclick="relatorioEntradas('Embalagens')" style="background:#1565c0;border:none;border-radius:8px;color:#fff;padding:6px 12px;cursor:pointer;font-size:0.8rem;">📊 Entradas</button>
         </div>
       </div>
@@ -518,6 +518,25 @@
       <div id="emb-hist-lista"></div>
     </div>
   </div>
+    <!-- Histórico de Entradas Embalagens -->
+    <div class="card" id="emb-hist-card" style="margin-top:12px;display:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <h3 style="margin:0;">📋 Últimas Entradas</h3>
+        <button onclick="relatorioEntradas('Embalagens')" style="background:none;border:none;color:#888;font-size:0.8rem;cursor:pointer;">✖ Fechar</button>
+      </div>
+      <div id="emb-hist-lista"><p style="color:#9e9e9e;text-align:center;">Carregando...</p></div>
+    </div>
+
+    <!-- Relatório de Pedido Embalagens -->
+    <div class="card" id="emb-pedido-card" style="margin-top:12px;display:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <h3 style="margin:0;">🛒 Itens para Pedir</h3>
+        <button onclick="togglePedidoCat('emb')" style="background:none;border:none;color:#888;font-size:0.8rem;cursor:pointer;">✖ Fechar</button>
+      </div>
+      <div id="emb-pedido-lista"></div>
+      <button onclick="pedirWhats('Embalagens')" style="width:100%;background:#25d366;border:none;border-radius:10px;color:#fff;padding:12px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:10px;">📲 Enviar pelo WhatsApp</button>
+    </div>
+
 
   <!-- ABA BEBIDAS -->
   <div class="screen" id="tab-bebidas">
@@ -526,7 +545,7 @@
         <h3 style="margin:0;">🍺 Bebidas</h3>
         <div style="display:flex;gap:6px;">
           <button onclick="carregarCatAba('Bebidas','beb')" style="background:#424242;border:none;border-radius:8px;color:#fff;padding:6px 12px;cursor:pointer;font-size:0.8rem;">🔄</button>
-          <button onclick="pedirWhats('Bebidas')" style="background:#25d366;border:none;border-radius:8px;color:#fff;padding:6px 14px;cursor:pointer;font-size:0.8rem;font-weight:700;">📲 Pedir</button>
+          <button onclick="togglePedidoCat('beb')" style="background:#25d366;border:none;border-radius:8px;color:#fff;padding:6px 14px;cursor:pointer;font-size:0.8rem;font-weight:700;">📲 Pedir</button>
           <button onclick="relatorioEntradas('Bebidas')" style="background:#1565c0;border:none;border-radius:8px;color:#fff;padding:6px 12px;cursor:pointer;font-size:0.8rem;">📊 Entradas</button>
         </div>
       </div>
@@ -2468,7 +2487,7 @@ var _catCarregado = { emb: false, beb: false };
 var CAT_PREFIX = { emb: 'Embalagens', beb: 'Bebidas' };
 var WHATS_NUMERO = '554288819420'; // número do fornecedor/gestão — ajuste se precisar
 
-async function carregarCatAba(categoria, pfx) {
+async async function carregarCatAba(categoria, pfx) {
   var lista = document.getElementById(pfx + '-lista');
   if (lista) lista.innerHTML = '<p style="text-align:center;color:#aaa;padding:20px;">Carregando...</p>';
   try {
