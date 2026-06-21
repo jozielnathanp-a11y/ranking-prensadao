@@ -2435,32 +2435,43 @@ document.addEventListener('click', function(e) {
 var _loteProdutos = [];
 
 async function abrirContagemLote() {
+  // Abrir modal imediatamente
+  var modal = document.getElementById('modal-lote');
+  var p1    = document.getElementById('lote-passo1');
+  var p2    = document.getElementById('lote-passo2');
+  var sel   = document.getElementById('lote-categoria');
+  if (!modal || !sel) { showToast('Erro: modal não encontrado','error'); return; }
+  p1.style.display = 'block';
+  p2.style.display = 'none';
+  modal.style.display = 'block';
+  sel.innerHTML = '<option value="">⏳ Carregando...</option>';
+
   try {
-    // Primeiro tenta usar o cache local para agilizar
-    var cacheProds = Object.values(produtosCache || {});
-    var prods;
-    if (cacheProds.length > 0) {
-      prods = cacheProds;
-    } else {
-      prods = await supa('GET', 'produtos', null, 'unidade_loja=eq.' + UNIDADE_LOJA + '&select=categoria,codigo,nome,estoque,unidade,qtd_por_pct&order=categoria.asc');
-      // popular cache se veio vazio
-      if (Array.isArray(prods) && prods.length > 0) {
-        prods.forEach(function(p){ if(p.codigo) produtosCache[p.codigo] = p; });
-      }
+    // Usar cache se disponível
+    var prods = Object.values(produtosCache || {});
+    if (!prods.length) {
+      var resp = await supa('GET', 'produtos', null,
+        'unidade_loja=eq.' + UNIDADE_LOJA + '&order=nome.asc');
+      prods = Array.isArray(resp) ? resp : [];
+      prods.forEach(function(p){ if(p.codigo) produtosCache[p.codigo] = p; });
     }
-    var cats = [...new Set((prods||[]).map(function(p){ return p.categoria; }).filter(Boolean))].sort();
-    var sel = document.getElementById('lote-categoria');
+    var cats = [];
+    prods.forEach(function(p){ if(p.categoria && cats.indexOf(p.categoria) === -1) cats.push(p.categoria); });
+    cats.sort();
     sel.innerHTML = '<option value="">-- Selecione a categoria --</option>';
-    cats.forEach(function(c) {
-      var opt = document.createElement('option');
-      opt.value = c; opt.textContent = c;
-      sel.appendChild(opt);
+    cats.forEach(function(c){
+      var o = document.createElement('option');
+      o.value = c; o.textContent = c;
+      sel.appendChild(o);
     });
-    if (!cats.length) { showToast('Nenhuma categoria encontrada. Recarregue a página.','error'); return; }
-  } catch(e) { showToast('Erro ao carregar categorias: ' + e.message,'error'); return; }
-  document.getElementById('lote-passo1').style.display = 'block';
-  document.getElementById('lote-passo2').style.display = 'none';
-  document.getElementById('modal-lote').style.display = 'block';
+    if (!cats.length) {
+      sel.innerHTML = '<option value="">Nenhuma categoria encontrada</option>';
+      showToast('Sem categorias. Recarregue a página.','error');
+    }
+  } catch(e) {
+    sel.innerHTML = '<option value="">Erro ao carregar</option>';
+    showToast('Erro: ' + (e.message||e),'error');
+  }
 }
 
 function fecharContagemLote() {
