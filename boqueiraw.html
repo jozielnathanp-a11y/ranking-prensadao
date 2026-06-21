@@ -789,6 +789,7 @@ async function carregarProdutos() {
     console.log('Produtos carregados:', Object.keys(produtosCache).length);
     renderEstoque();
     renderProdutos();
+    popularSelectProdutos();
     atualizarStats();
   } catch(e) {
     console.error('PRODUTOS ERRO:', e);
@@ -2459,7 +2460,18 @@ var _loteProdutos = [];
 
 async function abrirContagemLote() {
   try {
-    var prods = await supa('GET', 'produtos', null, 'unidade_loja=eq.' + UNIDADE_LOJA + '&select=categoria&order=categoria.asc');
+    // Primeiro tenta usar o cache local para agilizar
+    var cacheProds = Object.values(produtosCache || {});
+    var prods;
+    if (cacheProds.length > 0) {
+      prods = cacheProds;
+    } else {
+      prods = await supa('GET', 'produtos', null, 'unidade_loja=eq.' + UNIDADE_LOJA + '&select=categoria,codigo,nome,estoque,unidade,qtd_por_pct&order=categoria.asc');
+      // popular cache se veio vazio
+      if (Array.isArray(prods) && prods.length > 0) {
+        prods.forEach(function(p){ if(p.codigo) produtosCache[p.codigo] = p; });
+      }
+    }
     var cats = [...new Set((prods||[]).map(function(p){ return p.categoria; }).filter(Boolean))].sort();
     var sel = document.getElementById('lote-categoria');
     sel.innerHTML = '<option value="">-- Selecione a categoria --</option>';
@@ -2468,7 +2480,8 @@ async function abrirContagemLote() {
       opt.value = c; opt.textContent = c;
       sel.appendChild(opt);
     });
-  } catch(e) { showToast('Erro ao carregar categorias','error'); return; }
+    if (!cats.length) { showToast('Nenhuma categoria encontrada. Recarregue a página.','error'); return; }
+  } catch(e) { showToast('Erro ao carregar categorias: ' + e.message,'error'); return; }
   document.getElementById('lote-passo1').style.display = 'block';
   document.getElementById('lote-passo2').style.display = 'none';
   document.getElementById('modal-lote').style.display = 'block';
