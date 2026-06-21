@@ -2438,15 +2438,18 @@ document.addEventListener('click', function(e) {
 var _loteProdutos = [];
 
 async function abrirContagemLote() {
+  console.log('abrirContagemLote chamada');
   // Abrir modal imediatamente
   var modal = document.getElementById('modal-lote');
   var p1    = document.getElementById('lote-passo1');
   var p2    = document.getElementById('lote-passo2');
   var sel   = document.getElementById('lote-categoria');
+  console.log('modal:', modal, 'sel:', sel, 'p1:', p1, 'p2:', p2);
   if (!modal || !sel) { showToast('Erro: modal não encontrado','error'); return; }
   p1.style.display = 'block';
   p2.style.display = 'none';
   modal.style.display = 'block';
+  console.log('modal aberto, display:', modal.style.display);
   sel.innerHTML = '<option value="">⏳ Carregando...</option>';
 
   try {
