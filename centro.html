@@ -316,7 +316,12 @@ function showTab(id, el) {
 
   <!-- LANÇAR -->
   <div class="screen" id="tab-lancar">
-    <div class="card">
+        <div class="card" style="margin-bottom:10px;padding:12px;">
+      <button id="btn-abrir-lote" style="width:100%;background:linear-gradient(135deg,#1565c0,#0d47a1);color:#fff;padding:14px;font-size:1rem;font-weight:700;border:none;border-radius:12px;cursor:pointer;">
+        📋 Contagem em Lote
+      </button>
+    </div>
+<div class="card">
       <h3>➕ Novo Lançamento</h3>
 
       <!-- PASSO 1: Tipo -->
@@ -333,9 +338,7 @@ function showTab(id, el) {
         <input type="text" id="scan-input" placeholder="Bora! Digita ou escaneia o código, mano..." style="margin:0;flex:1;" onkeydown="if(event.key==='Enter'){buscarPorCodigo();}" />
         <button onclick="abrirCamera()" style="background:#1565c0;border:none;border-radius:10px;padding:0 14px;font-size:1.2rem;cursor:pointer;color:#fff;">📷</button>
       </div>
-      <button class="btn" onclick="abrirContagemLote()" style="width:100%;background:linear-gradient(135deg,#1565c0,#0d47a1);color:#fff;padding:14px;font-size:1rem;font-weight:700;border:none;border-radius:12px;cursor:pointer;margin-bottom:8px;">
-        📋 Contagem em Lote
-      </button>
+
       <div id="camera-area" style="display:none;margin-bottom:10px;">
         <video id="camera-video" style="width:100%;border-radius:10px;max-height:220px;" autoplay playsinline></video>
         <button onclick="fecharCamera()" class="btn btn-gray" style="margin-top:6px;">✖ Fechar câmera</button>
@@ -3018,6 +3021,13 @@ function renderExtratoLista() {
     '</div>';
   }).join('');
 }
+
+
+// bind botão lote via addEventListener (mais confiável que inline)
+document.addEventListener('DOMContentLoaded', function() {
+  var btnLote = document.getElementById('btn-abrir-lote');
+  if (btnLote) btnLote.addEventListener('click', function() { abrirContagemLote(); });
+});
 
 </script>
 
