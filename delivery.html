@@ -2861,6 +2861,73 @@ function showTab(id, el) {
 }
 // ═══════════════════════════════════════════════════════════
 
+
+// ── RELATÓRIO DE COMPRAS (Embalagens / Bebidas) ──
+function gerarRelatorioCompras(pfx, categoria) {
+  var cache = _catCache[pfx] || [];
+  if (!cache.length) {
+    showToast('Aguarde... carregando dados.');
+    carregarCatAba(categoria, pfx);
+    setTimeout(function(){ gerarRelatorioCompras(pfx, categoria); }, 2000);
+    return;
+  }
+  var hoje = new Date().toLocaleDateString('pt-BR');
+  var linhas = ['📋 RELATÓRIO DE COMPRAS - ' + categoria.toUpperCase(), '📅 ' + hoje, ''];
+
+  var precisam = cache.filter(function(p) {
+    return (parseFloat(p.estoque)||0) < (parseFloat(p.estoque_min)||0) || (parseFloat(p.estoque)||0) <= 0;
+  });
+  var ok = cache.filter(function(p) {
+    return (parseFloat(p.estoque)||0) >= (parseFloat(p.estoque_min)||0) && (parseFloat(p.estoque)||0) > 0;
+  });
+
+  if (!precisam.length) {
+    linhas.push('✅ Tudo em dia! Nenhum item abaixo do mínimo.');
+  } else {
+    linhas.push('🛒 PRECISA COMPRAR (' + precisam.length + ' itens):');
+    linhas.push('');
+    precisam.forEach(function(p) {
+      var est = parseFloat(p.estoque) || 0;
+      var min = parseFloat(p.estoque_min) || 0;
+      var max = parseFloat(p.estoque_max) || 0;
+      var inputPedir = document.getElementById('pedir-' + p.codigo);
+      var sug = max > 0 ? Math.max(0, max - est) : (min > 0 ? Math.max(0, min * 2 - est) : 0);
+      var qtdPedir = inputPedir ? (parseFloat(inputPedir.value) || sug) : sug;
+      var emoji = est <= 0 ? '🔴' : '⚠️';
+      linhas.push(emoji + ' ' + p.nome);
+      linhas.push('   Estoque: ' + est + ' ' + (p.unidade||'') + ' | Mín: ' + min + ' | Máx: ' + max);
+      if (qtdPedir > 0) linhas.push('   ➡️ Pedir: ' + qtdPedir + ' ' + (p.unidade||''));
+      linhas.push('');
+    });
+  }
+
+  if (ok.length) {
+    linhas.push('─────────────────────');
+    linhas.push('✅ EM DIA (' + ok.length + ' itens):');
+    ok.forEach(function(p) {
+      linhas.push('• ' + p.nome + ': ' + (parseFloat(p.estoque)||0) + ' ' + (p.unidade||''));
+    });
+  }
+
+  var texto = linhas.join('\n');
+  var el = document.getElementById(pfx + '-relatorio');
+  if (el) { el.textContent = texto; el.style.color = '#e0e0e0'; }
+  return texto;
+}
+
+async function enviarRelatorioWpp(pfx, categoria) {
+  var texto = gerarRelatorioCompras(pfx, categoria);
+  if (!texto) return;
+  var numero = (document.getElementById(pfx + '-wpp').value || '').replace(/\D/g,'');
+  if (!numero || numero.length < 10) {
+    showToast('⚠️ Digite um número válido com DDD');
+    return;
+  }
+  var urlWpp = 'https://wa.me/' + numero + '?text=' + encodeURIComponent(texto);
+  window.open(urlWpp, '_blank');
+  showToast('📲 Abrindo WhatsApp...');
+}
+
 </script>
 
 
