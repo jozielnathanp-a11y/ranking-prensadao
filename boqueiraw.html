@@ -547,25 +547,6 @@ function showTab(id, el) {
           style="background:#25d366;border:none;border-radius:8px;color:#fff;padding:8px 14px;cursor:pointer;font-size:0.85rem;font-weight:700;">📲 Enviar WPP</button>
       </div>
     </div>
-
-    <div class="card" style="margin-top:12px;">
-      <h3>➕ Entrada / Contagem</h3>
-      <div style="display:flex;gap:8px;margin-bottom:10px;">
-        <button onclick="selecionarTipoCat('emb','entrada')" id="emb-btn-entrada" class="btn btn-green" style="flex:1;margin:0;">📥 Entrada</button>
-        <button onclick="selecionarTipoCat('emb','contagem')" id="emb-btn-contagem" class="btn btn-gray" style="flex:1;margin:0;">📊 Contagem</button>
-      </div>
-      <input type="hidden" id="emb-tipo" value="entrada" />
-      <label style="font-size:0.85rem;font-weight:700;">Produto</label>
-      <select id="emb-sel-prod" style="width:100%;margin-bottom:8px;padding:10px;background:#1a1a1a;color:#fff;border:1px solid #333;border-radius:8px;">
-        <option value="">-- Selecione --</option>
-      </select>
-      <label style="font-size:0.85rem;font-weight:700;">Quantidade</label>
-      <input type="number" id="emb-qtd" placeholder="Ex: 5" style="margin-bottom:8px;" />
-      <label style="font-size:0.85rem;font-weight:700;">Observação (opcional)</label>
-      <input type="text" id="emb-obs" placeholder="Ex: entregue pela Atacadão..." style="margin-bottom:12px;" />
-      <button class="btn btn-green" onclick="lancarCatAba('emb','Embalagens')" style="width:100%;">💾 Confirmar</button>
-    </div>
-
     <div class="card" id="emb-hist-card" style="margin-top:12px;display:none;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
         <h3 style="margin:0;">📋 Últimas Entradas</h3>
@@ -623,25 +604,6 @@ function showTab(id, el) {
           style="background:#25d366;border:none;border-radius:8px;color:#fff;padding:8px 14px;cursor:pointer;font-size:0.85rem;font-weight:700;">📲 Enviar WPP</button>
       </div>
     </div>
-
-    <div class="card" style="margin-top:12px;">
-      <h3>➕ Entrada / Contagem</h3>
-      <div style="display:flex;gap:8px;margin-bottom:10px;">
-        <button onclick="selecionarTipoCat('beb','entrada')" id="beb-btn-entrada" class="btn btn-green" style="flex:1;margin:0;">📥 Entrada</button>
-        <button onclick="selecionarTipoCat('beb','contagem')" id="beb-btn-contagem" class="btn btn-gray" style="flex:1;margin:0;">📊 Contagem</button>
-      </div>
-      <input type="hidden" id="beb-tipo" value="entrada" />
-      <label style="font-size:0.85rem;font-weight:700;">Produto</label>
-      <select id="beb-sel-prod" style="width:100%;margin-bottom:8px;padding:10px;background:#1a1a1a;color:#fff;border:1px solid #333;border-radius:8px;">
-        <option value="">-- Selecione --</option>
-      </select>
-      <label style="font-size:0.85rem;font-weight:700;">Quantidade</label>
-      <input type="number" id="beb-qtd" placeholder="Ex: 5" style="margin-bottom:8px;" />
-      <label style="font-size:0.85rem;font-weight:700;">Observação (opcional)</label>
-      <input type="text" id="beb-obs" placeholder="Ex: entregue pela Atacadão..." style="margin-bottom:12px;" />
-      <button class="btn btn-green" onclick="lancarCatAba('beb','Bebidas')" style="width:100%;">💾 Confirmar</button>
-    </div>
-
     <div class="card" id="beb-hist-card" style="margin-top:12px;display:none;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
         <h3 style="margin:0;">📋 Últimas Entradas</h3>
