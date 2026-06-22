@@ -2424,19 +2424,20 @@ document.addEventListener('click', function(e) {
 var _loteProdutos = [];
 
 async function abrirContagemLote() {
-  // Abrir modal imediatamente
   var modal = document.getElementById('modal-lote');
   var p1    = document.getElementById('lote-passo1');
   var p2    = document.getElementById('lote-passo2');
   var sel   = document.getElementById('lote-categoria');
-  if (!modal || !sel) { showToast('Erro: modal não encontrado','error'); return; }
+  if (!modal || !sel) { alert('modal-lote nao encontrado'); return; }
   p1.style.display = 'block';
   p2.style.display = 'none';
   modal.style.display = 'block';
   sel.innerHTML = '<option value="">⏳ Carregando...</option>';
+  setTimeout(function() { _carregarCatsLote(sel); }, 10);
+}
 
+async function _carregarCatsLote(sel) {
   try {
-    // Usar cache se disponível
     var prods = Object.values(produtosCache || {});
     if (!prods.length) {
       var resp = await supa('GET', 'produtos', null,
@@ -2447,19 +2448,19 @@ async function abrirContagemLote() {
     var cats = [];
     prods.forEach(function(p){ if(p.categoria && cats.indexOf(p.categoria) === -1) cats.push(p.categoria); });
     cats.sort();
-    sel.innerHTML = '<option value="">-- Selecione a categoria --</option>';
-    cats.forEach(function(c){
-      var o = document.createElement('option');
-      o.value = c; o.textContent = c;
-      sel.appendChild(o);
-    });
-    if (!cats.length) {
+    if (cats.length) {
+      sel.innerHTML = '<option value="">-- Selecione a categoria --</option>';
+      cats.forEach(function(c){
+        var o = document.createElement('option');
+        o.value = c; o.textContent = c;
+        sel.appendChild(o);
+      });
+    } else {
       sel.innerHTML = '<option value="">Nenhuma categoria encontrada</option>';
-      showToast('Sem categorias. Recarregue a página.','error');
     }
   } catch(e) {
     sel.innerHTML = '<option value="">Erro ao carregar</option>';
-    showToast('Erro: ' + (e.message||e),'error');
+    console.warn('lote cats erro:', e);
   }
 }
 
@@ -3094,4 +3095,5 @@ function renderExtratoLista() {
   </div>
 
 </body>
+<!-- v1782145723 -->
 </html>
