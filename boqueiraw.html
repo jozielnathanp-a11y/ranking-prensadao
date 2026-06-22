@@ -2423,20 +2423,28 @@ document.addEventListener('click', function(e) {
 // ===== CONTAGEM EM LOTE =====
 var _loteProdutos = [];
 
-async function abrirContagemLote() {
-  // Abrir modal imediatamente
+function abrirContagemLote() {
+  // Abrir modal de forma SINCRONA - sem async para garantir que abre
   var modal = document.getElementById('modal-lote');
   var p1    = document.getElementById('lote-passo1');
   var p2    = document.getElementById('lote-passo2');
   var sel   = document.getElementById('lote-categoria');
-  if (!modal || !sel) { showToast('Erro: modal não encontrado','error'); return; }
+  if (!modal) { alert('modal-lote nao encontrado!'); return; }
+  if (!sel)   { alert('lote-categoria nao encontrado!'); return; }
   p1.style.display = 'block';
   p2.style.display = 'none';
-  modal.style.display = 'block';
+  modal.style.display = 'flex';
+  modal.style.alignItems = 'flex-start';
   sel.innerHTML = '<option value="">⏳ Carregando...</option>';
 
+  // Carregar categorias de forma async separada (nao bloqueia abertura do modal)
+  setTimeout(function() {
+    _carregarCatsLote(sel);
+  }, 50);
+}
+
+async function _carregarCatsLote(sel) {
   try {
-    // Usar cache se disponível
     var prods = Object.values(produtosCache || {});
     if (!prods.length) {
       var resp = await supa('GET', 'produtos', null,
@@ -2455,11 +2463,10 @@ async function abrirContagemLote() {
     });
     if (!cats.length) {
       sel.innerHTML = '<option value="">Nenhuma categoria encontrada</option>';
-      showToast('Sem categorias. Recarregue a página.','error');
     }
   } catch(e) {
     sel.innerHTML = '<option value="">Erro ao carregar</option>';
-    showToast('Erro: ' + (e.message||e),'error');
+    console.warn('lote cats:', e);
   }
 }
 
