@@ -304,7 +304,7 @@ function showTab(id, el) {
   <!-- LANÇAR -->
   <div class="screen" id="tab-lancar">
         <div class="card" style="margin-bottom:10px;padding:12px;">
-      <button onclick="abrirContagemLote()" style="width:100%;background:linear-gradient(135deg,#1565c0,#0d47a1);color:#fff;padding:14px;font-size:1rem;font-weight:700;border:none;border-radius:12px;cursor:pointer;">
+      <button id="btn-abrir-lote" onclick="abrirContagemLote()" style="width:100%;background:linear-gradient(135deg,#1565c0,#0d47a1);color:#fff;padding:14px;font-size:1rem;font-weight:700;border:none;border-radius:12px;cursor:pointer;">
         📋 Contagem em Lote
       </button>
     </div>
@@ -2423,28 +2423,20 @@ document.addEventListener('click', function(e) {
 // ===== CONTAGEM EM LOTE =====
 var _loteProdutos = [];
 
-function abrirContagemLote() {
-  // Abrir modal de forma SINCRONA - sem async para garantir que abre
+async function abrirContagemLote() {
+  // Abrir modal imediatamente
   var modal = document.getElementById('modal-lote');
   var p1    = document.getElementById('lote-passo1');
   var p2    = document.getElementById('lote-passo2');
   var sel   = document.getElementById('lote-categoria');
-  if (!modal) { alert('modal-lote nao encontrado!'); return; }
-  if (!sel)   { alert('lote-categoria nao encontrado!'); return; }
+  if (!modal || !sel) { showToast('Erro: modal não encontrado','error'); return; }
   p1.style.display = 'block';
   p2.style.display = 'none';
-  modal.style.display = 'flex';
-  modal.style.alignItems = 'flex-start';
+  modal.style.display = 'block';
   sel.innerHTML = '<option value="">⏳ Carregando...</option>';
 
-  // Carregar categorias de forma async separada (nao bloqueia abertura do modal)
-  setTimeout(function() {
-    _carregarCatsLote(sel);
-  }, 50);
-}
-
-async function _carregarCatsLote(sel) {
   try {
+    // Usar cache se disponível
     var prods = Object.values(produtosCache || {});
     if (!prods.length) {
       var resp = await supa('GET', 'produtos', null,
@@ -2463,10 +2455,11 @@ async function _carregarCatsLote(sel) {
     });
     if (!cats.length) {
       sel.innerHTML = '<option value="">Nenhuma categoria encontrada</option>';
+      showToast('Sem categorias. Recarregue a página.','error');
     }
   } catch(e) {
     sel.innerHTML = '<option value="">Erro ao carregar</option>';
-    console.warn('lote cats:', e);
+    showToast('Erro: ' + (e.message||e),'error');
   }
 }
 
@@ -3017,11 +3010,7 @@ function renderExtratoLista() {
 }
 
 
-// bind botão lote via addEventListener (mais confiável que inline)
-document.addEventListener('DOMContentLoaded', function() {
-  var btnLote = document.getElementById('btn-abrir-lote');
-  if (btnLote) btnLote.addEventListener('click', function() { abrirContagemLote(); });
-});
+// botão lote usa onclick direto
 
 </script>
 
