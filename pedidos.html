@@ -154,7 +154,7 @@
       position:relative;
       overflow:hidden;
       transition:transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
-      box-shadow: 4px 4px 0px rgba(139,0,0,0.5), 0 8px 32px rgba(0,0,0,0.6);
+      box-shadow: 4px 4px 0px rgba(0,0,0,0.5), 0 8px 32px rgba(0,0,0,0.6);
     }
 
     /* FAIXA LATERAL */
@@ -165,9 +165,9 @@
       width:5px;
       border-radius:12px 0 0 12px;
     }
-    .card:nth-child(1) .card-body::before { background: linear-gradient(180deg,#8B0000,#CC0000); }
-    .card:nth-child(2) .card-body::before { background: linear-gradient(180deg,#FFD700,#FFA500); }
-    .card:nth-child(3) .card-body::before { background: linear-gradient(180deg,#8B0000,#CC0000); }
+    .card:nth-child(1) .card-body::before { background: linear-gradient(180deg,#003399,#0055FF); }
+    .card:nth-child(2) .card-body::before { background: linear-gradient(180deg,#8B0000,#CC0000); }
+    .card:nth-child(3) .card-body::before { background: linear-gradient(180deg,#FFD700,#FFA500); }
 
     /* SPRAY BG */
     .card-body::after {
@@ -215,9 +215,9 @@
       color:#0A0A0A;
       text-transform:uppercase;
     }
-    .card:nth-child(1) .card-tag,
-    .card:nth-child(3) .card-tag { background:#8B0000; color:#FFD700; }
-    .card:nth-child(2) .card-tag { background:#FFD700; color:#0A0A0A; }
+    .card:nth-child(1) .card-tag { background:#003399; color:#fff; }
+    .card:nth-child(3) .card-tag { background:#FFD700; color:#0A0A0A; }
+    .card:nth-child(2) .card-tag { background:#8B0000; color:#fff; }
 
     .card-arrow {
       position:absolute;
@@ -264,7 +264,7 @@
     <a class="card" href="https://pedido.anota.ai/loja/prensado-marechal-2?f=msa" target="_blank" rel="noopener">
       <span class="card-num">01</span>
       <div class="card-body">
-        <div class="card-name">Unidade Centro</div>
+        <div class="card-name" style="color:#4D88FF">Unidade Centro</div>
         <div class="card-desc">Guarapuava / Centro</div>
         <span class="card-tag">Retirada · Consumo no local</span>
         <div class="card-arrow">›</div>
@@ -274,7 +274,7 @@
     <a class="card" href="https://pedido.anota.ai/loja/prensado-marechal" target="_blank" rel="noopener">
       <span class="card-num">02</span>
       <div class="card-body">
-        <div class="card-name">Unidade São Cristóvão</div>
+        <div class="card-name" style="color:#FF4444">Unidade São Cristóvão</div>
         <div class="card-desc">Guarapuava / São Cristóvão</div>
         <span class="card-tag">Delivery · Retirada</span>
         <div class="card-arrow">›</div>
@@ -284,7 +284,7 @@
     <a class="card" href="https://pedido.anota.ai/loja/prensado-do-luco" target="_blank" rel="noopener">
       <span class="card-num">03</span>
       <div class="card-body">
-        <div class="card-name">Unidade Boqueirão</div>
+        <div class="card-name" style="color:#FFD700">Unidade Boqueirão</div>
         <div class="card-desc">Guarapuava / Boqueirão</div>
         <span class="card-tag">Retirada · Consumo no local</span>
         <div class="card-arrow">›</div>
