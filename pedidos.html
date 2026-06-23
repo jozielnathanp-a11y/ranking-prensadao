@@ -305,17 +305,15 @@
   <main style="padding-top:14px;">
     <p class="section-label">Como você quer pedir?</p>
 
-    <!-- DELIVERY -->
-    <a class="card" href="https://pedido.anota.ai/loja/prensado-marechal" target="_blank" rel="noopener">
+    <!-- RETIRAR -->
+    <div class="card" onclick="toggleSub('sub-retirar')" style="cursor:pointer;">
       <span class="card-num">01</span>
       <div class="card-body">
-        <div class="card-name" style="color:#FF5555">Delivery</div>
-        <div class="card-desc">Receba em casa</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:0.62rem;letter-spacing:1px;color:rgba(255,255,255,0.2);margin-top:5px;">SEG–SÁB · 17H ÀS 23H30</div>
-        
-        <div class="card-arrow">›</div>
+        <div class="card-name" style="color:#4D88FF">Retirar</div>
+        <div class="card-desc">Pediu, chegou, pegou</div>
+        <div class="card-arrow" id="arrow-retirar">›</div>
       </div>
-    </a>
+    </div>
 
     <!-- COMER NO LOCAL -->
     <div class="card" onclick="toggleSub('sub-comer')" style="cursor:pointer;">
@@ -333,18 +331,20 @@
       </a>
       <a href="https://pedido.anota.ai/loja/prensado-do-luco" target="_blank" rel="noopener" class="sub-btn" style="border-left-color:#FFD700;">
         <span style="font-family:'Bebas Neue',sans-serif;font-size:0.65rem;letter-spacing:3px;color:#FFD700;">🍽️ UNIDADE BOQUEIRÃO</span>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:0.58rem;letter-spacing:1px;color:rgba(255,255,255,0.2);margin-top:3px;">SEG–SÁB 11H30 ÀS 22H · DOM 16H31 ÀS 22H</div>
       </a>
     </div>
 
-    <!-- RETIRAR -->
-    <div class="card" onclick="toggleSub('sub-retirar')" style="cursor:pointer;">
+    <!-- DELIVERY -->
+    <a class="card" href="https://pedido.anota.ai/loja/prensado-marechal" target="_blank" rel="noopener">
       <span class="card-num">03</span>
       <div class="card-body">
-        <div class="card-name" style="color:#4D88FF">Retirar</div>
-        <div class="card-desc">Pediu, chegou, pegou</div>
-        <div class="card-arrow" id="arrow-retirar">›</div>
+        <div class="card-name" style="color:#FF5555">Delivery</div>
+        <div class="card-desc">Receba em casa</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:0.62rem;letter-spacing:1px;color:rgba(255,255,255,0.2);margin-top:5px;">SEG–SÁB · 17H ÀS 23H30</div>
+        <div class="card-arrow">›</div>
       </div>
-    </div>
+    </a>
     <div id="sub-retirar" style="display:none;margin-top:-10px;margin-bottom:4px;padding:0 0 0 20px;">
       <a href="https://pedido.anota.ai/loja/prensado-marechal-2?f=msa" target="_blank" rel="noopener" class="sub-btn" style="border-left-color:#4D88FF;">
         <span style="font-family:'Bebas Neue',sans-serif;font-size:0.65rem;letter-spacing:3px;color:#4D88FF;">🏠 UNIDADE CENTRO</span>
