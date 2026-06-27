@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Avaliação de Perfil — Prensadão</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; color: #333; }
+  .container { max-width: 700px; margin: 0 auto; padding: 20px; }
+  .header { background: linear-gradient(135deg, #c0392b, #e74c3c); color: white; padding: 30px; border-radius: 16px; text-align: center; margin-bottom: 24px; }
+  .header h1 { font-size: 1.6em; margin-bottom: 6px; }
+  .header p { opacity: 0.9; font-size: 0.95em; }
+  .card { background: white; border-radius: 16px; padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+  .card h2 { font-size: 1.1em; color: #c0392b; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+  .card .subtitle { font-size: 0.85em; color: #888; margin-bottom: 20px; }
+  .nome-input { width: 100%; padding: 14px 16px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; transition: border 0.2s; }
+  .nome-input:focus { outline: none; border-color: #c0392b; }
+  .secao-titulo { font-size: 1em; font-weight: 700; color: #2c3e50; margin: 24px 0 16px; padding-bottom: 8px; border-bottom: 2px solid #f0f2f5; }
+  .questao { margin-bottom: 22px; }
+  .questao p { font-size: 0.95em; font-weight: 600; margin-bottom: 10px; line-height: 1.4; color: #2c3e50; }
+  .opcoes { display: flex; flex-direction: column; gap: 8px; }
+  .opcao { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: 2px solid #e8e8e8; border-radius: 10px; cursor: pointer; transition: all 0.2s; }
+  .opcao:hover { border-color: #c0392b; background: #fff5f5; }
+  .opcao input[type=radio] { accent-color: #c0392b; width: 16px; height: 16px; flex-shrink: 0; }
+  .opcao input[type=radio]:checked + label { color: #c0392b; font-weight: 600; }
+  .opcao.selecionada { border-color: #c0392b; background: #fff5f5; }
+  .opcao label { cursor: pointer; font-size: 0.9em; flex: 1; }
+  .progresso-bar { height: 6px; background: #f0f0f0; border-radius: 3px; margin-bottom: 20px; overflow: hidden; }
+  .progresso-fill { height: 100%; background: linear-gradient(90deg, #c0392b, #e74c3c); border-radius: 3px; transition: width 0.3s; }
+  .btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #c0392b, #e74c3c); color: white; border: none; border-radius: 12px; font-size: 1.05em; font-weight: 700; cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; box-shadow: 0 4px 15px rgba(192,57,43,0.4); }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(192,57,43,0.5); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .resultado { display: none; }
+  .perfil-card { border-radius: 16px; padding: 20px; margin-bottom: 16px; }
+  .perfil-disc { background: linear-gradient(135deg, #c0392b, #e74c3c); color: white; }
+  .perfil-comp { background: linear-gradient(135deg, #2980b9, #3498db); color: white; }
+  .perfil-cerebral { background: linear-gradient(135deg, #27ae60, #2ecc71); color: white; }
+  .perfil-card h3 { font-size: 1.1em; opacity: 0.85; margin-bottom: 4px; }
+  .perfil-card h2 { font-size: 1.5em; margin-bottom: 8px; }
+  .perfil-card p { font-size: 0.9em; opacity: 0.95; line-height: 1.5; }
+  .barras { margin-top: 12px; }
+  .barra-item { margin-bottom: 8px; }
+  .barra-label { display: flex; justify-content: space-between; font-size: 0.82em; margin-bottom: 3px; opacity: 0.9; }
+  .barra-bg { height: 8px; background: rgba(255,255,255,0.3); border-radius: 4px; overflow: hidden; }
+  .barra-fill { height: 100%; background: white; border-radius: 4px; transition: width 0.8s ease; }
+  .pontos-detalhe { background: #f8f9fa; border-radius: 12px; padding: 16px; margin-top: 16px; }
+  .pontos-detalhe h4 { color: #555; margin-bottom: 10px; font-size: 0.9em; }
+  .tag { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.8em; margin: 3px; font-weight: 600; }
+  .tag-forte { background: #d4edda; color: #155724; }
+  .tag-atencao { background: #fff3cd; color: #856404; }
+  .btn-pdf { background: linear-gradient(135deg, #2c3e50, #34495e); margin-top: 10px; }
+  .loading { text-align: center; padding: 20px; color: #888; }
+  .erro-msg { color: #c0392b; font-size: 0.85em; margin-top: 6px; display: none; }
+  .salvo-ok { background: #d4edda; color: #155724; padding: 10px 16px; border-radius: 8px; font-size: 0.85em; margin-top: 10px; display: none; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>🧠 Avaliação de Perfil</h1>
+    <p>Prensadão · Responda com sinceridade — não há certo ou errado!</p>
+  </div>
+
+  <div id="formulario">
+    <!-- Nome -->
+    <div class="card">
+      <h2>👤 Identificação</h2>
+      <p class="subtitle">Seu nome aparecerá no resultado</p>
+      <input type="text" id="nome" class="nome-input" placeholder="Digite seu nome completo" autocomplete="off">
+      <div class="erro-msg" id="erro-nome">Por favor, informe seu nome antes de continuar.</div>
+    </div>
+
+    <!-- Progresso -->
+    <div class="card" style="padding: 16px 24px;">
+      <div style="display:flex;justify-content:space-between;font-size:0.82em;color:#888;margin-bottom:6px;">
+        <span>Progresso</span>
+        <span id="progresso-txt">0 de 36 questões</span>
+      </div>
+      <div class="progresso-bar"><div class="progresso-fill" id="progresso-fill" style="width:0%"></div></div>
+    </div>
+
+    <!-- SEÇÃO 1: DISC -->
+    <div class="card">
+      <h2>📊 Parte 1 — Perfil DISC</h2>
+      <p class="subtitle">Para cada situação, escolha a opção que melhor descreve você no trabalho.</p>
+
+      <div class="questao" id="q1">
+        <p>1. Quando surge um problema no trabalho, você:</p>
+        <div class="opcoes">
+          <div class="opcao"><input type="radio" name="q1" id="q1a" value="D"><label for="q1a">Age imediatamente para resolver, sem esperar muito</label></div>
+          <div class="opcao"><input type="radio" name="q1" id="q1b" value="I"><label for="q1b">Conversa com a equipe para encontrar uma solução juntos</label></div>
+          <div class="opcao"><input type="radio" name="q1" id="q1c" value="S"><label for="q1c">Espera o momento certo e age com calma</label></div>
+          <div class="opcao"><input type="radio" name="q1" id="q1d" value="C"><label for="q1d">Analisa bem antes de tomar qualquer decisão</label></div>
+        </div>
+      </div>
+
+      <div class="questao" id="q2">
+        <p>2. Em uma reunião de equipe, você geralmente:</p>
+        <div class="opcoes">
+          <div class="opcao"><input type="radio" name="q2" id="q2a" value="D"><label for="q2a">Toma a frente e diz o que precisa ser feito</label></div>
+          <div class="opcao"><input type="radio" name="q2" id="q2b" value="I"><label for="q2b">Anima o grupo e sugere ideias criativas</label></div>
+          <div class="opcao"><input type="radio" name="q2" id="q2c" value="S"><label for="q2c">Ouve com atenção e apoia as decisões do grupo</label></div>
+          <div class="opcao"><input type="radio" name="q2" id="q2d" value="C"><label for="q2d">Faz perguntas e verifica se o plano está correto</label></div>
+        </div>
+      </div>
+
+      <div class="questao" id="q3">
+        <p>3. Como você lida com mudanças repentinas?</p>
+        <div class="opcoes">
+          <div class="opcao"><input type="radio" name="q3" id="q3a" value="D"><label for="q3a">Gosta de mudanças — é uma oportunidade de agir</label></div>
+          <div class="opcao"><input type="radio" name="q3" id="q3b" value="I"><label for="q3b">Se adapta rápido, vê como algo empolgante</label></div>
+          <div class="opcao"><input type="radio" name="q3" id="q3c" value="S"><label for="q3c">Prefere estabilidade, mas se adapta quando necessário</label></div>
+          <div class="opcao"><input type="radio" name="q3" id="q3d" value="C"><label for="q3d">Precisa entender bem a mudança antes de aceitar</label></div>
+        </div>
+      </div>
+
+      <div class="questao" id="q4">
+        <p>4. O que mais te motiva no trabalho?</p>
+        <div class="opcoes">
+          <div class="opcao"><input type="radio" name="q4" id="q4a" value="D"><label for="q4a">Superar metas e alcançar resultados</label></div>
+          <div class="opcao"><input type="radio" name="q4" id="q4b" value="I"><label for="q4b">Interagir com as pessoas e ser reconhecido</label></div>
+          <div class="opcao"><input type="radio" name="q4" id="q4c" value="S"><label for="q4c">Trabalhar em um ambiente estável e harmonioso</label></div>
+          <div class="opcao"><input type="radio" name="q4" id="q4d" value="C"><label for="q4d">Fazer o trabalho com qualidade e perfeição</label></div>
+        </div>
+      </div>
+
+      <div class="questao" id="q5">
+        <p>5. Quando precisa dar um feedback negativo a alguém:</p>
+        <div class="opcoes">
+          <div class="opcao"><input type="radio" name="q5" id="q5a" value="D"><label for="q5a">Fala diretamente e sem rodeios</label></div>
+          <div class="opcao"><input type="radio" name="q5" id="q5b" value="I"><label for="q5b">Procura deixar o clima leve enquanto fala</label></div>
+          <div class="opcao"><input type="radio" name="q5" id="q5c" value="S"><label for="q5c">Espera o momento certo e fala com cuidado</label></div>
+          <div class="opcao"><input type="radio" name="q5" id="q5d" value="C"><label for="q5d">Apresenta fatos e dados para justificar o feedback</label></div>
+        </div>
+      </div>
+
+      <div class="questao" id="q6">
+        <p>6. Quando você comete um erro no trabalho:</p>
+        <div class="opcoes">
+          <div class="opcao"><input type="radio" name="q6" id="q6a" value="D"><label for="q6a">Foca em como resolver rápido e seguir em frente</label></div>
+          <div class="opcao"><input type="radio" name="q6" id="q6b" value="I"><label for="q6b">Fala sobre o erro para aprender com o grupo</label></div>
+          <div class="opcao"><input type="radio" name="q6" id="q6c" value="S"><label for="q6c">Fica preocupado em não prejudicar a equipe</label></div>
+          <div class="opcao"><input type="radio" name="q6" id="q6d" value="C"><label for="q6d">Analisa o que aconteceu para não repetir</label></div>
+        </div>
+      </div>
+
+      <div class="questao" id="q7">
+        <p>7. Qual dessas palavras te descreve melhor?</p>
+        <div class="opcoes">
+          <div class="opcao"><input type="radio" name="q7" id="q7a" value="D"><label for="q7a">Determinado(a)</label></div>
+          <div class="opcao"><input type="radio" name="q7" id="q7b" value="I"><label for="q7b">Animado(a)</label></div>
+          <div class="opcao"><input type="radio" name="q7" id="q7c" value="S"><label for="q7c">Paciente</label></div>
+          <div class="opcao"><input type="radio" name="q7" id="q7d" value="C"><label for="q7d">Cuidadoso(a)</label></div>
+        </div>
+      </div>
+
+      <div class="questao" id="q8">
+        <p>8. Em situações de pressão, você:</p>
+        <div class="opcoes">
+          <div class="opcao"><input type="radio" name="q8" id="q8a" value="D"><label for="q8a">Fica mais focado(a) e acelerado(a)</label></div>
+          <div class="opcao"><input type="radio" name="q8" id="q8b" value="I"><label for="q8b">Busca apoio e conversa com o time</label></div>
+          <div class="opcao"><input type="radio" name="q8" id="q8c" value="S"><label for="q8c">Mantém a calma e trabalha no seu ritmo</label></div>
+          <div class="opcao"><input type="radio" name="q8" id="q8d" value="C"><label for="q8d">Se preocupa mais com a qualidade do que com a velocidade</label></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEÇÃO 2: PERFIL COMPORTAMENTAL -->
+    <div class="card">
+      <h2>🎯 Parte 2 — Perfil Comportamental</h2>
+      <p class="subtitle">Como você age no dia a dia do trabalho em equipe.</p>
+
+      <div class="questao" id="q9">
+        <p>9. Quando há um objetivo a cumprir, você normalmente:</p>
+        <div class="opcoes">
+          <div class="opcao"><input type="radio" name="q9" id="q9a" value="L"><label for="q9a">Lidera e organiza o time para chegar lá</label></div>
+          <div class="opcao"><input type="radio" name="q9" id="q9b" value="E"><label for="q9b">Coloca a mão na massa e executa as tarefas</label></div>
+          <div class="opcao"><input type="radio" name="q9" id="q9c" value="A"><label for="q9c">Planeja detalhes e analisa o melhor caminho</label></div>
+          <div class="opcao"><input type="radio" name="q9" id="q9d" value="R"><label for="q9d">Cuida de quem está em volta e mantém o clima bom</label></div>
+        </div>
+      </div>
+
+      <div class="questao" id="q10">
+        <p>10. Seu maior ponto forte no trabalho é:</p>
+        <div class="opcoes">
+          <div class="opcao"><input type="radio" name="q10" id="q10a" value="L"><label for="q10a">Tomar decisões e mover o time</label></div>
+          <div class="opcao"><input type="radio" name="q10" id="q10b" value="E"><label for="q10b">Executar bem o que precisa ser feito</label></div>
+          <div class="opcao"><input type="radio" name="q10" id="q10c" value="A"><label for="q10c">Pensar estrategicamente e evitar erros</label></div>
+          <div class="opcao"><input type="radio" name="q10" id="q10d" value="R"><label for="q10d">Criar conexão com as pessoas ao redor</label></div>
+        </div>
+      </div>
+
+      <div class="questao" id="q11">
+        <p>11. Você prefere trabalhar de que forma?</p>
+        <div class="opcoes">
+          <div class="opcao"><input type="radio" name="q11" id="q11a" value="L"><label for="q11a">Tendo autonomia para decidir e liderar</label></div>
+          <div class="opcao"><input type="radio" name="q11" id="q11b" value="E"><label for="q11b">Com tarefas claras e resultados concretos</label></div>
+          <div class="opcao"><input type="radio" name="q11" id="q11c" value="A"><label for="q11c">Com tempo para planejar e revisar o trabalho</label></div>
+          <div class="opcao"><input type="radio" name="q11" id="q11d" value="R"><label for="q11d">Em equipe, cuidando do bem-estar do grupo</label></div>
+        </div>
+      </div>
+
+      <div class="questao" id="q12">
+        <p>12. Quando o grupo está desanimado, você:</p>
+        <div class="opcoes">
+          <div class="opcao"><input type="radio" name="q12" id="q12a" value="L"><label for="q12a">Assume o controle e dá a direção</label></div>
+          <div class="opcao"><input type="radio" name="q12" id="q12b" value="E"><label for="q12b">Continua trabalhando e dá o exemplo</label></div>
+          <div class="opcao"><input type="radio" name="q12" id="q12c" value="A"><label for="q12c">Analisa o problema e sugere uma solução lógica</label></div>
+          <div class="opcao"><input type="radio" name="q12" id="q12d" value="R"><label for="q12d">Conversa, motiva e cuida do clima emocional</label></div>
+        </div>
+      </div>
+
+      <div class="questao" id="q13">
+        <p>13. O que mais te incomoda no trabalho?</p>
+        <div class="opcoes">
+          <div class="opcao"><input type="radio" name="q13" id="q13a" value="L"><label for="q13a">Falta de agilidade e decisões lentas</label></div>
+          <div class="opcao"><input type="radio" name="q13" id="q13b" value="E"><label for="q13b">Objetivos confusos e tarefas sem sentido</label></div>
+          <div class="opcao"><input type="radio" name="q13" id="q13c" value="A"><label for="q13c">Desorganização e falta de critério</label></div>
+          <div class="opcao"><input type="radio" name="q13" id="q13d" value="R"><label for="q13d">Conflitos e clima ruim entre a equipe</label></div>
+        </div>
+      </div>
+
+      <div class="questao" id="q14">
+        <p>14. No trabalho em grupo, seu papel mais natural é:</p>
+        <div class="opcoes">
+          <div class="opcao"><input type="radio" name="q14" id="q14a" value="L"><label for="q14a">Coordenar e apontar o caminho</label></div>
+          <div class="opcao"><input type="radio" name="q14" id="q14b" value="E"><label for="q14b">Fazer acontecer e entregar resultados</label></div>
+          <div class="opcao"><input type="radio" name="q14" id="q14c" value="A"><label for="q14c">Checar detalhes e garantir que está correto</label></div>
+          <div class="opcao"><input type="radio" name="q14" id="q14d" value="R"><label for="q14d">Unir o grupo e evitar conflitos</label></div>
+        </div>
+      </div>
+
+      <div class="questao" id="q15">
+        <p>15. Para você, um bom dia de trabalho é quando:</p>
+        <div class="opcoes">
+          <div class="opcao"><input type="radio" name="q15" id="q15a" value="L"><label for="q15a">As coisas andam rápido e as metas são batidas</label></div>
+          <div class="opcao"><input type="radio" name="q15" id="q15b" value="E"><label for="q15b">Você concluiu tudo o que estava previsto</label></div>
+          <div class="opcao"><input type="radio" name="q15" id="q15c" value="A"><label for="q15c">Tudo foi feito do jeito certo, sem erros</label></div>
+          <div class="opcao"><input type="radio" name="q15" id="q15d" value="R"><label for="q15d">O time trabalhou bem e todos estavam de bom humor</label></div>
+        </div>
+      </div>
+
+      <div class="questao" id="q16">
+        <p>16. Quando alguém faz uma crítica ao seu trabalho:</p>
+        <div class="opcoes">
+          <div class="opcao"><input type="radio" name="q16" id="q16a" value="L"><label for="q16a">Leva em conta se fizer sentido, mas não para de agir</label></div>
+          <div class="opcao"><input type="radio" name="q16" id="q16b" value="E"><label for="q16b">Foca no que precisa melhorar e age logo</label></div>
+          <div class="opcao"><input type="radio" name="q16" id="q16c" value="A"><label for="q16c">Analisa se a crítica tem base antes de mudar algo</label></div>
+          <div class="opcao"><input type="radio" name="q16" id="q16d" value="R"><label for="q16d">Fica sensível, mas tenta entender o ponto de vista</label></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEÇÃO 3: PREFERÊNCIA CEREBRAL -->
+    <div class="card">
+      <h2>🧩 Parte 3 — Preferência Cerebral</h2>
+      <p class="subtitle">Como sua mente funciona melhor — modelo baseado em Ned Herrmann.</p>
+
+      <div class="questao" id="q17">
+        <p>17. Quando aprende algo novo, você prefere:</p>
+        <div class="opcoes">
+          <div class="opcao"><input type="radio" name="q17" id="q17a" value="Q1"><label for="q17a">Entender a lógica por trás — o porquê das coisas</label></div>
+          <div class="opcao"><input type="radio" name="q17" id="q17b" value="Q2"><label for="q17b">Seguir um passo a passo organizado</label></div>
+          <div class="opcao"><input type="radio" name="q17" id="q17c" value="Q3"><label for="q17c">Conversar com alguém que já sabe</label></div>
+          <div class="opcao"><input type="radio" name="q17" id="q17d" value="Q4"><label for="q17d">Experimentar e ver o que acontece</label></div>
+        </div>
+      </div>
+
+      <div class="questao" id="q18">
+        <p>18. Na hora de resolver um desafio, você tende a:</p>
+        <div class="opcoes">
+          <div class="opcao"><input type="radio" name="q18" id="q18a" value="Q1"><label for="q18a">Usar lógica e dados para encontrar a melhor solução</label></div>
+          <div class="opcao"><input type="radio" name="q18" id="q18b" value="Q2"><label for="q18b">Seguir procedimentos e etapas já conhecidas</label></div>
+          <div class="opcao"><input type="radio" name="q18" id="q18c" value="Q3"><label for="q18c">Conversar com outras pessoas para ouvir opiniões</label></div>
+          <div class="opcao"><input type="radio" name="q18" id="q18d" value="Q4"><label for="q18d">Pensar em soluções novas e criativas</label></div>
+        </div>
+      </div>
+
+      <div class="questao" id="q19">
+        <p>19. Em seu tempo livre, você prefere:</p>
+        <div class="opcoes">
+          <div class="opcao"><input type="radio" name="q19" id="q19a" value="Q1"><label for="q19a">Ler, assistir documentários ou aprender coisas novas</label></div>
+          <div class="opcao"><input type="radio" name="q19" id="q19b" value="Q2"><label for="q19b">Fazer atividades organizadas e planejadas</label></div>
+          <div class="opcao"><input type="radio" name="q19" id="q19c" value="Q3"><label for="q19c">Estar com família ou amigos</label></div>
+          <div class="opcao"><input type="radio" name="q19" id="q19d" value="Q4"><label for="q19d">Criar algo: cozinhar, desenhar, montar, inventar</label></div>
+        </div>
+      </div>
+
+      <div class="questao" id="q20">
+        <p>20. Ao explicar algo para alguém, você usa mais:</p>
+        <div class="opcoes">
+          <div class="opcao"><input type="radio" name="q20" id="q20a" value="Q1"><label for="q20a">Argumentos e fatos concretos</label></div>
+          <div class="opcao"><input type="radio" name="q20" id="q20b" value="Q2"><label for="q20b">Um roteiro claro com começo, meio e fim</label></div>
+          <div class="opcao"><input type="radio" name="q20" id="q20c" value="Q3"><label for="q20c">Histórias e exemplos do dia a dia</label></div>
+          <div class="opcao"><input type="radio" name="q20" id="q20d" value="Q4"><label for="q20d">Imagens, gestos e comparações criativas</label></div>
+        </div>
+      </div>
+
+      <div class="questao" id="q21">
+        <p>21. No trabalho, você se sente mais confortável quando:</p>
+        <div class="opcoes">
+          <div class="opcao"><input type="radio" name="q21" id="q21a" value="Q1"><label for="q21a">Tudo tem uma explicação lógica e racional</label></div>
+          <div class="opcao"><input type="radio" name="q21" id="q21b" value="Q2"><label for="q21b">Há regras claras e processos bem definidos</label></div>
+          <div class="opcao"><input type="radio" name="q21" id="q21c" value="Q3"><label for="q21c">Há um bom relacionamento com o time</label></div>
+          <div class="opcao"><input type="radio" name="q21" id="q21d" value="Q4"><label for="q21d">Pode improvisar e criar novas formas de fazer</label></div>
+        </div>
+      </div>
+
+      <div class="questao" id="q22">
+        <p>22. Quando tem que tomar uma decisão importante:</p>
+        <div class="opcoes">
+          <div class="opcao"><input type="radio" name="q22" id="q22a" value="Q1"><label for="q22a">Usa dados e raciocínio objetivo</label></div>
+          <div class="opcao"><input type="radio" name="q22" id="q22b" value="Q2"><label for="q22b">Segue uma sequência de critérios pré-definidos</label></div>
+          <div class="opcao"><input type="radio" name="q22" id="q22c" value="Q3"><label for="q22c">Considera como isso vai afetar as pessoas</label></div>
+          <div class="opcao"><input type="radio" name="q22" id="q22d" value="Q4"><label for="q22d">Segue a intuição e pensa no futuro</label></div>
+        </div>
+      </div>
+
+      <div class="questao" id="q23">
+        <p>23. Você é mais reconhecido(a) no trabalho por:</p>
+        <div class="opcoes">
+          <div class="opcao"><input type="radio" name="q23" id="q23a" value="Q1"><label for="q23a">Resolver problemas complexos com inteligência</label></div>
+          <div class="opcao"><input type="radio" name="q23" id="q23b" value="Q2"><label for="q23b">Ser confiável, organizado(a) e pontual</label></div>
+          <div class="opcao"><input type="radio" name="q23" id="q23c" value="Q3"><label for="q23c">Ser uma pessoa querida que o time confia</label></div>
+          <div class="opcao"><input type="radio" name="q23" id="q23d" value="Q4"><label for="q23d">Ter ideias novas e resolver problemas de forma diferente</label></div>
+        </div>
+      </div>
+
+      <div class="questao" id="q24">
+        <p>24. Quando você organiza algo (um evento, uma tarefa), você:</p>
+        <div class="opcoes">
+          <div class="opcao"><input type="radio" name="q24" id="q24a" value="Q1"><label for="q24a">Levanta as informações necessárias e calcula o melhor caminho</label></div>
+          <div class="opcao"><input type="radio" name="q24" id="q24b" value="Q2"><label for="q24b">Faz uma lista detalhada e segue cada etapa</label></div>
+          <div class="opcao"><input type="radio" name="q24" id="q24c" value="Q3"><label for="q24c">Envolve as pessoas e cuida do bem-estar de todos</label></div>
+          <div class="opcao"><input type="radio" name="q24" id="q24d" value="Q4"><label for="q24d">Improvisa e vai adaptando conforme o necessário</label></div>
+        </div>
+      </div>
+
+      <div class="questao" id="q25">
+        <p>25. Seu maior talento natural é:</p>
+        <div class="opcoes">
+          <div class="opcao"><input type="radio" name="q25" id="q25a" value="Q1"><label for="q25a">Analisar situações com clareza e precisão</label></div>
+          <div class="opcao"><input type="radio" name="q25" id="q25b" value="Q2"><label for="q25b">Planejar e estruturar processos eficientes</label></div>
+          <div class="opcao"><input type="radio" name="q25" id="q25c" value="Q3"><label for="q25c">Conectar pessoas e criar vínculos verdadeiros</label></div>
+          <div class="opcao"><input type="radio" name="q25" id="q25d" value="Q4"><label for="q25d">Enxergar possibilidades onde outros veem obstáculos</label></div>
+        </div>
+      </div>
+
+      <div class="questao" id="q26">
+        <p>26. O que você mais valoriza em um ambiente de trabalho?</p>
+        <div class="opcoes">
+          <div class="opcao"><input type="radio" name="q26" id="q26a" value="Q1"><label for="q26a">Eficiência, lógica e resultados concretos</label></div>
+          <div class="opcao"><input type="radio" name="q26" id="q26b" value="Q2"><label for="q26b">Organização, disciplina e processos claros</label></div>
+          <div class="opcao"><input type="radio" name="q26" id="q26c" value="Q3"><label for="q26c">Respeito, cuidado e boa comunicação</label></div>
+          <div class="opcao"><input type="radio" name="q26" id="q26d" value="Q4"><label for="q26d">Liberdade, inovação e espaço para criar</label></div>
+        </div>
+      </div>
+
+      <div class="questao" id="q27">
+        <p>27. Você aprende melhor quando:</p>
+        <div class="opcoes">
+          <div class="opcao"><input type="radio" name="q27" id="q27a" value="Q1"><label for="q27a">Entende o conceito e pode aplicar a lógica</label></div>
+          <div class="opcao"><input type="radio" name="q27" id="q27b" value="Q2"><label for="q27b">Tem um manual ou roteiro para seguir</label></div>
+          <div class="opcao"><input type="radio" name="q27" id="q27c" value="Q3"><label for="q27c">Aprende com alguém de confiança ou em grupo</label></div>
+          <div class="opcao"><input type="radio" name="q27" id="q27d" value="Q4"><label for="q27d">Coloca em prática e vai ajustando no processo</label></div>
+        </div>
+      </div>
+
+      <div class="questao" id="q28">
+        <p>28. Como você lida com regras e procedimentos?</p>
+        <div class="opcoes">
+          <div class="opcao"><input type="radio" name="q28" id="q28a" value="Q1"><label for="q28a">Segue se fizerem sentido lógico</label></div>
+          <div class="opcao"><input type="radio" name="q28" id="q28b" value="Q2"><label for="q28b">Segue à risca — regras existem por um motivo</label></div>
+          <div class="opcao"><input type="radio" name="q28" id="q28c" value="Q3"><label for="q28c">Segue, mas pensa no impacto para as pessoas</label></div>
+          <div class="opcao"><input type="radio" name="q28" id="q28d" value="Q4"><label for="q28d">Tenta respeitar, mas questiona quando acha que pode ser melhor</label></div>
+        </div>
+      </div>
+
+      <!-- Questões bônus para DISC (completar 12 por seção — 4 extras) -->
+      <div class="questao" id="q29">
+        <p>29. Quando precisa convencer alguém de uma ideia:</p>
+        <div class="opcoes">
+          <div class="opcao"><input type="radio" name="q29" id="q29a" value="D"><label for="q29a">É direto(a) e mostra os benefícios de forma objetiva</label></div>
+          <div class="opcao"><input type="radio" name="q29" id="q29b" value="I"><label for="q29b">Usa entusiasmo e histórias para engajar</label></div>
+          <div class="opcao"><input type="radio" name="q29" id="q29c" value="S"><label for="q29c">Apresenta a ideia com cuidado e no momento certo</label></div>
+          <div class="opcao"><input type="radio" name="q29" id="q29d" value="C"><label for="q29d">Prepara dados e argumentos bem fundamentados</label></div>
+        </div>
+      </div>
+
+      <div class="questao" id="q30">
+        <p>30. Você se irrita quando:</p>
+        <div class="opcoes">
+          <div class="opcao"><input type="radio" name="q30" id="q30a" value="L"><label for="q30a">Ninguém toma uma decisão e as coisas ficam paradas</label></div>
+          <div class="opcao"><input type="radio" name="q30" id="q30b" value="E"><label for="q30b">O trabalho não avança ou é mal feito</label></div>
+          <div class="opcao"><input type="radio" name="q30" id="q30c" value="A"><label for="q30c">Há muita bagunça e falta de organização</label></div>
+          <div class="opcao"><input type="radio" name="q30" id="q30d" value="R"><label for="q30d">O ambiente fica tenso e as pessoas se tratam mal</label></div>
+        </div>
+      </div>
+
+      <div class="questao" id="q31">
+        <p>31. Como você prefere receber tarefas?</p>
+        <div class="opcoes">
+          <div class="opcao"><input type="radio" name="q31" id="q31a" value="Q1"><label for="q31a">Com liberdade para descobrir o melhor caminho</label></div>
+          <div class="opcao"><input type="radio" name="q31" id="q31b" value="Q2"><label for="q31b">Com instruções detalhadas e prazo claro</label></div>
+          <div class="opcao"><input type="radio" name="q31" id="q31c" value="Q3"><label for="q31c">Com apoio e abertura para tirar dúvidas</label></div>
+          <div class="opcao"><input type="radio" name="q31" id="q31d" value="Q4"><label for="q31d">Com espaço para inovar e propor melhorias</label></div>
+        </div>
+      </div>
+
+      <div class="questao" id="q32">
+        <p>32. Ao final de um projeto, o que você mais avalia?</p>
+        <div class="opcoes">
+          <div class="opcao"><input type="radio" name="q32" id="q32a" value="Q1"><label for="q32a">Se os resultados foram eficientes e lógicos</label></div>
+          <div class="opcao"><input type="radio" name="q32" id="q32b" value="Q2"><label for="q32b">Se o processo foi seguido corretamente</label></div>
+          <div class="opcao"><input type="radio" name="q32" id="q32c" value="Q3"><label for="q32c">Se a equipe ficou satisfeita e unida</label></div>
+          <div class="opcao"><input type="radio" name="q32" id="q32d" value="Q4"><label for="q32d">Se algo novo foi aprendido ou criado</label></div>
+        </div>
+      </div>
+
+      <div class="questao" id="q33">
+        <p>33. Qual estilo de liderança você mais admira?</p>
+        <div class="opcoes">
+          <div class="opcao"><input type="radio" name="q33" id="q33a" value="D"><label for="q33a">Firme, focado em resultados e com iniciativa</label></div>
+          <div class="opcao"><input type="radio" name="q33" id="q33b" value="I"><label for="q33b">Inspirador, comunicativo e que engaja a equipe</label></div>
+          <div class="opcao"><input type="radio" name="q33" id="q33c" value="S"><label for="q33c">Humano, consistente e que cuida das pessoas</label></div>
+          <div class="opcao"><input type="radio" name="q33" id="q33d" value="C"><label for="q33d">Estratégico, cuidadoso e que valoriza a qualidade</label></div>
+        </div>
+      </div>
+
+      <div class="questao" id="q34">
+        <p>34. Como você age quando discorda de uma decisão?</p>
+        <div class="opcoes">
+          <div class="opcao"><input type="radio" name="q34" id="q34a" value="D"><label for="q34a">Fala abertamente e defende seu ponto de vista</label></div>
+          <div class="opcao"><input type="radio" name="q34" id="q34b" value="I"><label for="q34b">Tenta convencer com entusiasmo e argumentos positivos</label></div>
+          <div class="opcao"><input type="radio" name="q34" id="q34c" value="S"><label for="q34c">Aceita, mas guarda sua opinião e observa</label></div>
+          <div class="opcao"><input type="radio" name="q34" id="q34d" value="C"><label for="q34d">Pesquisa mais e apresenta fatos para argumentar</label></div>
+        </div>
+      </div>
+
+      <div class="questao" id="q35">
+        <p>35. Quando você termina uma tarefa mais cedo:</p>
+        <div class="opcoes">
+          <div class="opcao"><input type="radio" name="q35" id="q35a" value="L"><label for="q35a">Já procura a próxima coisa para fazer ou melhorar</label></div>
+          <div class="opcao"><input type="radio" name="q35" id="q35b" value="E"><label for="q35b">Verifica se está tudo certo antes de considerar pronto</label></div>
+          <div class="opcao"><input type="radio" name="q35" id="q35c" value="A"><label for="q35c">Registra e organiza tudo para não perder o controle</label></div>
+          <div class="opcao"><input type="radio" name="q35" id="q35d" value="R"><label for="q35d">Pergunta se alguém precisa de ajuda</label></div>
+        </div>
+      </div>
+
+      <div class="questao" id="q36">
+        <p>36. A frase que mais combina com você é:</p>
+        <div class="opcoes">
+          <div class="opcao"><input type="radio" name="q36" id="q36a" value="D"><label for="q36a">"Feito é melhor que perfeito."</label></div>
+          <div class="opcao"><input type="radio" name="q36" id="q36b" value="I"><label for="q36b">"O importante é o caminho e as pessoas ao redor."</label></div>
+          <div class="opcao"><input type="radio" name="q36" id="q36c" value="S"><label for="q36c">"Devagar e sempre — consistência é tudo."</label></div>
+          <div class="opcao"><input type="radio" name="q36" id="q36d" value="C"><label for="q36d">"Se vale a pena fazer, vale a pena fazer bem feito."</label></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <button class="btn" id="btn-enviar" onclick="calcularResultado()">📊 Ver meu resultado</button>
+      <div class="erro-msg" id="erro-geral" style="display:none;text-align:center;margin-top:10px;">Por favor, responda todas as questões antes de continuar.</div>
+    </div>
+  </div>
+
+  <!-- RESULTADO -->
+  <div id="resultado" class="resultado">
+    <div class="header">
+      <h1>🎉 Seu Perfil está pronto!</h1>
+      <p id="res-nome-header"></p>
+    </div>
+
+    <!-- DISC -->
+    <div class="perfil-card perfil-disc" id="card-disc">
+      <h3>📊 Perfil DISC</h3>
+      <h2 id="disc-titulo"></h2>
+      <p id="disc-desc"></p>
+      <div class="barras" id="disc-barras"></div>
+    </div>
+
+    <!-- Comportamental -->
+    <div class="perfil-card perfil-comp" id="card-comp">
+      <h3>🎯 Perfil Comportamental</h3>
+      <h2 id="comp-titulo"></h2>
+      <p id="comp-desc"></p>
+      <div class="barras" id="comp-barras"></div>
+    </div>
+
+    <!-- Cerebral -->
+    <div class="perfil-card perfil-cerebral" id="card-cerebral">
+      <h3>🧩 Preferência Cerebral</h3>
+      <h2 id="cerebral-titulo"></h2>
+      <p id="cerebral-desc"></p>
+      <div class="barras" id="cerebral-barras"></div>
+    </div>
+
+    <!-- Pontos fortes / Atenção -->
+    <div class="card">
+      <h2 style="color:#2c3e50">💡 Pontos do seu perfil</h2>
+      <div class="pontos-detalhe">
+        <h4>✅ Seus pontos fortes</h4>
+        <div id="tags-fortes"></div>
+      </div>
+      <div class="pontos-detalhe" style="margin-top:12px">
+        <h4>⚠️ Pontos de atenção</h4>
+        <div id="tags-atencao"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="salvo-ok" id="salvo-ok">✅ Resultado salvo com sucesso!</div>
+      <button class="btn btn-pdf" id="btn-pdf" onclick="gerarPDF()">📄 Baixar resultado em PDF</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://trbyynbtuzpszdvjivbs.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRyYnl5bmJ0dXpwc3pkdmppdmJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYxMTEzMDIsImV4cCI6MjA2MTY4NzMwMn0.gC1T2sWRYrOWqINUcgVcpTWIWQhNh-4vM5b_8PVt-N0';
+
+// Atualizar progresso
+const totalQuestoes = 36;
+document.querySelectorAll('input[type=radio]').forEach(r => {
+  r.addEventListener('change', function() {
+    // Marcar visualmente
+    document.querySelectorAll(`input[name="${this.name}"]`).forEach(ri => {
+      ri.closest('.opcao').classList.remove('selecionada');
+    });
+    this.closest('.opcao').classList.add('selecionada');
+    // Atualizar progresso
+    const respondidas = new Set([...document.querySelectorAll('input[type=radio]:checked')].map(r => r.name)).size;
+    const pct = Math.round((respondidas / totalQuestoes) * 100);
+    document.getElementById('progresso-fill').style.width = pct + '%';
+    document.getElementById('progresso-txt').textContent = `${respondidas} de ${totalQuestoes} questões`;
+  });
+});
+
+const discInfo = {
+  D: { nome: 'Dominância', desc: 'Você é direto(a), determinado(a) e focado(a) em resultados. Age com rapidez, assume riscos e gosta de desafios. É natural em situações que exigem liderança e tomada de decisão.' },
+  I: { nome: 'Influência', desc: 'Você é comunicativo(a), entusiasta e inspira as pessoas ao redor. Tem facilidade para criar conexões e motivar o time. Trabalha bem em ambientes colaborativos e dinâmicos.' },
+  S: { nome: 'Estabilidade', desc: 'Você é paciente, leal e consistente. Prefere ambientes harmoniosos e é um pilar de confiança para a equipe. Trabalha bem sob pressão quando tem clareza do que precisa ser feito.' },
+  C: { nome: 'Conformidade', desc: 'Você é analítico(a), cuidadoso(a) e orientado(a) à qualidade. Antes de agir, pesquisa e verifica cada detalhe. É referência quando o assunto é precisão e acerto.' }
+};
+
+const compInfo = {
+  L: { nome: 'Perfil Liderança', desc: 'Você tem perfil de quem toma frente e move o grupo. Gosta de decidir, dar direção e fazer as coisas acontecerem. Em situações de pressão, sua clareza é um diferencial.' },
+  E: { nome: 'Perfil Executor(a)', desc: 'Você é focado(a) em resultados concretos. Age com praticidade e não deixa as coisas pela metade. O time pode contar com você para entregar o que foi prometido.' },
+  A: { nome: 'Perfil Analítico(a)', desc: 'Você pensa antes de agir. Valoriza a qualidade, a organização e o processo correto. É a pessoa que evita erros e mantém os padrões elevados.' },
+  R: { nome: 'Perfil Relacional', desc: 'Você é o coração da equipe. Cuida das pessoas, mantém o clima positivo e cria vínculos verdadeiros. Sua inteligência emocional é um grande diferencial.' }
+};
+
+const cerebralInfo = {
+  Q1: { nome: 'Quadrante A — Lógico/Analítico', desc: 'Sua mente funciona melhor com dados, fatos e lógica. Você pensa de forma objetiva, resolve problemas com clareza e é eficiente em análises racionais.' },
+  Q2: { nome: 'Quadrante B — Organizado/Sequencial', desc: 'Você pensa de forma estruturada e planejada. Gosta de processos, rotinas e checklists. Sua força está na disciplina e na consistência.' },
+  Q3: { nome: 'Quadrante C — Relacional/Emocional', desc: 'Sua mente prioriza as pessoas e as emoções. Você toma decisões considerando o impacto humano e tem facilidade para empatia e comunicação interpessoal.' },
+  Q4: { nome: 'Quadrante D — Criativo/Intuitivo', desc: 'Você pensa de forma global, visual e criativa. Enxerga o todo, tem intuição aguçada e gosta de inovar. É excelente para pensar fora da caixa.' }
+};
+
+function contarRespostas(nomes, categorias) {
+  const contagem = {};
+  categorias.forEach(c => contagem[c] = 0);
+  nomes.forEach(nome => {
+    const checked = document.querySelector(`input[name="${nome}"]:checked`);
+    if (checked) contagem[checked.value] = (contagem[checked.value] || 0) + 1;
+  });
+  return contagem;
+}
+
+function calcularResultado() {
+  const nome = document.getElementById('nome').value.trim();
+  if (!nome) {
+    document.getElementById('erro-nome').style.display = 'block';
+    document.getElementById('nome').focus();
+    return;
+  }
+  document.getElementById('erro-nome').style.display = 'none';
+
+  // Verificar se todas foram respondidas
+  const naoRespondidas = [];
+  for (let i = 1; i <= 36; i++) {
+    if (!document.querySelector(`input[name="q${i}"]:checked`)) naoRespondidas.push(i);
+  }
+  if (naoRespondidas.length > 0) {
+    document.getElementById('erro-geral').style.display = 'block';
+    document.getElementById('erro-geral').textContent = `Por favor, responda as questões: ${naoRespondidas.join(', ')}`;
+    // Scroll para a primeira não respondida
+    document.getElementById(`q${naoRespondidas[0]}`).scrollIntoView({behavior:'smooth', block:'center'});
+    return;
+  }
+
+  // DISC: q1-q8, q29, q33, q34, q36
+  const discNomes = ['q1','q2','q3','q4','q5','q6','q7','q8','q29','q33','q34','q36'];
+  const discCount = contarRespostas(discNomes, ['D','I','S','C']);
+  const discTotal = discNomes.length;
+  const discPrincipal = Object.entries(discCount).sort((a,b) => b[1]-a[1])[0][0];
+
+  // Comportamental: q9-q16, q30, q35
+  const compNomes = ['q9','q10','q11','q12','q13','q14','q15','q16','q30','q35'];
+  const compCount = contarRespostas(compNomes, ['L','E','A','R']);
+  const compTotal = compNomes.length;
+  const compPrincipal = Object.entries(compCount).sort((a,b) => b[1]-a[1])[0][0];
+
+  // Cerebral: q17-q28, q31, q32
+  const cerebralNomes = ['q17','q18','q19','q20','q21','q22','q23','q24','q25','q26','q27','q28','q31','q32'];
+  const cerebralCount = contarRespostas(cerebralNomes, ['Q1','Q2','Q3','Q4']);
+  const cerebralTotal = cerebralNomes.length;
+  const cerebralPrincipal = Object.entries(cerebralCount).sort((a,b) => b[1]-a[1])[0][0];
+
+  // Mostrar resultado
+  document.getElementById('res-nome-header').textContent = `Resultado de ${nome}`;
+  
+  // DISC
+  document.getElementById('disc-titulo').textContent = discInfo[discPrincipal].nome;
+  document.getElementById('disc-desc').textContent = discInfo[discPrincipal].desc;
+  document.getElementById('disc-barras').innerHTML = ['D','I','S','C'].map(k => `
+    <div class="barra-item">
+      <div class="barra-label"><span>${discInfo[k].nome}</span><span>${discCount[k] || 0}/${discTotal}</span></div>
+      <div class="barra-bg"><div class="barra-fill" style="width:${Math.round(((discCount[k]||0)/discTotal)*100)}%"></div></div>
+    </div>`).join('');
+
+  // Comportamental
+  document.getElementById('comp-titulo').textContent = compInfo[compPrincipal].nome;
+  document.getElementById('comp-desc').textContent = compInfo[compPrincipal].desc;
+  document.getElementById('comp-barras').innerHTML = ['L','E','A','R'].map(k => `
+    <div class="barra-item">
+      <div class="barra-label"><span>${compInfo[k].nome.replace('Perfil ','')}</span><span>${compCount[k] || 0}/${compTotal}</span></div>
+      <div class="barra-bg"><div class="barra-fill" style="width:${Math.round(((compCount[k]||0)/compTotal)*100)}%"></div></div>
+    </div>`).join('');
+
+  // Cerebral
+  document.getElementById('cerebral-titulo').textContent = cerebralInfo[cerebralPrincipal].nome;
+  document.getElementById('cerebral-desc').textContent = cerebralInfo[cerebralPrincipal].desc;
+  document.getElementById('cerebral-barras').innerHTML = ['Q1','Q2','Q3','Q4'].map(k => `
+    <div class="barra-item">
+      <div class="barra-label"><span>${cerebralInfo[k].nome.split('—')[1].trim()}</span><span>${cerebralCount[k] || 0}/${cerebralTotal}</span></div>
+      <div class="barra-bg"><div class="barra-fill" style="width:${Math.round(((cerebralCount[k]||0)/cerebralTotal)*100)}%"></div></div>
+    </div>`).join('');
+
+  // Pontos fortes e atenção
+  const fortes = [];
+  const atencao = [];
+  // DISC
+  if (discPrincipal === 'D') { fortes.push('Liderança natural','Tomada de decisão','Foco em resultados'); atencao.push('Pode ser impaciente','Ouvir mais os outros'); }
+  else if (discPrincipal === 'I') { fortes.push('Comunicação','Motivação da equipe','Criatividade'); atencao.push('Foco e organização','Gerenciar tempo'); }
+  else if (discPrincipal === 'S') { fortes.push('Confiabilidade','Trabalho em equipe','Paciência'); atencao.push('Assertividade','Lidar com mudanças rápidas'); }
+  else if (discPrincipal === 'C') { fortes.push('Qualidade no trabalho','Atenção aos detalhes','Análise crítica'); atencao.push('Agilidade na decisão','Flexibilidade'); }
+  // Comp
+  if (compPrincipal === 'L') fortes.push('Iniciativa');
+  else if (compPrincipal === 'E') fortes.push('Produtividade');
+  else if (compPrincipal === 'A') fortes.push('Precisão');
+  else if (compPrincipal === 'R') fortes.push('Empatia');
+  // Cerebral
+  if (cerebralPrincipal === 'Q1') fortes.push('Pensamento lógico');
+  else if (cerebralPrincipal === 'Q2') fortes.push('Organização');
+  else if (cerebralPrincipal === 'Q3') fortes.push('Inteligência emocional');
+  else if (cerebralPrincipal === 'Q4') fortes.push('Inovação');
+
+  document.getElementById('tags-fortes').innerHTML = [...new Set(fortes)].map(t => `<span class="tag tag-forte">${t}</span>`).join('');
+  document.getElementById('tags-atencao').innerHTML = [...new Set(atencao)].map(t => `<span class="tag tag-atencao">${t}</span>`).join('');
+
+  // Mostrar resultado
+  document.getElementById('formulario').style.display = 'none';
+  document.getElementById('resultado').style.display = 'block';
+  window.scrollTo({top: 0, behavior: 'smooth'});
+
+  // Salvar no Supabase
+  salvarResultado(nome, discCount, discPrincipal, compCount, compPrincipal, cerebralCount, cerebralPrincipal, discNomes, compNomes, cerebralNomes);
+}
+
+async function salvarResultado(nome, discCount, discPrincipal, compCount, compPrincipal, cerebralCount, cerebralPrincipal, discNomes, compNomes, cerebralNomes) {
+  const respostas = {};
+  for (let i = 1; i <= 36; i++) {
+    const checked = document.querySelector(`input[name="q${i}"]:checked`);
+    if (checked) respostas[`q${i}`] = checked.value;
+  }
+
+  const payload = {
+    acao: 'disc_avaliacao',
+    descricao: nome,
+    detalhe: {
+      nome,
+      data: new Date().toISOString(),
+      disc: { scores: discCount, principal: discPrincipal, perfil: discInfo[discPrincipal].nome },
+      comportamental: { scores: compCount, principal: compPrincipal, perfil: compInfo[compPrincipal].nome },
+      cerebral: { scores: cerebralCount, principal: cerebralPrincipal, perfil: cerebralInfo[cerebralPrincipal].nome },
+      respostas
+    }
+  };
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/auditoria`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify(payload)
+    });
+    if (res.ok || res.status === 201) {
+      document.getElementById('salvo-ok').style.display = 'block';
+    }
+  } catch(e) {
+    console.error('Erro ao salvar:', e);
+  }
+}
+
+function gerarPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  const nome = document.getElementById('nome').value.trim();
+  const data = new Date().toLocaleDateString('pt-BR', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+
+  const W = 210, margin = 20;
+  let y = 20;
+
+  // Header
+  doc.setFillColor(192, 57, 43);
+  doc.rect(0, 0, W, 40, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(20);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Avaliação de Perfil — Prensadão', W/2, 18, {align:'center'});
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'normal');
+  doc.text(`Colaborador: ${nome}`, W/2, 28, {align:'center'});
+  doc.text(`Data: ${data}`, W/2, 35, {align:'center'});
+  y = 50;
+
+  // Função para seção
+  function secao(titulo, cor, tituloPerf, desc, barras) {
+    doc.setFillColor(...cor);
+    doc.roundedRect(margin, y, W - margin*2, 8, 2, 2, 'F');
+    doc.setTextColor(255,255,255);
+    doc.setFontSize(11);
+    doc.setFont('helvetica','bold');
+    doc.text(titulo, margin+4, y+5.5);
+    y += 12;
+
+    doc.setTextColor(50,50,50);
+    doc.setFontSize(13);
+    doc.setFont('helvetica','bold');
+    doc.text(tituloPerf, margin, y);
+    y += 7;
+
+    doc.setFontSize(9);
+    doc.setFont('helvetica','normal');
+    doc.setTextColor(80,80,80);
+    const lines = doc.splitTextToSize(desc, W - margin*2);
+    doc.text(lines, margin, y);
+    y += lines.length * 5 + 4;
+
+    // Barras
+    barras.forEach(b => {
+      doc.setFontSize(8);
+      doc.setTextColor(60,60,60);
+      doc.text(b.label, margin, y);
+      doc.text(`${b.val}/${b.total}`, W-margin-10, y);
+      y += 4;
+      doc.setFillColor(220,220,220);
+      doc.roundedRect(margin, y, W-margin*2, 4, 1, 1, 'F');
+      const pct = Math.min(b.val/b.total, 1);
+      doc.setFillColor(...cor);
+      doc.roundedRect(margin, y, (W-margin*2)*pct, 4, 1, 1, 'F');
+      y += 8;
+    });
+    y += 4;
+  }
+
+  // Ler valores do DOM
+  const discTitulo = document.getElementById('disc-titulo').textContent;
+  const discDesc = document.getElementById('disc-desc').textContent;
+  const compTitulo = document.getElementById('comp-titulo').textContent;
+  const compDesc = document.getElementById('comp-desc').textContent;
+  const cerebralTitulo = document.getElementById('cerebral-titulo').textContent;
+  const cerebralDesc = document.getElementById('cerebral-desc').textContent;
+
+  function getBarrasFromDOM(id, info, total) {
+    return Object.keys(info).map(k => ({
+      label: info[k].nome || info[k].nome,
+      val: parseInt(document.querySelectorAll(`#${id} .barra-label span:last-child`)[Object.keys(info).indexOf(k)]?.textContent?.split('/')[0] || 0),
+      total
+    }));
+  }
+
+  secao('📊 Perfil DISC', [192,57,43], discTitulo, discDesc, [
+    {label:'Dominância', val: parseInt(document.querySelector('#disc-barras .barra-item:nth-child(1) .barra-label span:last-child')?.textContent||'0'), total:12},
+    {label:'Influência',  val: parseInt(document.querySelector('#disc-barras .barra-item:nth-child(2) .barra-label span:last-child')?.textContent||'0'), total:12},
+    {label:'Estabilidade',val: parseInt(document.querySelector('#disc-barras .barra-item:nth-child(3) .barra-label span:last-child')?.textContent||'0'), total:12},
+    {label:'Conformidade',val: parseInt(document.querySelector('#disc-barras .barra-item:nth-child(4) .barra-label span:last-child')?.textContent||'0'), total:12},
+  ]);
+
+  secao('🎯 Perfil Comportamental', [41,128,185], compTitulo, compDesc, [
+    {label:'Liderança',  val: parseInt(document.querySelector('#comp-barras .barra-item:nth-child(1) .barra-label span:last-child')?.textContent||'0'), total:10},
+    {label:'Executor(a)',val: parseInt(document.querySelector('#comp-barras .barra-item:nth-child(2) .barra-label span:last-child')?.textContent||'0'), total:10},
+    {label:'Analítico(a)',val:parseInt(document.querySelector('#comp-barras .barra-item:nth-child(3) .barra-label span:last-child')?.textContent||'0'), total:10},
+    {label:'Relacional', val: parseInt(document.querySelector('#comp-barras .barra-item:nth-child(4) .barra-label span:last-child')?.textContent||'0'), total:10},
+  ]);
+
+  secao('🧩 Preferência Cerebral', [39,174,96], cerebralTitulo, cerebralDesc, [
+    {label:'Lógico/Analítico',   val: parseInt(document.querySelector('#cerebral-barras .barra-item:nth-child(1) .barra-label span:last-child')?.textContent||'0'), total:14},
+    {label:'Organizado/Sequencial',val:parseInt(document.querySelector('#cerebral-barras .barra-item:nth-child(2) .barra-label span:last-child')?.textContent||'0'), total:14},
+    {label:'Relacional/Emocional',val:parseInt(document.querySelector('#cerebral-barras .barra-item:nth-child(3) .barra-label span:last-child')?.textContent||'0'), total:14},
+    {label:'Criativo/Intuitivo', val: parseInt(document.querySelector('#cerebral-barras .barra-item:nth-child(4) .barra-label span:last-child')?.textContent||'0'), total:14},
+  ]);
+
+  // Rodapé
+  doc.setFillColor(245,245,245);
+  doc.rect(0, 285, W, 12, 'F');
+  doc.setFontSize(8);
+  doc.setTextColor(150,150,150);
+  doc.text('Avaliação de Perfil · Prensadão · Gerado automaticamente', W/2, 292, {align:'center'});
+
+  doc.save(`avaliacao-${nome.toLowerCase().replace(/\s+/g,'-')}.pdf`);
+}
+</script>
+</body>
+</html>
