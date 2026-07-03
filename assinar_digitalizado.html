@@ -3,8 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Disable auto dark mode on devices -->
+    <meta name="color-scheme" content="only light">
     <title>Assinatura Digital de Rescisão - Kauany Silva Rocha</title>
     <style>
+        /* CSS Force Light Mode on all components */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #f4f6f9 !important;
+                color: #333333 !important;
+            }
+            .paper-sheet {
+                background-color: #ffffff !important;
+                color: #000000 !important;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.15) !important;
+                border-color: #e0e0e0 !important;
+            }
+            .section-header {
+                background-color: #f2f2f2 !important;
+                color: #000000 !important;
+            }
+            .data-col {
+                color: #000000 !important;
+            }
+            .data-label {
+                color: #333333 !important;
+            }
+            .data-value {
+                color: #000000 !important;
+            }
+            .values-table {
+                border-color: #000000 !important;
+                color: #000000 !important;
+            }
+            .values-table th {
+                background-color: #f2f2f2 !important;
+                color: #000000 !important;
+            }
+            .values-table td {
+                color: #000000 !important;
+            }
+            .statement {
+                background-color: #fafafa !important;
+                color: #000000 !important;
+                border-color: #000000 !important;
+            }
+            .sig-line {
+                border-color: #000000 !important;
+            }
+            .sig-name {
+                color: #000000 !important;
+            }
+            .sig-desc, .sig-sub {
+                color: #444444 !important;
+            }
+            .doc-footer {
+                color: #666666 !important;
+            }
+            .sig-panel {
+                background-color: #ffffff !important;
+                color: #333333 !important;
+            }
+            canvas {
+                background-color: #ffffff !important;
+            }
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -47,7 +111,8 @@
 
         /* Paper sheet simulation (perfect clean white digital page) */
         .paper-sheet {
-            background: #ffffff;
+            background: #ffffff !important;
+            color: #000000 !important;
             width: 100%;
             max-width: 820px;
             min-height: 1150px;
@@ -58,7 +123,6 @@
             position: relative;
             font-family: 'Courier New', Courier, monospace;
             font-size: 11px;
-            color: #000000;
             line-height: 1.4;
             border: 1px solid #e0e0e0;
         }
@@ -73,14 +137,14 @@
         /* Page Breaks for PDF Printing */
         @media print {
             body {
-                background: #ffffff;
+                background: #ffffff !important;
                 padding: 0;
             }
             .paper-sheet {
-                box-shadow: none;
+                box-shadow: none !important;
                 margin-bottom: 0;
                 page-break-after: always;
-                border: none;
+                border: none !important;
                 padding: 50px 40px;
             }
             .header-box, .sig-panel, .success-badge, .btn-print-floating, #bottom-spacer {
@@ -102,7 +166,8 @@
         }
 
         .section-header {
-            background-color: #f2f2f2;
+            background-color: #f2f2f2 !important;
+            color: #000000 !important;
             font-family: Arial, sans-serif;
             font-size: 9.5px;
             font-weight: bold;
@@ -129,6 +194,7 @@
             border-right: 1px solid #000000;
             display: flex;
             flex-direction: column;
+            color: #000000 !important;
         }
 
         .data-col:last-child {
@@ -140,13 +206,14 @@
             font-size: 7.5px;
             font-weight: bold;
             text-transform: uppercase;
-            color: #333333;
+            color: #333333 !important;
             margin-bottom: 2px;
         }
 
         .data-value {
             font-size: 9.5px;
             font-weight: bold;
+            color: #000000 !important;
         }
 
         /* Rubrics Table */
@@ -156,10 +223,12 @@
             font-size: 9px;
             margin-top: 10px;
             border: 1px solid #000000;
+            color: #000000 !important;
         }
 
         .values-table th {
-            background-color: #f2f2f2;
+            background-color: #f2f2f2 !important;
+            color: #000000 !important;
             font-family: Arial, sans-serif;
             font-weight: bold;
             text-align: left;
@@ -172,6 +241,7 @@
         .values-table td {
             padding: 5px 6px;
             border: 1px solid #000000;
+            color: #000000 !important;
         }
 
         .text-right {
@@ -189,7 +259,8 @@
             margin: 25px 0;
             padding: 10px;
             border: 1px dashed #000000;
-            background-color: #fafafa;
+            background-color: #fafafa !important;
+            color: #000000 !important;
         }
 
         .sig-section {
@@ -219,11 +290,17 @@
         .sig-name {
             font-weight: bold;
             font-size: 9.5px;
+            color: #000000 !important;
         }
 
         .sig-desc {
             font-size: 8.5px;
-            color: #444444;
+            color: #444444 !important;
+        }
+
+        .sig-sub {
+            font-size: 8.5px;
+            color: #444444 !important;
         }
 
         .signature-overlay {
@@ -241,7 +318,7 @@
             border-top: 1px dashed #cccccc;
             padding-top: 8px;
             font-size: 8px;
-            color: #666666;
+            color: #666666 !important;
             display: flex;
             justify-content: space-between;
         }
@@ -252,7 +329,8 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: #ffffff;
+            background: #ffffff !important;
+            color: #333333 !important;
             box-shadow: 0 -4px 25px rgba(0,0,0,0.15);
             padding: 15px 10px;
             display: flex;
@@ -272,7 +350,7 @@
         }
 
         canvas {
-            background: #ffffff;
+            background: #ffffff !important;
             border: 1px solid #b2bec3;
             border-radius: 4px;
             width: 100%;
@@ -597,7 +675,7 @@
 
     <!-- Floating Signature Canvas -->
     <div class="sig-panel" id="sig-panel">
-        <div class="panel-title">✍ *ASSINE COM O DEDO NO QUADRO ABAIXO:*</div>
+        <div class="panel-title">✍️ ASSINE COM O DEDO NO QUADRO ABAIXO:</div>
         <canvas id="pad"></canvas>
         <div class="panel-btns">
             <button class="btn btn-clear" id="btn-clear">Limpar</button>
