@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assinatura Digital - Pedido de Demissão</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px 10px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+            background: #fff;
+            padding: 40px 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            position: relative;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px 15px;
+            }
+        }
+
+        h1 {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            line-height: 1.4;
+        }
+
+        h2 {
+            font-size: 15px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 30px;
+            color: #555;
+        }
+
+        .content {
+            font-size: 15px;
+            line-height: 1.6;
+            text-align: justify;
+            margin-bottom: 25px;
+        }
+
+        .salutation {
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-indent: 30px;
+        }
+
+        .closing {
+            margin-top: 25px;
+            margin-bottom: 35px;
+        }
+
+        .date {
+            margin-bottom: 40px;
+        }
+
+        .signature-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .signature-line {
+            width: 80%;
+            max-width: 350px;
+            border-top: 1px solid #000;
+            margin-bottom: 10px;
+        }
+
+        .name {
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        .details {
+            font-size: 13px;
+            color: #666;
+            margin-top: 3px;
+        }
+
+        .footer {
+            margin-top: 60px;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+            font-size: 10px;
+            color: #999;
+            text-transform: uppercase;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Interactive signature box */
+        .signature-box-container {
+            width: 100%;
+            max-width: 500px;
+            background: #fafafa;
+            border: 2px dashed #0056b3;
+            border-radius: 8px;
+            margin: 20px auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .signature-box-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #0056b3;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        canvas {
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: crosshair;
+            width: 100%;
+            max-width: 450px;
+            height: 180px;
+            touch-action: none; /* Prevents scrolling while signing */
+        }
+
+        .buttons-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            width: 100%;
+            max-width: 450px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-clear {
+            background-color: #e4e6eb;
+            color: #4b4f56;
+        }
+
+        .btn-clear:hover {
+            background-color: #d8dadf;
+        }
+
+        .btn-confirm {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-confirm:hover {
+            background-color: #218838;
+        }
+
+        .btn-print {
+            background-color: #007bff;
+            color: white;
+            margin-top: 20px;
+            width: 100%;
+            max-width: 450px;
+            display: none;
+        }
+
+        .btn-print:hover {
+            background-color: #0069d9;
+        }
+
+        /* Success screen styling */
+        .success-badge {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            padding: 15px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+            display: none;
+            width: 100%;
+        }
+
+        .success-badge p {
+            text-indent: 0;
+            margin-bottom: 0;
+        }
+
+        #signature-image {
+            display: none;
+            max-height: 80px;
+            margin-bottom: 5px;
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                background-color: #fff;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                padding: 0;
+                width: 100%;
+            }
+            .signature-box-container, .buttons-container, .btn-print, .success-badge {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="document-paper">
+        <h1>Pedido de demissão antecipada do contrato de experiência</h1>
+        <h2>MARECHAL HLK LANCHES LTDA</h2>
+
+        <div class="content">
+            <div class="salutation">Prezados senhores,</div>
+            <p>Venho pela presente solicitar o meu desligamento do quadro de funcionários da empresa MARECHAL HLK LANCHES LTDA, do qual participo desde 02/06/2026, através de Contrato de Experiência de 30 dias, que vencerá em 01/07/2026.</p>
+            <p>Comunico-lhes também, de que meu último dia de serviço é o de hoje, ou seja, 15/06/2026.</p>
+            <div class="closing">Limitando-me ao exposto, firmo-me.</div>
+            <div class="date">GUARAPUAVA, 15 de Junho de 2026.</div>
+        </div>
+
+        <div class="signature-section">
+            <img id="signature-image" alt="Assinatura">
+            <div class="signature-line" id="sig-line"></div>
+            <div class="name">KAUANY SILVA ROCHA</div>
+            <div class="details">C.I. 147828431</div>
+            <div class="details">CPF 097.696.629-84</div>
+        </div>
+
+        <div class="footer">
+            <span>VILLANOVA CONTABILIDADE</span>
+            <span>folha SCI VISUAL Prática</span>
+        </div>
+    </div>
+
+    <!-- Interactive Signature Panel -->
+    <div class="signature-box-container" id="input-container">
+        <div class="signature-box-title">✍️ ASSINAR AGORA PELO CELULAR</div>
+        <canvas id="signature-pad"></canvas>
+        <div class="buttons-container">
+            <button class="btn-clear" id="clear-btn">Limpar</button>
+            <button class="btn-confirm" id="confirm-btn">Confirmar Assinatura</button>
+        </div>
+    </div>
+
+    <!-- Success message -->
+    <div class="success-badge" id="success-banner">
+        <p>🎉 DOCUMENTO ASSINADO COM SUCESSO!</p>
+        <p style="font-weight: normal; margin-top: 5px; font-size: 13px;">Tire um print (foto da tela) deste documento acima assinado e envie para o Josiel, ou clique em salvar como PDF.</p>
+    </div>
+
+    <button class="btn-print" id="print-btn" onclick="window.print()">📥 Salvar como PDF / Imprimir</button>
+
+    <script>
+        const canvas = document.getElementById('signature-pad');
+        const ctx = canvas.getContext('2d');
+        let drawing = false;
+
+        // Set high-res canvas
+        function resizeCanvas() {
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+            ctx.lineWidth = 3;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = '#000000';
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Drawing events for mouse
+        canvas.addEventListener('mousedown', (e) => {
+            drawing = true;
+            ctx.beginPath();
+            ctx.moveTo(e.offsetX, e.offsetY);
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (!drawing) return;
+            ctx.lineTo(e.offsetX, e.offsetY);
+            ctx.stroke();
+        });
+
+        canvas.addEventListener('mouseup', () => drawing = false);
+        canvas.addEventListener('mouseleave', () => drawing = false);
+
+        // Drawing events for touch
+        canvas.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                drawing = true;
+                const touch = e.touches[0];
+                const rect = canvas.getBoundingClientRect();
+                ctx.beginPath();
+                ctx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
+                e.preventDefault();
+            }
+        });
+
+        canvas.addEventListener('touchmove', (e) => {
+            if (!drawing || e.touches.length !== 1) return;
+            const touch = e.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            ctx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
+            ctx.stroke();
+            e.preventDefault();
+        });
+
+        canvas.addEventListener('touchend', (e) => {
+            drawing = false;
+            e.preventDefault();
+        });
+
+        // Clear button
+        document.getElementById('clear-btn').addEventListener('click', () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        });
+
+        // Confirm button
+        document.getElementById('confirm-btn').addEventListener('click', () => {
+            // Check if canvas is empty
+            const blank = document.createElement('canvas');
+            blank.width = canvas.width;
+            blank.height = canvas.height;
+            if (canvas.toDataURL() === blank.toDataURL()) {
+                alert('Por favor, faça a sua assinatura antes de confirmar!');
+                return;
+            }
+
+            // Get signature image and set it in the paper
+            const signatureData = canvas.toDataURL('image/png');
+            const sigImg = document.getElementById('signature-image');
+            sigImg.src = signatureData;
+            sigImg.style.display = 'block';
+
+            // Hide signature line since we now have the image
+            document.getElementById('sig-line').style.borderTop = 'none';
+
+            // Hide the input panel
+            document.getElementById('input-container').style.display = 'none';
+
+            // Show success banner and print button
+            document.getElementById('success-banner').style.display = 'block';
+            document.getElementById('print-btn').style.display = 'block';
+
+            // Scroll to the top of the page so the signed document is fully visible
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
